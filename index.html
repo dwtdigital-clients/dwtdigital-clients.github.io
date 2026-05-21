@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DWT Digital — Marketing IA pour TPE/PME locales</title>
+<meta name="description" content="DWT Digital, agence marketing IA pour commerçants et artisans locaux. Site vitrine, réseaux sociaux, SEO local, Google Ads — automatisés par l'IA.">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --violet: #4F0F5C;
+  --violet-light: #7B1FA2;
+  --violet-dark: #2D0636;
+  --green: #63AF21;
+  --green-light: #7BC93A;
+  --beige: #EFDEC9;
+  --beige-dark: #D4B896;
+  --white: #FAFAF8;
+  --text-dark: #1A0820;
+  --text-mid: #4A3050;
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Poppins', sans-serif; background: var(--white); color: var(--text-dark); overflow-x: hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 5%;
+  background: rgba(79, 15, 92, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(99, 175, 33, 0.2);
+  transition: all 0.3s;
+}
+nav.scrolled { padding: 12px 5%; background: rgba(45, 6, 54, 0.98); }
+.logo-nav {
+  display: flex; align-items: center; gap: 12px; text-decoration: none;
+}
+.logo-mark {
+  position: relative; width: 36px; height: 36px;
+}
+.logo-mark svg { width: 36px; height: 36px; }
+.logo-text { color: var(--beige); font-weight: 700; font-size: 15px; letter-spacing: 2px; line-height: 1.1; }
+.logo-sub { color: var(--green); font-size: 8px; letter-spacing: 3px; font-weight: 400; }
+.nav-links { display: flex; align-items: center; gap: 32px; }
+.nav-links a { color: rgba(239,222,201,0.7); text-decoration: none; font-size: 13px; font-weight: 400; letter-spacing: 0.5px; transition: color 0.2s; }
+.nav-links a:hover { color: var(--beige); }
+.nav-cta {
+  background: var(--green); color: white; padding: 10px 22px; border-radius: 4px;
+  font-size: 12px; font-weight: 600; text-decoration: none; letter-spacing: 1px;
+  text-transform: uppercase; transition: all 0.2s;
+}
+.nav-cta:hover { background: var(--green-light); transform: translateY(-1px); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  background: linear-gradient(160deg, var(--violet-dark) 0%, var(--violet) 50%, #3A0B45 100%);
+  display: flex; align-items: center;
+  position: relative; overflow: hidden;
+  padding: 120px 5% 80px;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(99,175,33,0.08) 0%, transparent 70%);
+}
+.hero-grid {
+  position: absolute; inset: 0; opacity: 0.03;
+  background-image: linear-gradient(var(--green) 1px, transparent 1px), linear-gradient(90deg, var(--green) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-content { position: relative; z-index: 2; max-width: 700px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(99,175,33,0.15); border: 1px solid rgba(99,175,33,0.4);
+  color: var(--green); padding: 6px 16px; border-radius: 20px;
+  font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 32px; animation: fadeUp 0.6s ease both;
+}
+.hero-badge::before { content: '●'; font-size: 8px; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+h1 {
+  font-size: clamp(42px, 6vw, 76px);
+  font-weight: 900; line-height: 1.05;
+  color: var(--beige);
+  margin-bottom: 24px;
+  animation: fadeUp 0.7s ease 0.1s both;
+}
+h1 .accent { color: var(--green); }
+h1 .light { font-weight: 300; font-style: italic; color: rgba(239,222,201,0.7); }
+.hero-desc {
+  font-size: 18px; color: rgba(239,222,201,0.6); line-height: 1.7;
+  margin-bottom: 48px; max-width: 560px;
+  animation: fadeUp 0.7s ease 0.2s both;
+}
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; animation: fadeUp 0.7s ease 0.3s both; }
+.btn-primary {
+  background: var(--green); color: white; padding: 16px 36px; border-radius: 4px;
+  font-size: 14px; font-weight: 600; text-decoration: none; letter-spacing: 1px;
+  text-transform: uppercase; transition: all 0.3s;
+  box-shadow: 0 8px 32px rgba(99,175,33,0.3);
+}
+.btn-primary:hover { background: var(--green-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(99,175,33,0.4); }
+.btn-secondary {
+  border: 1px solid rgba(239,222,201,0.3); color: var(--beige); padding: 16px 36px; border-radius: 4px;
+  font-size: 14px; font-weight: 400; text-decoration: none; letter-spacing: 0.5px;
+  transition: all 0.3s; backdrop-filter: blur(4px);
+}
+.btn-secondary:hover { border-color: rgba(239,222,201,0.7); background: rgba(239,222,201,0.05); }
+.hero-stats {
+  position: absolute; right: 5%; top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 24px;
+  animation: fadeLeft 0.8s ease 0.4s both;
+}
+.stat-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(239,222,201,0.1);
+  border-radius: 12px; padding: 20px 28px; text-align: right;
+  backdrop-filter: blur(8px);
+}
+.stat-num { font-size: 42px; font-weight: 900; color: var(--beige); line-height: 1; }
+.stat-num .unit { font-size: 20px; color: var(--green); }
+.stat-label { font-size: 11px; color: rgba(239,222,201,0.5); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+.hero-scroll {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: rgba(239,222,201,0.3); font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  animation: fadeUp 1s ease 0.8s both;
+}
+.scroll-line { width: 1px; height: 40px; background: linear-gradient(var(--green), transparent); animation: scrollAnim 2s ease infinite; }
+@keyframes scrollAnim { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform:scaleY(1);transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeLeft { from{opacity:0;transform:translate(30px,-50%)} to{opacity:1;transform:translate(0,-50%)} }
+
+/* CLIENTS STRIP */
+.strip {
+  background: var(--violet-dark);
+  padding: 20px 5%;
+  display: flex; align-items: center; gap: 48px;
+  border-top: 1px solid rgba(99,175,33,0.2);
+  overflow: hidden;
+}
+.strip-label { color: rgba(239,222,201,0.3); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; white-space: nowrap; }
+.strip-items { display: flex; gap: 48px; flex: 1; }
+.strip-item { color: rgba(239,222,201,0.25); font-size: 13px; font-weight: 300; letter-spacing: 1px; white-space: nowrap; }
+
+/* SECTIONS */
+section { padding: 100px 5%; }
+.section-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--green); font-weight: 600; margin-bottom: 16px; }
+.section-title { font-size: clamp(32px, 4vw, 52px); font-weight: 700; line-height: 1.15; color: var(--text-dark); margin-bottom: 20px; }
+.section-title .accent { color: var(--violet); }
+.section-desc { font-size: 17px; color: var(--text-mid); line-height: 1.7; max-width: 600px; }
+
+/* SERVICES */
+#services { background: var(--white); }
+.services-header { text-align: center; margin-bottom: 64px; }
+.services-header .section-desc { margin: 0 auto; }
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+.service-card {
+  border: 1px solid #E8E0F0; border-radius: 16px; padding: 36px;
+  transition: all 0.3s; position: relative; overflow: hidden; cursor: default;
+  background: white;
+}
+.service-card::before {
+  content: ''; position: absolute; inset: 0; border-radius: 16px;
+  background: linear-gradient(135deg, var(--violet) 0%, var(--violet-light) 100%);
+  opacity: 0; transition: opacity 0.3s;
+}
+.service-card:hover { border-color: var(--violet); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(79,15,92,0.12); }
+.service-card:hover::before { opacity: 0.03; }
+.service-icon { font-size: 32px; margin-bottom: 20px; position: relative; }
+.service-pack { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--green); font-weight: 600; margin-bottom: 8px; position: relative; }
+.service-name { font-size: 22px; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; position: relative; }
+.service-desc { font-size: 14px; color: var(--text-mid); line-height: 1.7; margin-bottom: 24px; position: relative; }
+.service-features { list-style: none; position: relative; }
+.service-features li { font-size: 13px; color: var(--text-mid); padding: 6px 0; padding-left: 20px; position: relative; border-top: 1px solid #F0EAF8; }
+.service-features li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+.service-price { margin-top: 24px; padding-top: 20px; border-top: 1px solid #F0EAF8; display: flex; align-items: baseline; gap: 4px; position: relative; }
+.price-from { font-size: 11px; color: var(--text-mid); }
+.price-num { font-size: 28px; font-weight: 900; color: var(--violet); }
+.price-unit { font-size: 12px; color: var(--text-mid); }
+.badge-popular {
+  position: absolute; top: 20px; right: 20px;
+  background: var(--green); color: white; padding: 4px 12px; border-radius: 20px;
+  font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+}
+
+/* PROCESS */
+#process { background: var(--violet-dark); position: relative; overflow: hidden; }
+#process::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 70% at 80% 50%, rgba(99,175,33,0.06) 0%, transparent 70%);
+}
+#process .section-label { color: var(--green); }
+#process .section-title { color: var(--beige); }
+#process .section-desc { color: rgba(239,222,201,0.6); }
+.process-steps { display: flex; flex-direction: column; gap: 0; margin-top: 64px; position: relative; }
+.process-steps::before {
+  content: ''; position: absolute; left: 27px; top: 40px; bottom: 40px; width: 1px;
+  background: linear-gradient(var(--green), rgba(99,175,33,0));
+}
+.process-step { display: flex; gap: 40px; align-items: flex-start; padding: 40px 0; position: relative; }
+.step-num {
+  width: 54px; height: 54px; border-radius: 50%; flex-shrink: 0;
+  background: rgba(99,175,33,0.15); border: 1px solid rgba(99,175,33,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 900; color: var(--green);
+  position: relative; z-index: 1;
+}
+.step-content { flex: 1; }
+.step-title { font-size: 22px; font-weight: 700; color: var(--beige); margin-bottom: 10px; }
+.step-desc { font-size: 15px; color: rgba(239,222,201,0.55); line-height: 1.7; }
+.step-tag { display: inline-block; margin-top: 12px; background: rgba(99,175,33,0.1); border: 1px solid rgba(99,175,33,0.2); color: var(--green); padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; letter-spacing: 1px; }
+.step-visual { flex-shrink: 0; width: 200px; }
+.step-chip {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(239,222,201,0.1);
+  border-radius: 10px; padding: 14px 18px;
+  display: flex; align-items: center; gap: 12px;
+}
+.chip-icon { font-size: 24px; }
+.chip-text { font-size: 12px; color: rgba(239,222,201,0.5); line-height: 1.4; }
+.chip-value { font-size: 16px; font-weight: 700; color: var(--beige); }
+
+/* AVANTAGES IA */
+#avantages { background: #F9F7FC; }
+.avantages-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 64px; }
+.avantage-card {
+  background: white; border-radius: 16px; padding: 36px;
+  border: 1px solid #EDE8F5; transition: all 0.3s;
+}
+.avantage-card:first-child { grid-row: span 2; background: var(--violet); border-color: var(--violet); }
+.avantage-card:hover { box-shadow: 0 16px 48px rgba(79,15,92,0.08); transform: translateY(-2px); }
+.av-icon { font-size: 36px; margin-bottom: 20px; }
+.av-num { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--green); font-weight: 600; margin-bottom: 12px; }
+.av-title { font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; line-height: 1.3; }
+.avantage-card:first-child .av-title { color: var(--beige); }
+.av-desc { font-size: 14px; color: var(--text-mid); line-height: 1.7; }
+.avantage-card:first-child .av-desc { color: rgba(239,222,201,0.6); }
+.av-highlight {
+  margin-top: 24px; padding: 16px; border-radius: 10px;
+  background: rgba(99,175,33,0.15); border: 1px solid rgba(99,175,33,0.3);
+  font-size: 13px; color: var(--green); font-weight: 600;
+}
+
+/* FAQ */
+#faq { background: white; }
+.faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 64px; }
+.faq-item {
+  border: 1px solid #EDE8F5; border-radius: 12px; overflow: hidden;
+  transition: all 0.3s;
+}
+.faq-q {
+  padding: 24px 28px; font-size: 15px; font-weight: 600; color: var(--text-dark);
+  cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; transition: all 0.2s;
+}
+.faq-q:hover { background: #F9F7FC; }
+.faq-q.active { background: var(--violet); color: var(--beige); }
+.faq-q .arrow { flex-shrink: 0; transition: transform 0.3s; font-size: 18px; color: var(--green); }
+.faq-q.active .arrow { transform: rotate(45deg); }
+.faq-a {
+  max-height: 0; overflow: hidden; transition: max-height 0.4s ease;
+  font-size: 14px; color: var(--text-mid); line-height: 1.7;
+}
+.faq-a.open { max-height: 300px; }
+.faq-a-inner { padding: 0 28px 24px; }
+
+/* ABOUT */
+#about {
+  background: linear-gradient(135deg, var(--violet-dark) 0%, var(--violet) 100%);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+}
+#about .section-label { color: var(--green); }
+#about .section-title { color: var(--beige); }
+#about .section-desc { color: rgba(239,222,201,0.65); margin-bottom: 36px; }
+.about-fact { padding: 20px 0; border-top: 1px solid rgba(239,222,201,0.1); display: flex; gap: 20px; align-items: flex-start; }
+.about-fact-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+.about-fact-text { font-size: 14px; color: rgba(239,222,201,0.55); line-height: 1.6; }
+.about-fact-text strong { color: var(--beige); }
+.about-visual {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(239,222,201,0.1);
+  border-radius: 20px; padding: 40px; position: relative;
+}
+.founder-initial {
+  width: 100px; height: 100px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--green), var(--green-light));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px; font-weight: 900; color: white; margin-bottom: 24px;
+}
+.founder-name { font-size: 22px; font-weight: 700; color: var(--beige); margin-bottom: 4px; }
+.founder-title { font-size: 13px; color: rgba(239,222,201,0.5); margin-bottom: 24px; }
+.founder-quote {
+  font-size: 15px; font-style: italic; color: rgba(239,222,201,0.65); line-height: 1.7;
+  padding-left: 20px; border-left: 3px solid var(--green);
+}
+
+/* CONTACT */
+#contact { background: var(--white); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; margin-top: 64px; }
+.contact-form { display: flex; flex-direction: column; gap: 16px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 12px; font-weight: 600; color: var(--text-mid); letter-spacing: 0.5px; text-transform: uppercase; }
+.form-group input, .form-group select, .form-group textarea {
+  border: 1px solid #DDD8E8; border-radius: 8px; padding: 14px 16px;
+  font-family: 'Poppins', sans-serif; font-size: 14px; color: var(--text-dark);
+  background: white; transition: border-color 0.2s;
+  width: 100%;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  outline: none; border-color: var(--violet);
+}
+.form-group textarea { resize: vertical; min-height: 100px; }
+.form-submit {
+  background: var(--violet); color: white; border: none; border-radius: 8px;
+  padding: 16px 32px; font-family: 'Poppins', sans-serif; font-size: 14px;
+  font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  cursor: pointer; transition: all 0.3s; width: 100%;
+}
+.form-submit:hover { background: var(--violet-light); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(79,15,92,0.3); }
+.contact-info { display: flex; flex-direction: column; gap: 24px; }
+.contact-item { display: flex; gap: 16px; align-items: flex-start; }
+.contact-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: linear-gradient(135deg, rgba(79,15,92,0.08), rgba(99,175,33,0.08));
+  border: 1px solid rgba(79,15,92,0.1);
+  display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+}
+.contact-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-mid); font-weight: 600; margin-bottom: 4px; }
+.contact-value { font-size: 15px; color: var(--text-dark); font-weight: 500; }
+.guarantee-box {
+  background: linear-gradient(135deg, var(--violet-dark), var(--violet));
+  border-radius: 16px; padding: 28px; color: var(--beige);
+  margin-top: 32px;
+}
+.guarantee-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.guarantee-text { font-size: 13px; color: rgba(239,222,201,0.65); line-height: 1.6; }
+
+/* FOOTER */
+footer {
+  background: var(--violet-dark);
+  padding: 60px 5% 32px;
+  border-top: 1px solid rgba(99,175,33,0.15);
+}
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+.footer-brand .tagline { font-size: 13px; color: rgba(239,222,201,0.4); line-height: 1.6; margin-top: 16px; }
+.footer-col h4 { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--green); font-weight: 600; margin-bottom: 20px; }
+.footer-col a { display: block; font-size: 13px; color: rgba(239,222,201,0.4); text-decoration: none; margin-bottom: 10px; transition: color 0.2s; }
+.footer-col a:hover { color: var(--beige); }
+.footer-bottom {
+  border-top: 1px solid rgba(239,222,201,0.08); padding-top: 24px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy { font-size: 12px; color: rgba(239,222,201,0.25); }
+.footer-legal a { font-size: 12px; color: rgba(239,222,201,0.25); text-decoration: none; margin-left: 24px; }
+
+/* SCROLL REVEAL */
+.reveal { opacity: 0; transform: translateY(24px); transition: all 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+@media(max-width:768px) {
+  .hero-stats { display: none; }
+  .services-grid { grid-template-columns: 1fr; }
+  .avantages-grid, .faq-grid, #about, .contact-grid, .footer-grid { grid-template-columns: 1fr; }
+  .avantage-card:first-child { grid-row: span 1; }
+  .step-visual { display: none; }
+  nav .nav-links { display: none; }
+  .form-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="logo-nav">
+    <div class="logo-mark">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="18,2 34,32 2,32" fill="#63AF21" opacity="0.9"/>
+        <line x1="10" y1="28" x2="26" y2="8" stroke="#EFDEC9" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="28" cy="8" r="1.5" fill="#EFDEC9" opacity="0.8"/>
+        <circle cx="30" cy="12" r="1" fill="#EFDEC9" opacity="0.5"/>
+        <circle cx="32" cy="6" r="1" fill="#EFDEC9" opacity="0.4"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-text">DWT DIGITAL</div>
+      <div class="logo-sub">Le futur de demain</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#process">Comment ça marche</a>
+    <a href="#avantages">Notre IA</a>
+    <a href="#faq">FAQ</a>
+    <a href="#about">À propos</a>
+    <a href="#contact" class="nav-cta">Audit gratuit</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Agence marketing IA — Valence &amp; France entière</div>
+    <h1>Le marketing <span class="accent">IA</span>,<br><span class="light">enfin accessible</span><br>aux commerçants.</h1>
+    <p class="hero-desc">DWT Digital automatise votre visibilité locale avec l'intelligence artificielle. Site vitrine, réseaux sociaux, SEO, publicités — tout est géré pour vous, pendant que vous exercez votre métier.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Démarrer mon audit gratuit</a>
+      <a href="#services" class="btn-secondary">Voir nos offres</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card">
+      <div class="stat-num">60<span class="unit">s</span></div>
+      <div class="stat-label">Audit local généré</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">7<span class="unit">×</span></div>
+      <div class="stat-label">Contenus par client</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">24<span class="unit">/7</span></div>
+      <div class="stat-label">Présence digitale</div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Découvrir
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <span class="strip-label">Adapté pour</span>
+  <div class="strip-items">
+    <span class="strip-item">🥐 Boulangeries</span>
+    <span class="strip-item">🍽️ Restaurants</span>
+    <span class="strip-item">✂️ Coiffeurs</span>
+    <span class="strip-item">🏥 Thérapeutes</span>
+    <span class="strip-item">🔨 Artisans</span>
+    <span class="strip-item">🎂 Pâtissiers</span>
+    <span class="strip-item">🛍️ Boutiques</span>
+    <span class="strip-item">🏋️ Coaches</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-header">
+    <div class="section-label reveal">Nos offres</div>
+    <h2 class="section-title reveal reveal-delay-1">Des packs clairs,<br><span class="accent">sans surprise</span></h2>
+    <p class="section-desc reveal reveal-delay-2">Choisissez le niveau d'accompagnement qui correspond à votre ambition. Tout est automatisé, tout est géré par notre IA.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon">🚀</div>
+      <div class="service-pack">Pack 01</div>
+      <div class="service-name">Starter</div>
+      <div class="service-desc">Votre première présence digitale professionnelle. Site vitrine + 4 publications Instagram par mois.</div>
+      <ul class="service-features">
+        <li>Site vitrine 5 pages</li>
+        <li>4 posts Instagram/mois</li>
+        <li>Audit visibilité locale PDF</li>
+        <li>Fiche Google My Business</li>
+      </ul>
+      <div class="service-price"><span class="price-from">à partir de</span><span class="price-num">297</span><span class="price-unit">€/mois</span></div>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <div class="badge-popular">Populaire</div>
+      <div class="service-icon">📱</div>
+      <div class="service-pack">Pack 02</div>
+      <div class="service-name">Social</div>
+      <div class="service-desc">Gestion complète de vos réseaux sociaux. Notre IA publie dans votre ton, votre style, sans que vous ayez à lever le petit doigt.</div>
+      <ul class="service-features">
+        <li>12 posts/mois (Instagram + Facebook)</li>
+        <li>Réponse aux avis Google</li>
+        <li>Brand Twin IA — votre voix répliquée</li>
+        <li>Radar tendances hebdomadaire</li>
+      </ul>
+      <div class="service-price"><span class="price-from">à partir de</span><span class="price-num">497</span><span class="price-unit">€/mois</span></div>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-icon">🔍</div>
+      <div class="service-pack">Pack 03</div>
+      <div class="service-name">SEO Local</div>
+      <div class="service-desc">Apparaissez en tête des recherches locales. Articles de blog SEO, fiche GMB optimisée, backlinks locaux.</div>
+      <ul class="service-features">
+        <li>4 articles SEO/mois</li>
+        <li>Google My Business optimisé</li>
+        <li>Posts GMB hebdomadaires</li>
+        <li>Rapport mensuel positions</li>
+      </ul>
+      <div class="service-price"><span class="price-from">à partir de</span><span class="price-num">397</span><span class="price-unit">€/mois</span></div>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-icon">🎯</div>
+      <div class="service-pack">Pack 04</div>
+      <div class="service-name">Publicités</div>
+      <div class="service-desc">Campagnes Google Ads et Meta Ads gérées et optimisées par l'IA. Vous ne payez que ce qui convertit.</div>
+      <ul class="service-features">
+        <li>Campagne Google Ads locale</li>
+        <li>Publicités Facebook + Instagram</li>
+        <li>A/B test automatique</li>
+        <li>Optimisation budget IA</li>
+      </ul>
+      <div class="service-price"><span class="price-from">à partir de</span><span class="price-num">597</span><span class="price-unit">€/mois</span></div>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-icon">⚡</div>
+      <div class="service-pack">Pack 05</div>
+      <div class="service-name">Full Digital</div>
+      <div class="service-desc">L'offre complète. Tous les services combinés, avec un reporting mensuel détaillé et un accès prioritaire à votre consultant.</div>
+      <ul class="service-features">
+        <li>Site + réseaux + SEO + Ads</li>
+        <li>20 contenus/mois multi-plateformes</li>
+        <li>Digital Commerce Twin 24/7</li>
+        <li>Rapport performance mensuel</li>
+      </ul>
+      <div class="service-price"><span class="price-from">à partir de</span><span class="price-num">897</span><span class="price-unit">€/mois</span></div>
+    </div>
+    <div class="service-card reveal reveal-delay-1" style="background: linear-gradient(135deg, var(--violet-dark), var(--violet)); border-color: var(--violet);">
+      <div class="service-icon">💎</div>
+      <div class="service-pack" style="color: var(--green);">Pack 06</div>
+      <div class="service-name" style="color: var(--beige);">Premium</div>
+      <div class="service-desc" style="color: rgba(239,222,201,0.65);">Votre agence marketing personnelle. Cross-Visibility Network, consultant dédié, stratégie sur-mesure.</div>
+      <ul class="service-features" style="color: rgba(239,222,201,0.55);">
+        <li style="border-color: rgba(239,222,201,0.1);">Tout le Pack Full</li>
+        <li style="border-color: rgba(239,222,201,0.1);">Cross-Visibility Network</li>
+        <li style="border-color: rgba(239,222,201,0.1);">Consultant dédié mensuel</li>
+        <li style="border-color: rgba(239,222,201,0.1);">Stratégie annuelle personnalisée</li>
+      </ul>
+      <div class="service-price" style="border-color: rgba(239,222,201,0.1);">
+        <span class="price-from" style="color: rgba(239,222,201,0.4);">à partir de</span>
+        <span class="price-num" style="color: var(--beige);">1 297</span>
+        <span class="price-unit" style="color: rgba(239,222,201,0.4);">€/mois</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-label reveal">Notre méthode</div>
+  <h2 class="section-title reveal reveal-delay-1">De zéro à visible<br>en <span style="color:var(--green)">72 heures</span></h2>
+  <p class="section-desc reveal reveal-delay-2">Un processus entièrement automatisé, piloté par l'IA, conçu pour les commerçants qui n'ont pas le temps de s'en occuper.</p>
+  <div class="process-steps">
+    <div class="process-step reveal">
+      <div class="step-num">01</div>
+      <div class="step-content">
+        <div class="step-title">Vous remplissez le formulaire — 8 minutes</div>
+        <div class="step-desc">Un formulaire simple et guidé. Votre commerce, vos valeurs, votre cible, vos ambitions. Notre IA analyse tout instantanément.</div>
+        <span class="step-tag">Formulaire intelligent</span>
+      </div>
+      <div class="step-visual">
+        <div class="step-chip">
+          <div class="chip-icon">📋</div>
+          <div><div class="chip-value">8 min</div><div class="chip-text">Formulaire complet</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">02</div>
+      <div class="step-content">
+        <div class="step-title">L'IA génère tous vos contenus</div>
+        <div class="step-desc">En moins de 3 minutes, notre IA produit votre site vitrine, vos 7 premiers contenus (posts, blog, email, ads), votre audit local, et votre maquette de marque.</div>
+        <span class="step-tag">7 productions simultanées</span>
+      </div>
+      <div class="step-visual">
+        <div class="step-chip">
+          <div class="chip-icon">🤖</div>
+          <div><div class="chip-value">&lt; 3 min</div><div class="chip-text">7 contenus générés</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">03</div>
+      <div class="step-content">
+        <div class="step-title">Vous validez depuis votre espace client</div>
+        <div class="step-desc">Accédez à votre espace personnel, visualisez chaque contenu en situation réelle (mockup Instagram, aperçu site), demandez des modifications, validez en un clic.</div>
+        <span class="step-tag">Preview temps réel</span>
+      </div>
+      <div class="step-visual">
+        <div class="step-chip">
+          <div class="chip-icon">✅</div>
+          <div><div class="chip-value">1 clic</div><div class="chip-text">Validation simple</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">04</div>
+      <div class="step-content">
+        <div class="step-title">Publication automatique sur tous vos réseaux</div>
+        <div class="step-desc">Dès votre validation, l'IA publie automatiquement sur Instagram, Facebook, Google My Business et votre site. Vous n'avez plus rien à faire.</div>
+        <span class="step-tag">Publication multi-plateformes</span>
+      </div>
+      <div class="step-visual">
+        <div class="step-chip">
+          <div class="chip-icon">📡</div>
+          <div><div class="chip-value">24/7</div><div class="chip-text">Présence assurée</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AVANTAGES IA -->
+<section id="avantages">
+  <div class="section-label reveal">Notre différence</div>
+  <h2 class="section-title reveal reveal-delay-1">5 technologies IA<br><span class="accent">que personne d'autre</span><br>ne vous propose</h2>
+  <div class="avantages-grid">
+    <div class="avantage-card reveal">
+      <div class="av-icon">🔍</div>
+      <div class="av-num">01</div>
+      <div class="av-title">Audit Local IA en 60 secondes</div>
+      <div class="av-desc">En 60 secondes, notre IA analyse votre visibilité locale : Google, réseaux sociaux, avis clients, concurrents directs. Un rapport PDF complet, personnalisé, gratuit.</div>
+      <div class="av-highlight">📄 Rapport PDF généré instantanément</div>
+    </div>
+    <div class="avantage-card reveal reveal-delay-1">
+      <div class="av-icon">🎭</div>
+      <div class="av-num">02</div>
+      <div class="av-title">Brand Twin — votre voix répliquée</div>
+      <div class="av-desc">Notre IA apprend votre façon de parler, vos valeurs, votre ton. Chaque contenu produit vous ressemble exactement — comme si vous l'aviez écrit vous-même.</div>
+    </div>
+    <div class="avantage-card reveal reveal-delay-2">
+      <div class="av-icon">📡</div>
+      <div class="av-num">03</div>
+      <div class="av-title">Radar Tendances hebdomadaire</div>
+      <div class="av-desc">Chaque semaine, votre IA détecte les tendances locales et nationales de votre secteur. Vous êtes toujours dans l'air du temps, sans effort.</div>
+    </div>
+    <div class="avantage-card reveal">
+      <div class="av-icon">🌐</div>
+      <div class="av-num">04</div>
+      <div class="av-title">Digital Commerce Twin 24/7</div>
+      <div class="av-desc">Votre jumeau digital ne dort jamais. Il répond aux avis, publie des posts, met à jour votre fiche Google — même quand vous êtes en vacances.</div>
+    </div>
+    <div class="avantage-card reveal reveal-delay-1">
+      <div class="av-icon">🤝</div>
+      <div class="av-num">05</div>
+      <div class="av-title">Cross-Visibility Network</div>
+      <div class="av-desc">Nous créons des alliances entre commerçants du même quartier. Votre boulangerie et le fleuriste d'en face se recommandent mutuellement — la croissance virale locale.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div style="text-align:center; margin-bottom: 64px;">
+    <div class="section-label reveal">FAQ</div>
+    <h2 class="section-title reveal reveal-delay-1">Les questions<br><span class="accent">qu'on nous pose</span></h2>
+  </div>
+  <div class="faq-grid">
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="toggleFaq(this)">Pourquoi faire du marketing digital en 2025 ? <span class="arrow">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">87% des consommateurs cherchent en ligne avant d'acheter localement. Sans présence digitale, vous perdez des clients au profit de concurrents moins bons que vous, mais plus visibles. Le marketing digital n'est plus un luxe — c'est une nécessité de survie pour les TPE/PME.</div></div>
+    </div>
+    <div class="faq-item reveal reveal-delay-1">
+      <div class="faq-q" onclick="toggleFaq(this)">Combien de temps dois-je y consacrer ? <span class="arrow">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">8 minutes pour remplir le formulaire d'onboarding. Ensuite, quelques minutes par mois pour valider vos contenus depuis votre espace client. L'IA fait tout le reste. C'est conçu pour des gens qui ont un vrai métier à exercer.</div></div>
+    </div>
+    <div class="faq-item reveal reveal-delay-2">
+      <div class="faq-q" onclick="toggleFaq(this)">L'IA peut-elle vraiment écrire dans mon style ? <span class="arrow">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Oui. Notre technologie Brand Twin analyse votre façon de parler, vos valeurs, votre vocabulaire. Les contenus produits sont si proches de votre style que vos clients ne voient pas la différence. Et vous pouvez toujours demander des modifications.</div></div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q" onclick="toggleFaq(this)">Est-ce que ça marche pour mon secteur ? <span class="arrow">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">DWT Digital est conçu pour tous les commerces locaux : restaurants, boulangeries, coiffeurs, artisans, thérapeutes, coachs, boutiques, professions libérales... Si vous avez des clients locaux, notre solution vous correspond.</div></div>
+    </div>
+    <div class="faq-item reveal reveal-delay-1">
+      <div class="faq-q" onclick="toggleFaq(this)">Que se passe-t-il si je ne suis pas satisfait ? <span class="arrow">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Vous pouvez demander des modifications illimitées sur tous vos contenus. Si après 30 jours vous n'êtes pas satisfait, nous vous remboursons intégralement. Zéro risque — c'est notre engagement.</div></div>
+    </div>
+    <div class="faq-item reveal reveal-delay-2">
+      <div class="faq-q" onclick="toggleFaq(this)">Comment se passe la connexion de mes réseaux sociaux ? <span class="arrow">+</span></div>
+      <div class="faq-a"><div class="faq-a-inner">Une seule connexion OAuth sécurisée depuis votre espace client. Vous autorisez DWT Digital à publier en votre nom — comme vous donneriez les clés à un community manager de confiance. Vous restez maître de vos comptes à tout moment.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div>
+    <div class="section-label reveal">L'histoire</div>
+    <h2 class="section-title reveal reveal-delay-1">Né de la cuisine,<br>forgé <span style="color:var(--green)">dans le terrain</span></h2>
+    <p class="section-desc reveal reveal-delay-2">Avant DWT Digital, j'ai passé deux saisons en cuisine d'altitude comme chef cuisinier. J'ai vu comment des passionnés extraordinaires restaient invisibles faute de visibilité digitale. Cette injustice m'a décidé.</p>
+    <div class="about-fact reveal">
+      <div class="about-fact-icon">🏔️</div>
+      <div class="about-fact-text"><strong>2 saisons en montagne</strong> — De cuisinier à chef de partie. J'ai vécu de l'intérieur les défis des petits commerces et artisans.</div>
+    </div>
+    <div class="about-fact reveal">
+      <div class="about-fact-icon">🎓</div>
+      <div class="about-fact-text"><strong>Master en Marketing Digital</strong> — La formation qui a transformé l'expérience terrain en expertise stratégique.</div>
+    </div>
+    <div class="about-fact reveal">
+      <div class="about-fact-icon">🤖</div>
+      <div class="about-fact-text"><strong>DWT Digital</strong> — L'agence que j'aurais voulu avoir quand je travaillais en cuisine. Accessible, automatisée, honnête.</div>
+    </div>
+  </div>
+  <div class="about-visual reveal">
+    <div class="founder-initial">T</div>
+    <div class="founder-name">Tirera Darell</div>
+    <div class="founder-title">Fondateur — DWT Digital · Valence (26)</div>
+    <div class="founder-quote">"Le meilleur commerçant du monde peut rester invisible. L'IA change ça. Mon rôle est de la mettre entre les mains de ceux qui en ont le plus besoin."</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div style="text-align:center; margin-bottom: 0;">
+    <div class="section-label reveal">Commencer</div>
+    <h2 class="section-title reveal reveal-delay-1">Votre audit local gratuit<br><span class="accent">en 60 secondes</span></h2>
+    <p class="section-desc reveal reveal-delay-2" style="margin: 0 auto 0;">Remplissez ce formulaire, notre IA analyse votre visibilité et vous envoie un rapport complet dans la journée. Gratuit, sans engagement.</p>
+  </div>
+  <div class="contact-grid">
+    <form class="contact-form reveal" onsubmit="handleContact(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Prénom</label>
+          <input type="text" placeholder="Marie" required>
+        </div>
+        <div class="form-group">
+          <label>Nom</label>
+          <input type="text" placeholder="Dupont" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email professionnel</label>
+        <input type="email" placeholder="marie@moncommerce.fr" required>
+      </div>
+      <div class="form-group">
+        <label>Téléphone</label>
+        <input type="tel" placeholder="06 12 34 56 78">
+      </div>
+      <div class="form-group">
+        <label>Type de commerce</label>
+        <select>
+          <option value="">Sélectionner...</option>
+          <option>Restauration / Food</option>
+          <option>Beauté / Bien-être</option>
+          <option>Artisan / BTP</option>
+          <option>Commerce de détail</option>
+          <option>Services / Profession libérale</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Nom de votre commerce</label>
+        <input type="text" placeholder="Ex : Boulangerie Dupont">
+      </div>
+      <div class="form-group">
+        <label>Votre besoin principal</label>
+        <textarea placeholder="Ex : Je n'ai pas de site internet et je voudrais être visible sur Google..."></textarea>
+      </div>
+      <button type="submit" class="form-submit">Recevoir mon audit gratuit →</button>
+    </form>
+    <div class="reveal reveal-delay-1">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-label">Zone d'intervention</div>
+            <div class="contact-value">Valence (26) &amp; France entière</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📧</div>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-value">contact@dwtdigital.fr</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">⏱️</div>
+          <div>
+            <div class="contact-label">Délai de réponse</div>
+            <div class="contact-value">Rapport généré sous 24h</div>
+          </div>
+        </div>
+      </div>
+      <div class="guarantee-box">
+        <div class="guarantee-title">🛡️ Garantie satisfaction 30 jours</div>
+        <div class="guarantee-text">Si vous n'êtes pas satisfait dans les 30 premiers jours, nous vous remboursons intégralement. Aucune question posée. C'est notre engagement envers chaque commerçant que nous accompagnons.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo-nav">
+        <div class="logo-mark">
+          <svg viewBox="0 0 36 36" fill="none"><polygon points="18,2 34,32 2,32" fill="#63AF21" opacity="0.9"/><line x1="10" y1="28" x2="26" y2="8" stroke="#EFDEC9" stroke-width="2.5" stroke-linecap="round"/><circle cx="28" cy="8" r="1.5" fill="#EFDEC9" opacity="0.8"/></svg>
+        </div>
+        <div><div class="logo-text">DWT DIGITAL</div><div class="logo-sub">Le futur de demain</div></div>
+      </a>
+      <p class="tagline">Marketing IA pour commerçants et artisans locaux. Automatisé, transparent, efficace.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="#services">Pack Starter</a>
+      <a href="#services">Pack Social</a>
+      <a href="#services">Pack SEO Local</a>
+      <a href="#services">Pack Publicités</a>
+      <a href="#services">Pack Full Digital</a>
+    </div>
+    <div class="footer-col">
+      <h4>Agence</h4>
+      <a href="#about">À propos</a>
+      <a href="#process">Notre méthode</a>
+      <a href="#avantages">Notre IA</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="footer-col">
+      <h4>Légal</h4>
+      <a href="#">Mentions légales</a>
+      <a href="#">CGV</a>
+      <a href="#">Politique de confidentialité</a>
+      <a href="#">Cookies</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 DWT Digital — Tirera Darell · Auto-entrepreneur · SIRET en cours</span>
+    <div>
+      <a href="#" class="footer-legal">LinkedIn</a>
+      <a href="#" class="footer-legal">Instagram</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+function toggleFaq(el) {
+  const answer = el.nextElementSibling;
+  const isOpen = answer.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('active'));
+  if(!isOpen) { answer.classList.add('open'); el.classList.add('active'); }
+}
+
+function handleContact(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.form-submit');
+  btn.textContent = '✅ Demande envoyée — réponse sous 24h !';
+  btn.style.background = '#63AF21';
+  setTimeout(() => { btn.textContent = 'Recevoir mon audit gratuit →'; btn.style.background = ''; }, 4000);
+}
+</script>
+</body>
+</html>
