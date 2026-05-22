@@ -1380,6 +1380,7 @@ const App = (function() {
 
   // API publique
   return {
+    init,
     goStep,
     validateIdentity,
     validatePost,
@@ -1398,11 +1399,13 @@ const App = (function() {
 
 })();
 
-// Lancement au chargement du DOM
-document.addEventListener('DOMContentLoaded', App.init || function() { App.goStep(1); });
-// Fallback si DOMContentLoaded déjà passé
-if (document.readyState !== 'loading') {
-  setTimeout(() => { if (typeof App.init === 'function') App.init(); }, 0);
+// Script en bas du body = DOM déjà chargé
+// Appel direct sans attendre DOMContentLoaded
+if (typeof App.init === 'function') {
+  App.init();
+} else {
+  // Sécurité : si l'IIFE n'a pas exporté init, forcer le rendu
+  App.goStep(1);
 }
 </script>
 </body>
