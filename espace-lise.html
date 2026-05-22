@@ -413,23 +413,53 @@ function showTab(name){
   if(t)t.classList.add('active');
   event.target.closest('a').classList.add('active');
 }
-function validatePost(btn){
-  btn.textContent='Validation envoyée !';
-  btn.style.background='#2D7A0A';
-  btn.disabled=true;
-  const b=btn.closest('.post-card').querySelector('.badge');
-  if(b){b.textContent='Validé';b.className='badge b-ok';}
-  const actions=btn.closest('.pc-actions');
-  if(actions){
-    const mod=actions.querySelector('.btn-mod');
-    const ref=actions.querySelector('[style*="C53030"]');
-    if(mod)mod.remove();if(ref)ref.remove();
-  }
+const WEBHOOK_RAPPEL = 'https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh';
+const CLIENT_NAME = 'Lise';
+const CLIENT_EMAIL = 'lisevernet@yahoo.com';
+const COMMERCE_NAME = 'Cake Délice';
+
+async function callWebhook(action, detail) {
+  try {
+    await fetch(WEBHOOK_RAPPEL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        client_name: CLIENT_NAME,
+        client_email: CLIENT_EMAIL,
+        commerce_name: COMMERCE_NAME,
+        action: action,
+        detail: detail
+      }),
+      mode: 'no-cors'
+    });
+  } catch(e) {}
 }
-let curPost='';
-function openModify(name){curPost=name;document.getElementById('mod-title').textContent=name;document.getElementById('mod-modal').classList.add('open');}
-function closeMod(){document.getElementById('mod-modal').classList.remove('open');}
-function sendMod(){alert('Votre demande a été envoyée pour "'+curPost+'". Notre équipe vous répond sous 24h.');closeMod();}
+
+function validatePost(btn) {
+  const postName = btn.closest('.post-card').querySelector('.pc-plat')?.textContent?.trim() || 'Post';
+  btn.textContent = 'Validation envoyée !';
+  btn.style.background = '#2D7A0A';
+  btn.disabled = true;
+  const b = btn.closest('.post-card').querySelector('.badge');
+  if(b) { b.textContent = 'Validé'; b.className = 'badge b-ok'; }
+  callWebhook('validation', postName + ' - Approuvé par le client');
+}
+
+let curPost = '';
+function openModify(name) {
+  curPost = name;
+  document.getElementById('mod-title').textContent = 'Modification pour : ' + name;
+  document.getElementById('mod-modal').classList.add('open');
+}
+function closeMod() { document.getElementById('mod-modal').classList.remove('open'); }
+function sendMod() {
+  const txt = document.getElementById('mod-txt').value;
+  if(!txt.trim()) { alert('Décrivez la modification souhaitée'); return; }
+  callWebhook('modification', curPost + ' : ' + txt);
+  alert('Votre demande a été envoyée ! Notre équipe vous répond sous 24h.');
+  closeMod();
+  document.getElementById('mod-txt').value = '';
+}
 </script>
 </body>
 </html>
