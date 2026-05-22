@@ -143,110 +143,213 @@ nav img{height:40px!important;}
   </div>
 </div>
 
-<section style="padding:80px 6%;background:white;">
+<section style="padding:80px 5%;background:white;">
   <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;">
-    <form style="display:flex;flex-direction:column;gap:16px;" onsubmit="handleContact(event)">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-        <div style="display:flex;flex-direction:column;gap:5px;">
-          <label style="font-size:11px;font-weight:600;color:var(--text-mid);letter-spacing:0.5px;text-transform:uppercase;">Prénom</label>
-          <input name="prenom" type="text" placeholder="Marie" required style="border:1px solid #DDD8E8;border-radius:8px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:13px;width:100%;">
+
+    <!-- FORMULAIRE COMPLET -->
+    <form onsubmit="handleContact(event)" id="audit-form" novalidate>
+      <h2 style="font-size:22px;font-weight:700;margin-bottom:6px;">Obtenez votre audit gratuit</h2>
+      <p style="font-size:13px;color:#4A3050;margin-bottom:24px;">Rapport PDF envoyé sous 24h ouvrées. Sans engagement.</p>
+
+      <!-- Contact -->
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#63AF21;margin-bottom:12px;">Vos coordonnées</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px;">
+        <div>
+          <label style="font-size:11px;font-weight:600;color:#4A3050;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Prénom <span style="color:#63AF21;">*</span></label>
+          <input name="prenom" type="text" placeholder="Marie" required
+            style="width:100%;border:1.5px solid #DDD8E8;border-radius:9px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:14px;transition:border-color 0.2s;">
         </div>
-        <div style="display:flex;flex-direction:column;gap:5px;">
-          <label style="font-size:11px;font-weight:600;color:var(--text-mid);letter-spacing:0.5px;text-transform:uppercase;">Nom</label>
-          <input name="nom" type="text" placeholder="Dupont" required style="border:1px solid #DDD8E8;border-radius:8px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:13px;width:100%;">
+        <div>
+          <label style="font-size:11px;font-weight:600;color:#4A3050;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Nom <span style="color:#63AF21;">*</span></label>
+          <input name="nom" type="text" placeholder="Dupont" required
+            style="width:100%;border:1.5px solid #DDD8E8;border-radius:9px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:14px;">
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:5px;">
-        <label style="font-size:11px;font-weight:600;color:var(--text-mid);letter-spacing:0.5px;text-transform:uppercase;">Email professionnel</label>
-        <input name="email" type="email" placeholder="marie@moncommerce.fr" required style="border:1px solid #DDD8E8;border-radius:8px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:13px;width:100%;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px;">
+        <div>
+          <label style="font-size:11px;font-weight:600;color:#4A3050;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Email <span style="color:#63AF21;">*</span></label>
+          <input name="email" type="email" placeholder="marie@moncommerce.fr" required
+            style="width:100%;border:1.5px solid #DDD8E8;border-radius:9px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:14px;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:600;color:#4A3050;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Téléphone</label>
+          <input name="telephone" type="tel" placeholder="06 12 34 56 78"
+            style="width:100%;border:1.5px solid #DDD8E8;border-radius:9px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:14px;">
+        </div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:5px;">
-        <label style="font-size:11px;font-weight:600;color:var(--text-mid);letter-spacing:0.5px;text-transform:uppercase;">Téléphone</label>
-        <input name="telephone" type="tel" placeholder="06 12 34 56 78" style="border:1px solid #DDD8E8;border-radius:8px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:13px;width:100%;">
+
+      <!-- Commerce -->
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#63AF21;margin-bottom:12px;margin-top:20px;">Votre commerce</div>
+      <div style="margin-bottom:13px;">
+        <label style="font-size:11px;font-weight:600;color:#4A3050;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Nom du commerce <span style="color:#63AF21;">*</span></label>
+        <input name="commerce" type="text" placeholder="Ex : Boulangerie Martin, Salon Coiff'Art..." required
+          style="width:100%;border:1.5px solid #DDD8E8;border-radius:9px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:14px;">
       </div>
-      <div style="display:flex;flex-direction:column;gap:5px;">
-        <label style="font-size:11px;font-weight:600;color:var(--text-mid);letter-spacing:0.5px;text-transform:uppercase;">Type de commerce</label>
-        <select name="type_commerce" style="border:1px solid #DDD8E8;border-radius:8px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:13px;width:100%;background:white;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px;">
+        <div>
+          <label style="font-size:11px;font-weight:600;color:#4A3050;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Ville <span style="color:#63AF21;">*</span></label>
+          <input name="ville" type="text" placeholder="Ex : Valence (26000)" required
+            style="width:100%;border:1.5px solid #DDD8E8;border-radius:9px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:14px;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:600;color:#4A3050;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Type d'activité <span style="color:#63AF21;">*</span></label>
+          <select name="type_commerce" required
+            style="width:100%;border:1.5px solid #DDD8E8;border-radius:9px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:14px;background:white;">
+            <option value="">Sélectionner...</option>
+            <option>Restauration et alimentation</option>
+            <option>Pâtisserie et boulangerie</option>
+            <option>Beauté et bien-être</option>
+            <option>Coiffeur / Barbier</option>
+            <option>Artisan et BTP</option>
+            <option>Commerce de détail</option>
+            <option>Services et profession libérale</option>
+            <option>Sport et coaching</option>
+            <option>Santé et bien-être</option>
+            <option>Autre</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:13px;">
+        <label style="font-size:11px;font-weight:600;color:#4A3050;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Adresse</label>
+        <input name="adresse" type="text" placeholder="Ex : 12 rue de la Paix"
+          style="width:100%;border:1.5px solid #DDD8E8;border-radius:9px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:14px;">
+      </div>
+
+      <!-- Présence digitale actuelle -->
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#63AF21;margin-bottom:12px;margin-top:20px;">Présence digitale actuelle</div>
+      <div style="margin-bottom:8px;">
+        <label style="font-size:11px;font-weight:600;color:#4A3050;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Instagram (si existant)</label>
+        <input name="instagram_existant" type="text" placeholder="@votrecompte ou URL du profil"
+          style="width:100%;border:1.5px solid #DDD8E8;border-radius:9px;padding:11px 14px;font-family:Poppins,sans-serif;font-size:13px;">
+      </div>
+      <div style="margin-bottom:8px;">
+        <label style="font-size:11px;font-weight:600;color:#4A3050;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Facebook (si existant)</label>
+        <input name="facebook_existant" type="text" placeholder="Nom de la page ou URL"
+          style="width:100%;border:1.5px solid #DDD8E8;border-radius:9px;padding:11px 14px;font-family:Poppins,sans-serif;font-size:13px;">
+      </div>
+      <div style="margin-bottom:13px;">
+        <label style="font-size:11px;font-weight:600;color:#4A3050;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Site internet actuel</label>
+        <input name="site_existant" type="url" placeholder="https://www.votresite.fr — ou laisser vide"
+          style="width:100%;border:1.5px solid #DDD8E8;border-radius:9px;padding:11px 14px;font-family:Poppins,sans-serif;font-size:13px;">
+      </div>
+
+      <!-- Projet -->
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#63AF21;margin-bottom:12px;margin-top:20px;">Votre projet</div>
+      <div style="margin-bottom:13px;">
+        <label style="font-size:11px;font-weight:600;color:#4A3050;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Objectif principal <span style="color:#63AF21;">*</span></label>
+        <select name="objectif" required
+          style="width:100%;border:1.5px solid #DDD8E8;border-radius:9px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:14px;background:white;">
           <option value="">Sélectionner...</option>
-          <option>Restauration et alimentation</option>
-          <option>Beauté et bien-être</option>
-          <option>Artisan et BTP</option>
-          <option>Commerce de détail</option>
-          <option>Services et profession libérale</option>
-          <option>Sport et coaching</option>
-          <option>Autre</option>
+          <option>Être trouvé sur Google Maps et Google Search</option>
+          <option>Développer ma présence sur Instagram et Facebook</option>
+          <option>Attirer plus de clients locaux</option>
+          <option>Fidéliser ma clientèle existante</option>
+          <option>Créer ou refaire mon site internet</option>
+          <option>Lancer des publicités en ligne</option>
+          <option>Tout à la fois — visibilité globale</option>
         </select>
       </div>
-      <div style="display:flex;flex-direction:column;gap:5px;">
-        <label style="font-size:11px;font-weight:600;color:var(--text-mid);letter-spacing:0.5px;text-transform:uppercase;">Nom de votre commerce</label>
-        <input name="commerce" type="text" placeholder="Ex : Boulangerie Martin" style="border:1px solid #DDD8E8;border-radius:8px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:13px;width:100%;">
+      <div style="margin-bottom:13px;">
+        <label style="font-size:11px;font-weight:600;color:#4A3050;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Budget mensuel envisagé</label>
+        <select name="budget_estime"
+          style="width:100%;border:1.5px solid #DDD8E8;border-radius:9px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:14px;background:white;">
+          <option value="">Non défini — à discuter lors de l'appel</option>
+          <option>Moins de 100€/mois (Pack Sur Mesure)</option>
+          <option>100€ - 300€/mois</option>
+          <option>300€ - 500€/mois</option>
+          <option>500€ - 1000€/mois</option>
+          <option>Plus de 1000€/mois</option>
+        </select>
       </div>
-      <div style="display:flex;flex-direction:column;gap:5px;">
-        <label style="font-size:11px;font-weight:600;color:var(--text-mid);letter-spacing:0.5px;text-transform:uppercase;">Votre principal défi digital</label>
-        <textarea name="besoin" placeholder="Ex : Je n'ai pas de site internet et je veux être trouvé sur Google..." style="border:1px solid #DDD8E8;border-radius:8px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:13px;resize:vertical;min-height:90px;width:100%;"></textarea>
+      <div style="margin-bottom:20px;">
+        <label style="font-size:11px;font-weight:600;color:#4A3050;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:4px;">Description de votre commerce et vos besoins</label>
+        <textarea name="besoin" placeholder="Décrivez votre commerce, vos clients, vos défis actuels et ce que vous attendez de nous..."
+          style="border:1.5px solid #DDD8E8;border-radius:9px;padding:12px 14px;font-family:Poppins,sans-serif;font-size:13px;resize:vertical;min-height:90px;width:100%;"></textarea>
       </div>
-      <button type="submit" style="background:var(--violet);color:white;border:none;border-radius:8px;padding:15px;font-family:Poppins,sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.3s;width:100%;">Recevoir mon audit gratuit</button>
+
+      <button type="submit"
+        style="background:#4F0F5C;color:white;border:none;border-radius:9px;padding:15px;font-family:Poppins,sans-serif;font-size:14px;font-weight:600;letter-spacing:0.5px;cursor:pointer;transition:all 0.3s;width:100%;"
+        id="submit-btn">
+        Recevoir mon audit gratuit
+      </button>
+      <p style="font-size:11px;color:#999;text-align:center;margin-top:10px;">Sans engagement. Rapport PDF envoyé sous 24h ouvrées.</p>
     </form>
+
+    <!-- COLONNE DROITE -->
     <div>
       <div style="border-radius:16px;overflow:hidden;height:260px;margin-bottom:28px;">
-        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80" alt="Rapport audit digital" style="width:100%;height:100%;object-fit:cover;">
+        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80"
+          alt="Audit digital" style="width:100%;height:100%;object-fit:cover;">
       </div>
-      <div style="display:flex;flex-direction:column;gap:18px;margin-bottom:28px;">
+      <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:24px;">
         <div style="display:flex;gap:14px;align-items:flex-start;">
-          <div style="width:42px;height:42px;border-radius:10px;background:rgba(79,15,92,0.07);border:1px solid rgba(79,15,92,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <div style="width:42px;height:42px;border-radius:10px;background:rgba(79,15,92,0.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F0F5C" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           </div>
-          <div><div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-mid);font-weight:600;margin-bottom:2px;">Basé à</div><div style="font-size:14px;color:var(--text-dark);font-weight:500;">Valence (26) — France entière</div></div>
+          <div><div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#4A3050;font-weight:600;margin-bottom:2px;">Basé à</div><div style="font-size:14px;color:#1A0820;font-weight:500;">Valence (26) — France entière</div></div>
         </div>
         <div style="display:flex;gap:14px;align-items:flex-start;">
-          <div style="width:42px;height:42px;border-radius:10px;background:rgba(79,15,92,0.07);border:1px solid rgba(79,15,92,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <div style="width:42px;height:42px;border-radius:10px;background:rgba(79,15,92,0.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F0F5C" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
           </div>
-          <div><div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-mid);font-weight:600;margin-bottom:2px;">Email</div><div style="font-size:14px;color:var(--text-dark);font-weight:500;">contact@dwtdigital.fr</div></div>
+          <div><div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#4A3050;font-weight:600;margin-bottom:2px;">Email</div><div style="font-size:14px;color:#1A0820;font-weight:500;">contact@dwtdigital.fr</div></div>
         </div>
         <div style="display:flex;gap:14px;align-items:flex-start;">
-          <div style="width:42px;height:42px;border-radius:10px;background:rgba(79,15,92,0.07);border:1px solid rgba(79,15,92,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <div style="width:42px;height:42px;border-radius:10px;background:rgba(79,15,92,0.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F0F5C" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </div>
-          <div><div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-mid);font-weight:600;margin-bottom:2px;">Délai de réponse</div><div style="font-size:14px;color:var(--text-dark);font-weight:500;">Rapport envoyé sous 24h ouvrées</div></div>
+          <div><div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#4A3050;font-weight:600;margin-bottom:2px;">Délai de réponse</div><div style="font-size:14px;color:#1A0820;font-weight:500;">Rapport envoyé sous 24h ouvrées</div></div>
         </div>
       </div>
-      <div style="background:linear-gradient(135deg,var(--violet-dark),var(--violet));border-radius:14px;padding:24px;">
-        <h3 style="font-size:15px;font-weight:700;color:var(--beige);margin-bottom:8px;">Garantie satisfaction 30 jours</h3>
+      <div style="background:linear-gradient(135deg,#2D0636,#4F0F5C);border-radius:14px;padding:24px;">
+        <h3 style="font-size:15px;font-weight:700;color:#EFDEC9;margin-bottom:8px;">Garantie satisfaction 30 jours</h3>
         <p style="font-size:13px;color:rgba(239,222,201,0.6);line-height:1.6;">Si après 30 jours vous n'êtes pas entièrement satisfait, nous vous remboursons intégralement. Sans condition.</p>
       </div>
     </div>
   </div>
 </section>
+
 <script>
 async function handleContact(e) {
   e.preventDefault();
-  const btn = e.target.querySelector('button[type=submit]');
-  if(btn) { btn.textContent = 'Envoi en cours...'; btn.disabled = true; }
-  const f = e.target;
+  const form = e.target;
+  const btn = document.getElementById('submit-btn');
+
+  // Validation basique
+  const required = ['prenom','nom','email','commerce','ville','type_commerce','objectif'];
+  const missing = required.filter(n => !form[n]?.value?.trim());
+  if (missing.length > 0) {
+    alert('Veuillez remplir tous les champs obligatoires (*)');
+    return;
+  }
+
+  btn.textContent = 'Envoi en cours...';
+  btn.disabled = true;
+  btn.style.background = '#7B1FA2';
+
   const data = {
-    // Identité
-    nom_contact: ((f.prenom?.value||'') + ' ' + (f.nom?.value||'')).trim(),
-    prenom: f.prenom?.value || '',
-    nom: f.nom?.value || '',
-    email: f.email?.value || '',
-    telephone: f.telephone?.value || '',
+    // Identité contact
+    nom_contact: (form.prenom.value + ' ' + form.nom.value).trim(),
+    prenom: form.prenom.value.trim(),
+    nom: form.nom.value.trim(),
+    email: form.email.value.trim(),
+    telephone: form.telephone?.value?.trim() || '',
     // Commerce
-    nom_commerce: f.commerce?.value || '',
-    adresse: f.adresse?.value || '',
-    ville: f.ville?.value || '',
-    secteur: f.type_commerce?.value || '',
-    // Présence digitale actuelle
-    instagram_existant: f.instagram_existant?.value || '',
-    facebook_existant: f.facebook_existant?.value || '',
-    site_existant: f.site_existant?.value || '',
+    nom_commerce: form.commerce.value.trim(),
+    adresse: form.adresse?.value?.trim() || '',
+    ville: form.ville.value.trim(),
+    secteur: form.type_commerce.value,
+    // Présence digitale existante
+    instagram: form.instagram_existant?.value?.trim() || '',
+    facebook_existant: form.facebook_existant?.value?.trim() || '',
+    site_existant: form.site_existant?.value?.trim() || '',
     // Projet
-    objectif: f.objectif?.value || '',
-    budget_estime: f.budget_estime?.value || '',
-    description: f.besoin?.value || '',
-    // Champs Make/W10
+    objectif: form.objectif.value,
+    budget_estime: form.budget_estime?.value || 'Non défini',
+    description: form.besoin?.value?.trim() || '',
+    // Champs W10 requis
+    client: (form.prenom.value + ' ' + form.nom.value).trim(),
     notion_page_id: '',
-    client: ((f.prenom?.value||'') + ' ' + (f.nom?.value||'')).trim(),
     ton: 'Professionnel',
     cible: 'Clients locaux',
     avantages: '',
@@ -259,37 +362,50 @@ async function handleContact(e) {
     logo_url: '',
     evenements: ''
   };
-  
-  let sent = false;
-  // Tentative 1 — W10 (crée fiche Notion) avec CORS normal
+
+  let ok = false;
+
+  // Tentative 1 — CORS normal → W10
   try {
     const r = await fetch('https://hook.eu1.make.com/2hppj3cbl39q2b4lvsvdwm785tjprgtq', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-    sent = true;
+    ok = true;
+    console.log('W10 status:', r.status);
   } catch(err) {
+    console.log('CORS attempt failed, trying no-cors:', err.message);
     // Tentative 2 — no-cors fallback
     try {
       await fetch('https://hook.eu1.make.com/2hppj3cbl39q2b4lvsvdwm785tjprgtq', {
-        method: 'POST', mode: 'no-cors',
+        method: 'POST',
+        mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify(data)
       });
-      sent = true;
-    } catch(err2) { console.error('Webhook error:', err2); }
+      ok = true;
+    } catch(err2) {
+      console.error('Both attempts failed:', err2);
+    }
   }
-  
-  if(btn) {
-    btn.textContent = 'Demande reçue — audit sous 24h ✓';
-    btn.style.background = '#63AF21';
-  }
-  f.reset();
+
+  btn.textContent = 'Demande reçue — audit sous 24h ✓';
+  btn.style.background = '#63AF21';
+  form.reset();
+
   setTimeout(() => {
-    if(btn) { btn.textContent = 'Recevoir mon audit gratuit'; btn.style.background = ''; btn.disabled = false; }
+    btn.textContent = 'Recevoir mon audit gratuit';
+    btn.style.background = '#4F0F5C';
+    btn.disabled = false;
   }, 8000);
 }
+
+// Focus styles
+document.querySelectorAll('input, select, textarea').forEach(el => {
+  el.addEventListener('focus', () => el.style.borderColor = '#4F0F5C');
+  el.addEventListener('blur', () => el.style.borderColor = '#DDD8E8');
+});
 </script>
 
 
