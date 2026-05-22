@@ -222,20 +222,68 @@ nav img{height:40px!important;}
 async function handleContact(e) {
   e.preventDefault();
   const btn = e.target.querySelector('button[type=submit]');
-  btn.textContent = 'Envoi en cours...';
-  btn.disabled = true;
+  if(btn) { btn.textContent = 'Envoi en cours...'; btn.disabled = true; }
+
   const f = e.target;
+  const data = {
+    nom_commerce: f.commerce?.value || '',
+    secteur: f.type_commerce?.value || '',
+    description: f.besoin?.value || '',
+    prenom: f.prenom?.value || '',
+    nom: f.nom?.value || '',
+    email: f.email?.value || '',
+    telephone: f.telephone?.value || '',
+    adresse: 'France',
+    ton: 'Professionnel',
+    cible: 'Clients locaux',
+    avantages: '',
+    couleurs: '',
+    specialites: '',
+    objectif: f.besoin?.value || '',
+    concurrents: '',
+    adjectifs: '',
+    inspiration: '',
+    horaires: '',
+    instagram: '',
+    logo_url: '',
+    evenements: '',
+    notion_page_id: '',
+    client: ((f.prenom?.value || '') + ' ' + (f.nom?.value || '')).trim()
+  };
+
+  let ok = false;
+  
+  // Tentative 1 : POST JSON direct vers W10 (crée la fiche Notion)
   try {
-    await fetch('https://hook.eu2.make.com/namnmscora1ngj49wnb3ju9u4zsog77b', {
-      method: 'POST', headers: {'Content-Type': 'application/json'}, mode: 'no-cors',
-      body: JSON.stringify({nom_commerce:f.commerce?.value||'',secteur:f.type_commerce?.value||'',description:f.besoin?.value||'',prenom:f.prenom?.value||'',nom:f.nom?.value||'',email:f.email?.value||'',telephone:f.telephone?.value||'',adresse:'France',ton:'Professionnel',cible:'Clients locaux',avantages:'',couleurs:'',specialites:'',objectif:f.besoin?.value||'',concurrents:'',adjectifs:'',inspiration:'',horaires:'',instagram:'',logo_url:'',evenements:'',notion_page_id:'',client:f.prenom?.value||''})
+    const r = await fetch('https://hook.eu1.make.com/2hppj3cbl39q2b4lvsvdwm785tjprgtq', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
     });
-  } catch(err) {}
-  btn.textContent = 'Demande reçue — rapport sous 24h';
-  btn.style.background = '#63AF21';
-  btn.style.opacity = '1';
+    if(r.ok || r.status === 200) ok = true;
+  } catch(err) {
+    // Tentative 2 : no-cors si CORS échoue
+    try {
+      await fetch('https://hook.eu1.make.com/2hppj3cbl39q2b4lvsvdwm785tjprgtq', {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(data),
+        mode: 'no-cors'
+      });
+      ok = true;
+    } catch(err2) {}
+  }
+
+  // Succès affiché dans tous les cas (no-cors = pas de confirmation possible)
+  if(btn) {
+    btn.textContent = 'Demande reçue — rapport sous 24h';
+    btn.style.background = '#63AF21';
+    btn.style.color = 'white';
+  }
   f.reset();
-  setTimeout(()=>{btn.textContent='Recevoir mon audit gratuit';btn.style.background='';btn.disabled=false;},5000);
+  setTimeout(() => {
+    if(btn) { btn.textContent = 'Recevoir mon audit gratuit'; btn.style.background = ''; btn.disabled = false; }
+  }, 6000);
 }
 </script>
 
