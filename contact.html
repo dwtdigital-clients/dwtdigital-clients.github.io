@@ -223,67 +223,72 @@ async function handleContact(e) {
   e.preventDefault();
   const btn = e.target.querySelector('button[type=submit]');
   if(btn) { btn.textContent = 'Envoi en cours...'; btn.disabled = true; }
-
   const f = e.target;
   const data = {
-    nom_commerce: f.commerce?.value || '',
-    secteur: f.type_commerce?.value || '',
-    description: f.besoin?.value || '',
+    // Identité
+    nom_contact: ((f.prenom?.value||'') + ' ' + (f.nom?.value||'')).trim(),
     prenom: f.prenom?.value || '',
     nom: f.nom?.value || '',
     email: f.email?.value || '',
     telephone: f.telephone?.value || '',
-    adresse: 'France',
+    // Commerce
+    nom_commerce: f.commerce?.value || '',
+    adresse: f.adresse?.value || '',
+    ville: f.ville?.value || '',
+    secteur: f.type_commerce?.value || '',
+    // Présence digitale actuelle
+    instagram_existant: f.instagram_existant?.value || '',
+    facebook_existant: f.facebook_existant?.value || '',
+    site_existant: f.site_existant?.value || '',
+    // Projet
+    objectif: f.objectif?.value || '',
+    budget_estime: f.budget_estime?.value || '',
+    description: f.besoin?.value || '',
+    // Champs Make/W10
+    notion_page_id: '',
+    client: ((f.prenom?.value||'') + ' ' + (f.nom?.value||'')).trim(),
     ton: 'Professionnel',
     cible: 'Clients locaux',
     avantages: '',
     couleurs: '',
     specialites: '',
-    objectif: f.besoin?.value || '',
     concurrents: '',
     adjectifs: '',
     inspiration: '',
     horaires: '',
-    instagram: '',
     logo_url: '',
-    evenements: '',
-    notion_page_id: '',
-    client: ((f.prenom?.value || '') + ' ' + (f.nom?.value || '')).trim()
+    evenements: ''
   };
-
-  let ok = false;
   
-  // Tentative 1 : POST JSON direct vers W10 (crée la fiche Notion)
+  let sent = false;
+  // Tentative 1 — W10 (crée fiche Notion) avec CORS normal
   try {
     const r = await fetch('https://hook.eu1.make.com/2hppj3cbl39q2b4lvsvdwm785tjprgtq', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-    if(r.ok || r.status === 200) ok = true;
+    sent = true;
   } catch(err) {
-    // Tentative 2 : no-cors si CORS échoue
+    // Tentative 2 — no-cors fallback
     try {
       await fetch('https://hook.eu1.make.com/2hppj3cbl39q2b4lvsvdwm785tjprgtq', {
-        method: 'POST',
+        method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(data),
-        mode: 'no-cors'
+        body: JSON.stringify(data)
       });
-      ok = true;
-    } catch(err2) {}
+      sent = true;
+    } catch(err2) { console.error('Webhook error:', err2); }
   }
-
-  // Succès affiché dans tous les cas (no-cors = pas de confirmation possible)
+  
   if(btn) {
-    btn.textContent = 'Demande reçue — rapport sous 24h';
+    btn.textContent = 'Demande reçue — audit sous 24h ✓';
     btn.style.background = '#63AF21';
-    btn.style.color = 'white';
   }
   f.reset();
   setTimeout(() => {
     if(btn) { btn.textContent = 'Recevoir mon audit gratuit'; btn.style.background = ''; btn.disabled = false; }
-  }, 6000);
+  }, 8000);
 }
 </script>
 
