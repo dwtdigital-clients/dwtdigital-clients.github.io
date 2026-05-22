@@ -5,96 +5,124 @@
 <title>Espace Client — Cake Délice — DWT Digital</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;0,700;0,900&display=swap" rel="stylesheet">
 <style>
-:root{--v:#4F0F5C;--vl:#7B1FA2;--vd:#2D0636;--g:#63AF21;--b:#EFDEC9;--w:#FAFAF8;--td:#1A0820;--tm:#4A3050;}
+:root{--v:#4F0F5C;--vl:#7B1FA2;--vd:#2D0636;--g:#63AF21;--gl:#7BC93A;--b:#EFDEC9;--w:#FAFAF8;--td:#1A0820;--tm:#4A3050;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Poppins',sans-serif;background:#F0ECF5;min-height:100vh;display:grid;grid-template-rows:auto 1fr;}
-.topbar{background:var(--vd);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(99,175,33,0.2);position:sticky;top:0;z-index:100;}
+body{font-family:'Poppins',sans-serif;background:#F0ECF5;color:var(--td);min-height:100vh;}
+
+/* TOPBAR */
+.topbar{background:var(--vd);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(99,175,33,0.2);}
 .tb-logo img{height:38px;border-radius:6px;}
 .tb-info{display:flex;align-items:center;gap:12px;}
-.tb-name{font-size:13px;font-weight:600;color:var(--b);}
+.tb-name{font-size:13px;font-weight:700;color:var(--b);}
 .tb-plan{font-size:10px;color:var(--g);letter-spacing:1px;text-transform:uppercase;}
-.tb-av{width:34px;height:34px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;}
-.layout{display:grid;grid-template-columns:210px 1fr;min-height:calc(100vh - 62px);}
-.sidebar{background:white;border-right:1px solid #EDE8F5;padding:20px 14px;overflow-y:auto;}
-.sb-section{margin-bottom:24px;}
+.tb-av{width:34px;height:34px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;flex-shrink:0;}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 64px);}
+
+/* SIDEBAR */
+.sidebar{background:white;border-right:1px solid #EDE8F5;padding:20px 14px;}
 .sb-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--tm);font-weight:600;margin-bottom:10px;padding:0 8px;}
-.sb-nav a{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--tm);padding:9px 10px;border-radius:7px;text-decoration:none;margin-bottom:1px;transition:all 0.2s;}
-.sb-nav a:hover{background:#F9F7FC;color:var(--td);}
-.sb-nav a.active{background:rgba(79,15,92,0.08);color:var(--v);font-weight:600;}
-.sb-stat{background:#F9F7FC;border-radius:9px;padding:12px;margin-bottom:8px;}
-.sb-stat-n{font-size:20px;font-weight:900;color:var(--v);}
-.sb-stat-l{font-size:11px;color:var(--tm);}
-.main{padding:24px 28px;overflow-y:auto;}
-.page-t{font-size:19px;font-weight:700;margin-bottom:4px;}
-.page-s{font-size:13px;color:var(--tm);margin-bottom:22px;}
-.tabs{display:flex;gap:0;margin-bottom:22px;border-bottom:1px solid #EDE8F5;}
-.tab{padding:9px 18px;font-size:13px;font-weight:500;color:var(--tm);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;}
-.tab.active{color:var(--v);border-bottom-color:var(--v);font-weight:600;}
-.tab-pane{display:none;}
-.tab-pane.active{display:block;}
-.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.step-nav{display:flex;flex-direction:column;gap:2px;margin-bottom:24px;}
+.step-nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;transition:all 0.2s;border:none;background:transparent;width:100%;font-family:Poppins,sans-serif;text-align:left;}
+.step-nav-item:hover{background:#F9F7FC;}
+.step-nav-item.active{background:rgba(79,15,92,0.08);}
+.step-nav-item.locked{opacity:0.35;cursor:not-allowed;}
+.step-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.icon-done{background:var(--g);color:white;}
+.icon-active{background:var(--v);color:white;}
+.icon-pending{background:#EDE8F5;color:var(--tm);}
+.icon-locked{background:#F5F5F5;color:#CCC;}
+.step-nav-label{font-size:12px;font-weight:500;color:var(--td);}
+.step-nav-item.active .step-nav-label{color:var(--v);font-weight:700;}
+.step-nav-item.locked .step-nav-label{color:#CCC;}
+.step-status-tag{font-size:9px;color:var(--tm);margin-left:auto;}
+.step-status-tag.done{color:var(--g);}
+.step-status-tag.active{color:var(--v);font-weight:700;}
+
+/* MAIN */
+.main{padding:28px 32px;overflow-y:auto;}
+.step-pane{display:none;}
+.step-pane.active{display:block;}
+
+/* STEP HEADER */
+.step-header{margin-bottom:24px;}
+.step-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(99,175,33,0.08);border:1px solid rgba(99,175,33,0.2);color:var(--g);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;}
+.step-title{font-size:20px;font-weight:700;color:var(--td);margin-bottom:6px;}
+.step-desc{font-size:14px;color:var(--tm);line-height:1.7;}
+
+/* CARDS */
+.card{background:white;border:1px solid #EDE8F5;border-radius:14px;padding:24px;margin-bottom:16px;}
+.card-title{font-size:14px;font-weight:700;color:var(--td);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+
+/* IDENTITY PREVIEW */
+.identity-preview{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+.id-card{border-radius:10px;padding:18px;}
+.id-card-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.id-colors{display:flex;gap:8px;}
+.id-swatch{width:36px;height:36px;border-radius:8px;}
+.id-fonts{font-size:20px;font-weight:700;margin:4px 0;}
+.id-tagline{font-size:12px;font-style:italic;}
+.id-logo-preview{border-radius:12px;padding:20px;text-align:center;}
+
+/* POSTS GRID */
+.posts-grid{display:flex;flex-direction:column;gap:14px;}
+.post-card{background:white;border:1px solid #EDE8F5;border-radius:12px;overflow:hidden;}
+.pc-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #F5F0FC;}
+.pc-plat{font-size:12px;font-weight:600;color:var(--td);display:flex;align-items:center;gap:6px;}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
 .b-pend{background:rgba(239,156,17,0.1);color:#B7791F;}
 .b-ok{background:rgba(99,175,33,0.1);color:#2D7A0A;}
-.b-pub{background:rgba(79,15,92,0.08);color:var(--v);}
 .b-plan{background:rgba(59,130,246,0.1);color:#1D4ED8;}
 .b-wip{background:rgba(107,114,128,0.1);color:#374151;}
-.notif{background:rgba(99,175,33,0.07);border:1px solid rgba(99,175,33,0.2);border-radius:8px;padding:9px 14px;font-size:12px;color:#2D7A0A;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-/* Post card */
-.post-card{background:white;border:1px solid #EDE8F5;border-radius:12px;overflow:hidden;margin-bottom:14px;}
-.pc-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #F5F0FC;}
-.pc-plat{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--td);}
-.pc-body{display:grid;grid-template-columns:250px 1fr;}
+.pc-body{display:grid;grid-template-columns:220px 1fr;}
 .pc-preview{padding:14px;border-right:1px solid #F5F0FC;}
 .ig-mock{border:1px solid #E5E5E5;border-radius:8px;overflow:hidden;}
 .ig-mh{background:white;padding:6px 10px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #F0F0F0;}
 .ig-av{width:20px;height:20px;border-radius:50%;object-fit:cover;}
 .ig-un{font-size:10px;font-weight:700;color:#000;}
-.ig-img{height:150px;overflow:hidden;}
+.ig-img{height:130px;overflow:hidden;}
 .ig-img img{width:100%;height:100%;object-fit:cover;}
 .ig-cap{padding:7px 10px;font-size:9px;color:#333;line-height:1.4;background:white;}
 .pc-content{padding:14px;}
 .pc-cl{font-size:10px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
-.pc-txt{font-size:12px;color:var(--td);line-height:1.7;background:#F9F7FC;padding:10px;border-radius:7px;margin-bottom:10px;max-height:100px;overflow-y:auto;}
+.pc-txt{font-size:12px;color:var(--td);line-height:1.7;background:#F9F7FC;padding:10px;border-radius:7px;margin-bottom:8px;max-height:100px;overflow-y:auto;}
 .pc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
 .tag{background:rgba(79,15,92,0.06);color:var(--v);font-size:10px;padding:3px 9px;border-radius:20px;}
-.pc-meta{font-size:11px;color:var(--tm);background:#F9F7FC;padding:7px 10px;border-radius:6px;}
-.pc-actions{padding:12px 16px;background:#F9F7FC;border-top:1px solid #EDE8F5;display:flex;gap:9px;flex-wrap:wrap;}
-.btn{padding:8px 16px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:Poppins,sans-serif;transition:all 0.2s;}
+.pc-actions{padding:12px 16px;background:#F9F7FC;border-top:1px solid #EDE8F5;display:flex;gap:9px;}
+.btn{padding:9px 18px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:Poppins,sans-serif;transition:all 0.2s;}
 .btn-ok{background:var(--g);color:white;}
 .btn-ok:hover{background:#4d8c19;}
 .btn-mod{background:white;color:var(--td);border:1px solid #DDD8E8;}
 .btn-mod:hover{border-color:var(--v);}
-/* Historique */
-.hist-item{background:white;border:1px solid #EDE8F5;border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:14px;margin-bottom:10px;}
-.hist-img{width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;}
-.hist-text{flex:1;}
-.hist-title{font-size:13px;font-weight:600;}
-.hist-sub{font-size:11px;color:var(--tm);}
-/* Stats */
-.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px;}
-.stat-box{background:white;border:1px solid #EDE8F5;border-radius:11px;padding:16px;text-align:center;}
-.stat-box-n{font-size:26px;font-weight:900;color:var(--tm);}
-.stat-box-l{font-size:11px;color:var(--tm);margin-top:3px;}
-.stat-zero{font-size:26px;font-weight:900;color:#E2E8F0;}
-.stat-info{background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.15);border-radius:8px;padding:12px;font-size:12px;color:#1D4ED8;}
-/* Reseaux */
-.cn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-.cn-card{background:white;border:1px solid #EDE8F5;border-radius:11px;padding:16px;text-align:center;}
-.cn-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;}
-.cn-name{font-size:13px;font-weight:600;margin-bottom:3px;}
-.cn-status{font-size:11px;color:var(--tm);margin-bottom:11px;}
-.btn-connect{background:var(--v);color:white;border:none;border-radius:7px;padding:8px 16px;font-size:11px;font-weight:600;cursor:pointer;font-family:Poppins,sans-serif;width:100%;}
-.btn-connected{background:rgba(99,175,33,0.1);color:#2D7A0A;border:1px solid rgba(99,175,33,0.3);}
-/* Modal */
+.btn-primary{background:var(--v);color:white;border:none;border-radius:9px;padding:13px 28px;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.btn-primary:hover{background:var(--vl);transform:translateY(-1px);}
+
+/* LOCKED STATE */
+.locked-state{text-align:center;padding:48px 24px;background:white;border:2px dashed #EDE8F5;border-radius:14px;}
+.locked-icon{width:64px;height:64px;border-radius:50%;background:#F5F0FC;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.locked-title{font-size:16px;font-weight:700;color:var(--td);margin-bottom:8px;}
+.locked-sub{font-size:13px;color:var(--tm);line-height:1.6;}
+
+/* PROGRESS */
+.progress-bar{background:#EDE8F5;border-radius:20px;height:8px;margin-bottom:20px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(to right,var(--v),var(--g));border-radius:20px;transition:width 0.6s ease;}
+
+/* MODIFY MODAL */
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:1000;align-items:center;justify-content:center;padding:20px;}
 .modal-ov.open{display:flex;}
 .modal{background:white;border-radius:16px;max-width:480px;width:100%;padding:28px;}
+
+/* NOTIF */
+.notif{background:rgba(99,175,33,0.07);border:1px solid rgba(99,175,33,0.2);border-radius:8px;padding:10px 14px;font-size:12px;color:#2D7A0A;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.notif-warn{background:rgba(245,158,11,0.07);border-color:rgba(245,158,11,0.2);color:#B7791F;}
+
 @media(max-width:768px){
   .layout{grid-template-columns:1fr;}
   .sidebar{display:none;}
   .pc-body{grid-template-columns:1fr;}
   .pc-preview{display:none;}
-  .stat-grid,.cn-grid{grid-template-columns:1fr 1fr;}
+  .identity-preview{grid-template-columns:1fr;}
   .main{padding:16px;}
 }
 </style>
@@ -110,281 +138,426 @@ body{font-family:'Poppins',sans-serif;background:#F0ECF5;min-height:100vh;displa
 </div>
 
 <div class="layout">
+
+  <!-- SIDEBAR — Navigation par étapes -->
   <div class="sidebar">
-    <div class="sb-section">
-      <div class="sb-label">Menu</div>
-      <nav class="sb-nav">
-        <a href="#" class="active" onclick="showTab('pubs');return false;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Publications
-        </a>
-        <a href="#" onclick="showTab('stats');return false;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Statistiques
-        </a>
-        <a href="https://dwtdigital-clients.github.io/Lise/" target="_blank">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z"/></svg>Mon site
-        </a>
-        <a href="#" onclick="showTab('reseaux');return false;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>Mes réseaux
-        </a>
-        <a href="#" onclick="showTab('profil');return false;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Mon profil
-        </a>
-      </nav>
+    <div class="sb-label">Votre parcours</div>
+
+    <!-- Barre de progression -->
+    <div style="padding:0 8px;margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tm);margin-bottom:6px;">
+        <span>Progression</span>
+        <span id="progress-pct">20%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:20%;"></div></div>
     </div>
-    <div class="sb-section">
-      <div class="sb-label">Ce mois — Mai 2026</div>
-      <div class="sb-stat"><div class="sb-stat-n">5</div><div class="sb-stat-l">publications planifiées</div></div>
-      <div class="sb-stat"><div class="sb-stat-n" style="color:var(--g);">1</div><div class="sb-stat-l">en attente de validation</div></div>
+
+    <div class="step-nav">
+      <button class="step-nav-item active" id="nav-1" onclick="goStep(1)">
+        <div class="step-icon icon-active">1</div>
+        <div>
+          <div class="step-nav-label">Identité visuelle</div>
+          <div class="step-status-tag active">En cours</div>
+        </div>
+      </button>
+      <button class="step-nav-item locked" id="nav-2" onclick="goStep(2)">
+        <div class="step-icon icon-locked">2</div>
+        <div>
+          <div class="step-nav-label">Publications</div>
+          <div class="step-status-tag">Après étape 1</div>
+        </div>
+      </button>
+      <button class="step-nav-item locked" id="nav-3" onclick="goStep(3)">
+        <div class="step-icon icon-locked">3</div>
+        <div>
+          <div class="step-nav-label">Site vitrine</div>
+          <div class="step-status-tag">Après étape 2</div>
+        </div>
+      </button>
+      <button class="step-nav-item locked" id="nav-4" onclick="goStep(4)">
+        <div class="step-icon icon-locked">4</div>
+        <div>
+          <div class="step-nav-label">Réseaux sociaux</div>
+          <div class="step-status-tag">Après étape 3</div>
+        </div>
+      </button>
+      <button class="step-nav-item locked" id="nav-5" onclick="goStep(5)">
+        <div class="step-icon icon-locked">5</div>
+        <div>
+          <div class="step-nav-label">Suivi mensuel</div>
+          <div class="step-status-tag">Après activation</div>
+        </div>
+      </button>
+    </div>
+
+    <div style="padding:14px;background:#F9F7FC;border-radius:10px;margin-top:8px;">
+      <div style="font-size:11px;font-weight:600;color:var(--td);margin-bottom:4px;">Besoin d'aide ?</div>
+      <div style="font-size:11px;color:var(--tm);margin-bottom:8px;">Notre équipe est disponible</div>
+      <a href="/rappel.html?name=Lise&email=lisevernet@yahoo.com&commerce=Cake+Delice" style="display:block;background:var(--v);color:white;text-align:center;padding:8px;border-radius:7px;font-size:11px;font-weight:600;text-decoration:none;">Demander un rappel</a>
     </div>
   </div>
 
+  <!-- MAIN CONTENT -->
   <div class="main">
 
-    <!-- PUBLICATIONS -->
-    <div class="tab-pane active" id="tab-pubs">
-      <div class="page-t">Publications</div>
-      <div class="page-s">Mai 2026 — 5 publications planifiées</div>
+    <!-- ══════════════════════════════════
+         ÉTAPE 1 — IDENTITÉ VISUELLE
+    ══════════════════════════════════ -->
+    <div class="step-pane active" id="step-1">
+      <div class="step-header">
+        <div class="step-badge">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/></svg>
+          Étape 1 sur 5
+        </div>
+        <div class="step-title">Votre identité visuelle</div>
+        <div class="step-desc">Avant de créer vos contenus et votre site, nous définissons votre charte graphique. Elle donne une cohérence à tout ce que nous produirons pour vous.</div>
+      </div>
+
+      <!-- Phase A: Identité générée, en attente de validation -->
+      <div id="identity-awaiting">
+
+        <div class="notif">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Notre équipe a préparé votre proposition d'identité visuelle. Validez-la ou demandez des modifications.
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--v)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            Proposition d'identité visuelle — Cake Délice
+          </div>
+
+          <div class="identity-preview">
+
+            <!-- Couleurs -->
+            <div class="id-card" style="background:#F9F7FC;">
+              <div class="id-card-label" style="color:var(--tm);">Palette de couleurs</div>
+              <div class="id-colors">
+                <div style="text-align:center;">
+                  <div class="id-swatch" style="background:#5C2E1A;"></div>
+                  <div style="font-size:9px;color:var(--tm);margin-top:4px;">Chocolat</div>
+                </div>
+                <div style="text-align:center;">
+                  <div class="id-swatch" style="background:#F5E6D3;"></div>
+                  <div style="font-size:9px;color:var(--tm);margin-top:4px;">Crème</div>
+                </div>
+                <div style="text-align:center;">
+                  <div class="id-swatch" style="background:#E85D9A;"></div>
+                  <div style="font-size:9px;color:var(--tm);margin-top:4px;">Rose</div>
+                </div>
+                <div style="text-align:center;">
+                  <div class="id-swatch" style="background:#8B5E3C;"></div>
+                  <div style="font-size:9px;color:var(--tm);margin-top:4px;">Caramel</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Typographie -->
+            <div class="id-card" style="background:#FFF8F0;">
+              <div class="id-card-label" style="color:var(--tm);">Typographie</div>
+              <div style="font-family:Georgia,serif;font-size:22px;color:#5C2E1A;margin-bottom:4px;">Cake Délice</div>
+              <div style="font-family:Poppins,sans-serif;font-size:13px;color:#8B5E3C;font-style:italic;">Pâtisserie artisanale</div>
+              <div style="margin-top:8px;font-size:11px;color:var(--tm);">Titres : Playfair Display<br>Texte : Poppins Light</div>
+            </div>
+
+            <!-- Tagline -->
+            <div class="id-card" style="background:#FCF0F7;grid-column:span 2;">
+              <div class="id-card-label" style="color:var(--tm);">Tagline & ton de communication</div>
+              <div style="font-size:17px;font-weight:700;color:#5C2E1A;font-style:italic;margin-bottom:6px;">"Chaque gâteau raconte une histoire"</div>
+              <div style="font-size:12px;color:var(--tm);">Ton : Chaleureux, artisanal, gourmand — pour des particuliers qui cherchent du fait main avec amour.</div>
+            </div>
+
+          </div>
+
+          <!-- Aperçu post Instagram avec charte -->
+          <div style="margin-top:16px;">
+            <div style="font-size:11px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Aperçu — Post Instagram avec votre charte</div>
+            <div style="max-width:260px;">
+              <div class="ig-mock">
+                <div class="ig-mh">
+                  <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=60&q=80" class="ig-av" alt="">
+                  <span class="ig-un">cakedelice_valence</span>
+                </div>
+                <div style="background:linear-gradient(135deg,#F9F0E8,#F5E6D3);height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px;text-align:center;">
+                  <div style="font-family:Georgia,serif;font-size:14px;font-style:italic;color:#5C2E1A;margin-bottom:4px;">Cake Délice</div>
+                  <div style="font-size:11px;color:#8B5E3C;letter-spacing:1px;text-transform:uppercase;font-size:9px;">Pâtisserie artisanale</div>
+                  <div style="width:40px;height:1px;background:#8B5E3C;margin:8px 0;"></div>
+                  <div style="font-size:10px;color:#8B5E3C;">Valence · Sur commande</div>
+                </div>
+                <div class="ig-cap"><strong>cakedelice_valence</strong> Chaque gâteau raconte une histoire... ✨</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px;margin-top:20px;padding-top:18px;border-top:1px solid #EDE8F5;">
+            <button class="btn btn-ok" onclick="validateIdentity()" style="flex:1;padding:12px;">Valider cette identité visuelle</button>
+            <button class="btn btn-mod" onclick="openModifyIdentity()" style="flex:1;padding:12px;">Demander des modifications</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Phase B: Identité validée (cachée au départ) -->
+      <div id="identity-done" style="display:none;">
+        <div class="notif">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Identité visuelle validée ! Les étapes suivantes sont maintenant accessibles.
+        </div>
+        <div class="card" style="text-align:center;padding:32px;">
+          <div style="width:60px;height:60px;border-radius:50%;background:rgba(99,175,33,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#63AF21" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div style="font-size:17px;font-weight:700;color:var(--td);margin-bottom:8px;">Identité validée</div>
+          <div style="font-size:13px;color:var(--tm);margin-bottom:20px;">Palette chocolat/crème/rose · Playfair Display + Poppins · "Chaque gâteau raconte une histoire"</div>
+          <button class="btn-primary" onclick="goStep(2)">Continuer — Étape 2 : Publications</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══════════════════════════════════
+         ÉTAPE 2 — PUBLICATIONS
+    ══════════════════════════════════ -->
+    <div class="step-pane" id="step-2">
+      <div class="step-header">
+        <div class="step-badge">Étape 2 sur 5</div>
+        <div class="step-title">Vos publications</div>
+        <div class="step-desc">Basés sur votre identité visuelle validée, voici vos premiers contenus pour Instagram, Facebook et Google My Business.</div>
+      </div>
 
       <div class="notif">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        1 publication en attente de votre validation — Cliquez sur "Valider" pour approuver
+        1 publication en attente de validation — Validez pour qu'elle soit publiée automatiquement
       </div>
 
-      <!-- Post 1: Instagram PENDING -->
-      <div class="post-card">
-        <div class="pc-head">
-          <div class="pc-plat">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
-            Instagram — Semaine 21
+      <div class="posts-grid">
+
+        <!-- Post 1: Instagram EN ATTENTE -->
+        <div class="post-card">
+          <div class="pc-head">
+            <div class="pc-plat">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+              Instagram — Semaine 21
+            </div>
+            <span class="badge b-pend">En attente de validation</span>
           </div>
-          <span class="badge b-pend">En attente de validation</span>
-        </div>
-        <div class="pc-body">
-          <div class="pc-preview">
-            <div class="pc-cl">Aperçu Instagram</div>
-            <div class="ig-mock">
-              <div class="ig-mh">
-                <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=60&q=80" class="ig-av" alt="">
-                <span class="ig-un">cakedelice_valence</span>
+          <div class="pc-body">
+            <div class="pc-preview">
+              <div style="font-size:10px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Aperçu Instagram</div>
+              <div class="ig-mock">
+                <div class="ig-mh">
+                  <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=60&q=80" class="ig-av" alt="">
+                  <span class="ig-un">cakedelice_valence</span>
+                </div>
+                <div class="ig-img"><img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=480&q=80" alt="Gâteau"></div>
+                <div class="ig-cap"><strong>cakedelice_valence</strong> Chaque gâteau raconte une histoire... Nos créations sur mesure pour vos mariages ✨</div>
               </div>
-              <div class="ig-img"><img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=480&q=80" alt="Gâteau"></div>
-              <div class="ig-cap"><strong>cakedelice_valence</strong> Chaque gâteau raconte une histoire... Nos créations sur mesure pour vos mariages.</div>
+            </div>
+            <div class="pc-content">
+              <div class="pc-cl">Texte du post</div>
+              <div class="pc-txt">Bienvenue chez Cake Délice ! Lise crée pour vous des pâtisseries artisanales sur mesure pour vos mariages, anniversaires et célébrations. Chaque création est unique, pensée avec soin et réalisée avec les meilleurs ingrédients locaux.</div>
+              <div class="pc-cl">Hashtags</div>
+              <div class="pc-tags"><span class="tag">#CakeDelice</span><span class="tag">#Patisserie</span><span class="tag">#Valence</span><span class="tag">#GateauMariage</span><span class="tag">#Artisanal</span></div>
+              <div style="font-size:11px;color:var(--tm);background:#F9F7FC;padding:8px 10px;border-radius:6px;">Meilleur horaire : Jeudi 18h30 · Portée estimée : 1 200 personnes</div>
             </div>
           </div>
-          <div class="pc-content">
-            <div class="pc-cl">Texte du post</div>
-            <div class="pc-txt">Bienvenue chez Cake Délice ! Lise crée pour vous des pâtisseries artisanales sur mesure pour vos mariages, anniversaires et célébrations. Chaque création est unique, pensée avec soin et réalisée avec les meilleurs ingrédients locaux.</div>
-            <div class="pc-cl">Hashtags</div>
-            <div class="pc-tags"><span class="tag">#CakeDelice</span><span class="tag">#Patisserie</span><span class="tag">#Valence</span><span class="tag">#GateauMariage</span><span class="tag">#Artisanal</span><span class="tag">#SurMesure</span></div>
-            <div class="pc-meta">Meilleur horaire : Jeudi 18h30 — Portée estimée : 1 200-1 500 personnes</div>
+          <div class="pc-actions">
+            <button class="btn btn-ok" onclick="validatePost(this,'Instagram Semaine 21')">Valider et programmer</button>
+            <button class="btn btn-mod" onclick="openModifyPost('Instagram Semaine 21')">Demander une modification</button>
+            <button class="btn" style="background:white;color:#C53030;border:1px solid #FEB2B2;" onclick="rejectPost(this)">Refuser</button>
           </div>
         </div>
-        <div class="pc-actions">
-          <button class="btn btn-ok" onclick="validatePost(this)">Valider et programmer</button>
-          <button class="btn btn-mod" onclick="openModify('Post Instagram Semaine 21')">Demander une modification</button>
-          <button class="btn" style="background:white;color:#C53030;border:1px solid #FEB2B2;">Refuser</button>
-        </div>
-      </div>
 
-      <!-- Post 2: Facebook PLANIFIÉ -->
-      <div class="post-card">
-        <div class="pc-head">
-          <div class="pc-plat">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-            Facebook — Semaine 22
+        <!-- Post 2: Facebook PLANIFIÉ -->
+        <div class="post-card">
+          <div class="pc-head">
+            <div class="pc-plat">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              Facebook — Semaine 22
+            </div>
+            <span class="badge b-plan">Planifié — 28 mai</span>
           </div>
-          <span class="badge b-plan">Planifié — 28 mai 2026</span>
-        </div>
-        <div class="pc-body">
-          <div class="pc-preview">
-            <div class="pc-cl">Aperçu Facebook</div>
-            <div class="ig-mock">
-              <div class="ig-mh" style="background:#f0f2f5;">
-                <div style="width:20px;height:20px;border-radius:50%;background:#1877F2;display:flex;align-items:center;justify-content:center;font-size:9px;color:white;font-weight:700;">C</div>
-                <span class="ig-un">Cake Délice</span>
+          <div class="pc-body">
+            <div class="pc-preview">
+              <div style="font-size:10px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Aperçu Facebook</div>
+              <div class="ig-mock">
+                <div class="ig-mh" style="background:#f0f2f5;"><div style="width:20px;height:20px;border-radius:50%;background:#1877F2;display:flex;align-items:center;justify-content:center;font-size:9px;color:white;font-weight:700;">C</div><span class="ig-un">Cake Délice</span></div>
+                <div class="ig-img"><img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=480&q=80" alt="Atelier"></div>
+                <div class="ig-cap"><strong>Cake Délice</strong> Atelier pâtisserie le samedi 30 mai !</div>
               </div>
-              <div class="ig-img"><img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=480&q=80" alt="Atelier"></div>
-              <div class="ig-cap"><strong>Cake Délice</strong> Rejoignez notre prochain atelier pâtisserie le samedi 30 mai !</div>
+            </div>
+            <div class="pc-content">
+              <div class="pc-cl">Texte du post</div>
+              <div class="pc-txt">Rejoignez notre prochain atelier pâtisserie le samedi 30 mai à Valence ! Adultes et enfants bienvenus. Places limitées — réservez vite via le lien en bio !</div>
+              <div style="font-size:11px;color:var(--tm);background:#F9F7FC;padding:8px 10px;border-radius:6px;">Publication automatique le 28 mai à 12h00</div>
             </div>
           </div>
-          <div class="pc-content">
-            <div class="pc-cl">Texte du post</div>
-            <div class="pc-txt">Envie d'apprendre à réaliser de magnifiques gâteaux ? Rejoignez notre prochain atelier pâtisserie le samedi 30 mai à Valence ! Adultes et enfants bienvenus. Places limitées — réservez vite !</div>
-            <div class="pc-cl">Hashtags</div>
-            <div class="pc-tags"><span class="tag">#AtelierPatisserie</span><span class="tag">#CakeDelice</span><span class="tag">#Valence</span><span class="tag">#CoursDeCuisine</span></div>
-            <div class="pc-meta">Publication prévue : Mercredi 28 mai à 12h00</div>
+          <div class="pc-actions" style="background:white;border:none;padding:12px 16px;">
+            <span style="font-size:12px;color:var(--tm);">Ce post a été validé. Publication programmée automatiquement.</span>
           </div>
         </div>
-        <div class="pc-actions" style="background:white;border:none;">
-          <span style="font-size:12px;color:var(--tm);">Ce post a été validé. Publication automatique le 28 mai à 12h00.</span>
-        </div>
-      </div>
 
-      <!-- Post 3: GMB PLANIFIÉ -->
-      <div class="post-card">
-        <div class="pc-head">
-          <div class="pc-plat">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-            Google My Business — Semaine 22
+        <!-- Post 3: GMB PLANIFIÉ -->
+        <div class="post-card">
+          <div class="pc-head">
+            <div class="pc-plat">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Google My Business — Semaine 22
+            </div>
+            <span class="badge b-plan">Planifié — 27 mai</span>
           </div>
-          <span class="badge b-plan">Planifié — 27 mai 2026</span>
-        </div>
-        <div class="pc-body">
-          <div class="pc-preview">
-            <div class="pc-cl">Aperçu Google</div>
-            <div class="ig-mock">
-              <div class="ig-mh" style="background:#fff;"><span style="font-size:11px;color:#4285F4;font-weight:700;">Google</span></div>
-              <div class="ig-img"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=480&q=80" alt="Pâtisserie"></div>
-              <div class="ig-cap"><strong>Cake Délice, Valence</strong> Commandez vos gâteaux de mariage sur mesure pour la saison 2026 !</div>
+          <div class="pc-body" style="grid-template-columns:1fr;">
+            <div class="pc-content" style="border:none;">
+              <div class="pc-cl">Publication Google</div>
+              <div class="pc-txt">Saison des mariages 2026 — Commandez dès maintenant votre gâteau de mariage personnalisé chez Cake Délice à Valence. Chaque création est unique.</div>
+              <div style="font-size:11px;color:var(--tm);background:#F9F7FC;padding:8px 10px;border-radius:6px;">Publication automatique le 27 mai à 9h00</div>
             </div>
           </div>
-          <div class="pc-content">
-            <div class="pc-cl">Texte</div>
-            <div class="pc-txt">Saison des mariages 2026 — Commandez dès maintenant votre gâteau de mariage personnalisé chez Cake Délice à Valence. Chaque création est unique, réalisée avec passion par Lise.</div>
-            <div class="pc-meta">Publication GMB prévue : Mardi 27 mai à 9h00</div>
-          </div>
         </div>
-        <div class="pc-actions" style="background:white;border:none;">
-          <span style="font-size:12px;color:var(--tm);">Publication automatique le 27 mai à 9h00.</span>
-        </div>
-      </div>
 
-      <!-- Post 4: Instagram EN COURS DE CREATION -->
-      <div class="post-card">
-        <div class="pc-head">
-          <div class="pc-plat">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/></svg>
-            Instagram — Semaine 23
+        <!-- Post 4: EN COURS DE CRÉATION -->
+        <div class="post-card">
+          <div class="pc-head">
+            <div class="pc-plat">Instagram — Semaine 23</div>
+            <span class="badge b-wip">En cours de création</span>
           </div>
-          <span class="badge b-wip">En cours de création</span>
-        </div>
-        <div class="pc-body" style="grid-template-columns:1fr;">
-          <div class="pc-content" style="border:none;">
-            <div style="background:#F9F7FC;border-radius:10px;padding:20px;text-align:center;">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5" style="margin:0 auto 12px;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-              <p style="font-size:13px;color:var(--tm);">Notre équipe prépare votre post pour la semaine 23. Vous recevrez une notification quand il sera prêt à valider.</p>
+          <div class="pc-body" style="grid-template-columns:1fr;">
+            <div class="pc-content" style="border:none;">
+              <div style="background:#F9F7FC;border-radius:10px;padding:20px;text-align:center;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5" style="margin:0 auto 10px;display:block;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                <p style="font-size:13px;color:var(--tm);">Notre équipe prépare votre prochain post. Vous recevrez une notification quand il sera prêt à valider.</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Post 5: Email Marketing EN COURS -->
-      <div class="post-card">
-        <div class="pc-head">
-          <div class="pc-plat">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            Email Newsletter — Mai 2026
-          </div>
-          <span class="badge b-wip">En cours de création</span>
-        </div>
-        <div class="pc-body" style="grid-template-columns:1fr;">
-          <div class="pc-content" style="border:none;">
-            <div style="background:#F9F7FC;border-radius:10px;padding:20px;text-align:center;">
-              <p style="font-size:13px;color:var(--tm);">Newsletter mensuelle en préparation — Actualités de la boutique, offres de saison, agenda des ateliers.</p>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- Historique -->
-      <div style="font-size:14px;font-weight:600;margin:24px 0 12px;padding-top:20px;border-top:1px solid #EDE8F5;">Historique des publications</div>
-      <div class="hist-item">
-        <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=80&q=80" class="hist-img" alt="">
-        <div class="hist-text"><div class="hist-title">Post Instagram — Gâteau de mariage</div><div class="hist-sub">Publié le 14 mai 2026 — 247 mentions j'aime — 18 commentaires</div></div>
-        <span class="badge b-pub">Publié</span>
+      <div style="font-size:14px;font-weight:600;margin:24px 0 12px;padding-top:20px;border-top:1px solid #EDE8F5;">Historique</div>
+      <div style="background:white;border:1px solid #EDE8F5;border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+        <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=80&q=80" style="width:44px;height:44px;border-radius:8px;object-fit:cover;" alt="">
+        <div style="flex:1;"><div style="font-size:13px;font-weight:600;">Post Instagram — Gâteau de mariage</div><div style="font-size:11px;color:var(--tm);">Publié le 14 mai · 247 mentions j'aime</div></div>
+        <span class="badge b-ok">Publié</span>
       </div>
-      <div class="hist-item">
-        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=80&q=80" class="hist-img" alt="">
-        <div class="hist-text"><div class="hist-title">Post Instagram — Atelier enfants</div><div class="hist-sub">Publié le 7 mai 2026 — 189 mentions j'aime</div></div>
-        <span class="badge b-pub">Publié</span>
+      <div style="background:white;border:1px solid #EDE8F5;border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=80&q=80" style="width:44px;height:44px;border-radius:8px;object-fit:cover;" alt="">
+        <div style="flex:1;"><div style="font-size:13px;font-weight:600;">Post Instagram — Atelier enfants</div><div style="font-size:11px;color:var(--tm);">Publié le 7 mai · 189 mentions j'aime</div></div>
+        <span class="badge b-ok">Publié</span>
       </div>
-      <div class="hist-item">
-        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=80&q=80" alt="" class="hist-img">
-        <div class="hist-text"><div class="hist-title">Post Facebook — Fête des Mères</div><div class="hist-sub">Publié le 25 avril 2026 — 312 personnes atteintes</div></div>
-        <span class="badge b-pub">Publié</span>
+
+      <div style="margin-top:20px;text-align:center;">
+        <button class="btn-primary" onclick="goStep(3)">Continuer — Étape 3 : Site vitrine</button>
       </div>
     </div>
 
-    <!-- STATS -->
-    <div class="tab-pane" id="tab-stats">
-      <div class="page-t">Statistiques</div>
-      <div class="page-s">Données temps réel — basées sur les plateformes connectées</div>
-      <div class="stat-info" style="margin-bottom:18px;">
-        <strong>Note :</strong> Les statistiques Facebook et Google My Business affichent 0 car ces plateformes ne sont pas encore connectées. Connectez-les dans l'onglet "Mes réseaux" pour voir les vraies données.
+
+    <!-- ══════════════════════════════════
+         ÉTAPE 3 — SITE VITRINE
+    ══════════════════════════════════ -->
+    <div class="step-pane" id="step-3">
+      <div class="step-header">
+        <div class="step-badge">Étape 3 sur 5</div>
+        <div class="step-title">Votre site vitrine</div>
+        <div class="step-desc">Votre site professionnel est en ligne. Vérifiez que tout vous convient et demandez des modifications si nécessaire.</div>
       </div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:12px;">Instagram (connecté)</div>
-      <div class="stat-grid">
-        <div class="stat-box"><div class="stat-box-n" style="color:var(--v);">1 247</div><div class="stat-box-l">Portée moyenne / post</div></div>
-        <div class="stat-box"><div class="stat-box-n" style="color:var(--g);">4.8%</div><div class="stat-box-l">Taux d'engagement</div></div>
-        <div class="stat-box"><div class="stat-box-n" style="color:var(--v);">+12</div><div class="stat-box-l">Nouveaux abonnés ce mois</div></div>
+
+      <div class="card">
+        <div class="card-title">Site vitrine Cake Délice</div>
+        <div style="border-radius:10px;overflow:hidden;border:1px solid #EDE8F5;margin-bottom:16px;">
+          <div style="background:#F0F0F0;padding:8px 12px;display:flex;gap:6px;align-items:center;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#ff5f57;"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#febc2e;"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#28c840;"></div>
+            <div style="flex:1;background:white;border-radius:4px;padding:5px 10px;font-size:11px;color:#666;">dwtdigital-clients.github.io/Lise/</div>
+          </div>
+          <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=700&q=80" style="width:100%;height:200px;object-fit:cover;" alt="Site Cake Délice">
+        </div>
+        <div style="display:flex;gap:12px;">
+          <a href="https://dwtdigital-clients.github.io/Lise/" target="_blank" class="btn-primary" style="flex:1;text-align:center;padding:12px;text-decoration:none;">Voir mon site</a>
+          <button class="btn btn-mod" onclick="openModifyPost('Site vitrine')" style="flex:1;padding:12px;">Demander des modifications</button>
+        </div>
       </div>
-      <div style="font-size:13px;font-weight:600;margin:18px 0 12px;">Facebook (non connecté)</div>
-      <div class="stat-grid">
-        <div class="stat-box"><div class="stat-zero">—</div><div class="stat-box-l">Portée</div></div>
-        <div class="stat-box"><div class="stat-zero">—</div><div class="stat-box-l">Engagement</div></div>
-        <div class="stat-box"><div class="stat-zero">—</div><div class="stat-box-l">Abonnés</div></div>
-      </div>
-      <div style="font-size:13px;font-weight:600;margin:18px 0 12px;">Google My Business (non connecté)</div>
-      <div class="stat-grid">
-        <div class="stat-box"><div class="stat-zero">—</div><div class="stat-box-l">Vues fiche</div></div>
-        <div class="stat-box"><div class="stat-zero">—</div><div class="stat-box-l">Appels</div></div>
-        <div class="stat-box"><div class="stat-zero">—</div><div class="stat-box-l">Avis</div></div>
+
+      <div style="margin-top:16px;text-align:center;">
+        <button class="btn-primary" onclick="goStep(4)">Continuer — Étape 4 : Réseaux sociaux</button>
       </div>
     </div>
 
-    <!-- RESEAUX -->
-    <div class="tab-pane" id="tab-reseaux">
-      <div class="page-t">Mes réseaux sociaux</div>
-      <div class="page-s">Connectez vos plateformes pour activer la publication automatique</div>
-      <div class="cn-grid" style="margin-top:16px;">
-        <div class="cn-card">
-          <div class="cn-icon" style="background:linear-gradient(135deg,#f09433,#dc2743,#bc1888);">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4" fill="none" stroke="white" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="white"/></svg>
+
+    <!-- ══════════════════════════════════
+         ÉTAPE 4 — RÉSEAUX SOCIAUX
+    ══════════════════════════════════ -->
+    <div class="step-pane" id="step-4">
+      <div class="step-header">
+        <div class="step-badge">Étape 4 sur 5</div>
+        <div class="step-title">Connexion de vos réseaux</div>
+        <div class="step-desc">Connectez vos comptes pour que nos publications soient automatiquement publiées en votre nom.</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;">
+        <div class="card" style="text-align:center;padding:20px;">
+          <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#f09433,#dc2743,#bc1888);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4" fill="none" stroke="white" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="white"/></svg>
           </div>
-          <div class="cn-name">Instagram</div>
-          <div class="cn-status">@cakedelice_valence</div>
-          <button class="btn-connect btn-connected">Connecté</button>
+          <div style="font-size:13px;font-weight:600;margin-bottom:3px;">Instagram</div>
+          <div style="font-size:11px;color:#2D7A0A;margin-bottom:12px;">Connecté ✓</div>
+          <button style="width:100%;background:rgba(99,175,33,0.1);color:#2D7A0A;border:1px solid rgba(99,175,33,0.3);border-radius:7px;padding:7px;font-size:11px;font-weight:600;cursor:default;">Actif</button>
         </div>
-        <div class="cn-card">
-          <div class="cn-icon" style="background:#1877F2;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        <div class="card" style="text-align:center;padding:20px;">
+          <div style="width:48px;height:48px;border-radius:12px;background:#1877F2;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
           </div>
-          <div class="cn-name">Facebook</div>
-          <div class="cn-status" style="color:#EF4444;">Non connecté</div>
-          <button class="btn-connect" onclick="alert('Connexion Facebook — Vous allez être redirigé vers la page de connexion Facebook. Vos accès sont sécurisés.')">Connecter</button>
+          <div style="font-size:13px;font-weight:600;margin-bottom:3px;">Facebook</div>
+          <div style="font-size:11px;color:#EF4444;margin-bottom:12px;">Non connecté</div>
+          <button onclick="alert('Connexion Facebook — Vous serez redirigé vers la page de connexion Facebook sécurisée.')" style="width:100%;background:var(--v);color:white;border:none;border-radius:7px;padding:7px;font-size:11px;font-weight:600;cursor:pointer;font-family:Poppins,sans-serif;">Connecter</button>
         </div>
-        <div class="cn-card">
-          <div class="cn-icon" style="background:#4285F4;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+        <div class="card" style="text-align:center;padding:20px;">
+          <div style="width:48px;height:48px;border-radius:12px;background:#4285F4;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5" fill="white" stroke="none"/></svg>
           </div>
-          <div class="cn-name">Google My Business</div>
-          <div class="cn-status" style="color:#EF4444;">Non connecté</div>
-          <button class="btn-connect" onclick="alert('Connexion Google My Business — Vous allez être redirigé vers la connexion Google.')">Connecter</button>
+          <div style="font-size:13px;font-weight:600;margin-bottom:3px;">Google My Business</div>
+          <div style="font-size:11px;color:#EF4444;margin-bottom:12px;">Non connecté</div>
+          <button onclick="alert('Connexion Google My Business — Vous serez redirigé vers la connexion Google.')" style="width:100%;background:var(--v);color:white;border:none;border-radius:7px;padding:7px;font-size:11px;font-weight:600;cursor:pointer;font-family:Poppins,sans-serif;">Connecter</button>
         </div>
       </div>
-      <div style="margin-top:16px;padding:14px;background:rgba(79,15,92,0.04);border-radius:10px;font-size:13px;color:var(--tm);">
-        Une fois connectés, DWT Digital publie vos contenus validés sur chaque plateforme. Vous pouvez révoquer les accès à tout moment.
+
+      <div style="background:rgba(79,15,92,0.04);border-radius:10px;padding:14px;font-size:13px;color:var(--tm);margin-bottom:16px;">
+        Connexion sécurisée — vous restez propriétaire de vos comptes et pouvez révoquer l'accès à tout moment.
+      </div>
+
+      <div style="text-align:center;">
+        <button class="btn-primary" onclick="goStep(5)">Continuer — Étape 5 : Suivi mensuel</button>
       </div>
     </div>
 
-    <!-- PROFIL -->
-    <div class="tab-pane" id="tab-profil">
-      <div class="page-t">Mon profil</div>
-      <div class="page-s">Informations de votre commerce</div>
-      <div class="card" style="max-width:580px;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-          <div><div style="font-size:11px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Commerce</div><div style="font-size:14px;font-weight:600;">Cake Délice</div></div>
-          <div><div style="font-size:11px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Secteur</div><div style="font-size:14px;">Pâtisserie artisanale</div></div>
-          <div><div style="font-size:11px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Contact</div><div style="font-size:14px;">Lise Vernet</div></div>
-          <div><div style="font-size:11px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Email</div><div style="font-size:14px;">lisevernet@yahoo.com</div></div>
-          <div><div style="font-size:11px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Téléphone</div><div style="font-size:14px;">07 82 92 96 94</div></div>
-          <div><div style="font-size:11px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Zone</div><div style="font-size:14px;">Valence 26000</div></div>
-          <div><div style="font-size:11px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Pack actif</div><div style="font-size:14px;color:var(--v);font-weight:600;">Pack Social Pro — 497€/mois</div></div>
-          <div><div style="font-size:11px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Statut</div><span class="badge b-ok">Client actif</span></div>
-        </div>
-        <div style="margin-top:18px;padding-top:14px;border-top:1px solid #EDE8F5;display:flex;gap:10px;">
-          <button style="background:var(--v);color:white;border:none;border-radius:7px;padding:10px 18px;font-size:12px;font-weight:600;cursor:pointer;font-family:Poppins,sans-serif;">Modifier</button>
-          <a href="/contact.html" style="background:white;color:var(--td);border:1px solid #DDD8E8;border-radius:7px;padding:10px 18px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;">Contacter DWT Digital</a>
+
+    <!-- ══════════════════════════════════
+         ÉTAPE 5 — SUIVI MENSUEL
+    ══════════════════════════════════ -->
+    <div class="step-pane" id="step-5">
+      <div class="step-header">
+        <div class="step-badge">Étape 5 sur 5</div>
+        <div class="step-title">Votre suivi mensuel</div>
+        <div class="step-desc">Tout est en place ! Voici votre tableau de bord de performance.</div>
+      </div>
+
+      <div class="notif">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Félicitations Lise — votre présence digitale est entièrement opérationnelle !
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;">
+        <div class="card" style="text-align:center;"><div style="font-size:28px;font-weight:900;color:var(--v);">1 247</div><div style="font-size:11px;color:var(--tm);">Portée moyenne / post</div></div>
+        <div class="card" style="text-align:center;"><div style="font-size:28px;font-weight:900;color:var(--g);">4.8%</div><div style="font-size:11px;color:var(--tm);">Taux d'engagement</div></div>
+        <div class="card" style="text-align:center;"><div style="font-size:28px;font-weight:900;color:var(--v);">+12</div><div style="font-size:11px;color:var(--tm);">Nouveaux abonnés</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Prochain rendez-vous mensuel</div>
+        <p style="font-size:14px;color:var(--tm);line-height:1.7;">Chaque mois, notre équipe vous présente un bilan de performances et prépare vos contenus du mois suivant. Vous recevez votre rapport par email.</p>
+        <div style="margin-top:14px;">
+          <a href="/rappel.html?name=Lise&email=lisevernet@yahoo.com&commerce=Cake+Delice" style="background:var(--v);color:white;padding:11px 24px;border-radius:7px;font-size:13px;font-weight:600;text-decoration:none;display:inline-block;">Planifier mon bilan mensuel</a>
         </div>
       </div>
     </div>
@@ -392,73 +565,135 @@ body{font-family:'Poppins',sans-serif;background:#F0ECF5;min-height:100vh;displa
   </div><!-- end main -->
 </div><!-- end layout -->
 
-<!-- Modal modification -->
+<!-- MODAL MODIFICATION -->
 <div class="modal-ov" id="mod-modal">
   <div class="modal">
-    <h3 style="font-size:17px;font-weight:700;margin-bottom:8px;">Demander une modification</h3>
-    <p id="mod-title" style="font-size:13px;color:var(--tm);margin-bottom:14px;"></p>
-    <textarea id="mod-txt" style="width:100%;border:1px solid #DDD8E8;border-radius:8px;padding:11px;font-family:Poppins,sans-serif;font-size:13px;min-height:80px;resize:vertical;" placeholder="Décrivez la modification souhaitée..."></textarea>
-    <div style="display:flex;gap:10px;margin-top:14px;">
-      <button onclick="sendMod()" style="flex:1;background:var(--v);color:white;border:none;border-radius:7px;padding:11px;font-size:12px;font-weight:600;cursor:pointer;font-family:Poppins,sans-serif;">Envoyer</button>
-      <button onclick="closeMod()" style="background:white;border:1px solid #DDD8E8;border-radius:7px;padding:11px 18px;font-size:12px;cursor:pointer;font-family:Poppins,sans-serif;">Annuler</button>
+    <h3 style="font-size:17px;font-weight:700;margin-bottom:6px;">Demander une modification</h3>
+    <p id="mod-context" style="font-size:13px;color:var(--tm);margin-bottom:14px;"></p>
+    <textarea id="mod-txt" style="width:100%;border:1px solid #DDD8E8;border-radius:8px;padding:11px;font-family:Poppins,sans-serif;font-size:13px;min-height:80px;resize:vertical;margin-bottom:14px;" placeholder="Décrivez la modification souhaitée..."></textarea>
+    <div style="display:flex;gap:10px;">
+      <button onclick="sendModification()" style="flex:1;background:var(--v);color:white;border:none;border-radius:7px;padding:11px;font-size:12px;font-weight:600;cursor:pointer;font-family:Poppins,sans-serif;">Envoyer la demande</button>
+      <button onclick="closeModal()" style="background:white;border:1px solid #DDD8E8;border-radius:7px;padding:11px 18px;font-size:12px;cursor:pointer;font-family:Poppins,sans-serif;">Annuler</button>
     </div>
   </div>
 </div>
 
 <script>
-function showTab(name){
-  document.querySelectorAll('.tab-pane').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.sb-nav a').forEach(a=>a.classList.remove('active'));
-  const t=document.getElementById('tab-'+name);
-  if(t)t.classList.add('active');
-  event.target.closest('a').classList.add('active');
-}
-const WEBHOOK_RAPPEL = 'https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh';
-const CLIENT_NAME = 'Lise';
-const CLIENT_EMAIL = 'lisevernet@yahoo.com';
-const COMMERCE_NAME = 'Cake Délice';
+const WEBHOOK = 'https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh';
+const CLIENT = {name:'Lise', email:'lisevernet@yahoo.com', commerce:'Cake Délice'};
 
-async function callWebhook(action, detail) {
+// Progression sauvegardée en localStorage
+let progress = JSON.parse(localStorage.getItem('lise-progress') || '{"step":1,"identityDone":false}');
+let currentStep = progress.step;
+
+async function notify(action, detail) {
   try {
-    await fetch(WEBHOOK_RAPPEL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        client_name: CLIENT_NAME,
-        client_email: CLIENT_EMAIL,
-        commerce_name: COMMERCE_NAME,
-        action: action,
-        detail: detail
-      }),
-      mode: 'no-cors'
+    await fetch(WEBHOOK, {
+      method:'POST', headers:{'Content-Type':'application/json'}, mode:'no-cors',
+      body: JSON.stringify({client_name:CLIENT.name, client_email:CLIENT.email, commerce_name:CLIENT.commerce, action, detail})
     });
   } catch(e) {}
 }
 
-function validatePost(btn) {
-  const postName = btn.closest('.post-card').querySelector('.pc-plat')?.textContent?.trim() || 'Post';
-  btn.textContent = 'Validation envoyée !';
-  btn.style.background = '#2D7A0A';
-  btn.disabled = true;
-  const b = btn.closest('.post-card').querySelector('.badge');
-  if(b) { b.textContent = 'Validé'; b.className = 'badge b-ok'; }
-  callWebhook('validation', postName + ' - Approuvé par le client');
+function saveProgress() {
+  localStorage.setItem('lise-progress', JSON.stringify({step:currentStep, identityDone:progress.identityDone}));
 }
 
-let curPost = '';
-function openModify(name) {
-  curPost = name;
-  document.getElementById('mod-title').textContent = 'Modification pour : ' + name;
+function updateProgressBar() {
+  const pcts = [20, 40, 60, 80, 100];
+  const pct = pcts[currentStep-1] || 20;
+  document.getElementById('progress-fill').style.width = pct+'%';
+  document.getElementById('progress-pct').textContent = pct+'%';
+}
+
+function updateNav(targetStep) {
+  for(let i=1;i<=5;i++) {
+    const nav = document.getElementById('nav-'+i);
+    const icon = nav.querySelector('.step-icon');
+    const statusTag = nav.querySelector('.step-status-tag');
+    nav.classList.remove('active','locked');
+    if(i < targetStep) {
+      icon.className='step-icon icon-done'; icon.textContent='✓';
+      statusTag.className='step-status-tag done'; statusTag.textContent='Terminé';
+    } else if(i === targetStep) {
+      icon.className='step-icon icon-active'; icon.textContent=i;
+      statusTag.className='step-status-tag active'; statusTag.textContent='En cours';
+      nav.classList.add('active');
+    } else {
+      icon.className='step-icon icon-locked'; icon.textContent=i;
+      statusTag.className='step-status-tag'; statusTag.textContent='Après étape '+(i-1);
+      nav.classList.add('locked');
+    }
+  }
+}
+
+function goStep(n) {
+  if(n > currentStep && !confirm('Passer à l'étape '+n+' ?')) return;
+  if(n > currentStep) currentStep = n;
+  document.querySelectorAll('.step-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('step-'+n).classList.add('active');
+  updateNav(n);
+  updateProgressBar();
+  saveProgress();
+}
+
+// Valider identité visuelle
+function validateIdentity() {
+  document.getElementById('identity-awaiting').style.display = 'none';
+  document.getElementById('identity-done').style.display = 'block';
+  progress.identityDone = true;
+  notify('validation', 'IDENTITE VISUELLE validée par Lise — Palette chocolat/crème/rose · Playfair Display · Tagline "Chaque gâteau raconte une histoire"');
+  saveProgress();
+  // Débloquer étape 2
+  const nav2 = document.getElementById('nav-2');
+  nav2.classList.remove('locked');
+  nav2.querySelector('.step-icon').className = 'step-icon icon-pending';
+  nav2.querySelector('.step-status-tag').textContent = 'Disponible';
+}
+
+// Valider un post
+function validatePost(btn, postName) {
+  btn.textContent='Validation envoyée !'; btn.style.background='#2D7A0A'; btn.disabled=true;
+  const b=btn.closest('.post-card').querySelector('.badge');
+  if(b){b.textContent='Validé';b.className='badge b-ok';}
+  notify('validation', postName+' — Approuvé par Lise');
+}
+
+function rejectPost(btn) {
+  if(!confirm('Refuser ce post ? Notre équipe le reprendra.')) return;
+  const b=btn.closest('.post-card').querySelector('.badge');
+  if(b){b.textContent='Refusé';b.className='badge';b.style.background='rgba(239,68,68,0.1)';b.style.color='#EF4444';}
+  notify('modification', 'Post refusé par Lise — reprendre depuis le début');
+}
+
+// Modifications
+let modContext='';
+function openModifyIdentity() {
+  modContext='Identité visuelle';
+  document.getElementById('mod-context').textContent='Modification pour : Identité visuelle (couleurs, typographie, tagline)';
   document.getElementById('mod-modal').classList.add('open');
 }
-function closeMod() { document.getElementById('mod-modal').classList.remove('open'); }
-function sendMod() {
-  const txt = document.getElementById('mod-txt').value;
-  if(!txt.trim()) { alert('Décrivez la modification souhaitée'); return; }
-  callWebhook('modification', curPost + ' : ' + txt);
+function openModifyPost(name) {
+  modContext=name;
+  document.getElementById('mod-context').textContent='Modification pour : '+name;
+  document.getElementById('mod-modal').classList.add('open');
+}
+function closeModal() { document.getElementById('mod-modal').classList.remove('open'); }
+function sendModification() {
+  const txt=document.getElementById('mod-txt').value;
+  if(!txt.trim()){alert('Décrivez la modification');return;}
+  notify('modification', modContext+' : '+txt);
   alert('Votre demande a été envoyée ! Notre équipe vous répond sous 24h.');
-  closeMod();
-  document.getElementById('mod-txt').value = '';
+  closeModal();
+  document.getElementById('mod-txt').value='';
+}
+
+// Init
+updateNav(currentStep);
+updateProgressBar();
+if(progress.identityDone) {
+  document.getElementById('identity-awaiting').style.display='none';
+  document.getElementById('identity-done').style.display='block';
 }
 </script>
 </body>
