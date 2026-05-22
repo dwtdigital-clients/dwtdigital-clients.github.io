@@ -727,12 +727,31 @@ function connectPlatform(id) {
 }
 
 // ── Validate identity ──
-function validateIdentity() {
+async function validateIdentity() {
   state.identityDone = true;
   save();
   document.getElementById('identity-content').style.display = 'none';
   document.getElementById('identity-done').style.display = 'block';
-  notify('validation', 'IDENTITE VISUELLE validée — Palette chocolat/crème/rose · Playfair Display · Plateformes : ' + state.platforms.map(id=>PLATFORMS[id]?.name||id).join(', '));
+  const platNames = state.platforms.map(id=>PLATFORMS[id]?.name||id).join(', ');
+  const identityInfo = 'Palette chocolat/crème/rose | Playfair Display + Poppins | Tagline: Chaque gâteau raconte une histoire | Ton chaleureux et artisanal';
+  notify('validation', 'IDENTITE VISUELLE validée — ' + identityInfo + ' — Plateformes : ' + platNames);
+  // DÉCLENCHER GÉNÉRATION AUTOMATIQUE DES POSTS via W-PostGen
+  try {
+    await fetch('https://hook.eu1.make.com/xsksxx8k04y6gd9lnhvc3nh95jeijo8c', {
+      method:'POST', headers:{'Content-Type':'application/json'}, mode:'no-cors',
+      body: JSON.stringify({
+        client_name: CLIENT.name, client_email: CLIENT.email,
+        commerce_name: CLIENT.commerce, platforms: platNames,
+        identity: identityInfo,
+        notion_page_id: '3644d149-85b5-81e0-a18a-f3e53cc660bd'
+      })
+    });
+    const doneDiv = document.getElementById('identity-done');
+    const genMsg = document.createElement('div');
+    genMsg.style.cssText = 'margin-top:14px;padding:12px 16px;background:rgba(99,175,33,0.07);border:1px solid rgba(99,175,33,0.2);border-radius:8px;font-size:12px;color:#2D7A0A;';
+    genMsg.innerHTML = 'Claude génère vos publications... Elles apparaîtront dans l\'étape 3 dans 1-2 minutes.';
+    doneDiv.appendChild(genMsg);
+  } catch(e) {}
 }
 
 // ── Validate post ──
