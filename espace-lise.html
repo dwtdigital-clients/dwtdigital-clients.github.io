@@ -191,6 +191,15 @@ body{font-family:'Poppins',sans-serif;background:#F0ECF5;color:var(--td);min-hei
   </div>
 </div>
 
+<!-- PROGRESS BAR MOBILE -->
+<div class="mobile-progress" id="mobile-progress">
+  <div class="mp-inner">
+    <span class="mp-step-label" id="mp-step-label">Étape 1</span>
+    <div class="mp-bar"><div class="mp-fill" id="mp-fill" style="width:0%;"></div></div>
+    <span class="mp-pct" id="mp-pct">0%</span>
+  </div>
+</div>
+
 <div class="layout">
 <div class="sidebar">
   <div class="progress-wrap">
@@ -791,24 +800,53 @@ function goStep(n) {
 }
 
 function updateNav(active) {
+  const stepLabels = ['','Plateformes','Identité visuelle','Publications','Site vitrine','Réseaux sociaux','Suivi mensuel'];
   for(let i=1;i<=6;i++) {
+    // Sidebar (desktop)
     const item = document.getElementById('nav-'+i);
     const icon = document.getElementById('ic-'+i);
     const sub = document.getElementById('sub-'+i);
-    item.classList.remove('active','locked');
-    if(i < active) {
-      icon.className='sn-icon ic-done'; icon.textContent='✓';
-      sub.className='sn-sub g'; sub.textContent='Terminé';
-    } else if(i === active) {
-      icon.className='sn-icon ic-active'; icon.textContent=i;
-      sub.className='sn-sub a'; sub.textContent='En cours';
-      item.classList.add('active');
-    } else {
-      icon.className='sn-icon ic-lock'; icon.textContent=i;
-      sub.className='sn-sub'; sub.textContent='Après étape '+(i-1);
-      item.classList.add('locked');
+    if(item) {
+      item.classList.remove('active','locked');
+      if(i < active) {
+        if(icon){icon.className='sn-icon ic-done';icon.textContent='✓';}
+        if(sub){sub.className='sn-sub g';sub.textContent='Terminé';}
+      } else if(i === active) {
+        if(icon){icon.className='sn-icon ic-active';icon.textContent=i;}
+        if(sub){sub.className='sn-sub a';sub.textContent='En cours';}
+        item.classList.add('active');
+      } else {
+        if(icon){icon.className='sn-icon ic-lock';icon.textContent=i;}
+        if(sub){sub.className='sn-sub';sub.textContent='Après étape '+(i-1);}
+        item.classList.add('locked');
+      }
+    }
+    // Mobile nav (bottom bar)
+    const mItem = document.getElementById('mn-'+i);
+    const mDot = document.getElementById('mnd-'+i);
+    if(mItem) {
+      mItem.classList.remove('active','locked');
+      if(i < active) {
+        if(mDot){mDot.className='mn-dot mn-dot-done';mDot.textContent='✓';}
+        mItem.classList.remove('locked');
+      } else if(i === active) {
+        if(mDot){mDot.className='mn-dot mn-dot-active';mDot.textContent=i;}
+        mItem.classList.add('active');
+      } else {
+        if(mDot){mDot.className='mn-dot mn-dot-lock';mDot.textContent=i;}
+        mItem.classList.add('locked');
+      }
     }
   }
+  // Progress bar mobile
+  const pcts = [0,17,33,50,67,83,100];
+  const pct = pcts[active] || 0;
+  const fill = document.getElementById('mp-fill');
+  const pctEl = document.getElementById('mp-pct');
+  const stepEl = document.getElementById('mp-step-label');
+  if(fill) fill.style.width = pct + '%';
+  if(pctEl) pctEl.textContent = pct + '%';
+  if(stepEl) stepEl.textContent = 'Étape ' + active + '/6 — ' + (stepLabels[active]||'');
 }
 
 function updateProgress(n) {
@@ -861,5 +899,34 @@ if(state.step > 1 && document.getElementById('reset-hint')) {
 }
 if(currentStep > 1) goStep(currentStep);
 </script>
+<!-- NAV MOBILE EN BAS -->
+<nav class="mobile-nav" id="mobile-nav">
+  <div class="mobile-nav-inner">
+    <div class="mn-item active" id="mn-1" onclick="goStep(1)">
+      <div class="mn-dot mn-dot-active" id="mnd-1">1</div>
+      <div class="mn-label">Plateformes</div>
+    </div>
+    <div class="mn-item locked" id="mn-2" onclick="goStep(2)">
+      <div class="mn-dot mn-dot-lock" id="mnd-2">2</div>
+      <div class="mn-label">Identité</div>
+    </div>
+    <div class="mn-item locked" id="mn-3" onclick="goStep(3)">
+      <div class="mn-dot mn-dot-lock" id="mnd-3">3</div>
+      <div class="mn-label">Posts</div>
+    </div>
+    <div class="mn-item locked" id="mn-4" onclick="goStep(4)">
+      <div class="mn-dot mn-dot-lock" id="mnd-4">4</div>
+      <div class="mn-label">Site</div>
+    </div>
+    <div class="mn-item locked" id="mn-5" onclick="goStep(5)">
+      <div class="mn-dot mn-dot-lock" id="mnd-5">5</div>
+      <div class="mn-label">Réseaux</div>
+    </div>
+    <div class="mn-item locked" id="mn-6" onclick="goStep(6)">
+      <div class="mn-dot mn-dot-lock" id="mnd-6">6</div>
+      <div class="mn-label">Suivi</div>
+    </div>
+  </div>
+</nav>
 </body>
 </html>
