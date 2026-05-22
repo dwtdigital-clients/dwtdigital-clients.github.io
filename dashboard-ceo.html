@@ -172,6 +172,7 @@ body{font-family:'Poppins',sans-serif;background:#0A0410;color:white;min-height:
   <div class="tabs">
     <button class="tab-btn active" onclick="showTab('vue-globale',this)">Vue globale</button>
     <button class="tab-btn" onclick="showTab('clients',this)">Clients</button>
+    <button class="tab-btn" onclick="showTab('devis-factures',this)">Devis & Factures</button>
     <button class="tab-btn" onclick="showTab('controle-manuel',this)">Contrôle manuel</button>
     <button class="tab-btn" onclick="showTab('plan-secours',this)">Plan de secours</button>
     <button class="tab-btn" onclick="showTab('scenarios',this)">Scénarios Make</button>
@@ -320,6 +321,118 @@ Belle journée,
 Tirera Darell — DWT Digital</textarea></div>
         <button onclick="openGmailCustom()" style="background:var(--g);color:white;border:none;border-radius:8px;padding:13px;font-family:Poppins,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Ouvrir dans Gmail et envoyer</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ════ DEVIS & FACTURES ════ -->
+  <div class="tab-pane" id="tab-devis-factures">
+    <!-- Compteur devis -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;">
+      <div class="panel" style="text-align:center;"><div style="font-size:32px;font-weight:900;color:var(--b);">1</div><div style="font-size:11px;color:rgba(239,222,201,0.4);">Devis envoyés</div></div>
+      <div class="panel" style="text-align:center;"><div style="font-size:32px;font-weight:900;color:var(--g);">0</div><div style="font-size:11px;color:rgba(239,222,201,0.4);">Devis validés</div></div>
+      <div class="panel" style="text-align:center;"><div style="font-size:32px;font-weight:900;color:#C084FC;">0</div><div style="font-size:11px;color:rgba(239,222,201,0.4);">Factures émises</div></div>
+    </div>
+
+    <!-- Générateur de devis -->
+    <div class="panel">
+      <div class="panel-title">Générer un devis client</div>
+      <div class="panel-sub">Remplissez et envoyez — le client reçoit le devis par email + lien de validation en ligne</div>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+        <div>
+          <label style="font-size:11px;color:rgba(239,222,201,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px;">Prénom client</label>
+          <input id="dv-prenom" type="text" placeholder="Ex : Lise" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(239,222,201,0.12);border-radius:8px;padding:10px 13px;font-family:Poppins,sans-serif;font-size:13px;color:white;">
+        </div>
+        <div>
+          <label style="font-size:11px;color:rgba(239,222,201,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px;">Nom du commerce</label>
+          <input id="dv-commerce" type="text" placeholder="Ex : Cake Délice" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(239,222,201,0.12);border-radius:8px;padding:10px 13px;font-family:Poppins,sans-serif;font-size:13px;color:white;">
+        </div>
+        <div>
+          <label style="font-size:11px;color:rgba(239,222,201,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px;">Email client</label>
+          <input id="dv-email" type="email" placeholder="client@email.fr" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(239,222,201,0.12);border-radius:8px;padding:10px 13px;font-family:Poppins,sans-serif;font-size:13px;color:white;">
+        </div>
+        <div>
+          <label style="font-size:11px;color:rgba(239,222,201,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px;">Ville</label>
+          <input id="dv-ville" type="text" placeholder="Ex : Valence (26000)" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(239,222,201,0.12);border-radius:8px;padding:10px 13px;font-family:Poppins,sans-serif;font-size:13px;color:white;">
+        </div>
+      </div>
+      
+      <div style="margin-bottom:14px;">
+        <label style="font-size:11px;color:rgba(239,222,201,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px;">Pack sélectionné</label>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;" id="pack-selector">
+          <button class="pack-btn selected" data-pack="Sur Mesure" data-price="97" onclick="selectPack(this)">Sur Mesure<br><span style="font-size:12px;font-weight:400;">97€/mois</span></button>
+          <button class="pack-btn" data-pack="Starter" data-price="297" onclick="selectPack(this)">Starter<br><span style="font-size:12px;font-weight:400;">297€/mois</span></button>
+          <button class="pack-btn" data-pack="Social Pro" data-price="497" onclick="selectPack(this)">Social Pro<br><span style="font-size:12px;font-weight:400;">497€/mois</span></button>
+          <button class="pack-btn" data-pack="SEO Local" data-price="397" onclick="selectPack(this)">SEO Local<br><span style="font-size:12px;font-weight:400;">397€/mois</span></button>
+          <button class="pack-btn" data-pack="Publicités" data-price="597" onclick="selectPack(this)">Publicités<br><span style="font-size:12px;font-weight:400;">597€/mois</span></button>
+          <button class="pack-btn" data-pack="Full Digital" data-price="897" onclick="selectPack(this)">Full Digital<br><span style="font-size:12px;font-weight:400;">897€/mois</span></button>
+        </div>
+      </div>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;">
+        <div>
+          <label style="font-size:11px;color:rgba(239,222,201,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px;">Montant mensuel (€)</label>
+          <input id="dv-montant" type="number" value="97" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(239,222,201,0.12);border-radius:8px;padding:10px 13px;font-family:Poppins,sans-serif;font-size:13px;color:white;">
+        </div>
+        <div>
+          <label style="font-size:11px;color:rgba(239,222,201,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px;">Frais de setup (€)</label>
+          <input id="dv-setup" type="number" value="0" placeholder="0 = pas de frais" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(239,222,201,0.12);border-radius:8px;padding:10px 13px;font-family:Poppins,sans-serif;font-size:13px;color:white;">
+        </div>
+        <div>
+          <label style="font-size:11px;color:rgba(239,222,201,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px;">N° de devis</label>
+          <input id="dv-num" type="text" value="DWT-2025-001" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(239,222,201,0.12);border-radius:8px;padding:10px 13px;font-family:Poppins,sans-serif;font-size:13px;color:white;">
+        </div>
+      </div>
+      
+      <div style="display:flex;gap:10px;align-items:center;">
+        <button onclick="previewDevis()" style="background:rgba(255,255,255,0.06);color:rgba(239,222,201,0.7);border:1px solid rgba(239,222,201,0.15);border-radius:8px;padding:11px 22px;font-family:Poppins,sans-serif;font-size:13px;cursor:pointer;">Prévisualiser</button>
+        <button onclick="sendDevis()" style="background:var(--g);color:white;border:none;border-radius:8px;padding:11px 28px;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;cursor:pointer;" id="btn-send-devis">Envoyer le devis par email</button>
+        <span id="devis-send-status" style="font-size:12px;display:none;"></span>
+      </div>
+    </div>
+
+    <!-- Historique devis -->
+    <div class="panel">
+      <div class="panel-title">Historique devis</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid rgba(239,222,201,0.06);">
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--b);">DWT-2025-001 — Lise Vernet (Cake Délice)</div>
+            <div style="font-size:11px;color:rgba(239,222,201,0.4);">Pack Social Pro · 497€/mois · Envoyé —</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="background:rgba(245,158,11,0.12);color:#F59E0B;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;">En attente</span>
+            <a href="https://dwtdigital-clients.github.io/devis/index.html?client=Lise&email=lisevernet%40yahoo.com&commerce=Cake+Delice&num=DWT-2025-001&pack=Social+Pro&montant=497&setup=0" target="_blank" style="font-size:11px;color:var(--g);">Voir</a>
+          </div>
+        </div>
+        <div style="font-size:12px;color:rgba(239,222,201,0.2);text-align:center;padding:10px;">Les prochains devis envoyés apparaîtront ici</div>
+      </div>
+    </div>
+
+    <!-- Générateur de facture -->
+    <div class="panel">
+      <div class="panel-title">Générer une facture</div>
+      <div class="panel-sub">Après validation du devis — génère et envoie la facture au client</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+        <div>
+          <label style="font-size:11px;color:rgba(239,222,201,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px;">Numéro de devis source</label>
+          <input id="fa-devis-num" type="text" placeholder="DWT-2025-001" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(239,222,201,0.12);border-radius:8px;padding:10px 13px;font-family:Poppins,sans-serif;font-size:13px;color:white;">
+        </div>
+        <div>
+          <label style="font-size:11px;color:rgba(239,222,201,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px;">N° de facture</label>
+          <input id="fa-num" type="text" placeholder="FAC-2025-001" value="FAC-2025-001" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(239,222,201,0.12);border-radius:8px;padding:10px 13px;font-family:Poppins,sans-serif;font-size:13px;color:white;">
+        </div>
+        <div>
+          <label style="font-size:11px;color:rgba(239,222,201,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px;">Email client</label>
+          <input id="fa-email" type="email" placeholder="client@email.fr" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(239,222,201,0.12);border-radius:8px;padding:10px 13px;font-family:Poppins,sans-serif;font-size:13px;color:white;">
+        </div>
+        <div>
+          <label style="font-size:11px;color:rgba(239,222,201,0.4);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:4px;">Montant total (€)</label>
+          <input id="fa-montant" type="number" placeholder="497" style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(239,222,201,0.12);border-radius:8px;padding:10px 13px;font-family:Poppins,sans-serif;font-size:13px;color:white;">
+        </div>
+      </div>
+      <button onclick="previewFacture()" style="background:var(--g);color:white;border:none;border-radius:8px;padding:11px 28px;font-family:Poppins,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Générer la facture PDF</button>
+      <span style="font-size:12px;color:rgba(239,222,201,0.4);margin-left:10px;">La facture s'ouvre dans un nouvel onglet — tu peux l'imprimer en PDF</span>
     </div>
   </div>
 
@@ -525,6 +638,83 @@ function showTab(name, btn) {
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   btn.classList.add('active');
+}
+
+// ═══ DEVIS & FACTURES ═══
+function selectPack(btn) {
+  document.querySelectorAll('.pack-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('dv-montant').value = btn.dataset.price;
+}
+
+function previewDevis() {
+  const url = buildDevisUrl();
+  window.open(url, '_blank');
+}
+
+function buildDevisUrl() {
+  const prenom = document.getElementById('dv-prenom').value || 'Client';
+  const commerce = document.getElementById('dv-commerce').value || 'Commerce';
+  const email = document.getElementById('dv-email').value || '';
+  const ville = document.getElementById('dv-ville').value || '';
+  const montant = document.getElementById('dv-montant').value || '497';
+  const setup = document.getElementById('dv-setup').value || '0';
+  const num = document.getElementById('dv-num').value || 'DWT-2025-001';
+  const packBtn = document.querySelector('.pack-btn.selected');
+  const pack = packBtn?.dataset?.pack || 'Social Pro';
+  return `https://dwtdigital-clients.github.io/devis/index.html?client=${encodeURIComponent(prenom)}&email=${encodeURIComponent(email)}&commerce=${encodeURIComponent(commerce)}&ville=${encodeURIComponent(ville)}&num=${encodeURIComponent(num)}&pack=${encodeURIComponent(pack)}&montant=${montant}&setup=${setup}`;
+}
+
+async function sendDevis() {
+  const btn = document.getElementById('btn-send-devis');
+  const status = document.getElementById('devis-send-status');
+  const email = document.getElementById('dv-email').value;
+  if(!email) { alert('Entrez l\'email du client'); return; }
+  if(!confirm('Envoyer le devis à ' + email + ' ?')) return;
+  
+  btn.textContent = 'Envoi...'; btn.disabled = true; status.style.display='none';
+  
+  const prenom = document.getElementById('dv-prenom').value || 'Client';
+  const commerce = document.getElementById('dv-commerce').value || 'Commerce';
+  const ville = document.getElementById('dv-ville').value || '';
+  const montant = document.getElementById('dv-montant').value || '497';
+  const setup = document.getElementById('dv-setup').value || '0';
+  const num = document.getElementById('dv-num').value || 'DWT-2025-001';
+  const packBtn = document.querySelector('.pack-btn.selected');
+  const pack = packBtn?.dataset?.pack || 'Social Pro';
+  
+  try {
+    await fetch('https://hook.eu1.make.com/tpkfek359n9lisdiim74n5bhk1427inn', {
+      method:'POST', headers:{'Content-Type':'application/json'}, mode:'no-cors',
+      body: JSON.stringify({
+        client_name: prenom, client_email: email,
+        commerce_name: commerce, ville: ville,
+        pack: pack, montant_mensuel: montant,
+        frais_setup: setup, devis_num: num,
+        services_detail: ''
+      })
+    });
+    status.textContent = 'Devis envoyé ! Vérification dans Telegram.';
+    status.style.color = '#63AF21';
+    // Auto-incrémenter numéro
+    const parts = num.split('-');
+    const nextNum = String(parseInt(parts[2]||'001') + 1).padStart(3,'0');
+    document.getElementById('dv-num').value = parts[0] + '-' + parts[1] + '-' + nextNum;
+  } catch(e) {
+    status.textContent = 'Erreur — utilise Gmail';
+    status.style.color = '#EF4444';
+  }
+  status.style.display = 'inline';
+  btn.textContent = 'Envoyer le devis par email'; btn.disabled = false;
+}
+
+function previewFacture() {
+  const num = document.getElementById('fa-num').value || 'FAC-2025-001';
+  const devisNum = document.getElementById('fa-devis-num').value || '';
+  const email = document.getElementById('fa-email').value || '';
+  const montant = document.getElementById('fa-montant').value || '497';
+  const url = `https://dwtdigital-clients.github.io/facture/index.html?num=${encodeURIComponent(num)}&devis=${encodeURIComponent(devisNum)}&email=${encodeURIComponent(email)}&montant=${montant}&date=${new Date().toLocaleDateString('fr-FR')}`;
+  window.open(url, '_blank');
 }
 
 function openEmailLise() {
