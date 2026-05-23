@@ -371,7 +371,7 @@ function renderProspects() {
   var el = document.getElementById('prospects-zone');
   if (!l.length) { el.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(239,222,201,0.3);font-size:13px">Aucun prospect. Formulaires remplis sur le site apparaitront ici.</div>'; return; }
   el.innerHTML = l.map(function(p, i) {
-    var pd = JSON.stringify({name: p.prenom||'', email: p.email||'', commerce: p.commerce||'', ville: p.ville||''}).replace(/\/g, '\\').replace(/'/g, "\'");
+    var pd = JSON.stringify({name: p.prenom||'', email: p.email||'', commerce: p.commerce||'', ville: p.ville||''}).replace(/\\/g, '\\\\').replace(/'/g, "\'");
     return '<div class="card-prospect"><div class="prospect-name">' + (p.prenom||'') + (p.nom ? ' '+p.nom : '') + (p.commerce ? ' — '+p.commerce : '') + '</div>'
       + '<div class="prospect-sub">' + p.email + (p.telephone ? ' · '+p.telephone : '') + (p.secteur ? ' · '+p.secteur : '') + '</div>'
       + '<div class="prospect-actions">'
