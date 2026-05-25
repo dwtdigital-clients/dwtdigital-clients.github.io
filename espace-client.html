@@ -116,8 +116,11 @@ nav img{height:40px!important;}
         <a href="#" style="font-size:12px;color:var(--tm);display:block;text-align:right;margin-bottom:16px;">Mot de passe oublié ?</a>
         <button type="submit" class="login-btn">Se connecter</button>
       </form>
-      <div class="login-divider">— ou —</div>
-      <button class="demo-btn" onclick="loginDemo()">Accéder à la démo (Cake Délice)</button>
+      <div class="login-divider">— ou accès démo —</div>
+      <div style="display:flex;gap:8px;">
+        <button class="demo-btn" onclick="loginDemo()" style="flex:1;font-size:12px;">🍰 Cake Délice</button>
+        <button class="demo-btn" onclick="window.location.href='/espace-zimblo.html'" style="flex:1;font-size:12px;background:#B5121B;">🥩 Boucherie Zimblo</button>
+      </div>
       <div class="no-account">Pas encore client ? <a href="/contact.html">Demandez votre audit gratuit</a></div>
     </div>
   </div>
@@ -129,6 +132,8 @@ function handleLogin(e){
   const pwd = document.getElementById('login-pwd').value;
   if(email === 'lisevernet@yahoo.com' && pwd === 'CakeDelice2025'){
     window.location.href = '/espace-lise.html';
+  } else if(email === 'zimblobot@gmail.com' && pwd === 'BoucherieZimblo2025'){
+    window.location.href = '/espace-zimblo.html';
   } else if(email === 'demo@dwtdigital.fr' || pwd === 'demo'){
     window.location.href = '/espace-lise.html';
   } else if(email === 'darellwilliampro1@gmail.com' && pwd === 'DWTDigital2025'){
