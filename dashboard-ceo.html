@@ -166,6 +166,16 @@ select.fi { background: #1A0820; }
             <button class="btn btn-b" onclick="window.open('/devis/index.html?client=Lise&email=lisevernet@yahoo.com&commerce=Cake+Delice&num=DWT-2025-001&pack=Social+Pro&montant=497&setup=0','_blank')">Voir devis</button>
           </div>
         </div>
+        <div class="pc" style="border-top:1px solid rgba(181,18,27,0.2);margin-top:12px;padding-top:12px;">
+          <div class="pc-name" style="color:#B5121B;">Marc Zimblo — Boucherie Zimblo 🥩</div>
+          <div class="pc-sub">Pack Social Pro · 497/mois · zimblobot@gmail.com</div>
+          <div class="pc-btns">
+            <button class="btn btn-g" onclick="window.open('/espace-zimblo.html','_blank')">Voir espace</button>
+            <button class="btn btn-g" onclick="window.open('/Zimblo/index.html','_blank')">Voir vitrine</button>
+            <button class="btn btn-y" onclick="openAudit('Marc','zimblobot@gmail.com','Boucherie Zimblo')">Audit</button>
+            <button class="btn btn-v" onclick="openDevis('Marc','zimblobot@gmail.com','Boucherie Zimblo','Paris 15e',497)">Devis</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -218,6 +228,11 @@ select.fi { background: #1A0820; }
             <div style="font-size:12px;font-weight:700;color:#EFDEC9;margin-bottom:4px">Email Lise — Gmail</div>
             <div style="font-size:11px;color:rgba(239,222,201,0.35);margin-bottom:8px">Ouvre Gmail pre-rempli</div>
             <button class="btn btn-g" onclick="gmailLise()">Ouvrir Gmail</button>
+          </div>
+          <div style="background:rgba(181,18,27,0.05);border:1px solid rgba(181,18,27,0.15);border-radius:10px;padding:14px">
+            <div style="font-size:12px;font-weight:700;color:#EFDEC9;margin-bottom:4px">Email Marc — Gmail 🥩</div>
+            <div style="font-size:11px;color:rgba(239,222,201,0.35);margin-bottom:8px">Envoie accès espace Zimblo</div>
+            <button class="btn btn-g" onclick="gmailZimblo()">Ouvrir Gmail</button>
           </div>
           <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(239,222,201,0.07);border-radius:10px;padding:14px">
             <div style="font-size:12px;font-weight:700;color:#EFDEC9;margin-bottom:4px">Test Brevo</div>
@@ -377,7 +392,7 @@ var TABS = [
 ];
 
 var CRM_INIT = [
-  {prenom:'Zimblo',nom:'',email:'zimblobot@gmail.com',tel:'',commerce:'',secteur:'Boucherie',ville:'',date:'22/05/2026'},
+  {prenom:'Marc',nom:'Zimblo',email:'zimblobot@gmail.com',tel:'0142305678',commerce:'Boucherie Zimblo',secteur:'Boucherie',ville:'Paris 15e',date:'22/05/2026',status:'client',espace:'https://dwtdigital-clients.github.io/espace-zimblo.html',site:'https://dwtdigital-clients.github.io/Zimblo/'},
   {prenom:'Tabac',nom:'Presse',email:'tabacpresse@gmail.com',tel:'0751586389',commerce:'Tabac Presse',secteur:'Commerce',ville:'',date:'22/05/2026'}
 ];
 
@@ -648,6 +663,7 @@ async function sendDv() {
 function prevFa() { var n=g('fa-nu').value||'FAC-2025-001',dv=g('fa-dv').value||'',em=g('fa-em').value||'',mo=g('fa-mo').value||'497',co=g('fa-co').value||'',pa=g('fa-pa').value||'Social Pro',dt=new Date().toLocaleDateString('fr-FR'); window.open('https://dwtdigital-clients.github.io/facture/index.html?num='+encodeURIComponent(n)+'&devis='+encodeURIComponent(dv)+'&email='+encodeURIComponent(em)+'&montant='+mo+'&commerce='+encodeURIComponent(co)+'&pack='+encodeURIComponent(pa)+'&date='+encodeURIComponent(dt),'_blank'); }
 
 // ━━━━ CONTROLE ━━━━
+function gmailZimblo() { var body=encodeURIComponent('Bonjour Marc !\n\nVotre espace Boucherie Zimblo est pret.\nEspace: https://dwtdigital-clients.github.io/espace-zimblo.html\nLogin: zimblobot@gmail.com\nMot de passe: BoucherieZimblo2025\n\nTirera - DWT Digital'); window.open('https://mail.google.com/mail/?view=cm&to=zimblobot@gmail.com&su='+encodeURIComponent('Votre espace digital Boucherie Zimblo')+'&body='+body,'_blank'); }
 function gmailLise() { var body=encodeURIComponent('Bonjour Lise !\n\nVotre espace est pret.\nEspace: https://dwtdigital-clients.github.io/espace-lise.html\nLogin: lisevernet@yahoo.com / CakeDelice2025\n\nTirera - DWT Digital'); window.open('https://mail.google.com/mail/?view=cm&to=lisevernet@yahoo.com&su='+encodeURIComponent('Votre espace digital Cake Delice')+'&body='+body,'_blank'); }
 async function testB() { var btn=g('b-test'); btn.textContent='Envoi...'; btn.disabled=true; try { await fetch(WH_EM,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({client_email:EM,client_name:'Tirera TEST',commerce_name:'TEST',site_url:'https://dwtdigital-clients.github.io/',texte_post:'Test Brevo OK.'})}); alert('Envoye ! Verifiez Gmail.'); } catch(e) { alert('Erreur'); } btn.textContent='Envoyer test'; btn.disabled=false; }
 function copyT(t) { navigator.clipboard.writeText(t).then(function(){alert('Copie !');}).catch(function(){prompt('Copiez:',t);}); }
