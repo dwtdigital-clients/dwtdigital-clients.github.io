@@ -896,12 +896,12 @@ function renderConnect() {
 
 function connectPlat(id) {
   var plat = PLATFORMS[id];
-  if (!confirm('Connexion à ' + plat.name + ' — vous allez être redirigé vers la page de connexion sécurisée. Continuer ?')) return;
+  // PAS de confirm() - bloqué par certains navigateurs sur GitHub Pages
   if (S.connected.indexOf(id) < 0) S.connected.push(id);
   saveState();
-  renderConnect();
   unlock(6);
-  notify('connexion', plat.name + ' connecté par Lise');
+  renderConnect();
+  notify('connexion', plat.name + ' connecte');
 }
 
 // ── Modal modification ──
