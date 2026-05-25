@@ -568,8 +568,16 @@ body {
     <div class="modal-title">Demander une modification</div>
     <div class="modal-sub" id="modal-sub"></div>
     <textarea class="modal-textarea" id="modal-text" placeholder="Décrivez précisément ce que vous souhaitez modifier..."></textarea>
+    <div id="modal-context-wrap" style="display:none;margin-bottom:12px">
+      <div style="font-size:12px;color:#666;margin-bottom:6px;font-weight:600">📎 Données à intégrer (optionnel)</div>
+      <div style="font-size:11px;color:#999;margin-bottom:6px">Collez ici votre liste de produits, prix, horaires, textes... Notre IA les intégrera directement sur le site.</div>
+      <textarea class="modal-textarea" id="modal-context" placeholder="Ex: Fraise 3€, Chocolat 3.50€, Vanille 3€..." style="min-height:60px;font-size:12px"></textarea>
+    </div>
+    <div style="margin-bottom:10px">
+      <button onclick="document.getElementById('modal-context-wrap').style.display=document.getElementById('modal-context-wrap').style.display==='none'?'block':'none'" style="font-size:11px;color:#9B6DBF;background:none;border:1px dashed #9B6DBF;border-radius:7px;padding:5px 12px;cursor:pointer;width:100%">+ Ajouter des données (produits, prix, horaires...)</button>
+    </div>
     <div class="modal-actions">
-      <button class="btn-primary" style="flex:1" onclick="sendModification()">Envoyer</button>
+      <button class="btn-primary" style="flex:1" onclick="sendModification()">Envoyer — Notre IA applique la modif</button>
       <button class="btn-outline" onclick="closeModal()">Annuler</button>
     </div>
   </div>
@@ -912,6 +920,8 @@ function openModal(ctx) {
   modalContext = ctx;
   document.getElementById('modal-sub').textContent = 'Concernant : ' + ctx;
   document.getElementById('modal-text').value = '';
+  if (document.getElementById('modal-context')) document.getElementById('modal-context').value = '';
+  if (document.getElementById('modal-context-wrap')) document.getElementById('modal-context-wrap').style.display = 'none';
   document.getElementById('modal-overlay').classList.add('open');
   setTimeout(function() { document.getElementById('modal-text').focus(); }, 100);
 }
@@ -928,14 +938,17 @@ function sendModification() {
   alert('⏳ Votre demande a été reçue.\nNotre IA applique la modification sur votre site.\nVous recevrez une confirmation dans 1 à 2 minutes.');
 
   // 1) Pipeline IA : Make → Claude lit HTML → applique modif → redéploie GitHub
+  var ctxData = document.getElementById('modal-context') ? document.getElementById('modal-context').value.trim() : '';
   var WH_MODIF = 'https://hook.eu1.make.com/r8kghl6dxv65r1xt0yic862e4x7dff8h';
   sendWebhook(WH_MODIF, {
-    client   : CLIENT.name,
-    commerce : CLIENT.commerce,
-    email    : CLIENT.email,
-    sujet    : modalContext,
-    message  : txt,
-    site_slug: 'Lise'
+    client      : CLIENT.name,
+    commerce    : CLIENT.commerce,
+    email       : CLIENT.email,
+    sujet       : modalContext,
+    message     : txt,
+    site_slug   : 'Lise',
+    site_file   : 'onboarding.html',
+    context_data: ctxData
   });
 
   // 2) Email CEO (notification parallèle)
