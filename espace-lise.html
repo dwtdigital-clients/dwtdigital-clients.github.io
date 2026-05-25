@@ -587,8 +587,10 @@ var CLIENT = {
   commerce: 'Cake Délice',
   notion_id: '3644d149-85b5-81e0-a18a-f3e53cc660bd'
 };
-var WH_NOTIFY = 'https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh';
+var WH_NOTIFY  = 'https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh';
 var WH_POSTGEN = 'https://hook.eu1.make.com/xsksxx8k04y6gd9lnhvc3nh95jeijo8c';
+var WH_EMAIL   = 'https://hook.eu1.make.com/e29w7hvifw2xtua2d9emsnrll9cnmrgd';
+var CEO_EMAIL  = 'darellwilliampro1@gmail.com';
 var STORAGE_KEY = 'dwt_client_v3';
 var STEPS = ['Plateformes','Identité visuelle','Publications','Site vitrine','Réseaux sociaux','Suivi mensuel'];
 var STEP_PCTS = [0, 17, 33, 50, 67, 83, 100];
@@ -917,9 +919,48 @@ function closeModal() { document.getElementById('modal-overlay').classList.remov
 function sendModification() {
   var txt = document.getElementById('modal-text').value.trim();
   if (!txt) { alert('Décrivez la modification souhaitée'); return; }
+
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('fr-FR') + ' à ' + now.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
+
+  // 1) Notif générique (WH_NOTIFY / Rappel existant)
   notify('modification', modalContext + ' : ' + txt);
+
+  // 2) Email direct au CEO via W-Email
+  var emailBody = '🔔 NOUVELLE DEMANDE DE MODIFICATION\n\n'
+    + 'Client : ' + CLIENT.name + ' ' + (CLIENT.nom||'') + '\n'
+    + 'Commerce : ' + CLIENT.commerce + '\n'
+    + 'Email client : ' + CLIENT.email + '\n'
+    + 'Date : ' + dateStr + '\n\n'
+    + '📌 Sujet : ' + modalContext + '\n\n'
+    + '💬 Message :\n' + txt + '\n\n'
+    + '👉 Dashboard CEO : https://dwtdigital-clients.github.io/dashboard-ceo.html\n'
+    + '👉 Espace Lise : https://dwtdigital-clients.github.io/espace-lise.html';
+
+  sendWebhook(WH_EMAIL, {
+    client_email   : CEO_EMAIL,
+    client_name    : 'DWT Digital',
+    commerce_name  : CLIENT.commerce + ' — Demande modification',
+    site_url       : 'https://dwtdigital-clients.github.io/espace-lise.html',
+    texte_post     : emailBody
+  });
+
+  // 3) Sauvegarder la demande localement
+  var demandes = JSON.parse(localStorage.getItem('dwt_demandes_v1') || '[]');
+  demandes.unshift({
+    id      : Date.now(),
+    date    : dateStr,
+    sujet   : modalContext,
+    message : txt,
+    client  : CLIENT.name,
+    commerce: CLIENT.commerce,
+    email   : CLIENT.email,
+    statut  : 'en_attente'
+  });
+  localStorage.setItem('dwt_demandes_v1', JSON.stringify(demandes));
+
   closeModal();
-  alert('Votre demande a été envoyée ! Réponse sous 24h.');
+  alert('✅ Votre demande a été transmise à votre chargé de compte.\nRéponse sous 24h.');
 }
 
 // ── Webhooks ──
