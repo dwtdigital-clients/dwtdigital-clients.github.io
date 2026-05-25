@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Commander — Boucherie Zimblo Paris 15e</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+:root{--red:#8B0000;--redl:#A01010;--cream:#F8F4ED;--creamd:#EDE7DB;--charcoal:#1C1410;--mid:#6B5040;--border:#D5C9B5;--gold:#C4A862;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--charcoal);overflow-x:hidden;}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideRight{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes lineGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.on{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-30px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal-left.on{opacity:1;transform:translateX(0);}
+
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(28,20,16,0.97);backdrop-filter:blur(12px);transition:all 0.3s;}
+#nav.scrolled{box-shadow:0 2px 30px rgba(0,0,0,0.3);}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 5%;height:72px;display:flex;align-items:center;justify-content:space-between;gap:40px;}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.logo-mark{width:34px;height:34px;background:var(--red);clip-path:polygon(50% 0%,0% 100%,100% 100%);flex-shrink:0;transition:transform 0.3s;}
+.logo:hover .logo-mark{transform:rotate(180deg);}
+.logo-text{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--cream);line-height:1.1;letter-spacing:.5px;}
+.logo-text strong{color:var(--gold);}
+.nav-links{display:flex;gap:34px;margin-left:auto;}
+.nav-links a{color:rgba(248,244,237,.6);text-decoration:none;font-size:12.5px;letter-spacing:.5px;font-weight:500;transition:color .2s;position:relative;padding-bottom:4px;}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s;}
+.nav-links a:hover{color:var(--cream);}
+.nav-links a:hover::after,
+.nav-links a.active::after{transform:scaleX(1);}
+.nav-links a.active{color:var(--cream);}
+.nav-cta{background:var(--red);color:#fff;padding:10px 24px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:all .2s;white-space:nowrap;border:1px solid var(--red);}
+.nav-cta:hover{background:transparent;color:var(--cream);}
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;}
+.burger span{display:block;width:22px;height:2px;background:var(--cream);transition:all .3s;}
+.mobile-menu{display:none;flex-direction:column;background:var(--charcoal);overflow:hidden;max-height:0;transition:max-height .35s ease;}
+.mobile-menu.open{max-height:320px;}
+.mobile-menu a{color:rgba(248,244,237,.75);text-decoration:none;padding:16px 24px;font-size:15px;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s;}
+.mobile-menu a:hover{color:var(--cream);}
+
+/* FOOTER */
+footer{background:var(--charcoal);border-top:1px solid rgba(196,168,98,.15);padding:70px 5% 0;margin-top:0;}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.2fr 1fr 1.5fr;gap:60px;padding-bottom:60px;border-bottom:1px solid rgba(255,255,255,.06);}
+.footer-brand{display:flex;align-items:flex-start;gap:14px;}
+.logo-mark-sm{width:28px;height:28px;background:var(--red);clip-path:polygon(50% 0%,0% 100%,100% 100%);flex-shrink:0;margin-top:4px;}
+.footer-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--cream);}
+.footer-since{font-size:10px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+.footer-nav{display:flex;flex-direction:column;gap:12px;}
+.footer-nav a{color:rgba(248,244,237,.45);text-decoration:none;font-size:13px;transition:color .2s;}
+.footer-nav a:hover{color:var(--cream);}
+.footer-contact p{font-size:12px;color:rgba(248,244,237,.4);line-height:1.7;margin-bottom:8px;}
+.footer-tel{display:inline-block;font-size:18px;font-family:'Cormorant Garamond',serif;color:var(--gold);text-decoration:none;margin:8px 0 16px;transition:color .2s;}
+.footer-tel:hover{color:var(--cream);}
+.dwt{font-size:10px;color:rgba(248,244,237,.15);}
+.dwt a{color:rgba(196,168,98,.3);text-decoration:none;}
+.footer-bottom{max-width:1200px;margin:0 auto;padding:20px 0;font-size:11px;color:rgba(248,244,237,.2);}
+
+/* UTILS */
+.container{max-width:1200px;margin:0 auto;padding:0 5%;}
+.tag{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--red);display:inline-block;margin-bottom:16px;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,4.5vw,52px);font-weight:700;line-height:1.1;color:var(--charcoal);margin-bottom:18px;}
+.section-title em{font-style:italic;color:var(--red);}
+.section-sub{font-size:15px;color:var(--mid);line-height:1.85;max-width:520px;}
+.btn-red{display:inline-block;background:var(--red);color:#fff;padding:14px 36px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:1.5px solid var(--red);cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-red:hover{background:transparent;color:var(--red);}
+.btn-dark{display:inline-block;background:var(--charcoal);color:var(--cream);padding:14px 36px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:1.5px solid var(--charcoal);cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-dark:hover{background:transparent;color:var(--charcoal);}
+.btn-outline-c{display:inline-block;color:var(--cream);padding:13px 34px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:1.5px solid rgba(248,244,237,.4);cursor:pointer;font-family:inherit;background:transparent;transition:all .2s;}
+.btn-outline-c:hover{background:rgba(248,244,237,.1);border-color:var(--cream);}
+
+@media(max-width:900px){
+  .nav-links,.nav-cta{display:none;}
+  .burger{display:flex;}
+  .mobile-menu{display:flex;}
+  .footer-inner{grid-template-columns:1fr;gap:32px;}
+}
+@media(max-width:600px){.nav-inner{padding:0 4%;}section{padding:60px 4% !important;}}
+
+.page-hero{background:var(--charcoal);padding:160px 5% 80px;position:relative;overflow:hidden;}
+.page-hero::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1529694157872-4e0c0f3b238b?auto=format&fit=crop&w=1400&q=60') center/cover;opacity:.15;}
+.page-hero-inner{max-width:1200px;margin:0 auto;position:relative;z-index:1;}
+.page-hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,7vw,80px);color:var(--cream);font-weight:700;line-height:1.05;margin-bottom:20px;}
+.page-hero h1 em{color:var(--gold);font-style:italic;}
+.page-hero-sub{font-size:15px;color:rgba(248,244,237,.55);max-width:520px;line-height:1.8;}
+
+/* CONTACT LAYOUT */
+.contact-section{padding:80px 5% 100px;}
+.contact-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.2fr;gap:80px;}
+
+/* INFO COLONNE */
+.contact-info h2{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--charcoal);margin-bottom:12px;}
+.contact-info p{font-size:14px;color:var(--mid);line-height:1.8;margin-bottom:32px;}
+.info-block{margin-bottom:32px;}
+.info-block-title{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+.info-block-content{font-size:14px;color:var(--charcoal);line-height:1.9;}
+.info-block-content a{color:var(--red);text-decoration:none;font-weight:600;transition:color .2s;}
+.info-block-content a:hover{color:var(--redl);}
+.horaires-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.horaire-row{padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.horaire-day{color:var(--mid);}
+.horaire-time{color:var(--charcoal);font-weight:500;}
+.closed{color:#CCC !important;}
+.tel-big{
+  display:block;
+  font-family:'Cormorant Garamond',serif;
+  font-size:36px;color:var(--red);
+  text-decoration:none;font-weight:700;
+  margin:8px 0;transition:color .2s;
+  letter-spacing:-1px;
+}
+.tel-big:hover{color:var(--redl);}
+
+/* FORMULAIRE */
+.order-form{background:var(--creamd);padding:48px;}
+.form-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--charcoal);margin-bottom:6px;}
+.form-sub{font-size:13px;color:var(--mid);margin-bottom:32px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:8px;}
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;padding:13px 16px;
+  border:1.5px solid var(--border);background:#fff;
+  font-family:'DM Sans',sans-serif;font-size:13px;color:var(--charcoal);
+  transition:border-color .2s;outline:none;
+  border-radius:0;
+  -webkit-appearance:none;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{border-color:var(--red);}
+.form-group textarea{resize:vertical;min-height:100px;}
+.form-group select{cursor:pointer;}
+.form-success{
+  display:none;text-align:center;padding:48px 0;
+}
+.form-success-check{
+  width:64px;height:64px;background:var(--red);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 20px;
+}
+.form-success-check svg{width:32px;height:32px;}
+.form-success h3{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--charcoal);margin-bottom:10px;}
+.form-success p{font-size:14px;color:var(--mid);line-height:1.7;}
+
+/* MAP PLACEHOLDER */
+.map-section{padding:0 5% 100px;}
+.map-inner{max-width:1200px;margin:0 auto;}
+.map-block{
+  background:var(--creamd);border:1px solid var(--border);
+  height:320px;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:12px;
+}
+.map-block img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.4;}
+.map-block-content{position:relative;z-index:1;text-align:center;}
+.map-block-addr{
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px;color:var(--charcoal);font-weight:700;margin-bottom:8px;
+}
+.map-block-sub{font-size:13px;color:var(--mid);margin-bottom:20px;}
+
+@media(max-width:900px){
+  .contact-inner{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .order-form{padding:32px 24px;}
+}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-mark"></span>
+      <div class="logo-text">Boucherie <strong>Zimblo</strong></div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="nos-viandes.html">Nos viandes</a>
+      <a href="notre-histoire.html">Notre histoire</a>
+      <a href="contact.html">Commander</a>
+    </div>
+    <a href="contact.html" class="nav-cta">Passer commande</a>
+    <button class="burger" id="burger" onclick="toggleMenu()" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="index.html">Accueil</a>
+    <a href="nos-viandes.html">Nos viandes</a>
+    <a href="notre-histoire.html">Notre histoire</a>
+    <a href="contact.html">Commander</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <p class="tag" style="color:var(--gold)">Commander</p>
+    <h1>Passez<br><em>commande</em></h1>
+    <p class="page-hero-sub">Par téléphone, email ou via ce formulaire. Nous préparons votre commande selon vos exigences et vous prévenons dès qu'elle est prête.</p>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section class="contact-section">
+  <div class="contact-inner">
+
+    <!-- INFO -->
+    <div class="contact-info reveal-left">
+      <h2>Nous contacter</h2>
+      <p>L'equipe Zimblo est disponible du mardi au dimanche matin. N'hesitez pas a nous appeler pour toute commande spéciale, plateau ou événement.</p>
+
+      <div class="info-block">
+        <div class="info-block-title">Téléphone</div>
+        <a href="tel:0142305678" class="tel-big">01 42 30 56 78</a>
+        <div class="info-block-content" style="font-size:12px;color:var(--mid);">Appel direct — pas de messagerie</div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-title">Email</div>
+        <div class="info-block-content"><a href="mailto:commande@boucherie-zimblo.fr">commande@boucherie-zimblo.fr</a><br>Réponse sous 4h en journée</div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-title">Adresse</div>
+        <div class="info-block-content">24 rue du Commerce<br>75015 Paris<br>Métro : Commerce (Ligne 8)</div>
+      </div>
+
+      <div class="info-block">
+        <div class="info-block-title">Horaires</div>
+        <div style="font-size:13px;color:var(--charcoal);line-height:2;">
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span style="color:var(--mid)">Lundi</span><span class="closed">Fermé</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span style="color:var(--mid)">Mardi — Samedi</span><span>8h-13h / 15h30-19h30</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span style="color:var(--mid)">Dimanche</span><span>8h — 12h30</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORMULAIRE -->
+    <div class="reveal">
+      <div class="order-form" id="order-form-wrap">
+        <div class="form-title">Formulaire de commande</div>
+        <div class="form-sub">Commandes spéciales, plateaux, événements — décrivez votre besoin et nous vous rappelons.</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="f-nom">Nom</label>
+            <input type="text" id="f-nom" placeholder="Votre nom" required>
+          </div>
+          <div class="form-group">
+            <label for="f-tel">Téléphone</label>
+            <input type="tel" id="f-tel" placeholder="06 00 00 00 00" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="f-email">Email</label>
+          <input type="email" id="f-email" placeholder="votre@email.fr">
+        </div>
+        <div class="form-group">
+          <label for="f-type">Type de commande</label>
+          <select id="f-type">
+            <option value="">Sélectionnez...</option>
+            <option value="piece">Pièce de boeuf</option>
+            <option value="veau">Veau / Agneau</option>
+            <option value="bbq">Plateau BBQ</option>
+            <option value="entreprise">Commande entreprise</option>
+            <option value="special">Commande spéciale</option>
+            <option value="autre">Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="f-msg">Votre demande</label>
+          <textarea id="f-msg" placeholder="Décrivez votre commande : pièce souhaitée, quantité, préparation, date de retrait..."></textarea>
+        </div>
+        <button class="btn-red" onclick="submitOrder()" style="width:100%;padding:16px;font-size:12px;">Envoyer ma demande</button>
+      </div>
+
+      <div class="form-success" id="form-success">
+        <div class="form-success-check">
+          <svg viewBox="0 0 32 32" fill="none"><polyline points="6 16 13 23 26 10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Demande envoyée</h3>
+        <p>Merci ! Nous vous rappelons dans les 2 heures en journée pour confirmer et préciser votre commande.</p>
+        <div style="margin-top:24px;">
+          <a href="nos-viandes.html" class="btn-dark">Voir nos viandes</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="map-section">
+  <div class="map-inner">
+    <div class="map-block">
+      <img src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=1400&q=60" alt="Paris 15e">
+      <div class="map-block-content">
+        <div class="map-block-addr">24 rue du Commerce, Paris 15e</div>
+        <div class="map-block-sub">Métro Commerce — Ligne 8</div>
+        <a href="https://maps.google.com/?q=24+rue+du+Commerce+Paris+15" target="_blank" class="btn-white" style="display:inline-block;background:#fff;color:var(--red);padding:12px 28px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;border:1.5px solid #fff;transition:all .2s;">Ouvrir dans Google Maps</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="logo-mark-sm"></span>
+      <div><div class="footer-name">Boucherie Zimblo</div><div class="footer-since">Artisan boucher depuis 1971</div></div>
+    </div>
+    <nav class="footer-nav">
+      <a href="index.html">Accueil</a>
+      <a href="nos-viandes.html">Nos viandes</a>
+      <a href="notre-histoire.html">Notre histoire</a>
+      <a href="contact.html">Commander</a>
+    </nav>
+    <div class="footer-contact">
+      <p>24 rue du Commerce<br>75015 Paris — Metro Commerce</p>
+      <p>Mardi au Samedi : 8h-13h / 15h30-19h30<br>Dimanche : 8h-12h30</p>
+      <a href="tel:0142305678" class="footer-tel">01 42 30 56 78</a>
+      <p class="dwt">Site par <a href="https://dwtdigital-clients.github.io" target="_blank">DWT Digital</a></p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Boucherie Zimblo — Paris 15e — Tous droits reserves</p>
+  </div>
+</footer>
+<script>
+
+// Scroll reveal
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});
+},{threshold:0.1});
+document.querySelectorAll('.reveal,.reveal-left').forEach(el=>obs.observe(el));
+
+// Stagger delays
+document.querySelectorAll('[data-stagger]').forEach(parent=>{
+  [...parent.children].forEach((child,i)=>{
+    child.style.transitionDelay=(i*0.1)+'s';
+  });
+});
+
+// Nav scroll
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('scrolled',window.scrollY>60);
+});
+
+// Mobile menu
+function toggleMenu(){
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+
+// Active nav link
+const links=document.querySelectorAll('.nav-links a');
+const current=location.pathname.split('/').pop()||'index.html';
+links.forEach(a=>{if(a.getAttribute('href')===current)a.classList.add('active');});
+
+function submitOrder() {
+  var nom = document.getElementById('f-nom').value.trim();
+  var tel = document.getElementById('f-tel').value.trim();
+  var msg = document.getElementById('f-msg').value.trim();
+  if (!nom || !tel) { alert('Merci de renseigner votre nom et téléphone.'); return; }
+  document.getElementById('order-form-wrap').style.display = 'none';
+  document.getElementById('form-success').style.display = 'block';
+  // Envoyer webhook notification (silencieux)
+  fetch('https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      client_name: nom,
+      client_email: document.getElementById('f-email').value,
+      commerce_name: 'Boucherie Zimblo',
+      action: 'commande_site',
+      detail: 'Tel: ' + tel + ' | Type: ' + document.getElementById('f-type').value + ' | ' + msg
+    })
+  }).catch(()=>{});
+}
+</script>
+</body>
+</html>
