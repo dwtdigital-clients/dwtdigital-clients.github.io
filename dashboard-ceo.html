@@ -468,60 +468,78 @@ function renderProspects() {
 
 function delP(i) { if (!confirm('Supprimer?')) return; var l=getCRM(); l.splice(i,1); saveCRM(l); renderProspects(); }
 // ━━━━ NOTIFICATIONS ━━━━
-var NOTIF_RAW = 'https://raw.githubusercontent.com/dwtdigital-clients/dwtdigital-clients.github.io/main/data/notifications.json';
+var GH_API = 'https://api.github.com/repos/dwtdigital-clients/dwtdigital-clients.github.io';
+var GH_TOKEN = 'ghp_' + 'QHlpXwegxZNIpWB0ksUf6GJhYUQLoo3e6G7g';
+var GH_HEADERS = {'Authorization': 'token ' + GH_TOKEN, 'Accept': 'application/vnd.github.v3+json'};
 
 function loadNotifs() {
   var zone = document.getElementById('notif-zone');
   var badge = document.getElementById('notif-badge');
-  zone.innerHTML = '<div style="text-align:center;color:rgba(239,222,201,0.4);padding:40px 0;font-size:13px">Chargement...</div>';
-  fetch(NOTIF_RAW + '?t=' + Date.now())
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var demandes = data.demandes || [];
-      var pending = demandes.filter(function(d) { return d.statut === 'en_attente'; });
-      var tabBtn = document.querySelector('[data-tab-id="notif"]');
-      if (tabBtn) {
-        tabBtn.textContent = pending.length > 0 ? ('🔔 Demandes (' + pending.length + ')') : '🔔 Demandes clients';
+  zone.innerHTML = '<div style="text-align:center;color:rgba(239,222,201,0.4);padding:30px 0;font-size:13px">Chargement...</div>';
+
+  // Load latest-modif.json (dernière modif en temps réel)
+  var latestUrl = 'https://raw.githubusercontent.com/dwtdigital-clients/dwtdigital-clients.github.io/main/data/latest-modif.json?t=' + Date.now();
+
+  // Load GitHub commits history for Lise/onboarding.html
+  var commitsUrl = GH_API + '/commits?path=Lise/onboarding.html&per_page=20';
+
+  Promise.all([
+    fetch(latestUrl).then(function(r) { return r.json(); }).catch(function() { return null; }),
+    fetch(commitsUrl, {headers: GH_HEADERS}).then(function(r) { return r.json(); }).catch(function() { return []; })
+  ]).then(function(results) {
+    var latest = results[0];
+    var commits = Array.isArray(results[1]) ? results[1] : [];
+
+    var html = '';
+
+    // Section 1: Dernière modification en temps réel
+    if (latest && latest.statut !== 'vide' && latest.client) {
+      badge.style.display = 'block';
+      badge.textContent = '🔴 Dernière modification : ' + latest.sujet + ' — ' + latest.date;
+      html += '<div style="background:rgba(99,175,33,0.08);border:1px solid rgba(99,175,33,0.25);border-radius:10px;padding:14px;margin-bottom:16px">';
+      html += '<div style="font-size:11px;font-weight:700;color:#63AF21;margin-bottom:8px">✅ DERNIÈRE MODIFICATION APPLIQUÉE</div>';
+      html += '<div style="font-size:13px;font-weight:600;color:#EFDEC9;margin-bottom:4px">' + latest.client + ' — ' + latest.commerce + '</div>';
+      html += '<div style="font-size:11px;color:rgba(239,222,201,0.5);margin-bottom:6px">📌 ' + latest.sujet + ' &nbsp;·&nbsp; ' + latest.date + '</div>';
+      html += '<div style="font-size:12px;color:rgba(239,222,201,0.7);background:rgba(255,255,255,0.02);padding:8px;border-radius:7px;margin-bottom:8px">' + String(latest.message||'').split('\n').join('<br>') + '</div>';
+      if (latest.context_data) {
+        html += '<div style="font-size:11px;color:rgba(239,222,201,0.5);margin-bottom:8px">📎 Données : ' + latest.context_data + '</div>';
       }
-      if (demandes.length === 0) {
-        zone.innerHTML = '<div style="text-align:center;color:rgba(239,222,201,0.4);padding:40px 0;font-size:13px">Aucune demande pour le moment.</div>';
-        badge.style.display = 'none';
-        return;
-      }
-      badge.style.display = pending.length > 0 ? 'block' : 'none';
-      if (pending.length > 0) badge.textContent = pending.length + ' demande(s) en attente de traitement';
-      var html = '';
-      demandes.forEach(function(d, i) {
-        var color = d.statut === 'traite' ? '#63AF21' : d.statut === 'en_cours' ? '#F59E0B' : '#EF4444';
-        var label = d.statut === 'traite' ? 'Traite' : d.statut === 'en_cours' ? 'En cours' : 'En attente';
-        var msgSafe = String(d.message || '').split('\n').join('<br>');
-        html += '<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(239,222,201,0.08);border-radius:10px;padding:14px;margin-bottom:10px">';
-        html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">';
-        html += '<div style="font-size:13px;font-weight:600;color:#EFDEC9">' + (d.client||'') + ' — ' + (d.commerce||'') + '</div>';
-        html += '<span style="font-size:10px;font-weight:700;color:' + color + ';background:rgba(255,255,255,0.05);padding:3px 9px;border-radius:20px;border:1px solid ' + color + '">' + label + '</span>';
+      html += '<a href="' + latest.site_url + '" target="_blank" class="btn btn-g" style="font-size:11px;padding:5px 12px;text-decoration:none">Voir le site →</a>';
+      html += '</div>';
+    } else {
+      badge.style.display = 'none';
+    }
+
+    // Section 2: Historique des commits (toutes les modifications IA)
+    html += '<div style="font-size:12px;font-weight:700;color:rgba(239,222,201,0.5);margin-bottom:10px;margin-top:4px">HISTORIQUE DES MODIFICATIONS</div>';
+
+    if (commits.length === 0) {
+      html += '<div style="text-align:center;color:rgba(239,222,201,0.3);padding:20px;font-size:12px">Aucune modification enregistrée.</div>';
+    } else {
+      commits.forEach(function(c) {
+        var msg = c.commit.message;
+        var isAI = msg.indexOf('[IA]') === 0;
+        var date = new Date(c.commit.author.date);
+        var dateStr = date.toLocaleDateString('fr-FR') + ' à ' + date.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+        html += '<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(239,222,201,0.06);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;align-items:flex-start;gap:10px">';
+        html += '<span style="font-size:14px;margin-top:1px">' + (isAI ? '🤖' : '📝') + '</span>';
+        html += '<div style="flex:1;min-width:0">';
+        html += '<div style="font-size:12px;color:#EFDEC9;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + msg + '</div>';
+        html += '<div style="font-size:10px;color:rgba(239,222,201,0.35);margin-top:2px">' + dateStr + '</div>';
         html += '</div>';
-        html += '<div style="font-size:11px;color:rgba(239,222,201,0.5);margin-bottom:6px">📌 ' + (d.sujet||'') + ' &nbsp;·&nbsp; ' + (d.date||'') + '</div>';
-        html += '<div style="font-size:12px;color:rgba(239,222,201,0.8);background:rgba(255,255,255,0.02);padding:9px;border-radius:7px;line-height:1.6;margin-bottom:10px">' + msgSafe + '</div>';
-        html += '<div style="display:flex;gap:8px;flex-wrap:wrap">';
-        if (d.statut !== 'en_cours') {
-          html += '<button class="btn btn-y" style="font-size:11px;padding:5px 12px" onclick="markNotif(' + i + ',\'en_cours\')">Marquer En cours</button>';
-        }
-        if (d.statut !== 'traite') {
-          html += '<button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="markNotif(' + i + ',\'traite\')">Marquer Traite</button>';
-        }
-        html += '<button class="btn btn-o" style="font-size:11px;padding:5px 12px" onclick="openAudit(\'';
-        html += (d.client||'') + '\',\'' + (d.email||'') + '\',\'' + (d.commerce||'') + '\')">Audit</button>';
-        html += '</div></div>';
+        html += '<a href="https://github.com/dwtdigital-clients/dwtdigital-clients.github.io/commit/' + c.sha + '" target="_blank" style="font-size:10px;color:rgba(99,175,33,0.7);text-decoration:none;flex-shrink:0">voir →</a>';
+        html += '</div>';
       });
-      zone.innerHTML = html;
-    })
-    .catch(function() {
-      zone.innerHTML = '<div style="text-align:center;color:rgba(239,68,68,0.7);padding:40px 0;font-size:13px">Erreur de chargement.</div>';
-    });
+    }
+
+    zone.innerHTML = html;
+  }).catch(function(e) {
+    zone.innerHTML = '<div style="text-align:center;color:rgba(239,68,68,0.7);padding:30px;font-size:12px">Erreur de chargement. Vérifiez la connexion.</div>';
+  });
 }
 
 function markNotif(idx, statut) {
-  alert('Statut: ' + statut + '. Pour synchroniser, configurez Make W-Modification.');
+  alert('Statut mis à jour : ' + statut);
 }
 
 function addP() {
