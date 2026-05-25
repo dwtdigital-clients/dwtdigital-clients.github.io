@@ -1,1 +1,13 @@
-{"id": 0, "date": "", "client": "", "commerce": "", "sujet": "", "message": "", "site_url": "", "statut": "vide"}
+{
+  "client": "Marc",
+  "commerce": "Boucherie Zimblo",
+  "email": "zimblobot@gmail.com",
+  "sujet": "Ajout produit",
+  "message": "Ajout de la carte Filet de boeuf Rossini (45eur/kg) dans la grille produits.",
+  "site_slug": "Zimblo",
+  "site_file": "index.html",
+  "date": "25/05/2026",
+  "heure": "19:45",
+  "statut": "deploye",
+  "url": "https://dwtdigital-clients.github.io/Zimblo/"
+}
