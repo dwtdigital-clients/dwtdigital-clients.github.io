@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Boucherie Zimblo — Viandes de Qualité Paris 15e</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--r:#B5121B;--rd:#7A0B12;--g:#C8A46E;--cr:#FAF0E6;--dk:#1C0A0A;--w:#FAFAF8;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Poppins',sans-serif;background:var(--w);color:var(--dk);}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(28,10,10,0.96);backdrop-filter:blur(12px);padding:14px 5%;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:12px;}
+.nav-logo-icon{width:40px;height:40px;background:var(--r);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.nav-logo span{font-size:17px;font-weight:700;color:var(--cr);}
+.nav-links{display:flex;gap:28px;}
+.nav-links a{color:rgba(250,240,230,0.6);text-decoration:none;font-size:13px;transition:color 0.2s;}
+.nav-links a:hover{color:var(--cr);}
+.nav-cta{background:var(--r);color:#fff;padding:9px 22px;border-radius:25px;font-size:13px;font-weight:600;text-decoration:none;transition:all 0.2s;}
+.nav-cta:hover{background:#d41420;transform:translateY(-1px);}
+
+/* HERO */
+.hero{min-height:100vh;background:linear-gradient(135deg,#0D0404 0%,#2D0808 40%,var(--rd) 100%);display:flex;align-items:center;justify-content:center;text-align:center;padding:120px 5% 80px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=1400&q=60') center/cover;opacity:0.18;}
+.hero-content{position:relative;z-index:1;max-width:700px;}
+.hero-badge{display:inline-block;background:rgba(200,164,110,0.2);border:1px solid rgba(200,164,110,0.4);color:var(--g);font-size:12px;font-weight:600;padding:6px 18px;border-radius:20px;margin-bottom:24px;letter-spacing:0.5px;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(40px,7vw,78px);font-weight:700;color:var(--cr);line-height:1.1;margin-bottom:20px;}
+.hero h1 em{font-style:italic;color:var(--g);}
+.hero p{font-size:17px;color:rgba(250,240,230,0.7);max-width:520px;margin:0 auto 36px;line-height:1.7;}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-v{background:var(--r);color:#fff;padding:14px 32px;border-radius:30px;font-size:14px;font-weight:700;text-decoration:none;transition:all 0.2s;}
+.btn-v:hover{background:#d41420;transform:translateY(-2px);box-shadow:0 8px 24px rgba(181,18,27,0.4);}
+.btn-o{border:2px solid rgba(250,240,230,0.35);color:var(--cr);padding:14px 32px;border-radius:30px;font-size:14px;font-weight:600;text-decoration:none;transition:all 0.2s;}
+.btn-o:hover{background:rgba(250,240,230,0.08);}
+
+/* STATS */
+.stats-bar{background:var(--g);padding:22px 5%;display:flex;justify-content:center;gap:60px;flex-wrap:wrap;}
+.stat{text-align:center;}
+.stat-num{font-size:26px;font-weight:900;color:var(--dk);}
+.stat-label{font-size:12px;color:rgba(28,10,10,0.7);font-weight:600;}
+
+/* SECTION GENERIQUE */
+section{padding:90px 5%;}
+.section-tag{display:inline-block;background:rgba(181,18,27,0.08);border:1px solid rgba(181,18,27,0.2);color:var(--r);font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:14px;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,44px);font-weight:700;color:var(--dk);margin-bottom:12px;line-height:1.2;}
+.section-sub{font-size:15px;color:#777;max-width:560px;line-height:1.7;}
+.center{text-align:center;display:flex;flex-direction:column;align-items:center;}
+
+/* PRODUITS */
+.products-section{background:linear-gradient(180deg,var(--w) 0%,#F8F0E8 100%);}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:52px;}
+.product-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 4px 24px rgba(181,18,27,0.08);transition:all 0.3s;position:relative;}
+.product-card:hover{transform:translateY(-6px);box-shadow:0 12px 40px rgba(181,18,27,0.15);}
+.product-img{height:200px;overflow:hidden;position:relative;}
+.product-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s;}
+.product-card:hover .product-img img{transform:scale(1.05);}
+.product-badge{position:absolute;top:12px;right:12px;background:var(--r);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;}
+.product-body{padding:20px;}
+.product-name{font-size:17px;font-weight:700;color:var(--dk);margin-bottom:6px;}
+.product-desc{font-size:13px;color:#777;line-height:1.6;margin-bottom:14px;}
+.product-footer{display:flex;align-items:center;justify-content:space-between;}
+.product-price{font-size:22px;font-weight:900;color:var(--r);}
+.product-price span{font-size:13px;font-weight:400;color:#999;}
+.product-btn{background:rgba(181,18,27,0.07);color:var(--r);border:none;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:inherit;}
+.product-btn:hover{background:var(--r);color:#fff;}
+
+/* SPÉCIALITÉS */
+.specials-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:40px;justify-content:center;}
+.special-chip{background:#fff;border:2px solid rgba(181,18,27,0.1);border-radius:14px;padding:16px 22px;text-align:center;min-width:160px;transition:all 0.2s;}
+.special-chip:hover{border-color:var(--r);transform:translateY(-2px);}
+.special-chip .emoji{font-size:28px;display:block;margin-bottom:6px;}
+.special-chip .name{font-size:13px;font-weight:600;color:var(--dk);}
+.special-chip .price{font-size:16px;font-weight:900;color:var(--r);}
+
+/* SAVOIR-FAIRE */
+.process-section{background:linear-gradient(135deg,#0D0404,#2D0808);}
+.process-section .section-title{color:var(--cr);}
+.process-section .section-sub{color:rgba(250,240,230,0.6);}
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px;margin-top:52px;}
+.step-card{text-align:center;}
+.step-num{width:52px;height:52px;border-radius:50%;background:rgba(200,164,110,0.2);border:2px solid var(--g);color:var(--g);font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.step-card h3{font-size:16px;font-weight:700;color:var(--cr);margin-bottom:8px;}
+.step-card p{font-size:13px;color:rgba(250,240,230,0.55);line-height:1.6;}
+
+/* TEMOIGNAGE */
+.temoignage{background:#fff;border-left:4px solid var(--r);border-radius:0 12px 12px 0;padding:24px 28px;max-width:600px;margin:40px auto 0;}
+.temoignage p{font-style:italic;color:#555;font-size:15px;line-height:1.7;margin-bottom:12px;}
+.temoignage strong{color:var(--dk);font-size:13px;}
+
+/* CONTACT */
+.contact-section{background:var(--dk);}
+.contact-section .section-title{color:var(--cr);}
+.contact-section .section-sub{color:rgba(250,240,230,0.6);}
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-top:52px;}
+.contact-card{background:rgba(255,255,255,0.05);border:1px solid rgba(250,240,230,0.1);border-radius:16px;padding:28px;text-align:center;}
+.contact-card .icon{font-size:32px;margin-bottom:14px;display:block;}
+.contact-card h3{font-size:15px;font-weight:600;color:var(--cr);margin-bottom:6px;}
+.contact-card p{font-size:13px;color:rgba(250,240,230,0.5);line-height:1.6;}
+.contact-card a{color:var(--g);text-decoration:none;font-weight:600;}
+
+/* FOOTER */
+footer{background:#0D0404;padding:32px 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+footer p{font-size:12px;color:rgba(250,240,230,0.3);}
+.footer-logo{display:flex;align-items:center;gap:10px;}
+.footer-logo-icon{width:30px;height:30px;background:var(--r);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.footer-logo span{font-size:14px;font-weight:700;color:rgba(250,240,230,0.5);}
+.dwt-badge{font-size:11px;color:rgba(250,240,230,0.2);}
+.dwt-badge a{color:rgba(200,164,110,0.5);text-decoration:none;}
+@media(max-width:600px){nav{padding:12px 4%;}.nav-links{display:none;}.hero h1{font-size:36px;}.stats-bar{gap:30px;}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-icon">🥩</div>
+    <span>Boucherie Zimblo</span>
+  </div>
+  <div class="nav-links">
+    <a href="#produits">Nos viandes</a>
+    <a href="#savoir-faire">Savoir-faire</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a href="tel:0142305678" class="nav-cta">📞 Appeler</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🥩 BOUCHERIE ARTISANALE — PARIS 15e</div>
+    <h1>La <em>viande d'exception</em> depuis 3 générations</h1>
+    <p>Marc Zimblo sélectionne personnellement chaque pièce auprès d'éleveurs partenaires français. Maturation maîtrisée, découpe sur mesure, conseils du boucher.</p>
+    <div class="hero-btns">
+      <a href="#produits" class="btn-v">Découvrir nos viandes</a>
+      <a href="#contact" class="btn-o">Nous trouver</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num">3</div><div class="stat-label">Générations</div></div>
+  <div class="stat"><div class="stat-num">47</div><div class="stat-label">Éleveurs partenaires</div></div>
+  <div class="stat"><div class="stat-num">21-45j</div><div class="stat-label">Maturation</div></div>
+  <div class="stat"><div class="stat-num">★ 4.9</div><div class="stat-label">Avis Google</div></div>
+</div>
+
+<!-- PRODUITS -->
+<section id="produits" class="products-section">
+  <div class="center">
+    <div class="section-tag">Nos viandes</div>
+    <h2 class="section-title">Des pièces sélectionnées avec soin</h2>
+    <p class="section-sub">Bœuf Charolais, veau fermier, agneau de plein-air — chaque race choisie pour ses qualités gustatives exceptionnelles.</p>
+  </div>
+  <div class="products-grid">
+    <div class="product-card">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80" alt="Entrecôte Black Angus">
+        <div class="product-badge">⭐ Best-seller</div>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Entrecôte Black Angus</div>
+        <div class="product-desc">Maturée 30 jours en cave. Persillé exceptionnel, fondant en bouche. Élevage irlandais certifié.</div>
+        <div class="product-footer">
+          <div class="product-price">28€<span>/kg</span></div>
+          <button class="product-btn">Commander →</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Côte de bœuf maturée">
+        <div class="product-badge">🏆 Spécialité</div>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Côte de bœuf maturée 45j</div>
+        <div class="product-desc">Notre pièce maîtresse. Charolais français, maturation longue. Saveur profonde et texture incomparable.</div>
+        <div class="product-footer">
+          <div class="product-price">38€<span>/kg</span></div>
+          <button class="product-btn">Commander →</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80" alt="Rôti de veau fermier">
+      </div>
+      <div class="product-body">
+        <div class="product-name">Rôti de veau fermier</div>
+        <div class="product-desc">Veau sous la mère, élevé en Vendée. Chair rosée, goût délicat. Parfait pour un dimanche en famille.</div>
+        <div class="product-footer">
+          <div class="product-price">22€<span>/kg</span></div>
+          <button class="product-btn">Commander →</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1529694157872-4e0c0f3b238b?auto=format&fit=crop&w=600&q=80" alt="Plateau BBQ">
+        <div class="product-badge">🔥 Saison</div>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Plateau BBQ Maison</div>
+        <div class="product-desc">Sélection Marc Zimblo : côtes, merguez maison, brochettes marinées et chorizo artisanal. Pour 4 personnes.</div>
+        <div class="product-footer">
+          <div class="product-price">52€<span>/plateau</span></div>
+          <button class="product-btn">Commander →</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1605346576568-4ed0f09eed8a?auto=format&fit=crop&w=600&q=80" alt="Agneau de plein-air">
+      </div>
+      <div class="product-body">
+        <div class="product-name">Gigot d'agneau Label Rouge</div>
+        <div class="product-desc">Agneau du Quercy, élevage plein-air. Découpe à votre convenance. Idéal pour les grandes occasions.</div>
+        <div class="product-footer">
+          <div class="product-price">24€<span>/kg</span></div>
+          <button class="product-btn">Commander →</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">
+        <img src="https://images.unsplash.com/photo-1615361200141-f45040f367be?auto=format&fit=crop&w=600&q=80" alt="Charcuterie maison">
+        <div class="product-badge">🏠 Maison</div>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Charcuterie Maison</div>
+        <div class="product-desc">Pâtés, rillettes, saucisses et terrines préparés dans notre laboratoire. Recettes familiales depuis 1971.</div>
+        <div class="product-footer">
+          <div class="product-price">18€<span>/200g</span></div>
+          <button class="product-btn">Commander →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPÉCIALITÉS -->
+  <div class="center" style="margin-top:60px;">
+    <div class="section-tag">Nos spécialités express</div>
+    <h2 class="section-title">À emporter</h2>
+  </div>
+  <div class="specials-row">
+    <div class="special-chip"><span class="emoji">🥩</span><div class="name">Steak haché maison</div><div class="price">6€/2 steaks</div></div>
+    <div class="special-chip"><span class="emoji">🌭</span><div class="name">Merguez maison</div><div class="price">12€/kg</div></div>
+    <div class="special-chip"><span class="emoji">🐓</span><div class="name">Poulet fermier</div><div class="price">16€/pièce</div></div>
+    <div class="special-chip"><span class="emoji">🥚</span><div class="name">Lardons fumés</div><div class="price">4€/200g</div></div>
+    <div class="special-chip"><span class="emoji">🫙</span><div class="name">Pâté de campagne</div><div class="price">8€/pot</div></div>
+  </div>
+</section>
+
+<!-- SAVOIR-FAIRE -->
+<section id="savoir-faire" class="process-section">
+  <div class="center">
+    <div class="section-tag" style="background:rgba(200,164,110,0.15);border-color:rgba(200,164,110,0.3);color:var(--g);">Notre approche</div>
+    <h2 class="section-title">Du producteur à votre assiette</h2>
+    <p class="section-sub">Un processus rigoureux pour garantir la qualité à chaque étape.</p>
+  </div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <h3>Sélection à la ferme</h3>
+      <p>Marc visite personnellement ses 47 éleveurs partenaires. Chaque animal est choisi pour sa race, son alimentation et ses conditions d'élevage.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <h3>Maturation maîtrisée</h3>
+      <p>Nos viandes maturent de 21 à 45 jours en cave réfrigérée à 2°C. Ce processus développe les arômes et attendrit les fibres naturellement.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <h3>Découpe sur mesure</h3>
+      <p>Chaque pièce est découpée à votre demande. Épaisseur, grammage, préparation : votre boucher s'adapte à vos recettes.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <h3>Conseils & recettes</h3>
+      <p>Cuisson, marinade, conservation : l'équipe Zimblo vous guide pour sublimer chaque pièce. Des fiches recettes offertes à chaque achat.</p>
+    </div>
+  </div>
+  <div class="temoignage">
+    <p>"J'achète chez Zimblo depuis 15 ans. Marc connaît ses producteurs par leur prénom. La côte de bœuf maturée, c'est un rituel chez nous le dimanche."</p>
+    <strong>⭐⭐⭐⭐⭐ — Jean-Pierre R., client fidèle depuis 2009</strong>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="center">
+    <div class="section-tag" style="background:rgba(200,164,110,0.15);border-color:rgba(200,164,110,0.3);color:var(--g);">Nous trouver</div>
+    <h2 class="section-title">Venez nous rendre visite</h2>
+    <p class="section-sub">En boutique ou par téléphone, Marc et son équipe vous accueillent du mardi au samedi.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-card">
+      <span class="icon">📍</span>
+      <h3>Adresse</h3>
+      <p>24 rue du Commerce<br>75015 Paris<br>Métro Commerce (L8)</p>
+    </div>
+    <div class="contact-card">
+      <span class="icon">🕐</span>
+      <h3>Horaires</h3>
+      <p>Mardi — Samedi<br>8h00 — 13h00 / 15h30 — 19h30<br>Dimanche : 8h — 12h30</p>
+    </div>
+    <div class="contact-card">
+      <span class="icon">📞</span>
+      <h3>Téléphone</h3>
+      <p><a href="tel:0142305678">01 42 30 56 78</a><br><br>Commandes spéciales & plateaux<br>à partir de 24h</p>
+    </div>
+    <div class="contact-card">
+      <span class="icon">📧</span>
+      <h3>Commandes</h3>
+      <p><a href="mailto:commande@boucherie-zimblo.fr">commande@boucherie-zimblo.fr</a><br><br>Devis gratuit pour<br>événements & entreprises</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">
+    <div class="footer-logo-icon">🥩</div>
+    <span>Boucherie Zimblo</span>
+  </div>
+  <p>© 2026 Boucherie Zimblo — Paris 15e — Depuis 1971</p>
+  <p class="dwt-badge">Site créé par <a href="https://dwtdigital-clients.github.io" target="_blank">DWT Digital</a></p>
+</footer>
+
+</body>
+</html>
