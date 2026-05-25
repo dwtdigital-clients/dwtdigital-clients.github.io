@@ -518,6 +518,7 @@ body {
         <div class="btn-group">
           <a href="https://dwtdigital-clients.github.io/Lise/" target="_blank" class="btn-success">Voir mon site</a>
           <button class="btn-outline" onclick="openModal('Site vitrine')">Demander une modification</button>
+            <button class="btn-outline" onclick="showHistory()" style="margin-top:8px;width:100%">📋 Historique de mes demandes</button>
         </div>
       </div>
       <div class="btn-group" style="margin-top:18px">
@@ -562,6 +563,18 @@ body {
 <nav class="bottom-nav" id="bottom-nav"></nav>
 
 <!-- MODAL -->
+<div class="modal-overlay" id="history-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-sheet" style="max-height:75vh">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📋 Historique des modifications</div>
+    <div class="modal-sub">Toutes vos demandes envoyées à DWT Digital</div>
+    <div id="history-list" style="max-height:50vh;overflow-y:auto"></div>
+    <div class="modal-actions" style="margin-top:12px">
+      <button class="btn-outline" style="flex:1" onclick="document.getElementById('history-overlay').classList.remove('open')">Fermer</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-overlay">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
@@ -926,6 +939,33 @@ function openModal(ctx) {
   setTimeout(function() { document.getElementById('modal-text').focus(); }, 100);
 }
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+
+function showHistory() {
+  var demandes = JSON.parse(localStorage.getItem('dwt_demandes_v1') || '[]');
+  var list = document.getElementById('history-list');
+  if (demandes.length === 0) {
+    list.innerHTML = '<div style="text-align:center;color:#999;padding:30px;font-size:13px">Aucune demande envoyée pour le moment.</div>';
+  } else {
+    var html = '';
+    demandes.forEach(function(d) {
+      var statusColor = d.statut === 'traite' || d.statut === 'applique' ? '#22c55e' : '#f59e0b';
+      var statusLabel = d.statut === 'traite' || d.statut === 'applique' ? '✅ Appliqué' : '⏳ En cours';
+      html += '<div style="border:1px solid #eee;border-radius:10px;padding:12px;margin-bottom:8px">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">';
+      html += '<span style="font-size:12px;font-weight:700;color:#333">' + (d.sujet||'Modification') + '</span>';
+      html += '<span style="font-size:10px;font-weight:600;color:' + statusColor + '">' + statusLabel + '</span>';
+      html += '</div>';
+      html += '<div style="font-size:11px;color:#666;margin-bottom:4px">' + (d.date||'') + '</div>';
+      html += '<div style="font-size:12px;color:#444;background:#f9f9f9;padding:8px;border-radius:6px">' + (d.message||'') + '</div>';
+      if (d.context_data) {
+        html += '<div style="font-size:11px;color:#888;margin-top:6px">📎 ' + d.context_data + '</div>';
+      }
+      html += '</div>';
+    });
+    list.innerHTML = html;
+  }
+  document.getElementById('history-overlay').classList.add('open');
+}
 function sendModification() {
   var txt = document.getElementById('modal-text').value.trim();
   if (!txt) { alert('Décrivez la modification souhaitée'); return; }
@@ -972,7 +1012,7 @@ function sendModification() {
   demandes.unshift({
     id: Date.now(), date: dateStr, sujet: modalContext,
     message: txt, client: CLIENT.name, commerce: CLIENT.commerce,
-    email: CLIENT.email, statut: 'en_attente'
+    email: CLIENT.email, context_data: ctxData, statut: 'applique'
   });
   localStorage.setItem('dwt_demandes_v1', JSON.stringify(demandes));
 }
