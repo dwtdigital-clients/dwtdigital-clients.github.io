@@ -297,12 +297,27 @@ select.fi { background: #1A0820; }
           <div class="fg"><label>Prenom *</label><input id="ec-pr" class="fi" oninput="ecPrev()"></div>
           <div class="fg"><label>Commerce *</label><input id="ec-co" class="fi" oninput="ecPrev()"></div>
           <div class="fg"><label>Email *</label><input id="ec-em" type="email" class="fi" oninput="ecPrev()"></div>
+          <div class="fg"><label>Secteur *</label>
+            <select id="ec-se" class="fi">
+              <option value="Commerce">Commerce general</option>
+              <option value="Boulangerie">Boulangerie / Patisserie</option>
+              <option value="Boucherie">Boucherie / Charcuterie</option>
+              <option value="Restaurant">Restaurant / Cafe</option>
+              <option value="Coiffeur">Coiffeur / Beaute</option>
+              <option value="Artisan">Artisan / Reparation</option>
+              <option value="Immobilier">Immobilier</option>
+              <option value="Sante">Sante / Bien-etre</option>
+              <option value="Mode">Mode / Textile</option>
+              <option value="Auto">Auto / Garage</option>
+            </select>
+          </div>
           <div class="fg"><label>Pack</label>
             <select id="ec-pk" class="fi">
               <option>Pack Sur Mesure</option><option>Pack Starter</option>
               <option selected>Pack Social Pro</option><option>Pack SEO Local</option><option>Pack Full Digital</option>
             </select>
           </div>
+          <div class="fg"><label>Ville</label><input id="ec-vi" class="fi" placeholder="Paris, Lyon..."></div>
         </div>
         <div class="creds-box">
           <div class="creds-label">Identifiants generes</div>
@@ -609,36 +624,130 @@ function openEspace(n, em, co) {
 
 async function doCreateEspace() {
   var pr=g('ec-pr').value.trim(), co=g('ec-co').value.trim(), em=g('ec-em').value.trim(), pk=g('ec-pk').value;
+  var se=g('ec-se') ? g('ec-se').value : 'Commerce';
+  var vi=g('ec-vi') ? g('ec-vi').value.trim() : '';
   if (!pr||!co||!em) { alert('Prenom, commerce et email requis'); return; }
-  var sl=slug(pr+'-'+co), pw=pwd(co), url='https://dwtdigital-clients.github.io/clients/'+sl+'/';
-  EC_URL=url; CREDS='Commerce: '+co+'\nClient: '+pr+' ('+em+')\nURL: '+url+'\nLogin: '+em+'\nMot de passe: '+pw+'\nPack: '+pk;
+  var sl=slug(pr+'-'+co), pw=pwd(co);
+  var espaceSlug='espace-'+sl+'.html';
+  var capSlug=sl.charAt(0).toUpperCase()+sl.slice(1);
+  var url='https://dwtdigital-clients.github.io/'+espaceSlug;
+  EC_URL=url;
+  CREDS='Commerce: '+co+'\nClient: '+pr+' ('+em+')\nURL: '+url+'\nLogin: '+em+'\nMot de passe: '+pw+'\nPack: '+pk;
   var btn=g('b-ec'), prog=g('ec-prog');
-  btn.disabled=true; btn.textContent='Création...'; prog.style.display='block';
-  function step(p,t) { g('ec-pf').style.width=p+'%'; g('ec-pt').textContent=t; return new Promise(function(r){setTimeout(r,500);}); }
+  btn.disabled=true; btn.textContent='Creation...'; prog.style.display='block';
+  function step(p,t){g('ec-pf').style.width=p+'%';g('ec-pt').textContent=t;return new Promise(function(r){setTimeout(r,600);});}
+
+  // Sector config
+  var SECTORS={
+    'Boucherie':     {color:'#B5121B',img:'photo-1607623814075-e51df1bdc82f',tagline:'La qualite artisanale depuis toujours'},
+    'Boulangerie':   {color:'#C2522D',img:'photo-1574615522789-e77fe6e4df70',tagline:'Le pain et la passion au quotidien'},
+    'Restaurant':    {color:'#1A3A2A',img:'photo-1414235077428-338989a2e8c0',tagline:'La gastronomie au coeur de notre metier'},
+    'Coiffeur':      {color:'#6B21A8',img:'photo-1560066984-138daaa5a6f0',tagline:'Votre beaute, notre passion'},
+    'Artisan':       {color:'#C2522D',img:'photo-1504328345606-18bbc8c9d7d1',tagline:'Le savoir-faire transmis de main en main'},
+    'Immobilier':    {color:'#1E3A5F',img:'photo-1560518883-ce09059eeffa',tagline:'Votre projet immobilier entre de bonnes mains'},
+    'Sante':         {color:'#0E7490',img:'photo-1576091160550-2173dba999ef',tagline:'Votre sante, notre priorite'},
+    'Mode':          {color:'#9D174D',img:'photo-1558618666-fcd25c85cd64',tagline:'La mode autrement'},
+    'Auto':          {color:'#374151',img:'photo-1492144534655-ae79c964c9d7',tagline:'L expertise au service de votre vehicule'},
+    'Commerce':      {color:'#4F0F5C',img:'photo-1607082348824-0a96f2a4b9da',tagline:'Au service de votre quotidien'}
+  };
+  var sec=SECTORS[se]||SECTORS['Commerce'];
+
   try {
-    await step(10,'Génération du template client...');
-    // Generate client HTML from template
-    var clientHTML = generateClientHTML(pr, co, em, pw, pk, sl);
-    var encoded = btoa(unescape(encodeURIComponent(clientHTML)));
-    await step(30,'Création du fichier sur GitHub...');
-    // Push directly to GitHub API
-    var ghRes = await fetch('https://api.github.com/repos/dwtdigital-clients/dwtdigital-clients.github.io/contents/clients/'+sl+'/index.html', {
-      method: 'PUT',
-      headers: {'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json'},
-      body: JSON.stringify({message: 'Espace client: '+co+' ('+pr+')', content: encoded})
-    });
-    if (!ghRes.ok) {
-      var err = await ghRes.json();
-      throw new Error('GitHub: ' + JSON.stringify(err));
+    await step(5,'Preparation de l\'espace client...');
+
+    // ─── 1. Fetch espace-zimblo.html as template ───
+    var tplResp=await fetch('https://raw.githubusercontent.com/dwtdigital-clients/dwtdigital-clients.github.io/main/espace-zimblo.html?t='+Date.now());
+    if(!tplResp.ok) throw new Error('Template introuvable');
+    var tpl=await tplResp.text();
+    await step(20,'Template charge...');
+
+    // ─── 2. Replace all Zimblo-specific data ───
+    var replacements=[
+      ['Espace Client — Boucherie Zimblo','Espace Client — '+co],
+      ['Boucherie Zimblo',co],
+      ['>M</div>','>'+pr.charAt(0).toUpperCase()+'</div>'],
+      ['style="background:#B5121B"','style="background:'+sec.color+'"'],
+      ["name: 'Marc'","name: '"+pr+"'"],
+      ["email: 'zimblobot@gmail.com'","email: '"+em+"'"],
+      ["commerce: 'Boucherie Zimblo'","commerce: '"+co+"'"],
+      ["notion_id: 'zimblo-notion-001'","notion_id: '"+sl+"-notion-001'"],
+      ["'dwt_zimblo_v1'","'dwt_"+sl+"_v1'"],
+      ["'dwt_zimblo_demandes_v1'","'dwt_"+sl+"_demandes_v1'"],
+      ["site_slug   : 'Zimblo'","site_slug   : '"+capSlug+"'"],
+      ["dwtdigital-clients.github.io/Zimblo/","dwtdigital-clients.github.io/"+capSlug+"/"],
+      ["/Zimblo/index.html","/"+capSlug+"/index.html"],
+      ["/Zimblo/","/"+capSlug+"/"],
+      ["zimblobot@gmail.com",em],
+      ["BoucherieZimblo2025",pw],
+      ["photo-1607623814075-e51df1bdc82f",sec.img],
+      ["photo-1544025162-d76694265947",sec.img],
+      ["photo-1529694157872-4e0c0f3b238b",sec.img],
+      ["name=Marc&email=zimblobot@gmail.com&commerce=Boucherie+Zimblo","name="+pr+"&email="+encodeURIComponent(em)+"&commerce="+encodeURIComponent(co)],
+      ["/rappel.html?name=Marc","/rappel.html?name="+pr],
+      ["#B5121B",sec.color],
+      ["La viande d'exception depuis 3 générations",sec.tagline],
+      ["Paris 15e",vi||'France'],
+      ['Viande','Service'],
+      ['boucheriezimblo',sl.replace(/-/g,'')],
+      ['Boucherie Zimblo — Paris 15e',co+(vi?' — '+vi:'')],
+      ['Viandes d\'exception',co],
+      ['Maturation 45 jours',co+' — '+se]
+    ];
+
+    for(var i=0;i<replacements.length;i++){
+      var from=replacements[i][0], to=replacements[i][1];
+      tpl=tpl.split(from).join(to);
     }
-    await step(60,'Fichier créé sur GitHub...');
-    // Notify Make / Telegram
-    fetch(WH_CE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prenom:pr,email:em,commerce:co,pack:pk,slug:sl,pwd:pw,url:url})}).catch(function(){});
-    await step(80,'Notification envoyée...');
-    await new Promise(function(r){setTimeout(r,3000);});
-    await step(100,'Créé !');
+    await step(40,'Personnalisation...');
+
+    // ─── 3. Push espace-{slug}.html to GitHub ───
+    var espB64=btoa(unescape(encodeURIComponent(tpl)));
+    var ghR1=await fetch('https://api.github.com/repos/dwtdigital-clients/dwtdigital-clients.github.io/contents/'+espaceSlug,{
+      method:'PUT',
+      headers:{'Authorization':'token '+GH_TOKEN,'Content-Type':'application/json'},
+      body:JSON.stringify({message:'feat: Espace client '+co+' ('+pr+')',content:espB64})
+    });
+    if(!ghR1.ok){var e1=await ghR1.json();throw new Error('GitHub espace: '+JSON.stringify(e1.message||e1));}
+    await step(55,'Espace cree sur GitHub...');
+
+    // ─── 4. Update data/clients.json ───
+    var cjR=await fetch('https://api.github.com/repos/dwtdigital-clients/dwtdigital-clients.github.io/contents/data/clients.json',{
+      headers:{'Authorization':'token '+GH_TOKEN}
+    });
+    var cjData=await cjR.json();
+    var cjContent=JSON.parse(atob(cjData.content.replace(/\n/g,'')));
+    var exists=cjContent.clients.some(function(c){return c.email===em;});
+    if(!exists){
+      cjContent.clients.push({email:em,password:pw,slug:sl,espace:'/'+espaceSlug,site:'/'+capSlug+'/',commerce:co,prenom:pr,secteur:se,ville:vi,pack:pk,created:new Date().toISOString().slice(0,10)});
+      var cjB64=btoa(unescape(encodeURIComponent(JSON.stringify(cjContent,null,2))));
+      await fetch('https://api.github.com/repos/dwtdigital-clients/dwtdigital-clients.github.io/contents/data/clients.json',{
+        method:'PUT',
+        headers:{'Authorization':'token '+GH_TOKEN,'Content-Type':'application/json'},
+        body:JSON.stringify({message:'data: Add client '+co,content:cjB64,sha:cjData.sha})
+      });
+    }
+    await step(70,'Registre mis a jour...');
+
+    // ─── 5. Create starter vitrine folder ───
+    var vitrineHTML='<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>'+co+' — Site en cours de creation</title><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:#0D0D0D;color:#F5F0E8;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px 20px;}.wrap{max-width:520px;}.logo{width:12px;height:12px;background:'+sec.color+';clip-path:polygon(50% 0%,0% 100%,100% 100%);margin:0 auto 32px;}.h1{font-family:"Cormorant Garamond",serif;font-size:clamp(32px,5vw,52px);color:#F5F0E8;margin-bottom:12px;}.sub{font-size:15px;color:rgba(245,240,232,0.5);line-height:1.8;margin-bottom:36px;}.cta{display:inline-block;background:'+sec.color+';color:white;padding:13px 32px;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;text-decoration:none;}.foot{margin-top:60px;font-size:11px;color:rgba(245,240,232,0.2);}a{color:rgba(245,240,232,0.3);text-decoration:none;}</style></head><body><div class="wrap"><div class="logo"></div><h1 class="h1">'+co+'</h1><p class="sub">Notre site est en cours de creation. Il sera disponible tres prochainement.</p><a href="mailto:'+em+'" class="cta">Nous contacter</a><div class="foot">Site realise par <a href="https://dwtdigital-clients.github.io" target="_blank">DWT Digital</a></div></div></body></html>';
+    var vtB64=btoa(unescape(encodeURIComponent(vitrineHTML)));
+    await fetch('https://api.github.com/repos/dwtdigital-clients/dwtdigital-clients.github.io/contents/'+capSlug+'/index.html',{
+      method:'PUT',
+      headers:{'Authorization':'token '+GH_TOKEN,'Content-Type':'application/json'},
+      body:JSON.stringify({message:'feat: Vitrine starter '+co,content:vtB64})
+    });
+    await step(85,'Site vitrine cree...');
+
+    // ─── 6. Notify via Make + Email ───
+    fetch(WH_CE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prenom:pr,email:em,commerce:co,pack:pk,secteur:se,slug:sl,pwd:pw,url:url})}).catch(function(){});
+    fetch(WH_EMAIL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      client_email:CEO_EMAIL,client_name:'DWT Digital',commerce_name:co+' — Nouvel espace cree',
+      site_url:url,texte_post:'Nouvel espace cree pour '+pr+' ('+co+')\nEmail: '+em+'\nMDP: '+pw+'\nURL: '+url
+    })}).catch(function(){});
+    await step(100,'Espace cree !');
+
     g('ec-form').style.display='none'; g('ec-prog').style.display='none';
-    g('ec-ok-info').innerHTML='<strong>Commerce:</strong> '+co+'<br><strong>Client:</strong> '+pr+' ('+em+')<br><strong>URL:</strong> <a href="'+url+'" target="_blank" style="color:#63AF21">'+url+'</a><br><strong>Login:</strong> '+em+'<br><strong>MDP:</strong> '+pw+'<br><strong>Pack:</strong> '+pk+'<br><br><small style="color:rgba(239,222,201,0.35)">GitHub Pages prend 1-2 min. Verifiez Telegram pour confirmation.</small>';
+    g('ec-ok-info').innerHTML='<strong>Commerce:</strong> '+co+'<br><strong>Client:</strong> '+pr+' ('+em+')<br><strong>Espace:</strong> <a href="'+url+'" target="_blank" style="color:#63AF21">'+url+'</a><br><strong>Login:</strong> '+em+'<br><strong>MDP:</strong> '+pw+'<br><strong>Pack:</strong> '+pk+'<br><br><small style="color:rgba(239,222,201,0.35)">GitHub Pages: 1-2 min. Telegram vous confirme.</small>';
     g('b-open-ec').onclick=function(){window.open(url,'_blank');};
     g('ec-ok').style.display='block';
   } catch(err) { g('ec-pt').textContent='Erreur: '+err.message; g('ec-pf').style.background='#EF4444'; btn.disabled=false; btn.textContent='Reessayer'; }
@@ -680,3 +789,4 @@ function esc(s) { return (s||'').replace(/'/g,"\'").replace(/"/g,'&quot;'); }
 </script>
 </body>
 </html>
+
