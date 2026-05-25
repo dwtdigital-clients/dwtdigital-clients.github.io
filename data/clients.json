@@ -1,0 +1,30 @@
+{
+  "clients": [
+    {
+      "email": "lisevernet@yahoo.com",
+      "password": "CakeDelice2025",
+      "slug": "lise",
+      "espace": "/espace-lise.html",
+      "site": "/Lise/",
+      "commerce": "Cake Délice",
+      "prenom": "Lise",
+      "secteur": "Pâtisserie",
+      "ville": "Valence",
+      "pack": "Pack Social Pro",
+      "created": "2026-05-01"
+    },
+    {
+      "email": "zimblobot@gmail.com",
+      "password": "BoucherieZimblo2025",
+      "slug": "zimblo",
+      "espace": "/espace-zimblo.html",
+      "site": "/Zimblo/",
+      "commerce": "Boucherie Zimblo",
+      "prenom": "Marc",
+      "secteur": "Boucherie",
+      "ville": "Paris 15e",
+      "pack": "Pack Social Pro",
+      "created": "2026-05-25"
+    }
+  ]
+}
