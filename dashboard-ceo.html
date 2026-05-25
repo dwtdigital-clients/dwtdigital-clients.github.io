@@ -516,18 +516,42 @@ function loadNotifs() {
     if (commits.length === 0) {
       html += '<div style="text-align:center;color:rgba(239,222,201,0.3);padding:20px;font-size:12px">Aucune modification enregistrée.</div>';
     } else {
-      commits.forEach(function(c) {
+      commits.forEach(function(c, idx) {
         var msg = c.commit.message;
         var isAI = msg.indexOf('[IA]') === 0;
+        if (!isAI) return; // N'affiche que les modifications IA
         var date = new Date(c.commit.author.date);
         var dateStr = date.toLocaleDateString('fr-FR') + ' à ' + date.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
-        html += '<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(239,222,201,0.06);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;align-items:flex-start;gap:10px">';
-        html += '<span style="font-size:14px;margin-top:1px">' + (isAI ? '🤖' : '📝') + '</span>';
+        // Parse "[IA] sujet — commerce"
+        var parsed = msg.replace('[IA] ', '').split(' — ');
+        var sujet = parsed[0] || msg;
+        var commerce = parsed[1] || '';
+        var cardId = 'commit-detail-' + idx;
+        html += '<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(239,222,201,0.07);border-radius:10px;margin-bottom:8px;overflow:hidden">';
+        // Header - cliquable pour expand
+        html += '<div onclick="document.getElementById(\'' + cardId + '\').style.display=document.getElementById(\'' + cardId + '\').style.display===\'none\'?\'block\':\'none\'" style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer">';
+        html += '<span style="font-size:16px">🤖</span>';
         html += '<div style="flex:1;min-width:0">';
-        html += '<div style="font-size:12px;color:#EFDEC9;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + msg + '</div>';
-        html += '<div style="font-size:10px;color:rgba(239,222,201,0.35);margin-top:2px">' + dateStr + '</div>';
+        html += '<div style="font-size:12px;color:#EFDEC9;font-weight:700">' + sujet + '</div>';
+        if (commerce) html += '<div style="font-size:11px;color:rgba(239,222,201,0.45)">' + commerce + '</div>';
         html += '</div>';
-        html += '<a href="https://github.com/dwtdigital-clients/dwtdigital-clients.github.io/commit/' + c.sha + '" target="_blank" style="font-size:10px;color:rgba(99,175,33,0.7);text-decoration:none;flex-shrink:0">voir →</a>';
+        html += '<div style="text-align:right;flex-shrink:0">';
+        html += '<div style="font-size:10px;color:rgba(99,175,33,0.8);font-weight:700">🟢 Déployé</div>';
+        html += '<div style="font-size:10px;color:rgba(239,222,201,0.3)">' + dateStr + '</div>';
+        html += '</div>';
+        html += '</div>';
+        // Detail panel (hidden by default)
+        html += '<div id="' + cardId + '" style="display:none;padding:12px 14px;border-top:1px solid rgba(239,222,201,0.06);background:rgba(255,255,255,0.01)">';
+        html += '<div style="font-size:11px;color:rgba(239,222,201,0.5);margin-bottom:8px">📌 Modification appliquée par Claude AI le ' + dateStr + '</div>';
+        html += '<div style="font-size:12px;color:rgba(239,222,201,0.7);background:rgba(255,255,255,0.02);padding:9px;border-radius:7px;margin-bottom:8px">';
+        if (commerce) html += '<strong>Commerce :</strong> ' + commerce + '<br>';
+        html += '<strong>Sujet :</strong> ' + sujet;
+        html += '</div>';
+        html += '<div style="display:flex;gap:8px;flex-wrap:wrap">';
+        html += '<a href="https://dwtdigital-clients.github.io/Lise/onboarding.html" target="_blank" class="btn btn-g" style="font-size:11px;padding:5px 12px;text-decoration:none">🌐 Voir le site</a>';
+        html += '<a href="https://github.com/dwtdigital-clients/dwtdigital-clients.github.io/commit/' + c.sha + '" target="_blank" class="btn btn-o" style="font-size:11px;padding:5px 12px;text-decoration:none">Code source</a>';
+        html += '</div>';
+        html += '</div>';
         html += '</div>';
       });
     }
