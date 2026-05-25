@@ -945,19 +945,28 @@ function sendModification() {
     texte_post     : emailBody
   });
 
-  // 3) Sauvegarder la demande localement
+  // 3) Sauvegarder localement
   var demandes = JSON.parse(localStorage.getItem('dwt_demandes_v1') || '[]');
   demandes.unshift({
-    id      : Date.now(),
-    date    : dateStr,
-    sujet   : modalContext,
-    message : txt,
-    client  : CLIENT.name,
-    commerce: CLIENT.commerce,
-    email   : CLIENT.email,
-    statut  : 'en_attente'
+    id: Date.now(), date: dateStr, sujet: modalContext,
+    message: txt, client: CLIENT.name, commerce: CLIENT.commerce,
+    email: CLIENT.email, statut: 'en_attente'
   });
   localStorage.setItem('dwt_demandes_v1', JSON.stringify(demandes));
+
+  // 4) Envoyer à Make pour stockage dans notifications.json GitHub
+  var WH_NOTIF_WRITE = 'https://hook.eu1.make.com/xvep071tdulmxvg4gtdrjxgmcfc3ovfc';
+  sendWebhook(WH_NOTIF_WRITE, {
+    type     : 'notification',
+    id       : Date.now(),
+    date     : dateStr,
+    sujet    : modalContext,
+    message  : txt,
+    client   : CLIENT.name,
+    commerce : CLIENT.commerce,
+    email    : CLIENT.email,
+    statut   : 'en_attente'
+  });
 
   closeModal();
   alert('✅ Votre demande a été transmise à votre chargé de compte.\nRéponse sous 24h.');
