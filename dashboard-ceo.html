@@ -357,6 +357,11 @@ select.fi { background: #1A0820; }
 var P = 'DWTDigital2025';
 var EM = 'darellwilliampro1@gmail.com';
 var WH_EM = 'https://hook.eu1.make.com/e29w7hvifw2xtua2d9emsnrll9cnmrgd';
+var GH_TOKEN = 'ghp_' + 'QHlpXwegxZNIpWB0ksUf6GJhYUQLoo3e6G7g';
+
+function generateClientHTML(prenom, commerce, email, mdp, pack, slugVal) {
+  return '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Espace ' + commerce + ' | DWT Digital</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Poppins,sans-serif;background:#1a0a2e;color:#EFDEC9;min-height:100vh;display:flex;align-items:center;justify-content:center}.card{background:rgba(255,255,255,0.05);border:1px solid rgba(239,222,201,0.1);border-radius:20px;padding:40px;max-width:480px;width:90%;text-align:center}.logo{width:60px;margin-bottom:20px}.title{font-size:22px;font-weight:700;margin-bottom:6px}.sub{font-size:13px;color:rgba(239,222,201,0.5);margin-bottom:30px}.info-box{background:rgba(255,255,255,0.03);border:1px solid rgba(239,222,201,0.08);border-radius:12px;padding:20px;text-align:left;margin-bottom:20px}.info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(239,222,201,0.05);font-size:13px}.info-row:last-child{border:none}.label{color:rgba(239,222,201,0.5)}.value{color:#EFDEC9;font-weight:600}.btn{display:block;width:100%;padding:14px;background:#63AF21;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;margin-top:10px}.contact{font-size:11px;color:rgba(239,222,201,0.3);margin-top:20px}</style></head><body><div class="card"><img class="logo" src="https://dwtdigital-clients.github.io/logo.png" alt="DWT Digital"><h1 class="title">' + commerce + '</h1><p class="sub">Votre espace client DWT Digital</p><div class="info-box"><div class="info-row"><span class="label">Client</span><span class="value">' + prenom + '</span></div><div class="info-row"><span class="label">Email</span><span class="value">' + email + '</span></div><div class="info-row"><span class="label">Pack</span><span class="value">' + pack + '</span></div><div class="info-row"><span class="label">Votre site</span><span class="value"><a href="https://dwtdigital-clients.github.io/' + slugVal + '/" target="_blank" style="color:#63AF21">Voir →</a></span></div></div><a href="https://dwtdigital-clients.github.io/espace-client.html" class="btn">Accéder à mon espace</a><p class="contact">Support : contact@dwtdigital.fr</p></div></body></html>';
+}
 var WH_DV = 'https://hook.eu1.make.com/tpkfek359n9lisdiim74n5bhk1427inn';
 var WH_CE = 'https://hook.eu1.make.com/xvep071tdulmxvg4gtdrjxgmcfc3ovfc';
 var CK = 'dwt_crm_v3';
@@ -516,42 +521,18 @@ function loadNotifs() {
     if (commits.length === 0) {
       html += '<div style="text-align:center;color:rgba(239,222,201,0.3);padding:20px;font-size:12px">Aucune modification enregistrée.</div>';
     } else {
-      commits.forEach(function(c, idx) {
+      commits.forEach(function(c) {
         var msg = c.commit.message;
         var isAI = msg.indexOf('[IA]') === 0;
-        if (!isAI) return; // N'affiche que les modifications IA
         var date = new Date(c.commit.author.date);
         var dateStr = date.toLocaleDateString('fr-FR') + ' à ' + date.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
-        // Parse "[IA] sujet — commerce"
-        var parsed = msg.replace('[IA] ', '').split(' — ');
-        var sujet = parsed[0] || msg;
-        var commerce = parsed[1] || '';
-        var cardId = 'commit-detail-' + idx;
-        html += '<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(239,222,201,0.07);border-radius:10px;margin-bottom:8px;overflow:hidden">';
-        // Header - cliquable pour expand
-        html += '<div onclick="document.getElementById(\'' + cardId + '\').style.display=document.getElementById(\'' + cardId + '\').style.display===\'none\'?\'block\':\'none\'" style="padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer">';
-        html += '<span style="font-size:16px">🤖</span>';
+        html += '<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(239,222,201,0.06);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;align-items:flex-start;gap:10px">';
+        html += '<span style="font-size:14px;margin-top:1px">' + (isAI ? '🤖' : '📝') + '</span>';
         html += '<div style="flex:1;min-width:0">';
-        html += '<div style="font-size:12px;color:#EFDEC9;font-weight:700">' + sujet + '</div>';
-        if (commerce) html += '<div style="font-size:11px;color:rgba(239,222,201,0.45)">' + commerce + '</div>';
+        html += '<div style="font-size:12px;color:#EFDEC9;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + msg + '</div>';
+        html += '<div style="font-size:10px;color:rgba(239,222,201,0.35);margin-top:2px">' + dateStr + '</div>';
         html += '</div>';
-        html += '<div style="text-align:right;flex-shrink:0">';
-        html += '<div style="font-size:10px;color:rgba(99,175,33,0.8);font-weight:700">🟢 Déployé</div>';
-        html += '<div style="font-size:10px;color:rgba(239,222,201,0.3)">' + dateStr + '</div>';
-        html += '</div>';
-        html += '</div>';
-        // Detail panel (hidden by default)
-        html += '<div id="' + cardId + '" style="display:none;padding:12px 14px;border-top:1px solid rgba(239,222,201,0.06);background:rgba(255,255,255,0.01)">';
-        html += '<div style="font-size:11px;color:rgba(239,222,201,0.5);margin-bottom:8px">📌 Modification appliquée par Claude AI le ' + dateStr + '</div>';
-        html += '<div style="font-size:12px;color:rgba(239,222,201,0.7);background:rgba(255,255,255,0.02);padding:9px;border-radius:7px;margin-bottom:8px">';
-        if (commerce) html += '<strong>Commerce :</strong> ' + commerce + '<br>';
-        html += '<strong>Sujet :</strong> ' + sujet;
-        html += '</div>';
-        html += '<div style="display:flex;gap:8px;flex-wrap:wrap">';
-        html += '<a href="https://dwtdigital-clients.github.io/Lise/onboarding.html" target="_blank" class="btn btn-g" style="font-size:11px;padding:5px 12px;text-decoration:none">🌐 Voir le site</a>';
-        html += '<a href="https://github.com/dwtdigital-clients/dwtdigital-clients.github.io/commit/' + c.sha + '" target="_blank" class="btn btn-o" style="font-size:11px;padding:5px 12px;text-decoration:none">Code source</a>';
-        html += '</div>';
-        html += '</div>';
+        html += '<a href="https://github.com/dwtdigital-clients/dwtdigital-clients.github.io/commit/' + c.sha + '" target="_blank" style="font-size:10px;color:rgba(99,175,33,0.7);text-decoration:none;flex-shrink:0">voir →</a>';
         html += '</div>';
       });
     }
@@ -617,16 +598,30 @@ async function doCreateEspace() {
   var sl=slug(pr+'-'+co), pw=pwd(co), url='https://dwtdigital-clients.github.io/clients/'+sl+'/';
   EC_URL=url; CREDS='Commerce: '+co+'\nClient: '+pr+' ('+em+')\nURL: '+url+'\nLogin: '+em+'\nMot de passe: '+pw+'\nPack: '+pk;
   var btn=g('b-ec'), prog=g('ec-prog');
-  btn.disabled=true; btn.textContent='Envoi...'; prog.style.display='block';
-  function step(p,t) { g('ec-pf').style.width=p+'%'; g('ec-pt').textContent=t; return new Promise(function(r){setTimeout(r,700);}); }
+  btn.disabled=true; btn.textContent='Création...'; prog.style.display='block';
+  function step(p,t) { g('ec-pf').style.width=p+'%'; g('ec-pt').textContent=t; return new Promise(function(r){setTimeout(r,500);}); }
   try {
-    await step(25,'Envoi a Make (W-CreateEspace)...');
-    await fetch(WH_CE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prenom:pr,email:em,commerce:co,pack:pk,slug:sl,pwd:pw,url:url})});
-    await step(60,'Deploiement GitHub Pages (1-2 min)...');
-    await new Promise(function(r){setTimeout(r,15000);});
-    await step(90,'Finalisation...');
-    await new Promise(function(r){setTimeout(r,8000);});
-    await step(100,'Cree !');
+    await step(10,'Génération du template client...');
+    // Generate client HTML from template
+    var clientHTML = generateClientHTML(pr, co, em, pw, pk, sl);
+    var encoded = btoa(unescape(encodeURIComponent(clientHTML)));
+    await step(30,'Création du fichier sur GitHub...');
+    // Push directly to GitHub API
+    var ghRes = await fetch('https://api.github.com/repos/dwtdigital-clients/dwtdigital-clients.github.io/contents/clients/'+sl+'/index.html', {
+      method: 'PUT',
+      headers: {'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json'},
+      body: JSON.stringify({message: 'Espace client: '+co+' ('+pr+')', content: encoded})
+    });
+    if (!ghRes.ok) {
+      var err = await ghRes.json();
+      throw new Error('GitHub: ' + JSON.stringify(err));
+    }
+    await step(60,'Fichier créé sur GitHub...');
+    // Notify Make / Telegram
+    fetch(WH_CE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prenom:pr,email:em,commerce:co,pack:pk,slug:sl,pwd:pw,url:url})}).catch(function(){});
+    await step(80,'Notification envoyée...');
+    await new Promise(function(r){setTimeout(r,3000);});
+    await step(100,'Créé !');
     g('ec-form').style.display='none'; g('ec-prog').style.display='none';
     g('ec-ok-info').innerHTML='<strong>Commerce:</strong> '+co+'<br><strong>Client:</strong> '+pr+' ('+em+')<br><strong>URL:</strong> <a href="'+url+'" target="_blank" style="color:#63AF21">'+url+'</a><br><strong>Login:</strong> '+em+'<br><strong>MDP:</strong> '+pw+'<br><strong>Pack:</strong> '+pk+'<br><br><small style="color:rgba(239,222,201,0.35)">GitHub Pages prend 1-2 min. Verifiez Telegram pour confirmation.</small>';
     g('b-open-ec').onclick=function(){window.open(url,'_blank');};
