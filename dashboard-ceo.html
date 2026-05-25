@@ -442,9 +442,9 @@ function renderProspects() {
       + '<div class="pc-name">' + (p.prenom||'') + (p.nom?' '+p.nom:'') + (p.commerce?' — '+p.commerce:'') + '</div>'
       + '<div class="pc-sub">' + p.email + (p.tel?' · '+p.tel:'') + (p.secteur?' · '+p.secteur:'') + '</div>'
       + '<div class="pc-btns">'
-      + '<button class="btn btn-y" onclick="openAudit('' + esc(p.prenom) + '','' + esc(p.email) + '','' + esc(p.commerce||'') + '')">Audit</button>'
-      + '<button class="btn btn-v" onclick="openDevis('' + esc(p.prenom) + '','' + esc(p.email) + '','' + esc(p.commerce||'') + '','' + esc(p.ville||'') + '',497)">Devis</button>'
-      + '<button class="btn btn-g" onclick="openEspace('' + esc(p.prenom) + '','' + esc(p.email) + '','' + esc(p.commerce||'') + '')">Creer espace</button>'
+      + '<button class="btn btn-y" onclick="openAudit(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\')">Audit</button>'
+      + '<button class="btn btn-v" onclick="openDevis(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\',\'' + esc(p.ville||'') + '\',497)">Devis</button>'
+      + '<button class="btn btn-g" onclick="openEspace(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\')">Creer espace</button>'
       + '<button class="btn btn-r" onclick="delP(' + i + ')">x</button>'
       + '</div></div>';
   });
