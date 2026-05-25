@@ -923,25 +923,34 @@ function sendModification() {
   var now = new Date();
   var dateStr = now.toLocaleDateString('fr-FR') + ' à ' + now.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
 
-  // 1) Notif générique (WH_NOTIFY / Rappel existant)
-  notify('modification', modalContext + ' : ' + txt);
+  closeModal();
+  // Afficher le message de traitement immédiatement
+  alert('⏳ Votre demande a été reçue.\nNotre IA applique la modification sur votre site.\nVous recevrez une confirmation dans 1 à 2 minutes.');
 
-  // 2) Email direct au CEO via W-Email
-  var emailBody = '🔔 NOUVELLE DEMANDE DE MODIFICATION\n\n'
-    + 'Client : ' + CLIENT.name + ' ' + (CLIENT.nom||'') + '\n'
-    + 'Commerce : ' + CLIENT.commerce + '\n'
-    + 'Email client : ' + CLIENT.email + '\n'
+  // 1) Pipeline IA : Make → Claude lit HTML → applique modif → redéploie GitHub
+  var WH_MODIF = 'https://hook.eu1.make.com/r8kghl6dxv65r1xt0yic862e4x7dff8h';
+  sendWebhook(WH_MODIF, {
+    client   : CLIENT.name,
+    commerce : CLIENT.commerce,
+    email    : CLIENT.email,
+    sujet    : modalContext,
+    message  : txt,
+    site_slug: 'Lise'
+  });
+
+  // 2) Email CEO (notification parallèle)
+  var emailBody = '🤖 MODIFICATION IA EN COURS\n\n'
+    + 'Client : ' + CLIENT.name + ' (' + CLIENT.commerce + ')\n'
+    + 'Sujet : ' + modalContext + '\n'
+    + 'Message : ' + txt + '\n'
     + 'Date : ' + dateStr + '\n\n'
-    + '📌 Sujet : ' + modalContext + '\n\n'
-    + '💬 Message :\n' + txt + '\n\n'
-    + '👉 Dashboard CEO : https://dwtdigital-clients.github.io/dashboard-ceo.html\n'
-    + '👉 Espace Lise : https://dwtdigital-clients.github.io/espace-lise.html';
-
+    + 'Claude applique la modification automatiquement.\n'
+    + 'Site : https://dwtdigital-clients.github.io/Lise/';
   sendWebhook(WH_EMAIL, {
     client_email   : CEO_EMAIL,
     client_name    : 'DWT Digital',
-    commerce_name  : CLIENT.commerce + ' — Demande modification',
-    site_url       : 'https://dwtdigital-clients.github.io/espace-lise.html',
+    commerce_name  : CLIENT.commerce + ' — Modif IA',
+    site_url       : 'https://dwtdigital-clients.github.io/Lise/',
     texte_post     : emailBody
   });
 
@@ -953,23 +962,6 @@ function sendModification() {
     email: CLIENT.email, statut: 'en_attente'
   });
   localStorage.setItem('dwt_demandes_v1', JSON.stringify(demandes));
-
-  // 4) Envoyer à Make pour stockage dans notifications.json GitHub
-  var WH_NOTIF_WRITE = 'https://hook.eu1.make.com/xvep071tdulmxvg4gtdrjxgmcfc3ovfc';
-  sendWebhook(WH_NOTIF_WRITE, {
-    type     : 'notification',
-    id       : Date.now(),
-    date     : dateStr,
-    sujet    : modalContext,
-    message  : txt,
-    client   : CLIENT.name,
-    commerce : CLIENT.commerce,
-    email    : CLIENT.email,
-    statut   : 'en_attente'
-  });
-
-  closeModal();
-  alert('✅ Votre demande a été transmise à votre chargé de compte.\nRéponse sous 24h.');
 }
 
 // ── Webhooks ──
