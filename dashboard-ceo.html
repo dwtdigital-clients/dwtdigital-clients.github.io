@@ -474,80 +474,55 @@ function loadNotifs() {
   var zone = document.getElementById('notif-zone');
   var badge = document.getElementById('notif-badge');
   zone.innerHTML = '<div style="text-align:center;color:rgba(239,222,201,0.4);padding:40px 0;font-size:13px">Chargement...</div>';
-  
   fetch(NOTIF_RAW + '?t=' + Date.now())
     .then(function(r) { return r.json(); })
     .then(function(data) {
       var demandes = data.demandes || [];
       var pending = demandes.filter(function(d) { return d.statut === 'en_attente'; });
-      
-      // Update tab badge
       var tabBtn = document.querySelector('[data-tab-id="notif"]');
       if (tabBtn) {
-        tabBtn.textContent = pending.length > 0 ? '🔔 Demandes (' + pending.length + ')' : '🔔 Demandes clients';
+        tabBtn.textContent = pending.length > 0 ? ('🔔 Demandes (' + pending.length + ')') : '🔔 Demandes clients';
       }
-      
       if (demandes.length === 0) {
         zone.innerHTML = '<div style="text-align:center;color:rgba(239,222,201,0.4);padding:40px 0;font-size:13px">Aucune demande pour le moment.</div>';
         badge.style.display = 'none';
         return;
       }
-      
-      if (pending.length > 0) {
-        badge.style.display = 'block';
-        badge.textContent = pending.length + ' demande(s) en attente de traitement';
-      } else {
-        badge.style.display = 'none';
-      }
-      
+      badge.style.display = pending.length > 0 ? 'block' : 'none';
+      if (pending.length > 0) badge.textContent = pending.length + ' demande(s) en attente de traitement';
       var html = '';
       demandes.forEach(function(d, i) {
         var color = d.statut === 'traite' ? '#63AF21' : d.statut === 'en_cours' ? '#F59E0B' : '#EF4444';
         var label = d.statut === 'traite' ? 'Traite' : d.statut === 'en_cours' ? 'En cours' : 'En attente';
-        html += '<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(239,222,201,0.08);border-radius:10px;padding:14px;margin-bottom:10px">'
-          + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
-          + '<div style="font-size:13px;font-weight:600;color:#EFDEC9">' + (d.client||'') + ' — ' + (d.commerce||'') + '</div>'
-          + '<span style="font-size:10px;font-weight:700;color:' + color + ';background:rgba(255,255,255,0.05);padding:3px 9px;border-radius:20px;border:1px solid ' + color + '">' + label + '</span>'
-          + '</div>'
-          + '<div style="font-size:11px;color:rgba(239,222,201,0.5);margin-bottom:6px">📌 ' + (d.sujet||'') + ' &nbsp;·&nbsp; ' + (d.date||'') + '</div>'
-          + '<div style="font-size:12px;color:rgba(239,222,201,0.8);background:rgba(255,255,255,0.02);padding:9px;border-radius:7px;line-height:1.6;margin-bottom:10px">' + (d.message||'').replace(/
-/g,'<br>') + '</div>'
-          + '<div style="display:flex;gap:8px;flex-wrap:wrap">';
-        
+        var msgSafe = String(d.message || '').split('\n').join('<br>');
+        html += '<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(239,222,201,0.08);border-radius:10px;padding:14px;margin-bottom:10px">';
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">';
+        html += '<div style="font-size:13px;font-weight:600;color:#EFDEC9">' + (d.client||'') + ' — ' + (d.commerce||'') + '</div>';
+        html += '<span style="font-size:10px;font-weight:700;color:' + color + ';background:rgba(255,255,255,0.05);padding:3px 9px;border-radius:20px;border:1px solid ' + color + '">' + label + '</span>';
+        html += '</div>';
+        html += '<div style="font-size:11px;color:rgba(239,222,201,0.5);margin-bottom:6px">📌 ' + (d.sujet||'') + ' &nbsp;·&nbsp; ' + (d.date||'') + '</div>';
+        html += '<div style="font-size:12px;color:rgba(239,222,201,0.8);background:rgba(255,255,255,0.02);padding:9px;border-radius:7px;line-height:1.6;margin-bottom:10px">' + msgSafe + '</div>';
+        html += '<div style="display:flex;gap:8px;flex-wrap:wrap">';
         if (d.statut !== 'en_cours') {
-          html += '<button class="btn btn-y" style="font-size:11px;padding:5px 12px" onclick="markNotif(' + i + ','en_cours')">Marquer En cours</button>';
+          html += '<button class="btn btn-y" style="font-size:11px;padding:5px 12px" onclick="markNotif(' + i + ',\'en_cours\')">Marquer En cours</button>';
         }
         if (d.statut !== 'traite') {
-          html += '<button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="markNotif(' + i + ','traite')">Marquer Traite</button>';
+          html += '<button class="btn btn-g" style="font-size:11px;padding:5px 12px" onclick="markNotif(' + i + ',\'traite\')">Marquer Traite</button>';
         }
-        html += '<button class="btn" style="font-size:11px;padding:5px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(239,222,201,0.1);border-radius:7px;color:#EFDEC9;cursor:pointer" onclick="openAudit('' + (d.client||'') + '','' + (d.email||'') + '','' + (d.commerce||'') + '')">Audit</button>';
+        html += '<button class="btn btn-o" style="font-size:11px;padding:5px 12px" onclick="openAudit(\'';
+        html += (d.client||'') + '\',\'' + (d.email||'') + '\',\'' + (d.commerce||'') + '\')">Audit</button>';
         html += '</div></div>';
       });
-      
       zone.innerHTML = html;
     })
-    .catch(function(e) {
-      zone.innerHTML = '<div style="text-align:center;color:rgba(239,68,68,0.7);padding:40px 0;font-size:13px">Erreur de chargement. Verifiez la connexion.</div>';
+    .catch(function() {
+      zone.innerHTML = '<div style="text-align:center;color:rgba(239,68,68,0.7);padding:40px 0;font-size:13px">Erreur de chargement.</div>';
     });
 }
 
 function markNotif(idx, statut) {
-  // For now: update localStorage mirror + alert CEO to also update in GitHub via Make
-  alert('Statut mis a jour localement. Configurez Make pour synchroniser avec notifications.json.');
+  alert('Statut: ' + statut + '. Pour synchroniser, configurez Make W-Modification.');
 }
-
-// Auto-load notifications on tab switch
-document.addEventListener('DOMContentLoaded', function() {
-  // Patch tabs to add data-tab-id + auto-load notifs
-  setTimeout(function() {
-    document.querySelectorAll('.tab').forEach(function(btn, i) {
-      if (TABS[i]) btn.setAttribute('data-tab-id', TABS[i].id);
-      if (TABS[i] && TABS[i].id === 'notif') {
-        btn.addEventListener('click', function() { loadNotifs(); });
-      }
-    });
-  }, 200);
-});
 
 function addP() {
   var p = {prenom:g('mp-pr').value.trim(),nom:g('mp-no').value.trim(),email:g('mp-em').value.trim(),tel:g('mp-te').value.trim(),commerce:g('mp-co').value.trim(),ville:g('mp-vi').value.trim(),secteur:g('mp-se').value,date:new Date().toLocaleDateString('fr-FR')};
