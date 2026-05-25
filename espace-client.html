@@ -117,32 +117,40 @@ nav img{height:40px!important;}
         <button type="submit" class="login-btn">Se connecter</button>
       </form>
       <div class="login-divider">— ou accès démo —</div>
-      <div style="display:flex;gap:8px;">
-        <button class="demo-btn" onclick="loginDemo()" style="flex:1;font-size:12px;">🍰 Cake Délice</button>
-        <button class="demo-btn" onclick="window.location.href='/espace-zimblo.html'" style="flex:1;font-size:12px;background:#B5121B;">🥩 Boucherie Zimblo</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="demo-btn" onclick="loginDemo()" style="flex:1;font-size:11px;min-width:120px;">Cake Delice (demo)</button>
+        <button class="demo-btn" onclick="window.location.href='/espace-zimblo.html'" style="flex:1;font-size:11px;min-width:120px;background:#B5121B;">Boucherie Zimblo (demo)</button>
       </div>
       <div class="no-account">Pas encore client ? <a href="/contact.html">Demandez votre audit gratuit</a></div>
     </div>
   </div>
 </div>
 <script>
-function handleLogin(e){
+async function handleLogin(e){
   e.preventDefault();
-  const email = document.getElementById('login-email').value;
-  const pwd = document.getElementById('login-pwd').value;
-  if(email === 'lisevernet@yahoo.com' && pwd === 'CakeDelice2025'){
-    window.location.href = '/espace-lise.html';
-  } else if(email === 'zimblobot@gmail.com' && pwd === 'BoucherieZimblo2025'){
-    window.location.href = '/espace-zimblo.html';
-  } else if(email === 'demo@dwtdigital.fr' || pwd === 'demo'){
-    window.location.href = '/espace-lise.html';
-  } else if(email === 'darellwilliampro1@gmail.com' && pwd === 'DWTDigital2025'){
-    window.location.href = '/dashboard-ceo.html';
-  } else {
-    document.getElementById('error-msg').style.display = 'block';
+  const email = document.getElementById('login-email').value.trim();
+  const pwd   = document.getElementById('login-pwd').value;
+  const errEl = document.getElementById('error-msg');
+  errEl.style.display = 'none';
+
+  // CEO dashboard
+  if(email === 'darellwilliampro1@gmail.com' && pwd === 'DWTDigital2025'){
+    window.location.href = '/dashboard-ceo.html'; return;
   }
+
+  // Dynamic lookup from clients.json
+  try {
+    const r = await fetch('https://raw.githubusercontent.com/dwtdigital-clients/dwtdigital-clients.github.io/main/data/clients.json?t=' + Date.now());
+    const data = await r.json();
+    const client = (data.clients || []).find(c => c.email === email && c.password === pwd);
+    if(client){
+      window.location.href = client.espace; return;
+    }
+  } catch(err){ console.log('clients.json lookup failed', err); }
+
+  errEl.style.display = 'block';
 }
-function loginDemo(){window.location.href = '/espace-lise.html';}
+function loginDemo(){ window.location.href = '/espace-lise.html'; }
 </script>
 
 <script>
