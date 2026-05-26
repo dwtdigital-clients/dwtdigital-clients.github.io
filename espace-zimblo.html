@@ -79,7 +79,7 @@ body {
 }
 .sb-item:hover { background: #F9F7FC; }
 .sb-item.active { background: rgba(79,15,92,0.08); }
-.sb-item.locked { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+.sb-item.locked { opacity: 0.5; cursor: pointer; }
 .sb-dot {
   width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
@@ -306,7 +306,7 @@ body {
   transition: border-color 0.2s; -webkit-tap-highlight-color: transparent;
 }
 .bn-item.active { border-top-color: var(--v); }
-.bn-item.locked { opacity: 0.35; pointer-events: none; }
+.bn-item.locked { opacity: 0.5; }
 .bn-dot { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
 .bn-dot-lock { background: #EDE8F5; color: #999; }
 .bn-dot-active { background: var(--v); color: white; }
@@ -659,8 +659,7 @@ function saveState() {
 // ── Navigation ──
 function goTo(n) {
   n = parseInt(n);
-  if (n < 1 || n > 6) return;
-  if (n > S.max) return; // step locked
+  if (n < 1 || n > 6) return; // navigation libre, pas de verrou
 
   // Masquer tous les steps
   for (var i = 1; i <= 6; i++) {
@@ -784,7 +783,7 @@ function validatePlatforms() {
   if (S.platforms.length === 0) return;
   unlock(2);
   var names = S.platforms.map(function(id) { return (PLATFORMS[id] && PLATFORMS[id].name) || id; }).join(', ');
-  notify('plateforme', 'Plateformes choisies par Lise : ' + names);
+  notify('plateforme', 'Plateformes choisies par ' + CLIENT.name + ' : ' + names);
   goTo(2);
 }
 
@@ -967,6 +966,8 @@ function showHistory() {
   document.getElementById('history-overlay').classList.add('open');
 }
 function sendModification() {
+  // Debug: log what we're sending
+  console.log('[W-Mod] Déclenchement modification pour', CLIENT.commerce);
   var txt = document.getElementById('modal-text').value.trim();
   if (!txt) { alert('Décrivez la modification souhaitée'); return; }
 
@@ -1037,6 +1038,8 @@ function sendWebhook(url, data) {
 // ── Initialisation ──
 function init() {
   loadState();
+  // Débloquer toutes les étapes dès le début (navigation libre)
+  S.max = 6;
   initPlatforms();
 
   // Bouton valider plateformes
@@ -1060,3 +1063,4 @@ init();
 </script>
 </body>
 </html>
+
