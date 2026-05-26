@@ -610,7 +610,7 @@ function pwd(c) { var b=(c||'Client').replace(/[^a-zA-Z]/g,'').substring(0,8)||'
 function ecPrev() {
   var p=g('ec-pr').value.trim()||'Client', c=g('ec-co').value.trim()||'Commerce', e=g('ec-em').value.trim()||'client@email.fr';
   var sl=slug(p+'-'+c), pw=pwd(c);
-  g('ec-url').textContent='dwtdigital-clients.github.io/clients/'+sl+'/';
+  g('ec-url').textContent='dwtdigital-clients.github.io/espace-'+sl+'.html';
   g('ec-ep').textContent=e; g('ec-pw').textContent=pw;
 }
 
@@ -740,8 +740,8 @@ async function doCreateEspace() {
 
     // ─── 6. Notify via Make + Email ───
     fetch(WH_CE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prenom:pr,email:em,commerce:co,pack:pk,secteur:se,slug:sl,pwd:pw,url:url})}).catch(function(){});
-    fetch(WH_EMAIL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-      client_email:CEO_EMAIL,client_name:'DWT Digital',commerce_name:co+' — Nouvel espace cree',
+    fetch(WH_EM,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      client_email:EM,client_name:'DWT Digital',commerce_name:co+' — Nouvel espace cree',
       site_url:url,texte_post:'Nouvel espace cree pour '+pr+' ('+co+')\nEmail: '+em+'\nMDP: '+pw+'\nURL: '+url
     })}).catch(function(){});
     await step(100,'Espace cree !');
