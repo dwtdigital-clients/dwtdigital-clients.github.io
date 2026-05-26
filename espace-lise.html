@@ -979,17 +979,25 @@ function sendModification() {
 
   // 1) Pipeline IA : Make → Claude lit HTML → applique modif → redéploie GitHub
   var ctxData = document.getElementById('modal-context') ? document.getElementById('modal-context').value.trim() : '';
+  var sujet = modalContext || 'Modification site vitrine';
   var WH_MODIF = 'https://hook.eu1.make.com/r8kghl6dxv65r1xt0yic862e4x7dff8h';
-  sendWebhook(WH_MODIF, {
+  var payload = {
     client      : CLIENT.name,
     commerce    : CLIENT.commerce,
     email       : CLIENT.email,
-    sujet       : modalContext,
+    sujet       : sujet,
     message     : txt,
     site_slug   : 'Lise',
-    site_file   : 'onboarding.html',
+    site_file   : 'index.html',
+    repo        : 'dwtdigital-clients/dwtdigital-clients.github.io',
+    full_path   : 'Lise/index.html',
     context_data: ctxData
-  });
+  };
+  console.log('[W-Mod] Payload:', JSON.stringify(payload));
+  sendWebhook(WH_MODIF, payload,
+    function(r) { notify('validation', 'Modification en cours — Telegram dans 2 min.'); },
+    function(e) { notify('info', 'Erreur reseau. Consultez F12 > Console.'); }
+  );
 
   // 2) Email CEO (notification parallèle)
   var emailBody = '🤖 MODIFICATION IA EN COURS\n\n'
@@ -1025,13 +1033,30 @@ function notify(action, detail) {
   });
 }
 
-function sendWebhook(url, data) {
+function sendWebhook(url, data, onSuccess, onError) {
   var body = JSON.stringify(data);
+  console.log('[Webhook] Envoi vers:', url, '| Payload:', JSON.stringify(data));
   fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body:body })
-    .catch(function() {
-      fetch(url, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:body })
-        .catch(function(e) { console.log('Webhook error', e); });
+  .then(function(resp) {
+    console.log('[Webhook] HTTP:', resp.status);
+    return resp.text();
+  })
+  .then(function(txt) {
+    console.log('[Webhook] Reponse Make:', txt);
+    if (onSuccess) onSuccess(txt);
+  })
+  .catch(function(err) {
+    console.warn('[Webhook] CORS fallback...', err.message);
+    fetch(url, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:body })
+    .then(function() {
+      console.log('[Webhook] Fallback no-cors envoye');
+      if (onSuccess) onSuccess('sent-no-cors');
+    })
+    .catch(function(e) {
+      console.error('[Webhook] ECHEC TOTAL:', e);
+      if (onError) onError(e);
     });
+  });
 }
 
 // ── Initialisation ──
