@@ -700,12 +700,17 @@ async function doCreateEspace() {
     }
     await step(40,'Personnalisation...');
 
-    // ─── 3. Push espace-{slug}.html to GitHub ───
+    // ─── 3. Push espace-{slug}.html to GitHub (GET sha first if exists) ───
     var espB64=btoa(unescape(encodeURIComponent(tpl)));
+    var existingShaCk=await fetch('https://api.github.com/repos/dwtdigital-clients/dwtdigital-clients.github.io/contents/'+espaceSlug,{
+      headers:{'Authorization':'token '+GH_TOKEN}
+    });
+    var espBody={message:'feat: Espace client '+co+' ('+pr+')',content:espB64};
+    if(existingShaCk.ok){var existingData=await existingShaCk.json();espBody.sha=existingData.sha;}
     var ghR1=await fetch('https://api.github.com/repos/dwtdigital-clients/dwtdigital-clients.github.io/contents/'+espaceSlug,{
       method:'PUT',
       headers:{'Authorization':'token '+GH_TOKEN,'Content-Type':'application/json'},
-      body:JSON.stringify({message:'feat: Espace client '+co+' ('+pr+')',content:espB64})
+      body:JSON.stringify(espBody)
     });
     if(!ghR1.ok){var e1=await ghR1.json();throw new Error('GitHub espace: '+JSON.stringify(e1.message||e1));}
     await step(55,'Espace cree sur GitHub...');
