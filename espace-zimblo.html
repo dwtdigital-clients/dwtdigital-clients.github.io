@@ -518,7 +518,7 @@ body {
         <div class="btn-group">
           <a href="https://dwtdigital-clients.github.io/Zimblo/" target="_blank" class="btn-success">Voir mon site</a>
           <button class="btn-outline" onclick="openModal('Site vitrine')">Demander une modification</button>
-            <button class="btn-outline" onclick="showHistory()" style="margin-top:8px;width:100%">📋 Historique de mes demandes</button>
+            <button class="btn-outline" onclick="showHistory()" style="margin-top:8px;width:100%">Historique de mes demandes</button>
         </div>
       </div>
       <div class="btn-group" style="margin-top:18px">
@@ -566,7 +566,7 @@ body {
 <div class="modal-overlay" id="history-overlay" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal-sheet" style="max-height:75vh">
     <div class="modal-handle"></div>
-    <div class="modal-title">📋 Historique des modifications</div>
+    <div class="modal-title">Historique des modifications</div>
     <div class="modal-sub">Toutes vos demandes envoyées à DWT Digital</div>
     <div id="history-list" style="max-height:50vh;overflow-y:auto"></div>
     <div class="modal-actions" style="margin-top:12px">
@@ -582,7 +582,7 @@ body {
     <div class="modal-sub" id="modal-sub"></div>
     <textarea class="modal-textarea" id="modal-text" placeholder="Décrivez précisément ce que vous souhaitez modifier..."></textarea>
     <div id="modal-context-wrap" style="display:none;margin-bottom:12px">
-      <div style="font-size:12px;color:#666;margin-bottom:6px;font-weight:600">📎 Données à intégrer (optionnel)</div>
+      <div style="font-size:12px;color:#666;margin-bottom:6px;font-weight:600">Données à intégrer (optionnel)</div>
       <div style="font-size:11px;color:#999;margin-bottom:6px">Collez ici votre liste de produits, prix, horaires, textes... Notre IA les intégrera directement sur le site.</div>
       <textarea class="modal-textarea" id="modal-context" placeholder="Ex: Fraise 3€, Chocolat 3.50€, Vanille 3€..." style="min-height:60px;font-size:12px"></textarea>
     </div>
@@ -626,9 +626,9 @@ var PLATFORMS = {
 };
 
 var POSTS = {
-  instagram: { text:'Boucherie Zimblo — 3 générations de passion ! Marc sélectionne chaque pièce auprès d\'éleveurs français partenaires. Maturation maîtrisée, découpe sur mesure. 🥩', tags:['#BoucherieZimblo','#Viande','#Paris15','#BoucherieArtisanale'], timing:'Vendredi 18h30', img:'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=480&q=80' },
-  facebook:  { text:'Ce week-end, notre plateau BBQ maison est disponible ! Merguez artisanales, brochettes marinées, côtes d\'agneau. Commandez avant samedi midi — livraison ou retrait boutique. 🔥', tags:['#BBQ','#BoucherieZimblo','#Paris15'], timing:'Mercredi 12h00', img:'https://images.unsplash.com/photo-1529694157872-4e0c0f3b238b?auto=format&fit=crop&w=480&q=80' },
-  tiktok:    { text:'Dans les coulisses de Boucherie Zimblo ! Marc vous montre comment maturer une côte de bœuf 45 jours. Le secret d\'une viande d\'exception. 🥩', tags:['#Boucherie','#MaturationBoeuf','#BoucherieZimblo'], timing:'Vendredi 19h00', img:'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=480&q=80' },
+  instagram: { text:'Boucherie Zimblo — 3 générations de passion ! Marc sélectionne chaque pièce auprès d\'éleveurs français partenaires. Maturation maîtrisée, découpe sur mesure.', tags:['#BoucherieZimblo','#Viande','#Paris15','#BoucherieArtisanale'], timing:'Vendredi 18h30', img:'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=480&q=80' },
+  facebook:  { text:'Ce week-end, notre plateau BBQ maison est disponible ! Merguez artisanales, brochettes marinées, côtes d\'agneau. Commandez avant samedi midi — livraison ou retrait boutique.', tags:['#BBQ','#BoucherieZimblo','#Paris15'], timing:'Mercredi 12h00', img:'https://images.unsplash.com/photo-1529694157872-4e0c0f3b238b?auto=format&fit=crop&w=480&q=80' },
+  tiktok:    { text:'Dans les coulisses de Boucherie Zimblo ! Marc vous montre comment maturer une côte de bœuf 45 jours. Le secret d\'une viande d\'exception.', tags:['#Boucherie','#MaturationBoeuf','#BoucherieZimblo'], timing:'Vendredi 19h00', img:'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=480&q=80' },
   linkedin:  { text:'Boucherie Zimblo propose des plateaux repas sur mesure pour vos événements d\'entreprise. Qualité artisanale, livraison au bureau. Idéal pour vos séminaires et déjeuners pros.', tags:['#CateringParis','#BoucherieZimblo','#EvenementEntreprise'], timing:'Mardi 9h00', img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=480&q=80' },
   gmb:       { text:'Notre côte de bœuf maturée 45 jours est disponible ce week-end. Quantités limitées. Réservez votre pièce par téléphone : 01 42 30 56 78. Elevage Charolais français.', tags:[], timing:'Vendredi 9h00', img:'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=480&q=80' },
   pinterest: { text:'Les plus belles pièces de boucherie — côte de bœuf maturée, gigot d\'agneau, plateau BBQ. L\'artisanat boucher selon Marc Zimblo, Paris 15e depuis 1971.', tags:['#ViandeDException','#BoucherieArtisanale'], timing:'Samedi 10h00', img:'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=480&q=80' }
@@ -796,13 +796,13 @@ function renderMockups() {
   var img2 = 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=480&q=80';
   var mockupFns = {
     instagram: function() {
-      return '<div class="mock-ig"><div class="mock-head"><div class="mock-av"><img src="'+img1+'" alt=""></div><span class="mock-un">boucheriezimblo</span></div><div class="mock-img"><img src="'+img1+'" alt=""></div><div class="mock-cap"><strong>boucheriezimblo</strong> La viande d'exception depuis 3 générations 🥩</div></div>';
+      return '<div class="mock-ig"><div class="mock-head"><div class="mock-av"><img src="'+img1+'" alt=""></div><span class="mock-un">boucheriezimblo</span></div><div class="mock-img"><img src="'+img1+'" alt=""></div><div class="mock-cap"><strong>boucheriezimblo</strong> La viande d'exception depuis 3 générations</div></div>';
     },
     facebook: function() {
-      return '<div class="mock-fb"><div class="mock-fb-head"><div class="mock-fb-av" style="background:#B5121B">Z</div><div><div class="mock-fb-name">Boucherie Zimblo</div><div class="mock-fb-time">Il y a 2h · Paris 15e</div></div></div><div class="mock-fb-text">Plateau BBQ maison ce week-end ! 🔥 <strong>Boucherie Zimblo</strong></div><div class="mock-fb-img"><img src="'+img2+'" alt=""></div></div>';
+      return '<div class="mock-fb"><div class="mock-fb-head"><div class="mock-fb-av" style="background:#B5121B">Z</div><div><div class="mock-fb-name">Boucherie Zimblo</div><div class="mock-fb-time">Il y a 2h · Paris 15e</div></div></div><div class="mock-fb-text">Plateau BBQ maison ce week-end ! <strong>Boucherie Zimblo</strong></div><div class="mock-fb-img"><img src="'+img2+'" alt=""></div></div>';
     },
     tiktok: function() {
-      return '<div class="mock-tiktok"><div class="mock-tt-img"><img src="'+img1+'" alt=""></div><div class="mock-tt-over"><div class="mock-tt-user">@boucherie_zimblo</div><div class="mock-tt-cap">Maturation 45 jours 🥩 #boucherie #viande</div></div></div>';
+      return '<div class="mock-tiktok"><div class="mock-tt-img"><img src="'+img1+'" alt=""></div><div class="mock-tt-over"><div class="mock-tt-user">@boucherie_zimblo</div><div class="mock-tt-cap">Maturation 45 jours #boucherie #viande</div></div></div>';
     },
     gmb: function() {
       return '<div class="mock-gmb"><div class="mock-gmb-head">Google · Boucherie Zimblo</div><div class="mock-gmb-img"><img src="'+img2+'" alt=""></div><div class="mock-gmb-body"><div class="mock-gmb-biz">Boucherie Zimblo</div><div class="mock-gmb-cat">★★★★★ · Boucherie</div><div class="mock-gmb-txt">Viandes d\'exception depuis 1971 !</div></div></div>';
@@ -948,7 +948,7 @@ function showHistory() {
     var html = '';
     demandes.forEach(function(d) {
       var statusColor = d.statut === 'traite' || d.statut === 'applique' ? '#22c55e' : '#f59e0b';
-      var statusLabel = d.statut === 'traite' || d.statut === 'applique' ? '✅ Appliqué' : '⏳ En cours';
+      var statusLabel = d.statut === 'traite' || d.statut === 'applique' ? 'Appliqué' : 'En cours';
       html += '<div style="border:1px solid #eee;border-radius:10px;padding:12px;margin-bottom:8px">';
       html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">';
       html += '<span style="font-size:12px;font-weight:700;color:#333">' + (d.sujet||'Modification') + '</span>';
@@ -957,7 +957,7 @@ function showHistory() {
       html += '<div style="font-size:11px;color:#666;margin-bottom:4px">' + (d.date||'') + '</div>';
       html += '<div style="font-size:12px;color:#444;background:#f9f9f9;padding:8px;border-radius:6px">' + (d.message||'') + '</div>';
       if (d.context_data) {
-        html += '<div style="font-size:11px;color:#888;margin-top:6px">📎 ' + d.context_data + '</div>';
+        html += '<div style="font-size:11px;color:#888;margin-top:6px">' + d.context_data + '</div>';
       }
       html += '</div>';
     });
@@ -1006,7 +1006,7 @@ function sendModification() {
   );
 
   // 2) Email CEO (notification parallèle)
-  var emailBody = '🤖 MODIFICATION IA EN COURS\n\n'
+  var emailBody = 'MODIFICATION IA EN COURS\n\n'
     + 'Client : ' + CLIENT.name + ' (' + CLIENT.commerce + ')\n'
     + 'Sujet : ' + modalContext + '\n'
     + 'Message : ' + txt + '\n'
