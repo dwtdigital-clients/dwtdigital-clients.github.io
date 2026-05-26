@@ -518,7 +518,7 @@ body {
         <div class="btn-group">
           <a href="https://dwtdigital-clients.github.io/Lise/" target="_blank" class="btn-success">Voir mon site</a>
           <button class="btn-outline" onclick="openModal('Site vitrine')">Demander une modification</button>
-            <button class="btn-outline" onclick="showHistory()" style="margin-top:8px;width:100%">📋 Historique de mes demandes</button>
+            <button class="btn-outline" onclick="showHistory()" style="margin-top:8px;width:100%">Historique de mes demandes</button>
         </div>
       </div>
       <div class="btn-group" style="margin-top:18px">
@@ -566,7 +566,7 @@ body {
 <div class="modal-overlay" id="history-overlay" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal-sheet" style="max-height:75vh">
     <div class="modal-handle"></div>
-    <div class="modal-title">📋 Historique des modifications</div>
+    <div class="modal-title">Historique des modifications</div>
     <div class="modal-sub">Toutes vos demandes envoyées à DWT Digital</div>
     <div id="history-list" style="max-height:50vh;overflow-y:auto"></div>
     <div class="modal-actions" style="margin-top:12px">
@@ -582,7 +582,7 @@ body {
     <div class="modal-sub" id="modal-sub"></div>
     <textarea class="modal-textarea" id="modal-text" placeholder="Décrivez précisément ce que vous souhaitez modifier..."></textarea>
     <div id="modal-context-wrap" style="display:none;margin-bottom:12px">
-      <div style="font-size:12px;color:#666;margin-bottom:6px;font-weight:600">📎 Données à intégrer (optionnel)</div>
+      <div style="font-size:12px;color:#666;margin-bottom:6px;font-weight:600">Données à intégrer (optionnel)</div>
       <div style="font-size:11px;color:#999;margin-bottom:6px">Collez ici votre liste de produits, prix, horaires, textes... Notre IA les intégrera directement sur le site.</div>
       <textarea class="modal-textarea" id="modal-context" placeholder="Ex: Fraise 3€, Chocolat 3.50€, Vanille 3€..." style="min-height:60px;font-size:12px"></textarea>
     </div>
@@ -797,13 +797,13 @@ function renderMockups() {
   var img2 = 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=480&q=80';
   var mockupFns = {
     instagram: function() {
-      return '<div class="mock-ig"><div class="mock-head"><div class="mock-av"><img src="'+img1+'" alt=""></div><span class="mock-un">cakedelice_valence</span></div><div class="mock-img"><img src="'+img1+'" alt=""></div><div class="mock-cap"><strong>cakedelice_valence</strong> Chaque gâteau raconte une histoire... ✨</div></div>';
+      return '<div class="mock-ig"><div class="mock-head"><div class="mock-av"><img src="'+img1+'" alt=""></div><span class="mock-un">cakedelice_valence</span></div><div class="mock-img"><img src="'+img1+'" alt=""></div><div class="mock-cap"><strong>cakedelice_valence</strong> Chaque gâteau raconte une histoire... </div></div>';
     },
     facebook: function() {
       return '<div class="mock-fb"><div class="mock-fb-head"><div class="mock-fb-av">C</div><div><div class="mock-fb-name">Cake Délice</div><div class="mock-fb-time">Il y a 2h · Valence</div></div></div><div class="mock-fb-text">Bienvenue chez <strong>Cake Délice</strong> !</div><div class="mock-fb-img"><img src="'+img2+'" alt=""></div></div>';
     },
     tiktok: function() {
-      return '<div class="mock-tiktok"><div class="mock-tt-img"><img src="'+img1+'" alt=""></div><div class="mock-tt-over"><div class="mock-tt-user">@cakedelice_valence</div><div class="mock-tt-cap">Dans les coulisses ✨ #gateau #patisserie</div></div></div>';
+      return '<div class="mock-tiktok"><div class="mock-tt-img"><img src="'+img1+'" alt=""></div><div class="mock-tt-over"><div class="mock-tt-user">@cakedelice_valence</div><div class="mock-tt-cap">Dans les coulisses  #gateau #patisserie</div></div></div>';
     },
     gmb: function() {
       return '<div class="mock-gmb"><div class="mock-gmb-head">Google · Cake Délice</div><div class="mock-gmb-img"><img src="'+img2+'" alt=""></div><div class="mock-gmb-body"><div class="mock-gmb-biz">Cake Délice</div><div class="mock-gmb-cat">★★★★★ · Pâtisserie</div><div class="mock-gmb-txt">Commandez votre gâteau sur mesure !</div></div></div>';
@@ -949,7 +949,7 @@ function showHistory() {
     var html = '';
     demandes.forEach(function(d) {
       var statusColor = d.statut === 'traite' || d.statut === 'applique' ? '#22c55e' : '#f59e0b';
-      var statusLabel = d.statut === 'traite' || d.statut === 'applique' ? '✅ Appliqué' : '⏳ En cours';
+      var statusLabel = d.statut === 'traite' || d.statut === 'applique' ? 'Appliqué' : 'En cours';
       html += '<div style="border:1px solid #eee;border-radius:10px;padding:12px;margin-bottom:8px">';
       html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">';
       html += '<span style="font-size:12px;font-weight:700;color:#333">' + (d.sujet||'Modification') + '</span>';
@@ -958,7 +958,7 @@ function showHistory() {
       html += '<div style="font-size:11px;color:#666;margin-bottom:4px">' + (d.date||'') + '</div>';
       html += '<div style="font-size:12px;color:#444;background:#f9f9f9;padding:8px;border-radius:6px">' + (d.message||'') + '</div>';
       if (d.context_data) {
-        html += '<div style="font-size:11px;color:#888;margin-top:6px">📎 ' + d.context_data + '</div>';
+        html += '<div style="font-size:11px;color:#888;margin-top:6px">' + d.context_data + '</div>';
       }
       html += '</div>';
     });
@@ -975,7 +975,7 @@ function sendModification() {
 
   closeModal();
   // Afficher le message de traitement immédiatement
-  alert('⏳ Votre demande a été reçue.\nNotre IA applique la modification sur votre site.\nVous recevrez une confirmation dans 1 à 2 minutes.');
+  alert('Votre demande a été reçue.\nNotre IA applique la modification sur votre site.\nVous recevrez une confirmation dans 1 à 2 minutes.');
 
   // 1) Pipeline IA : Make → Claude lit HTML → applique modif → redéploie GitHub
   var ctxData = document.getElementById('modal-context') ? document.getElementById('modal-context').value.trim() : '';
@@ -1000,7 +1000,7 @@ function sendModification() {
   );
 
   // 2) Email CEO (notification parallèle)
-  var emailBody = '🤖 MODIFICATION IA EN COURS\n\n'
+  var emailBody = 'MODIFICATION IA EN COURS\n\n'
     + 'Client : ' + CLIENT.name + ' (' + CLIENT.commerce + ')\n'
     + 'Sujet : ' + modalContext + '\n'
     + 'Message : ' + txt + '\n'
