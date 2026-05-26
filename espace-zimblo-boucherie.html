@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Espace Client — boucherie</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══ RESET ═══ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #F0ECF5;
+  color: #1A0820;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ═══ VARIABLES ═══ */
+:root {
+  --v: #4F0F5C; --vl: #7B1FA2; --vd: #2D0636;
+  --g: #63AF21; --gl: #7BC93A;
+  --b: #EFDEC9; --bg: #F0ECF5;
+  --td: #1A0820; --tm: #4A3050;
+  --border: #EDE8F5; --radius: 12px;
+}
+
+/* ═══ TOPBAR ═══ */
+.topbar {
+  background: var(--vd);
+  padding: 11px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 200;
+  border-bottom: 1px solid rgba(99,175,33,0.2);
+}
+.topbar-logo { display: flex; align-items: center; }
+.topbar-logo img { height: 36px; border-radius: 6px; display: block; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.topbar-commerce { font-size: 13px; font-weight: 700; color: var(--b); }
+.topbar-pack { font-size: 10px; color: var(--g); letter-spacing: 1px; text-transform: uppercase; }
+.topbar-av {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--g); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; flex-shrink: 0;
+}
+
+/* ═══ PROGRESS BAR ═══ */
+.prog-bar-wrap {
+  background: var(--vd);
+  padding: 7px 18px 10px;
+  border-bottom: 1px solid rgba(99,175,33,0.15);
+  position: sticky; top: 58px; z-index: 199;
+}
+.prog-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.prog-label { font-size: 11px; font-weight: 600; color: var(--g); }
+.prog-pct { font-size: 10px; color: rgba(239,222,201,0.45); }
+.prog-track { background: rgba(239,222,201,0.12); border-radius: 20px; height: 5px; overflow: hidden; }
+.prog-fill { height: 100%; background: linear-gradient(to right, var(--vl), var(--g)); border-radius: 20px; transition: width 0.4s ease; }
+
+/* ═══ DESKTOP LAYOUT ═══ */
+.layout { display: flex; min-height: calc(100vh - 95px); }
+
+/* ═══ SIDEBAR ═══ */
+.sidebar {
+  width: 210px; flex-shrink: 0;
+  background: white; border-right: 1px solid var(--border);
+  padding: 18px 10px;
+  display: none; /* hidden by default, shown on desktop */
+}
+.sidebar-label { font-size: 10px; color: var(--tm); letter-spacing: 2px; text-transform: uppercase; font-weight: 600; padding: 0 6px; margin-bottom: 10px; }
+.sb-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 10px; border-radius: 8px;
+  cursor: pointer; border: none; background: transparent;
+  width: 100%; text-align: left; font-family: 'Poppins', sans-serif;
+  margin-bottom: 2px; transition: background 0.15s;
+}
+.sb-item:hover { background: #F9F7FC; }
+.sb-item.active { background: rgba(79,15,92,0.08); }
+.sb-item.locked { opacity: 0.5; cursor: pointer; }
+.sb-dot {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+}
+.dot-lock { background: #F0F0F0; color: #BBB; }
+.dot-active { background: var(--v); color: white; }
+.dot-done { background: var(--g); color: white; }
+.sb-text { font-size: 12px; font-weight: 500; color: var(--td); }
+.sb-item.active .sb-text { color: var(--v); font-weight: 700; }
+.sb-item.locked .sb-text { color: #BBB; }
+.sb-sub { font-size: 10px; color: var(--tm); }
+.sb-sub.done { color: var(--g); }
+.sb-sub.active { color: var(--v); font-weight: 700; }
+.sidebar-help { margin-top: 16px; padding: 12px; background: #F9F7FC; border-radius: 10px; }
+.sidebar-help p { font-size: 11px; color: var(--tm); margin-bottom: 8px; }
+.sidebar-help a { display: block; background: var(--v); color: white; text-align: center; padding: 8px; border-radius: 7px; font-size: 11px; font-weight: 600; text-decoration: none; }
+
+/* ═══ MAIN ═══ */
+.main { flex: 1; padding: 20px 18px 100px; overflow-x: hidden; min-width: 0; }
+
+/* ═══ STEPS — SHOW/HIDE PAR CLASSE ═══ */
+.step { display: none; }
+.step.active { display: block; animation: fadeUp 0.25s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.step-badge {
+  display: inline-block;
+  background: rgba(99,175,33,0.08); border: 1px solid rgba(99,175,33,0.2);
+  color: var(--g); padding: 4px 12px; border-radius: 20px;
+  font-size: 11px; font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.step-title { font-size: 19px; font-weight: 700; color: var(--td); margin-bottom: 6px; }
+.step-desc { font-size: 13px; color: var(--tm); line-height: 1.7; margin-bottom: 18px; }
+
+/* ═══ CARDS ═══ */
+.card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 14px; }
+
+/* ═══ PLATFORM CARDS ═══ */
+.platforms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+.plat {
+  border: 2px solid var(--border); border-radius: 10px;
+  padding: 16px 10px; text-align: center;
+  cursor: pointer; user-select: none;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  position: relative; background: white;
+}
+.plat:active { transform: scale(0.96); }
+.plat.sel { border-color: var(--v); background: rgba(79,15,92,0.04); }
+.plat.sel::after { content: '✓'; position: absolute; top: 6px; right: 8px; font-size: 11px; font-weight: 700; color: var(--g); }
+.plat-icon { width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; }
+.plat-name { font-size: 11px; font-weight: 700; color: var(--td); margin-bottom: 2px; pointer-events: none; }
+.plat-sub { font-size: 10px; color: var(--tm); pointer-events: none; }
+.plat * { pointer-events: none; }
+.plat-count { font-size: 12px; color: var(--tm); margin-bottom: 14px; }
+.plat-count strong { color: var(--v); }
+
+/* ═══ BUTTONS ═══ */
+.btn-primary {
+  display: inline-block; background: var(--v); color: white;
+  border: none; border-radius: 9px; padding: 13px 28px;
+  font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: background 0.2s, transform 0.1s;
+  text-decoration: none; text-align: center;
+}
+.btn-primary:hover { background: var(--vl); }
+.btn-primary:active { transform: scale(0.97); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-primary.full { width: 100%; }
+.btn-success {
+  display: inline-block; background: var(--g); color: white;
+  border: none; border-radius: 9px; padding: 11px 22px;
+  font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: background 0.2s, transform 0.1s;
+}
+.btn-success:active { transform: scale(0.97); }
+.btn-outline {
+  display: inline-block; background: white; color: var(--td);
+  border: 1.5px solid var(--border); border-radius: 9px; padding: 10px 20px;
+  font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: border-color 0.2s;
+}
+.btn-outline:hover { border-color: var(--v); }
+.btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+
+/* ═══ NOTIFICATIONS ═══ */
+.notif {
+  display: flex; align-items: flex-start; gap: 8px;
+  background: rgba(99,175,33,0.07); border: 1px solid rgba(99,175,33,0.2);
+  border-radius: 8px; padding: 10px 13px;
+  font-size: 12px; color: #2D7A0A; margin-bottom: 14px; line-height: 1.5;
+}
+.notif-warn { background: rgba(245,158,11,0.07); border-color: rgba(245,158,11,0.25); color: #B7791F; }
+
+/* ═══ IDENTITÉ VISUELLE ═══ */
+.palette { display: flex; gap: 10px; margin: 10px 0 14px; flex-wrap: wrap; }
+.swatch { text-align: center; }
+.swatch-dot { width: 38px; height: 38px; border-radius: 9px; margin-bottom: 4px; }
+.swatch-name { font-size: 9px; color: var(--tm); }
+.identity-typo { background: #FFF8F0; border-radius: 9px; padding: 12px; margin-bottom: 12px; }
+.identity-tagline { background: #FCF0F7; border-radius: 9px; padding: 12px; margin-bottom: 14px; }
+.identity-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--tm); margin-bottom: 7px; }
+.mockup-scroll { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; margin: 12px 0; }
+.mockup-scroll::-webkit-scrollbar { height: 4px; }
+.mockup-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.mockup-item { flex-shrink: 0; }
+.mockup-label { font-size: 11px; font-weight: 700; color: var(--td); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+.mock-ig { border: 1px solid #E5E5E5; border-radius: 8px; overflow: hidden; width: 190px; }
+.mock-head { background: white; padding: 6px 9px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid #F0F0F0; }
+.mock-av { width: 20px; height: 20px; border-radius: 50%; overflow: hidden; }
+.mock-av img { width: 100%; height: 100%; object-fit: cover; }
+.mock-un { font-size: 10px; font-weight: 700; color: #000; }
+.mock-img { height: 140px; overflow: hidden; }
+.mock-img img { width: 100%; height: 100%; object-fit: cover; }
+.mock-cap { padding: 6px 9px; font-size: 9px; color: #333; line-height: 1.4; background: white; }
+.mock-fb { border: 1px solid #E0E0E0; border-radius: 8px; overflow: hidden; width: 210px; background: white; }
+.mock-fb-head { padding: 9px; display: flex; align-items: center; gap: 7px; }
+.mock-fb-av { width: 32px; height: 32px; border-radius: 50%; background: #5C2E1A; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.mock-fb-name { font-size: 12px; font-weight: 700; color: #000; }
+.mock-fb-time { font-size: 10px; color: #999; }
+.mock-fb-text { padding: 0 9px 8px; font-size: 11px; color: #333; line-height: 1.5; }
+.mock-fb-img { height: 130px; overflow: hidden; }
+.mock-fb-img img { width: 100%; height: 100%; object-fit: cover; }
+.mock-tiktok { border-radius: 8px; overflow: hidden; width: 110px; height: 195px; position: relative; background: #000; }
+.mock-tt-img { position: absolute; inset: 0; }
+.mock-tt-img img { width: 100%; height: 100%; object-fit: cover; opacity: 0.75; }
+.mock-tt-over { position: absolute; bottom: 0; left: 0; right: 0; padding: 8px; background: linear-gradient(transparent, rgba(0,0,0,0.7)); }
+.mock-tt-user { color: white; font-size: 9px; font-weight: 700; margin-bottom: 2px; }
+.mock-tt-cap { color: rgba(255,255,255,0.8); font-size: 8px; line-height: 1.3; }
+.mock-gmb { border: 1px solid #E0E0E0; border-radius: 8px; overflow: hidden; width: 190px; background: white; }
+.mock-gmb-head { background: #4285F4; padding: 7px 9px; color: white; font-size: 10px; font-weight: 700; }
+.mock-gmb-img { height: 110px; overflow: hidden; }
+.mock-gmb-img img { width: 100%; height: 100%; object-fit: cover; }
+.mock-gmb-body { padding: 7px 9px; }
+.mock-gmb-biz { font-size: 12px; font-weight: 700; color: #000; }
+.mock-gmb-cat { font-size: 10px; color: #999; margin-bottom: 3px; }
+.mock-gmb-txt { font-size: 10px; color: #444; line-height: 1.4; }
+.mock-linkedin { border: 1px solid #E0E0E0; border-radius: 8px; overflow: hidden; width: 210px; background: white; }
+.mock-li-head { padding: 9px; display: flex; align-items: center; gap: 7px; }
+.mock-li-av { width: 36px; height: 36px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
+.mock-li-av img { width: 100%; height: 100%; object-fit: cover; }
+.mock-li-info { font-size: 12px; font-weight: 700; color: #000; }
+.mock-li-sub { font-size: 10px; color: #666; }
+.mock-li-text { padding: 0 9px 8px; font-size: 11px; color: #333; line-height: 1.5; }
+.mock-li-img { height: 120px; overflow: hidden; }
+.mock-li-img img { width: 100%; height: 100%; object-fit: cover; }
+.mock-pin { border-radius: 8px; overflow: hidden; width: 120px; position: relative; }
+.mock-pin-img { height: 190px; overflow: hidden; }
+.mock-pin-img img { width: 100%; height: 100%; object-fit: cover; }
+.mock-pin-cap { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); padding: 7px 8px; color: white; font-size: 9px; font-weight: 700; }
+
+/* ═══ POSTS ═══ */
+.post-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 12px; }
+.post-head { padding: 11px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F5F0FC; }
+.post-plat { font-size: 12px; font-weight: 600; color: var(--td); display: flex; align-items: center; gap: 6px; }
+.post-plat-dot { width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0; }
+.post-body-grid { display: grid; grid-template-columns: 190px 1fr; }
+.post-preview { padding: 11px; border-right: 1px solid #F5F0FC; }
+.post-content { padding: 11px; }
+.field-label { font-size: 10px; font-weight: 700; color: var(--tm); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+.post-text { font-size: 12px; color: var(--td); line-height: 1.7; background: #F9F7FC; padding: 9px; border-radius: 7px; margin-bottom: 7px; max-height: 80px; overflow-y: auto; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 7px; }
+.tag { background: rgba(79,15,92,0.06); color: var(--v); font-size: 10px; padding: 3px 8px; border-radius: 20px; }
+.timing { font-size: 11px; color: var(--tm); background: #F9F7FC; padding: 6px 9px; border-radius: 6px; }
+.post-actions { padding: 11px 15px; background: #F9F7FC; border-top: 1px solid var(--border); display: flex; gap: 8px; flex-wrap: wrap; }
+.badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.b-pend { background: rgba(245,158,11,0.1); color: #B7791F; }
+.b-ok { background: rgba(99,175,33,0.1); color: #2D7A0A; }
+.b-plan { background: rgba(59,130,246,0.1); color: #1D4ED8; }
+.b-wip { background: rgba(107,114,128,0.1); color: #374151; }
+
+/* ═══ CONNECT GRID ═══ */
+.connect-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; margin-bottom: 14px; }
+.connect-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; }
+.connect-icon { width: 44px; height: 44px; border-radius: 11px; display: flex; align-items: center; justify-content: center; margin: 0 auto 9px; }
+.connect-name { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+.connect-status { font-size: 11px; margin-bottom: 10px; }
+.connect-btn { width: 100%; padding: 8px; border-radius: 7px; font-size: 11px; font-weight: 600; cursor: pointer; border: none; font-family: 'Poppins', sans-serif; transition: background 0.2s; }
+.connect-btn-v { background: var(--v); color: white; }
+.connect-btn-ok { background: rgba(99,175,33,0.1); color: #2D7A0A; border: 1px solid rgba(99,175,33,0.3) !important; cursor: default; }
+
+/* ═══ STATS ═══ */
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+.stat-box { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; }
+.stat-num { font-size: 28px; font-weight: 900; color: var(--v); }
+.stat-label { font-size: 11px; color: var(--tm); margin-top: 3px; }
+
+/* ═══ HISTORY ═══ */
+.history-item { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 12px 15px; display: flex; align-items: center; gap: 11px; margin-bottom: 9px; }
+.history-thumb { width: 42px; height: 42px; border-radius: 7px; object-fit: cover; flex-shrink: 0; }
+.history-info { flex: 1; min-width: 0; }
+.history-title { font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.history-sub { font-size: 11px; color: var(--tm); }
+
+/* ═══ CONFIRMED STATE ═══ */
+.confirmed-state { text-align: center; padding: 28px 16px; }
+.confirmed-icon { width: 58px; height: 58px; border-radius: 50%; background: rgba(99,175,33,0.1); border: 2px solid rgba(99,175,33,0.3); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+
+/* ═══ MODAL ═══ */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; align-items: flex-end; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal-sheet { background: white; border-radius: 18px 18px 0 0; width: 100%; max-width: 520px; padding: 22px 18px 32px; max-height: 80vh; overflow-y: auto; }
+.modal-handle { width: 36px; height: 4px; background: #DDD; border-radius: 4px; margin: 0 auto 16px; }
+.modal-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.modal-sub { font-size: 13px; color: var(--tm); margin-bottom: 12px; }
+.modal-textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 9px; padding: 11px 13px; font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--td); resize: vertical; min-height: 80px; margin-bottom: 12px; }
+.modal-textarea:focus { outline: none; border-color: var(--v); }
+.modal-actions { display: flex; gap: 10px; }
+
+/* ═══ MOBILE BOTTOM NAV ═══ */
+.bottom-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: white; border-top: 1px solid var(--border);
+  z-index: 300; box-shadow: 0 -3px 14px rgba(79,15,92,0.07);
+}
+.bottom-nav-inner { display: flex; overflow-x: auto; scrollbar-width: none; }
+.bottom-nav-inner::-webkit-scrollbar { display: none; }
+.bn-item {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 10px 10px 12px; min-width: 58px; flex-shrink: 0;
+  cursor: pointer; border-top: 3px solid transparent;
+  transition: border-color 0.2s; -webkit-tap-highlight-color: transparent;
+}
+.bn-item.active { border-top-color: var(--v); }
+.bn-item.locked { opacity: 0.5; }
+.bn-dot { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+.bn-dot-lock { background: #EDE8F5; color: #999; }
+.bn-dot-active { background: var(--v); color: white; }
+.bn-dot-done { background: var(--g); color: white; }
+.bn-label { font-size: 9px; color: var(--tm); text-align: center; line-height: 1.2; }
+.bn-item.active .bn-label { color: var(--v); font-weight: 700; }
+
+/* ═══ RESPONSIVE ═══ */
+@media (min-width: 769px) {
+  .sidebar { display: block; }
+  .main { padding-bottom: 40px; }
+  .modal-overlay { align-items: center; padding: 20px; }
+  .modal-sheet { border-radius: 18px; max-height: 80vh; }
+}
+@media (max-width: 768px) {
+  .bottom-nav { display: block; }
+  .platforms-grid { grid-template-columns: 1fr 1fr; }
+  .post-body-grid { grid-template-columns: 1fr; }
+  .post-preview { display: none; }
+  .connect-grid { grid-template-columns: 1fr 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .btn-primary.full, .btn-group .btn-primary, .btn-group .btn-success { width: 100%; }
+  .btn-group { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a href="/index.html" class="topbar-logo">
+    <img src="https://dwtdigital-clients.github.io/logo-200.png" alt="DWT Digital">
+  </a>
+  <div class="topbar-right">
+    <div>
+      <div class="topbar-commerce">boucherie</div>
+      <div class="topbar-pack">Pack Social Pro</div>
+    </div>
+    <div class="topbar-av" style="background:#4F0F5C">Z</div>
+  </div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="prog-bar-wrap">
+  <div class="prog-meta">
+    <span class="prog-label" id="prog-label">Étape 1 — Mes plateformes</span>
+    <span class="prog-pct" id="prog-pct">0%</span>
+  </div>
+  <div class="prog-track">
+    <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR (desktop uniquement) -->
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ÉTAPE 1 — PLATEFORMES -->
+    <section class="step active" id="step-1">
+      <div class="step-badge">Étape 1 sur 6</div>
+      <h1 class="step-title">Sur quelles plateformes souhaitez-vous communiquer ?</h1>
+      <p class="step-desc">Sélectionnez une ou plusieurs plateformes. Nous adapterons votre identité visuelle et vos publications pour chacune.</p>
+
+      <p class="plat-count" id="plat-count">Aucune sélectionnée — choisissez au moins une</p>
+
+      <div class="platforms-grid" id="plat-grid">
+        <div class="plat" data-id="instagram">
+          <div class="plat-icon" style="background:linear-gradient(135deg,#f09433,#dc2743,#bc1888)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="white" stroke="none"/></svg>
+          </div>
+          <div class="plat-name">Instagram</div>
+          <div class="plat-sub">Photos & stories</div>
+        </div>
+        <div class="plat" data-id="facebook">
+          <div class="plat-icon" style="background:#1877F2">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </div>
+          <div class="plat-name">Facebook</div>
+          <div class="plat-sub">Publications & events</div>
+        </div>
+        <div class="plat" data-id="tiktok">
+          <div class="plat-icon" style="background:#000">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.77 0 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.73a4.85 4.85 0 0 1-1.01-.04z"/></svg>
+          </div>
+          <div class="plat-name">TikTok</div>
+          <div class="plat-sub">Vidéos courtes</div>
+        </div>
+        <div class="plat" data-id="linkedin">
+          <div class="plat-icon" style="background:#0A66C2">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </div>
+          <div class="plat-name">LinkedIn</div>
+          <div class="plat-sub">Réseau pro</div>
+        </div>
+        <div class="plat" data-id="gmb">
+          <div class="plat-icon" style="background:#4285F4">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5" fill="white" stroke="none"/></svg>
+          </div>
+          <div class="plat-name">Google Business</div>
+          <div class="plat-sub">Fiche Google</div>
+        </div>
+        <div class="plat" data-id="pinterest">
+          <div class="plat-icon" style="background:#E60023">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.099.12.113.225.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+          </div>
+          <div class="plat-name">Pinterest</div>
+          <div class="plat-sub">Inspiration</div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn-primary" id="btn-validate-plat" disabled>Valider et continuer →</button>
+      </div>
+    </section>
+
+    <!-- ÉTAPE 2 — IDENTITÉ -->
+    <section class="step" id="step-2">
+      <div class="step-badge">Étape 2 sur 6</div>
+      <h1 class="step-title">Votre identité visuelle</h1>
+      <p class="step-desc">Proposition de charte graphique adaptée à votre secteur. Validez ou demandez des modifications.</p>
+
+      <div id="identity-zone">
+        <div class="notif">Validez votre identité pour débloquer la création de vos publications.</div>
+        <div class="card">
+          <div class="identity-label">Palette de couleurs</div>
+          <div class="palette">
+            <div class="swatch"><div class="swatch-dot" style="background:#4F0F5C"></div><div class="swatch-name">Rouge</div></div>
+            <div class="swatch"><div class="swatch-dot" style="background:#FAF0E6;border:1px solid #EEE"></div><div class="swatch-name">Ivoire</div></div>
+            <div class="swatch"><div class="swatch-dot" style="background:#C8A46E"></div><div class="swatch-name">Or chaud</div></div>
+            <div class="swatch"><div class="swatch-dot" style="background:#1C0A0A"></div><div class="swatch-name">Noir profond</div></div>
+          </div>
+          <div class="identity-typo">
+            <div class="identity-label">Typographie</div>
+            <div style="font-family:'Playfair Display',serif;font-size:22px;color:#4F0F5C;margin-bottom:3px">boucherie</div>
+            <div style="font-size:13px;color:#C8A46E;font-style:italic">Services d'exception · France</div>
+          </div>
+          <div class="identity-tagline">
+            <div class="identity-label">Tagline</div>
+            <div style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;color:#4F0F5C">"Au service de votre quotidien"</div>
+            <div style="font-size:12px;color:var(--tm);margin-top:5px">Ton : Artisanal, noble, expert, authentique</div>
+          </div>
+          <div class="identity-label">Aperçu sur vos plateformes</div>
+          <div class="mockup-scroll" id="mockup-zone"></div>
+          <div class="btn-group">
+            <button class="btn-success" onclick="validateIdentity()">Valider cette identité</button>
+            <button class="btn-outline" onclick="openModal('Identité visuelle')">Demander des modifications</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="identity-confirmed" style="display:none">
+        <div class="notif">Identité validée ! Les publications sont en cours de génération.</div>
+        <div class="card">
+          <div class="confirmed-state">
+            <div class="confirmed-icon">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#63AF21" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div style="font-size:17px;font-weight:700;margin-bottom:8px">Identité validée</div>
+            <div style="font-size:13px;color:var(--tm);margin-bottom:18px">Palette rouge/ivoire/or · Playfair Display · "Au service de votre quotidien"</div>
+            <button class="btn-primary" onclick="goTo(3)">Voir mes publications →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ÉTAPE 3 — PUBLICATIONS -->
+    <section class="step" id="step-3">
+      <div class="step-badge">Étape 3 sur 6</div>
+      <h1 class="step-title">Vos publications</h1>
+      <p class="step-desc">Créées avec votre charte, adaptées à chaque plateforme choisie. Validez pour programmer automatiquement.</p>
+      <div class="notif" id="posts-notif">Validez chaque publication pour la programmer automatiquement.</div>
+      <div id="posts-zone"></div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+        <div style="font-size:14px;font-weight:600;margin-bottom:10px">Historique</div>
+        <div class="history-item">
+          <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=80&q=80" class="history-thumb" alt="">
+          <div class="history-info">
+            <div class="history-title">Post Instagram — Côte de bœuf maturée</div>
+            <div class="history-sub">22 mai · 183 mentions j'aime</div>
+          </div>
+          <span class="badge b-ok">Publié</span>
+        </div>
+      </div>
+      <div class="btn-group" style="margin-top:18px">
+        <button class="btn-primary" onclick="goTo(4)">Voir mon site →</button>
+      </div>
+    </section>
+
+    <!-- ÉTAPE 4 — SITE VITRINE -->
+    <section class="step" id="step-4">
+      <div class="step-badge">Étape 4 sur 6</div>
+      <h1 class="step-title">Votre site vitrine</h1>
+      <p class="step-desc">Votre site est en ligne, habillé avec votre identité validée.</p>
+      <div class="card">
+        <div style="border-radius:9px;overflow:hidden;border:1px solid var(--border);margin-bottom:14px">
+          <div style="background:#F0F0F0;padding:7px 12px;display:flex;gap:5px;align-items:center">
+            <span style="width:9px;height:9px;border-radius:50%;background:#ff5f57;display:block"></span>
+            <span style="width:9px;height:9px;border-radius:50%;background:#febc2e;display:block"></span>
+            <span style="width:9px;height:9px;border-radius:50%;background:#28c840;display:block"></span>
+            <span style="flex:1;background:white;border-radius:4px;padding:4px 10px;font-size:11px;color:#666">dwtdigital-clients.github.io/Zimblo-boucherie/</span>
+          </div>
+          <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=700&q=80" style="width:100%;height:170px;object-fit:cover;display:block" alt="Site boucherie">
+        </div>
+        <div class="btn-group">
+          <a href="https://dwtdigital-clients.github.io/Zimblo-boucherie/" target="_blank" class="btn-success">Voir mon site</a>
+          <button class="btn-outline" onclick="openModal('Site vitrine')">Demander une modification</button>
+            <button class="btn-outline" onclick="showHistory()" style="margin-top:8px;width:100%">Historique de mes demandes</button>
+        </div>
+      </div>
+      <div class="btn-group" style="margin-top:18px">
+        <button class="btn-primary" onclick="goTo(5)">Connecter mes réseaux →</button>
+      </div>
+    </section>
+
+    <!-- ÉTAPE 5 — RÉSEAUX -->
+    <section class="step" id="step-5">
+      <div class="step-badge">Étape 5 sur 6</div>
+      <h1 class="step-title">Connexion de vos réseaux</h1>
+      <p class="step-desc">Connectez vos comptes pour que vos publications soient publiées automatiquement.</p>
+      <div class="connect-grid" id="connect-zone"></div>
+      <div class="notif notif-warn" style="font-size:12px">Connexion sécurisée — vous restez propriétaire de vos comptes à tout moment.</div>
+      <div class="btn-group" style="margin-top:18px">
+        <button class="btn-primary" onclick="goTo(6)">Accéder à mon suivi →</button>
+      </div>
+    </section>
+
+    <!-- ÉTAPE 6 — SUIVI -->
+    <section class="step" id="step-6">
+      <div class="step-badge">Étape 6 sur 6</div>
+      <h1 class="step-title">Votre suivi mensuel</h1>
+      <p class="step-desc">Tout est en place. Voici vos performances.</p>
+      <div class="notif">Félicitations — votre présence digitale est entièrement opérationnelle !</div>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="stat-num">1 247</div><div class="stat-label">Portée / post</div></div>
+        <div class="stat-box"><div class="stat-num" style="color:var(--g)">4.8%</div><div class="stat-label">Engagement</div></div>
+        <div class="stat-box"><div class="stat-num">+12</div><div class="stat-label">Abonnés</div></div>
+      </div>
+      <div class="card">
+        <div style="font-size:14px;font-weight:700;margin-bottom:8px">Prochain bilan mensuel</div>
+        <p style="font-size:14px;color:var(--tm);line-height:1.7;margin-bottom:14px">Notre équipe fait le point chaque mois sur vos performances et prépare le mois suivant.</p>
+        <a href="/rappel.html?name=Zimblo&email=zimblobot%40gmail.com&commerce=boucherie" class="btn-primary">Planifier mon bilan</a>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bottom-nav" id="bottom-nav"></nav>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="history-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-sheet" style="max-height:75vh">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Historique des modifications</div>
+    <div class="modal-sub">Toutes vos demandes envoyées à DWT Digital</div>
+    <div id="history-list" style="max-height:50vh;overflow-y:auto"></div>
+    <div class="modal-actions" style="margin-top:12px">
+      <button class="btn-outline" style="flex:1" onclick="document.getElementById('history-overlay').classList.remove('open')">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Demander une modification</div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <textarea class="modal-textarea" id="modal-text" placeholder="Décrivez précisément ce que vous souhaitez modifier..."></textarea>
+    <div id="modal-context-wrap" style="display:none;margin-bottom:12px">
+      <div style="font-size:12px;color:#666;margin-bottom:6px;font-weight:600">Données à intégrer (optionnel)</div>
+      <div style="font-size:11px;color:#999;margin-bottom:6px">Collez ici votre liste de produits, prix, horaires, textes... Notre IA les intégrera directement sur le site.</div>
+      <textarea class="modal-textarea" id="modal-context" placeholder="Ex: Fraise 3€, Chocolat 3.50€, Vanille 3€..." style="min-height:60px;font-size:12px"></textarea>
+    </div>
+    <div style="margin-bottom:10px">
+      <button onclick="document.getElementById('modal-context-wrap').style.display=document.getElementById('modal-context-wrap').style.display==='none'?'block':'none'" style="font-size:11px;color:#9B6DBF;background:none;border:1px dashed #9B6DBF;border-radius:7px;padding:5px 12px;cursor:pointer;width:100%">+ Ajouter des données (produits, prix, horaires...)</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-primary" style="flex:1" onclick="sendModification()">Envoyer — Notre IA applique la modif</button>
+      <button class="btn-outline" onclick="closeModal()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═════════════════════════════════════════
+// DWT Digital — Espace Client v3
+// Architecture simple et fiable
+// ═════════════════════════════════════════
+
+var CLIENT = {
+  name: 'Zimblo',
+  email: 'zimblobot@gmail.com',
+  commerce: 'boucherie',
+  notion_id: 'zimblo-boucherie-notion-001'
+};
+var WH_NOTIFY  = 'https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh';
+var WH_POSTGEN = 'https://hook.eu1.make.com/xsksxx8k04y6gd9lnhvc3nh95jeijo8c';
+var WH_EMAIL   = 'https://hook.eu1.make.com/e29w7hvifw2xtua2d9emsnrll9cnmrgd';
+var CEO_EMAIL  = 'darellwilliampro1@gmail.com';
+var STORAGE_KEY = 'dwt_zimblo-boucherie_v1';
+var STEPS = ['Plateformes','Identité visuelle','Publications','Site vitrine','Réseaux sociaux','Suivi mensuel'];
+var STEP_PCTS = [0, 17, 33, 50, 67, 83, 100];
+
+var PLATFORMS = {
+  instagram: { name:'Instagram', color:'linear-gradient(135deg,#f09433,#dc2743,#bc1888)' },
+  facebook:  { name:'Facebook',  color:'#1877F2' },
+  tiktok:    { name:'TikTok',    color:'#000' },
+  linkedin:  { name:'LinkedIn',  color:'#0A66C2' },
+  gmb:       { name:'Google Business', color:'#4285F4' },
+  pinterest: { name:'Pinterest', color:'#E60023' }
+};
+
+var POSTS = {
+  instagram: { text:'boucherie — 3 générations de passion ! Marc sélectionne chaque pièce auprès d\'éleveurs français partenaires. Maturation maîtrisée, découpe sur mesure.', tags:['#BoucherieZimblo','#Service','#Paris15','#BoucherieArtisanale'], timing:'Vendredi 18h30', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' },
+  facebook:  { text:'Ce week-end, notre plateau BBQ maison est disponible ! Merguez artisanales, brochettes marinées, côtes d\'agneau. Commandez avant samedi midi — livraison ou retrait boutique.', tags:['#BBQ','#BoucherieZimblo','#Paris15'], timing:'Mercredi 12h00', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' },
+  tiktok:    { text:'Dans les coulisses de boucherie ! Marc vous montre comment maturer une côte de bœuf 45 jours. Le secret d\'une viande d\'exception.', tags:['#Boucherie','#MaturationBoeuf','#BoucherieZimblo'], timing:'Vendredi 19h00', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' },
+  linkedin:  { text:'boucherie propose des plateaux repas sur mesure pour vos événements d\'entreprise. Qualité artisanale, livraison au bureau. Idéal pour vos séminaires et déjeuners pros.', tags:['#CateringParis','#BoucherieZimblo','#EvenementEntreprise'], timing:'Mardi 9h00', img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=480&q=80' },
+  gmb:       { text:'Notre côte de bœuf maturée 45 jours est disponible ce week-end. Quantités limitées. Réservez votre pièce par téléphone : 01 42 30 56 78. Elevage Charolais français.', tags:[], timing:'Vendredi 9h00', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' },
+  pinterest: { text:'Les plus belles pièces de boucherie — côte de bœuf maturée, gigot d\'agneau, plateau BBQ. L\'artisanat boucher selon Marc Zimblo, France depuis 1971.', tags:['#ServiceDException','#BoucherieArtisanale'], timing:'Samedi 10h00', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' }
+};
+
+// ── État ──
+var S = { step:1, max:1, platforms:[], identity:false, posts_ok:[], connected:[] };
+
+function loadState() {
+  try {
+    var saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      var parsed = JSON.parse(saved);
+      S.step = parsed.step || 1;
+      S.max = parsed.max || 1;
+      S.platforms = parsed.platforms || [];
+      S.identity = parsed.identity || false;
+      S.posts_ok = parsed.posts_ok || [];
+      S.connected = parsed.connected || [];
+    }
+  } catch(e) { console.log('State load error', e); }
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(S)); } catch(e) {}
+}
+
+// ── Navigation ──
+function goTo(n) {
+  n = parseInt(n);
+  if (n < 1 || n > 6) return; // navigation libre, pas de verrou
+
+  // Masquer tous les steps
+  for (var i = 1; i <= 6; i++) {
+    var el = document.getElementById('step-' + i);
+    if (el) el.className = 'step';
+  }
+  // Afficher le step actif
+  var active = document.getElementById('step-' + n);
+  if (active) active.className = 'step active';
+
+  S.step = n;
+  saveState();
+
+  updateProgress(n);
+  updateSidebar(n);
+  updateBottomNav(n);
+
+  // Rendu spécifique
+  if (n === 2) renderMockups();
+  if (n === 3) renderPosts();
+  if (n === 5) renderConnect();
+
+  window.scrollTo(0, 0);
+}
+
+function unlock(n) {
+  if (n > S.max) { S.max = n; saveState(); }
+}
+
+// ── Progress bar ──
+function updateProgress(n) {
+  var pct = STEP_PCTS[n] || 0;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-label').textContent = 'Étape ' + n + '/6 — ' + (STEPS[n-1] || '');
+}
+
+// ── Sidebar (desktop) ──
+function updateSidebar(active) {
+  var sb = document.getElementById('sidebar');
+  if (!sb) return;
+  var html = '<p class="sidebar-label">Votre parcours</p>';
+  for (var i = 1; i <= 6; i++) {
+    var isDone = i < active;
+    var isActive = i === active;
+    var isLocked = i > S.max;
+    var cls = 'sb-item' + (isActive ? ' active' : '') + (isLocked ? ' locked' : '');
+    var dotCls = isLocked ? 'sb-dot dot-lock' : isDone ? 'sb-dot dot-done' : isActive ? 'sb-dot dot-active' : 'sb-dot dot-lock';
+    var dotTxt = isDone ? '✓' : i;
+    var subCls = 'sb-sub' + (isDone ? ' done' : isActive ? ' active' : '');
+    var subTxt = isDone ? 'Terminé' : isActive ? 'En cours' : isLocked ? 'Après étape '+(i-1) : 'À venir';
+    html += '<button class="' + cls + '" onclick="goTo(' + i + ')">'
+      + '<span class="' + dotCls + '">' + dotTxt + '</span>'
+      + '<span><div class="sb-text">' + STEPS[i-1] + '</div><div class="' + subCls + '">' + subTxt + '</div></span>'
+      + '</button>';
+  }
+  html += '<div class="sidebar-help"><p>Notre équipe vous accompagne</p><a href="/rappel.html?name=Zimblo&email=zimblobot%40gmail.com&commerce=boucherie">Demander un rappel</a></div>';
+  sb.innerHTML = html;
+}
+
+// ── Bottom nav (mobile) ──
+function updateBottomNav(active) {
+  var bn = document.getElementById('bottom-nav');
+  if (!bn) return;
+  var html = '<div class="bottom-nav-inner">';
+  var labels = ['Plateformes','Identité','Posts','Site','Réseaux','Suivi'];
+  for (var i = 1; i <= 6; i++) {
+    var isDone = i < active;
+    var isActive = i === active;
+    var isLocked = i > S.max;
+    var itemCls = 'bn-item' + (isActive ? ' active' : '') + (isLocked ? ' locked' : '');
+    var dotCls = isLocked ? 'bn-dot bn-dot-lock' : isDone ? 'bn-dot bn-dot-done' : isActive ? 'bn-dot bn-dot-active' : 'bn-dot bn-dot-lock';
+    html += '<div class="' + itemCls + '" onclick="goTo(' + i + ')">'
+      + '<span class="' + dotCls + '">' + (isDone ? '✓' : i) + '</span>'
+      + '<span class="bn-label">' + labels[i-1] + '</span></div>';
+  }
+  html += '</div>';
+  bn.innerHTML = html;
+}
+
+// ── Plateformes ──
+function initPlatforms() {
+  var cards = document.querySelectorAll('.plat');
+  for (var i = 0; i < cards.length; i++) {
+    (function(card) {
+      // Marquer les sélectionnées au chargement
+      if (S.platforms.indexOf(card.dataset.id) >= 0) card.classList.add('sel');
+      // Event listener
+      card.addEventListener('click', function() {
+        var id = card.dataset.id;
+        card.classList.toggle('sel');
+        var idx = S.platforms.indexOf(id);
+        if (card.classList.contains('sel')) {
+          if (idx < 0) S.platforms.push(id);
+        } else {
+          if (idx >= 0) S.platforms.splice(idx, 1);
+        }
+        saveState();
+        updatePlatCount();
+      });
+    })(cards[i]);
+  }
+  updatePlatCount();
+}
+
+function updatePlatCount() {
+  var n = S.platforms.length;
+  var el = document.getElementById('plat-count');
+  var btn = document.getElementById('btn-validate-plat');
+  if (n === 0) {
+    el.innerHTML = 'Aucune sélectionnée — choisissez au moins une';
+    if (btn) btn.disabled = true;
+  } else {
+    var names = S.platforms.map(function(id) { return (PLATFORMS[id] && PLATFORMS[id].name) || id; }).join(', ');
+    el.innerHTML = '<strong>' + n + '</strong> sélectionnée' + (n > 1 ? 's' : '') + ' : ' + names;
+    if (btn) btn.disabled = false;
+  }
+}
+
+function validatePlatforms() {
+  if (S.platforms.length === 0) return;
+  unlock(2);
+  var names = S.platforms.map(function(id) { return (PLATFORMS[id] && PLATFORMS[id].name) || id; }).join(', ');
+  notify('plateforme', 'Plateformes choisies par ' + CLIENT.name + ' : ' + names);
+  goTo(2);
+}
+
+// ── Identité visuelle ──
+function renderMockups() {
+  var container = document.getElementById('mockup-zone');
+  if (!container) return;
+  container.innerHTML = '';
+  var img1 = 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80';
+  var img2 = 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80';
+  var mockupFns = {
+    instagram: function() {
+      return '<div class="mock-ig"><div class="mock-head"><div class="mock-av"><img src="'+img1+'" alt=""></div><span class="mock-un">zimbloboucherie</span></div><div class="mock-img"><img src="'+img1+'" alt=""></div><div class="mock-cap"><strong>zimbloboucherie</strong> Au service de votre quotidien</div></div>';
+    },
+    facebook: function() {
+      return '<div class="mock-fb"><div class="mock-fb-head"><div class="mock-fb-av" style="background:#4F0F5C">Z</div><div><div class="mock-fb-name">boucherie</div><div class="mock-fb-time">Il y a 2h · France</div></div></div><div class="mock-fb-text">Plateau BBQ maison ce week-end ! <strong>boucherie</strong></div><div class="mock-fb-img"><img src="'+img2+'" alt=""></div></div>';
+    },
+    tiktok: function() {
+      return '<div class="mock-tiktok"><div class="mock-tt-img"><img src="'+img1+'" alt=""></div><div class="mock-tt-over"><div class="mock-tt-user">@boucherie_zimblo</div><div class="mock-tt-cap">boucherie — Commerce #boucherie #viande</div></div></div>';
+    },
+    gmb: function() {
+      return '<div class="mock-gmb"><div class="mock-gmb-head">Google · boucherie</div><div class="mock-gmb-img"><img src="'+img2+'" alt=""></div><div class="mock-gmb-body"><div class="mock-gmb-biz">boucherie</div><div class="mock-gmb-cat">★★★★★ · Boucherie</div><div class="mock-gmb-txt">Services d\'exception depuis 1971 !</div></div></div>';
+    },
+    linkedin: function() {
+      return '<div class="mock-linkedin"><div class="mock-li-head"><div class="mock-li-av"><img src="'+img2+'" alt=""></div><div><div class="mock-li-info">boucherie</div><div class="mock-li-sub">Boucherie · France</div></div></div><div class="mock-li-text">Plateaux repas premium pour vos événements d\'entreprise.</div><div class="mock-li-img"><img src="'+img1+'" alt=""></div></div>';
+    },
+    pinterest: function() {
+      return '<div class="mock-pin"><div class="mock-pin-img"><img src="'+img1+'" alt=""></div><div class="mock-pin-cap">boucherie — France</div></div>';
+    }
+  };
+  S.platforms.forEach(function(id) {
+    if (!mockupFns[id]) return;
+    var plat = PLATFORMS[id];
+    var wrap = document.createElement('div');
+    wrap.className = 'mockup-item';
+    var colorStyle = plat.color.indexOf('gradient') >= 0 ? 'background:' + plat.color : 'background:' + plat.color;
+    wrap.innerHTML = '<div class="mockup-label"><span style="width:14px;height:14px;border-radius:4px;display:inline-block;' + colorStyle + '"></span>' + plat.name + '</div>' + mockupFns[id]();
+    container.appendChild(wrap);
+  });
+  // Restaurer état si déjà validé
+  if (S.identity) {
+    document.getElementById('identity-zone').style.display = 'none';
+    document.getElementById('identity-confirmed').style.display = 'block';
+  }
+}
+
+function validateIdentity() {
+  S.identity = true;
+  unlock(3);
+  saveState();
+  document.getElementById('identity-zone').style.display = 'none';
+  document.getElementById('identity-confirmed').style.display = 'block';
+  var platNames = S.platforms.map(function(id) { return (PLATFORMS[id] && PLATFORMS[id].name) || id; }).join(', ');
+  notify('validation', 'IDENTITÉ VISUELLE validée — Palette rouge/ivoire/or — Plateformes : ' + platNames);
+  // Déclencher génération posts
+  sendWebhook(WH_POSTGEN, {
+    client_name: CLIENT.name, client_email: CLIENT.email, commerce_name: CLIENT.commerce,
+    platforms: platNames, notion_page_id: CLIENT.notion_id,
+    identity: 'Palette rouge/ivoire/or | Playfair Display | Tagline: La viande d\'exception depuis 3 générations'
+  });
+}
+
+// ── Publications ──
+function renderPosts() {
+  var zone = document.getElementById('posts-zone');
+  if (!zone) return;
+  zone.innerHTML = '';
+  S.platforms.forEach(function(platId, idx) {
+    var plat = PLATFORMS[platId];
+    var post = POSTS[platId];
+    if (!post) return;
+    var isOk = S.posts_ok.indexOf(platId) >= 0;
+    var isFirst = idx === 0;
+    var badgeHtml = (isFirst && !isOk)
+      ? '<span class="badge b-pend">En attente</span>'
+      : isOk ? '<span class="badge b-ok">Validé</span>'
+      : '<span class="badge b-plan">Planifié</span>';
+    var color = plat.color.indexOf('gradient') >= 0 ? plat.color : plat.color;
+    var tagsHtml = post.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('');
+    var actionsHtml = (isFirst && !isOk)
+      ? '<button class="btn-success" onclick="validatePost(\'' + platId + '\',this)">Valider et programmer</button><button class="btn-outline" onclick="openModal(\'' + plat.name + '\')">Modifier</button>'
+      : isOk ? '<span style="font-size:12px;color:var(--tm)">Publication approuvée et programmée.</span>'
+      : '<span style="font-size:12px;color:var(--tm)">Programmée automatiquement.</span>';
+
+    var card = document.createElement('div');
+    card.className = 'post-card';
+    card.id = 'pc-' + platId;
+    card.innerHTML = '<div class="post-head"><span class="post-plat"><span class="post-plat-dot" style="background:' + color + '"></span>' + plat.name + ' — Semaine 21</span><span id="badge-' + platId + '">' + badgeHtml + '</span></div>'
+      + '<div class="post-body-grid">'
+      + '<div class="post-preview"><div class="field-label">Aperçu</div><div style="border:1px solid #E5E5E5;border-radius:7px;overflow:hidden"><div style="background:' + color + ';padding:4px 7px"><span style="color:white;font-size:9px;font-weight:700">' + plat.name + '</span></div><img src="' + post.img + '" style="width:100%;height:90px;object-fit:cover;display:block" alt=""><div style="padding:5px 7px;font-size:9px;color:#333;line-height:1.3">' + post.text.substring(0, 60) + '...</div></div></div>'
+      + '<div class="post-content"><div class="field-label">Texte</div><div class="post-text">' + post.text + '</div>' + (tagsHtml ? '<div class="field-label">Hashtags</div><div class="tags">' + tagsHtml + '</div>' : '') + '<div class="timing">Meilleur horaire : ' + post.timing + '</div></div>'
+      + '</div>'
+      + '<div class="post-actions" id="pa-' + platId + '">' + actionsHtml + '</div>';
+    zone.appendChild(card);
+  });
+}
+
+function validatePost(platId, btn) {
+  btn.textContent = 'Validation envoyée !';
+  btn.style.background = '#2D7A0A';
+  btn.disabled = true;
+  var badge = document.getElementById('badge-' + platId);
+  if (badge) badge.innerHTML = '<span class="badge b-ok">Validé</span>';
+  var actions = document.getElementById('pa-' + platId);
+  if (actions) actions.innerHTML = '<span style="font-size:12px;color:var(--tm)">Publication approuvée et programmée.</span>';
+  if (S.posts_ok.indexOf(platId) < 0) S.posts_ok.push(platId);
+  unlock(4);
+  saveState();
+  notify('validation', 'Post ' + ((PLATFORMS[platId] && PLATFORMS[platId].name) || platId) + ' — Approuvé par Marc');
+}
+
+// ── Connexion réseaux ──
+function renderConnect() {
+  var zone = document.getElementById('connect-zone');
+  if (!zone) return;
+  zone.innerHTML = '';
+  if (S.platforms.length <= 2) zone.style.gridTemplateColumns = '1fr 1fr';
+  else zone.style.gridTemplateColumns = 'repeat(3,1fr)';
+  S.platforms.forEach(function(id) {
+    var plat = PLATFORMS[id];
+    var isConnected = S.connected.indexOf(id) >= 0;
+    var color = plat.color.indexOf('gradient') >= 0 ? plat.color : plat.color;
+    var card = document.createElement('div');
+    card.className = 'connect-card';
+    card.innerHTML = '<div class="connect-icon" style="background:' + color + '"></div>'
+      + '<div class="connect-name">' + plat.name + '</div>'
+      + '<div class="connect-status" style="color:' + (isConnected ? '#2D7A0A' : '#EF4444') + '">' + (isConnected ? 'Connecté ✓' : 'Non connecté') + '</div>'
+      + '<button class="connect-btn ' + (isConnected ? 'connect-btn-ok' : 'connect-btn-v') + '" id="cnx-' + id + '" ' + (isConnected ? 'disabled' : '') + ' onclick="connectPlat(\'' + id + '\')">' + (isConnected ? 'Actif' : 'Connecter') + '</button>';
+    zone.appendChild(card);
+  });
+}
+
+function connectPlat(id) {
+  var plat = PLATFORMS[id];
+  // PAS de confirm() - bloqué par certains navigateurs sur GitHub Pages
+  if (S.connected.indexOf(id) < 0) S.connected.push(id);
+  saveState();
+  unlock(6);
+  renderConnect();
+  notify('connexion', plat.name + ' connecte');
+}
+
+// ── Modal modification ──
+var modalContext = '';
+function openModal(ctx) {
+  modalContext = ctx;
+  document.getElementById('modal-sub').textContent = 'Concernant : ' + ctx;
+  document.getElementById('modal-text').value = '';
+  if (document.getElementById('modal-context')) document.getElementById('modal-context').value = '';
+  if (document.getElementById('modal-context-wrap')) document.getElementById('modal-context-wrap').style.display = 'none';
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(function() { document.getElementById('modal-text').focus(); }, 100);
+}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+
+function showHistory() {
+  var demandes = JSON.parse(localStorage.getItem('dwt_zimblo-boucherie_demandes_v1') || '[]');
+  var list = document.getElementById('history-list');
+  if (demandes.length === 0) {
+    list.innerHTML = '<div style="text-align:center;color:#999;padding:30px;font-size:13px">Aucune demande envoyée pour le moment.</div>';
+  } else {
+    var html = '';
+    demandes.forEach(function(d) {
+      var statusColor = d.statut === 'traite' || d.statut === 'applique' ? '#22c55e' : '#f59e0b';
+      var statusLabel = d.statut === 'traite' || d.statut === 'applique' ? 'Appliqué' : 'En cours';
+      html += '<div style="border:1px solid #eee;border-radius:10px;padding:12px;margin-bottom:8px">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">';
+      html += '<span style="font-size:12px;font-weight:700;color:#333">' + (d.sujet||'Modification') + '</span>';
+      html += '<span style="font-size:10px;font-weight:600;color:' + statusColor + '">' + statusLabel + '</span>';
+      html += '</div>';
+      html += '<div style="font-size:11px;color:#666;margin-bottom:4px">' + (d.date||'') + '</div>';
+      html += '<div style="font-size:12px;color:#444;background:#f9f9f9;padding:8px;border-radius:6px">' + (d.message||'') + '</div>';
+      if (d.context_data) {
+        html += '<div style="font-size:11px;color:#888;margin-top:6px">' + d.context_data + '</div>';
+      }
+      html += '</div>';
+    });
+    list.innerHTML = html;
+  }
+  document.getElementById('history-overlay').classList.add('open');
+}
+function sendModification() {
+  var txt = document.getElementById('modal-text').value.trim();
+  if (!txt) { alert('Décrivez la modification souhaitée'); return; }
+  var sujet = modalContext || 'Modification site';
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('fr-FR') + ' a ' + now.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
+  console.log('[W-Mod] === DEBUT PIPELINE MODIFICATION ===');
+  console.log('[W-Mod] Client:', CLIENT.commerce, '|', CLIENT.email);
+  console.log('[W-Mod] Sujet:', sujet);
+  console.log('[W-Mod] Message:', txt);
+  closeModal();
+
+  // 1) Pipeline IA : Make → Claude lit HTML → applique modif → redéploie GitHub
+  var ctxData = document.getElementById('modal-context') ? document.getElementById('modal-context').value.trim() : '';
+  var WH_MODIF = 'https://hook.eu1.make.com/r8kghl6dxv65r1xt0yic862e4x7dff8h';
+  var payload = {
+    client      : CLIENT.name,
+    commerce    : CLIENT.commerce,
+    email       : CLIENT.email,
+    sujet       : sujet,
+    message     : txt,
+    site_slug   : 'Zimblo-boucherie',
+    site_file   : 'index.html',
+    context_data: ctxData,
+    repo        : 'dwtdigital-clients/dwtdigital-clients.github.io',
+    full_path   : 'Zimblo/index.html'
+  };
+  console.log('[W-Mod] Payload webhook:', JSON.stringify(payload));
+  notify('info', 'Demande en cours de traitement par notre IA...');
+  sendWebhook(WH_MODIF, payload,
+    function(resp) {
+      console.log('[W-Mod] Webhook Make OK:', resp);
+      notify('validation', 'Demande reçue par Make. Modification en cours (1-2 min).');
+    },
+    function(err) {
+      console.error('[W-Mod] Webhook ECHEC:', err);
+      notify('info', 'Erreur réseau. Vérifiez la console F12 et contactez DWT Digital.');
+    }
+  );
+
+  // 2) Email CEO (notification parallèle)
+  var emailBody = 'MODIFICATION IA EN COURS\n\n'
+    + 'Client : ' + CLIENT.name + ' (' + CLIENT.commerce + ')\n'
+    + 'Sujet : ' + modalContext + '\n'
+    + 'Message : ' + txt + '\n'
+    + 'Date : ' + dateStr + '\n\n'
+    + 'Claude applique la modification automatiquement.\n'
+    + 'Site : https://dwtdigital-clients.github.io/Zimblo-boucherie/';
+  sendWebhook(WH_EMAIL, {
+    client_email   : CEO_EMAIL,
+    client_name    : 'DWT Digital',
+    commerce_name  : CLIENT.commerce + ' — Modif IA',
+    site_url       : 'https://dwtdigital-clients.github.io/Zimblo-boucherie/',
+    texte_post     : emailBody
+  });
+
+  // 3) Sauvegarder localement
+  var demandes = JSON.parse(localStorage.getItem('dwt_zimblo-boucherie_demandes_v1') || '[]');
+  demandes.unshift({
+    id: Date.now(), date: dateStr, sujet: modalContext,
+    message: txt, client: CLIENT.name, commerce: CLIENT.commerce,
+    email: CLIENT.email, context_data: ctxData, statut: 'applique'
+  });
+  localStorage.setItem('dwt_zimblo-boucherie_demandes_v1', JSON.stringify(demandes));
+}
+
+// ── Webhooks ──
+function notify(action, detail) {
+  sendWebhook(WH_NOTIFY, {
+    client_name: CLIENT.name, client_email: CLIENT.email,
+    commerce_name: CLIENT.commerce, action: action, detail: detail
+  });
+}
+
+function sendWebhook(url, data, onSuccess, onError) {
+  var body = JSON.stringify(data);
+  console.log('[Webhook] Envoi vers:', url);
+  console.log('[Webhook] Payload:', JSON.stringify(data, null, 2));
+  // Make webhooks acceptent les requetes JSON cross-origin
+  fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: body
+  })
+  .then(function(resp) {
+    console.log('[Webhook] Statut HTTP:', resp.status);
+    return resp.text();
+  })
+  .then(function(txt) {
+    console.log('[Webhook] Reponse Make:', txt);
+    if (onSuccess) onSuccess(txt);
+  })
+  .catch(function(err) {
+    console.warn('[Webhook] Echec CORS, fallback no-cors...', err);
+    // Fallback no-cors: le navigateur envoie quand meme la requete
+    // Make la recoit mais on ne peut pas lire la reponse (comportement normal no-cors)
+    fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: body
+    })
+    .then(function() {
+      console.log('[Webhook] Fallback no-cors envoye (reponse opaque - normal)');
+      if (onSuccess) onSuccess('sent-no-cors');
+    })
+    .catch(function(e) {
+      console.error('[Webhook] ECHEC TOTAL:', e);
+      if (onError) onError(e);
+    });
+  });
+}
+
+// ── Initialisation ──
+function init() {
+  loadState();
+  // Débloquer toutes les étapes dès le début (navigation libre)
+  S.max = 6;
+  initPlatforms();
+
+  // Bouton valider plateformes
+  var btnPlat = document.getElementById('btn-validate-plat');
+  if (btnPlat) btnPlat.onclick = validatePlatforms;
+
+  // Modal — fermer en cliquant l'overlay
+  var overlay = document.getElementById('modal-overlay');
+  if (overlay) {
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) closeModal(); });
+  }
+  // Escape
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+  // Aller à l'étape sauvegardée
+  goTo(S.step);
+}
+
+// Appel direct — script en bas du body, DOM déjà prêt
+init();
+</script>
+</body>
+</html>
+
