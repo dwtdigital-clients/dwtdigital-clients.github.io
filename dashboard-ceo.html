@@ -167,7 +167,7 @@ select.fi { background: #1A0820; }
           </div>
         </div>
         <div class="pc" style="border-top:1px solid rgba(181,18,27,0.2);margin-top:12px;padding-top:12px;">
-          <div class="pc-name" style="color:#B5121B;">Marc Zimblo — Boucherie Zimblo 🥩</div>
+          <div class="pc-name" style="color:#B5121B;">Marc Zimblo — Boucherie Zimblo</div>
           <div class="pc-sub">Pack Social Pro · 497/mois · zimblobot@gmail.com</div>
           <div class="pc-btns">
             <button class="btn btn-g" onclick="window.open('/espace-zimblo.html','_blank')">Voir espace</button>
@@ -230,7 +230,7 @@ select.fi { background: #1A0820; }
             <button class="btn btn-g" onclick="gmailLise()">Ouvrir Gmail</button>
           </div>
           <div style="background:rgba(181,18,27,0.05);border:1px solid rgba(181,18,27,0.15);border-radius:10px;padding:14px">
-            <div style="font-size:12px;font-weight:700;color:#EFDEC9;margin-bottom:4px">Email Marc — Gmail 🥩</div>
+            <div style="font-size:12px;font-weight:700;color:#EFDEC9;margin-bottom:4px">Email Marc — Gmail</div>
             <div style="font-size:11px;color:rgba(239,222,201,0.35);margin-bottom:8px">Envoie accès espace Zimblo</div>
             <button class="btn btn-g" onclick="gmailZimblo()">Ouvrir Gmail</button>
           </div>
@@ -515,7 +515,7 @@ function loadNotifs() {
   // Load latest-modif.json (dernière modif en temps réel)
   var latestUrl = 'https://raw.githubusercontent.com/dwtdigital-clients/dwtdigital-clients.github.io/main/data/latest-modif.json?t=' + Date.now();
 
-  // Load GitHub commits history for Lise/onboarding.html
+  // Load recent GitHub commits (all files)
   var commitsUrl = GH_API + '/commits?per_page=30';
 
   Promise.all([
@@ -532,12 +532,12 @@ function loadNotifs() {
       badge.style.display = 'block';
       badge.textContent = 'Dernière modification : ' + latest.sujet + ' — ' + latest.date;
       html += '<div style="background:rgba(99,175,33,0.08);border:1px solid rgba(99,175,33,0.25);border-radius:10px;padding:14px;margin-bottom:16px">';
-      html += '<div style="font-size:11px;font-weight:700;color:#63AF21;margin-bottom:8px">✅ DERNIÈRE MODIFICATION APPLIQUÉE</div>';
+      html += '<div style="font-size:11px;font-weight:700;color:#63AF21;margin-bottom:8px">DERNIÈRE MODIFICATION APPLIQUÉE</div>';
       html += '<div style="font-size:13px;font-weight:600;color:#EFDEC9;margin-bottom:4px">' + latest.client + ' — ' + latest.commerce + '</div>';
       html += '<div style="font-size:11px;color:rgba(239,222,201,0.5);margin-bottom:6px">📌 ' + latest.sujet + ' &nbsp;·&nbsp; ' + latest.date + '</div>';
       html += '<div style="font-size:12px;color:rgba(239,222,201,0.7);background:rgba(255,255,255,0.02);padding:8px;border-radius:7px;margin-bottom:8px">' + String(latest.message||'').split('\n').join('<br>') + '</div>';
       if (latest.context_data) {
-        html += '<div style="font-size:11px;color:rgba(239,222,201,0.5);margin-bottom:8px">📎 Données : ' + latest.context_data + '</div>';
+        html += '<div style="font-size:11px;color:rgba(239,222,201,0.5);margin-bottom:8px">Données : ' + latest.context_data + '</div>';
       }
       html += '<a href="' + (latest.url || latest.site_url || '#') + '" target="_blank" class="btn btn-g" style="font-size:11px;padding:5px 12px;text-decoration:none">Voir le site →</a>';
       html += '</div>';
