@@ -25,19 +25,6 @@
       "ville": "Paris 15e",
       "pack": "Pack Social Pro",
       "created": "2026-05-25"
-    },
-    {
-      "email": "test-sophie-dwt@yopmail.com",
-      "password": "Boulange2025!",
-      "slug": "sophie-boulangerie-du-mar",
-      "espace": "/espace-sophie-boulangerie-du-mar.html",
-      "site": "/Sophie-boulangerie-du-mar/",
-      "commerce": "Boulangerie du Marche",
-      "prenom": "Sophie",
-      "secteur": "Boulangerie",
-      "ville": "Lyon 2e",
-      "pack": "Pack Social Pro",
-      "created": "2026-05-26"
     }
   ]
 }
