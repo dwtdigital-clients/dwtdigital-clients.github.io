@@ -966,31 +966,44 @@ function showHistory() {
   document.getElementById('history-overlay').classList.add('open');
 }
 function sendModification() {
-  // Debug: log what we're sending
-  console.log('[W-Mod] Déclenchement modification pour', CLIENT.commerce);
   var txt = document.getElementById('modal-text').value.trim();
   if (!txt) { alert('Décrivez la modification souhaitée'); return; }
-
+  var sujet = modalContext || 'Modification site';
   var now = new Date();
-  var dateStr = now.toLocaleDateString('fr-FR') + ' à ' + now.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
-
+  var dateStr = now.toLocaleDateString('fr-FR') + ' a ' + now.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
+  console.log('[W-Mod] === DEBUT PIPELINE MODIFICATION ===');
+  console.log('[W-Mod] Client:', CLIENT.commerce, '|', CLIENT.email);
+  console.log('[W-Mod] Sujet:', sujet);
+  console.log('[W-Mod] Message:', txt);
   closeModal();
-  // Afficher le message de traitement immédiatement
-  alert('⏳ Votre demande a été reçue.\nNotre IA applique la modification sur votre site.\nVous recevrez une confirmation dans 1 à 2 minutes.');
 
   // 1) Pipeline IA : Make → Claude lit HTML → applique modif → redéploie GitHub
   var ctxData = document.getElementById('modal-context') ? document.getElementById('modal-context').value.trim() : '';
   var WH_MODIF = 'https://hook.eu1.make.com/r8kghl6dxv65r1xt0yic862e4x7dff8h';
-  sendWebhook(WH_MODIF, {
+  var payload = {
     client      : CLIENT.name,
     commerce    : CLIENT.commerce,
     email       : CLIENT.email,
-    sujet       : modalContext,
+    sujet       : sujet,
     message     : txt,
     site_slug   : 'Zimblo',
     site_file   : 'index.html',
-    context_data: ctxData
-  });
+    context_data: ctxData,
+    repo        : 'dwtdigital-clients/dwtdigital-clients.github.io',
+    full_path   : 'Zimblo/index.html'
+  };
+  console.log('[W-Mod] Payload webhook:', JSON.stringify(payload));
+  notify('info', 'Demande en cours de traitement par notre IA...');
+  sendWebhook(WH_MODIF, payload,
+    function(resp) {
+      console.log('[W-Mod] Webhook Make OK:', resp);
+      notify('validation', 'Demande reçue par Make. Modification en cours (1-2 min).');
+    },
+    function(err) {
+      console.error('[W-Mod] Webhook ECHEC:', err);
+      notify('info', 'Erreur réseau. Vérifiez la console F12 et contactez DWT Digital.');
+    }
+  );
 
   // 2) Email CEO (notification parallèle)
   var emailBody = '🤖 MODIFICATION IA EN COURS\n\n'
@@ -1026,13 +1039,43 @@ function notify(action, detail) {
   });
 }
 
-function sendWebhook(url, data) {
+function sendWebhook(url, data, onSuccess, onError) {
   var body = JSON.stringify(data);
-  fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body:body })
-    .catch(function() {
-      fetch(url, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:body })
-        .catch(function(e) { console.log('Webhook error', e); });
+  console.log('[Webhook] Envoi vers:', url);
+  console.log('[Webhook] Payload:', JSON.stringify(data, null, 2));
+  // Make webhooks acceptent les requetes JSON cross-origin
+  fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: body
+  })
+  .then(function(resp) {
+    console.log('[Webhook] Statut HTTP:', resp.status);
+    return resp.text();
+  })
+  .then(function(txt) {
+    console.log('[Webhook] Reponse Make:', txt);
+    if (onSuccess) onSuccess(txt);
+  })
+  .catch(function(err) {
+    console.warn('[Webhook] Echec CORS, fallback no-cors...', err);
+    // Fallback no-cors: le navigateur envoie quand meme la requete
+    // Make la recoit mais on ne peut pas lire la reponse (comportement normal no-cors)
+    fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: body
+    })
+    .then(function() {
+      console.log('[Webhook] Fallback no-cors envoye (reponse opaque - normal)');
+      if (onSuccess) onSuccess('sent-no-cors');
+    })
+    .catch(function(e) {
+      console.error('[Webhook] ECHEC TOTAL:', e);
+      if (onError) onError(e);
     });
+  });
 }
 
 // ── Initialisation ──
