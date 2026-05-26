@@ -400,7 +400,7 @@ var EC_URL = '';
 
 var TABS = [
   {id:'crm', label:'CRM & Prospects'},
-  {id:'notif', label:'🔔 Demandes clients'},
+  {id:'notif', label:'Demandes clients'},
   {id:'devis', label:'Devis & Factures'},
   {id:'controle', label:'Controle manuel'},
   {id:'scenarios', label:'Scenarios Make'}
@@ -516,7 +516,7 @@ function loadNotifs() {
   var latestUrl = 'https://raw.githubusercontent.com/dwtdigital-clients/dwtdigital-clients.github.io/main/data/latest-modif.json?t=' + Date.now();
 
   // Load GitHub commits history for Lise/onboarding.html
-  var commitsUrl = GH_API + '/commits?path=Lise/onboarding.html&per_page=20';
+  var commitsUrl = GH_API + '/commits?per_page=30';
 
   Promise.all([
     fetch(latestUrl).then(function(r) { return r.json(); }).catch(function() { return null; }),
@@ -530,7 +530,7 @@ function loadNotifs() {
     // Section 1: Dernière modification en temps réel
     if (latest && latest.statut !== 'vide' && latest.client) {
       badge.style.display = 'block';
-      badge.textContent = '🔴 Dernière modification : ' + latest.sujet + ' — ' + latest.date;
+      badge.textContent = 'Dernière modification : ' + latest.sujet + ' — ' + latest.date;
       html += '<div style="background:rgba(99,175,33,0.08);border:1px solid rgba(99,175,33,0.25);border-radius:10px;padding:14px;margin-bottom:16px">';
       html += '<div style="font-size:11px;font-weight:700;color:#63AF21;margin-bottom:8px">✅ DERNIÈRE MODIFICATION APPLIQUÉE</div>';
       html += '<div style="font-size:13px;font-weight:600;color:#EFDEC9;margin-bottom:4px">' + latest.client + ' — ' + latest.commerce + '</div>';
@@ -539,7 +539,7 @@ function loadNotifs() {
       if (latest.context_data) {
         html += '<div style="font-size:11px;color:rgba(239,222,201,0.5);margin-bottom:8px">📎 Données : ' + latest.context_data + '</div>';
       }
-      html += '<a href="' + latest.site_url + '" target="_blank" class="btn btn-g" style="font-size:11px;padding:5px 12px;text-decoration:none">Voir le site →</a>';
+      html += '<a href="' + (latest.url || latest.site_url || '#') + '" target="_blank" class="btn btn-g" style="font-size:11px;padding:5px 12px;text-decoration:none">Voir le site →</a>';
       html += '</div>';
     } else {
       badge.style.display = 'none';
@@ -557,7 +557,7 @@ function loadNotifs() {
         var date = new Date(c.commit.author.date);
         var dateStr = date.toLocaleDateString('fr-FR') + ' à ' + date.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
         html += '<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(239,222,201,0.06);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;align-items:flex-start;gap:10px">';
-        html += '<span style="font-size:14px;margin-top:1px">' + (isAI ? '🤖' : '📝') + '</span>';
+        html += '<span style="font-size:14px;margin-top:1px">' + (isAI ? '<span style="font-size:10px;font-weight:700;color:#63AF21;background:rgba(99,175,33,0.12);padding:2px 6px;border-radius:4px">IA</span>' : '<span style="font-size:10px;color:rgba(239,222,201,0.4)">git</span>') + '</span>';
         html += '<div style="flex:1;min-width:0">';
         html += '<div style="font-size:12px;color:#EFDEC9;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + msg + '</div>';
         html += '<div style="font-size:10px;color:rgba(239,222,201,0.35);margin-top:2px">' + dateStr + '</div>';
