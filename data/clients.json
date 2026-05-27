@@ -6,9 +6,9 @@
       "slug": "lise",
       "espace": "/espace-lise.html",
       "site": "/Lise/",
-      "commerce": "Cake Délice",
+      "commerce": "Cake DÃ©lice",
       "prenom": "Lise",
-      "secteur": "Pâtisserie",
+      "secteur": "PÃ¢tisserie",
       "ville": "Valence",
       "pack": "Pack Social Pro",
       "created": "2026-05-01"
@@ -25,6 +25,19 @@
       "ville": "Paris 15e",
       "pack": "Pack Social Pro",
       "created": "2026-05-25"
+    },
+    {
+      "email": "binkszimblo@gmail.com",
+      "password": "Lefourni2025!",
+      "slug": "sophie-le-fournil-de-soph",
+      "espace": "/espace-sophie-le-fournil-de-soph.html",
+      "site": "/Sophie-le-fournil-de-soph/",
+      "commerce": "Le Fournil de Sophie",
+      "prenom": "sophie",
+      "secteur": "Commerce",
+      "ville": "",
+      "pack": "Pack Social Pro",
+      "created": "2026-05-27"
     }
   ]
 }
