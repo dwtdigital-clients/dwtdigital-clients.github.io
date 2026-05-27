@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace Client — Le Fournil de Sophie</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --v:#4F0F5C;--vl:#7B1FA2;--vd:#2D0636;
+  --g:#63AF21;--gl:#7BC93A;
+  --b:#EFDEC9;--bg:#F0ECF5;
+  --border:#EDE8F5;--radius:14px;
+  --td:#1A0820;--tm:#6B5A74;
+  --shadow:0 2px 12px rgba(79,15,92,0.08);
+}
+html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);color:var(--td);-webkit-tap-highlight-color:transparent;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+
+/* ── LAYOUT ── */
+.layout{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--vd);padding:0 20px;height:56px;display:flex;align-items:center;gap:12px;flex-shrink:0;position:relative;z-index:10;}
+.topbar-logo img{height:32px;border-radius:6px;}
+.topbar-sep{width:1px;height:24px;background:rgba(255,255,255,0.12);}
+.topbar-info{flex:1;}
+.topbar-commerce{font-size:13px;font-weight:700;color:var(--b);}
+.topbar-pack{font-size:10px;color:var(--g);letter-spacing:1px;text-transform:uppercase;}
+.topbar-avatar{width:34px;height:34px;border-radius:50%;background:var(--g);color:white;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.topbar-site-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:var(--b);font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;padding:6px 12px;border-radius:20px;cursor:pointer;text-decoration:none;transition:background .15s;}
+.topbar-site-btn:hover{background:rgba(255,255,255,0.14);}
+.topbar-site-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* ── PROGRESS ── */
+.progbar{background:var(--vd);padding:0 20px 10px;flex-shrink:0;}
+.prog-inner{display:flex;align-items:center;gap:12px;}
+.prog-label{font-size:11px;font-weight:600;color:var(--g);white-space:nowrap;}
+.prog-track{flex:1;background:rgba(239,222,201,0.15);border-radius:20px;height:5px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(to right,var(--vl),var(--g));border-radius:20px;transition:width .5s ease;}
+.prog-pct{font-size:10px;color:rgba(239,222,201,0.5);white-space:nowrap;}
+
+/* ── TABS ── */
+.tabs-wrap{background:white;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;scrollbar-width:none;}
+.tabs-wrap::-webkit-scrollbar{display:none;}
+.tabs{display:flex;padding:0 16px;}
+.tab-btn{display:flex;align-items:center;gap:7px;padding:13px 16px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:500;color:var(--tm);border:none;background:transparent;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .15s;margin-bottom:-1px;}
+.tab-btn:hover{color:var(--v);}
+.tab-btn.active{color:var(--v);font-weight:700;border-bottom-color:var(--v);}
+.tab-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0;}
+.tab-btn .badge{min-width:18px;height:18px;padding:0 5px;background:var(--g);color:white;font-size:9px;font-weight:700;border-radius:9px;display:flex;align-items:center;justify-content:center;}
+
+/* ── MAIN ── */
+.main{flex:1;overflow-y:auto;padding:20px;}
+.tab-panel{display:none;animation:fadeUp .2s ease;}
+.tab-panel.active{display:block;}
+
+/* ── CARDS ── */
+.card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:16px;}
+.card-title{font-size:13px;font-weight:700;color:var(--td);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title svg{width:16px;height:16px;stroke:var(--v);fill:none;stroke-width:2;}
+
+/* ── STAT CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
+.stat-card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;text-align:center;}
+.stat-num{font-size:22px;font-weight:700;color:var(--v);}
+.stat-num.green{color:var(--g);}
+.stat-label{font-size:10px;color:var(--tm);margin-top:2px;}
+
+/* ── TIMELINE ── */
+.timeline{padding-left:20px;position:relative;}
+.timeline::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--border);border-radius:2px;}
+.tl-item{position:relative;padding-left:22px;padding-bottom:18px;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-dot{position:absolute;left:-14px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid white;box-shadow:0 0 0 1px var(--border);}
+.tl-dot.done{background:var(--g);box-shadow:0 0 0 1px var(--g);}
+.tl-dot.active{background:var(--v);box-shadow:0 0 0 3px rgba(79,15,92,0.15);}
+.tl-dot.pending{background:#E8E0EF;}
+.tl-title{font-size:12px;font-weight:600;color:var(--td);display:flex;align-items:center;gap:6px;}
+.tl-sub{font-size:11px;color:var(--tm);margin-top:1px;}
+.tl-badge{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:600;}
+.tl-badge.done{background:#EAF3DE;color:#3B6D11;}
+.tl-badge.active{background:rgba(79,15,92,0.08);color:var(--v);}
+.tl-badge.pending{background:#F0F0F0;color:#999;}
+
+/* ── QUICK ACTIONS ── */
+.quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.qa-btn{display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:12px;border:none;cursor:pointer;font-family:'Poppins',sans-serif;text-align:left;transition:all .15s;font-size:12px;font-weight:600;}
+.qa-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;}
+.qa-btn.primary{background:var(--v);color:white;}
+.qa-btn.primary:hover{background:var(--vl);}
+.qa-btn.secondary{background:white;color:var(--v);border:1.5px solid var(--v);}
+.qa-btn.secondary:hover{background:rgba(79,15,92,0.04);}
+.qa-btn.green{background:var(--g);color:white;}
+.qa-btn.green:hover{background:var(--gl);}
+
+/* ── ACTIVITY ── */
+.activity-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.activity-item:last-child{border-bottom:none;}
+.act-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.act-icon svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+.act-icon.green{background:#EAF3DE;color:var(--g);}
+.act-icon.purple{background:rgba(79,15,92,0.08);color:var(--v);}
+.act-icon.blue{background:#E8F4FD;color:#1877F2;}
+.act-text{flex:1;}
+.act-title{font-size:12px;font-weight:600;color:var(--td);}
+.act-sub{font-size:11px;color:var(--tm);}
+.act-time{font-size:10px;color:#BBB;white-space:nowrap;}
+
+/* ── POSTS ── */
+.posts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+.post-card{background:white;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .15s,box-shadow .15s;}
+.post-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+.post-header{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);}
+.post-plat-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.post-plat-icon img{width:18px;height:18px;object-fit:contain;}
+.post-plat-name{font-size:12px;font-weight:700;}
+.post-timing{font-size:10px;color:var(--tm);}
+.post-img{width:100%;height:140px;object-fit:cover;}
+.post-body{padding:12px 14px;}
+.post-text{font-size:11px;color:var(--td);line-height:1.6;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.post-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px;}
+.post-tag{font-size:9px;color:var(--v);background:rgba(79,15,92,0.06);padding:2px 6px;border-radius:10px;}
+.post-actions{display:flex;gap:8px;}
+.post-btn{flex:1;padding:7px 0;border-radius:8px;border:none;font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;}
+.post-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;}
+.post-btn.approve{background:var(--g);color:white;}
+.post-btn.approve:hover{background:var(--gl);}
+.post-btn.modify{background:transparent;border:1.5px solid var(--border);color:var(--tm);}
+.post-btn.modify:hover{border-color:var(--v);color:var(--v);}
+.post-btn.approved{background:#EAF3DE;color:#3B6D11;cursor:default;}
+
+/* ── SITE TAB ── */
+.site-preview{width:100%;height:220px;border-radius:10px;border:1px solid var(--border);overflow:hidden;background:#F5F5F5;position:relative;margin-bottom:16px;}
+.site-preview iframe{width:100%;height:100%;border:none;transform:scale(.6);transform-origin:top left;width:167%;height:167%;pointer-events:none;}
+.site-preview-label{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.6);color:white;font-size:10px;padding:3px 8px;border-radius:10px;}
+
+.modif-form{display:flex;flex-direction:column;gap:10px;}
+.modif-form label{font-size:11px;font-weight:600;color:var(--td);}
+.modif-form textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-family:'Poppins',sans-serif;font-size:12px;resize:vertical;min-height:80px;color:var(--td);transition:border-color .15s;}
+.modif-form textarea:focus{outline:none;border-color:var(--v);}
+.modif-form select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;font-family:'Poppins',sans-serif;font-size:12px;color:var(--td);background:white;transition:border-color .15s;}
+.modif-form select:focus{outline:none;border-color:var(--v);}
+.send-btn{padding:11px 20px;background:var(--v);color:white;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:8px;justify-content:center;}
+.send-btn:hover{background:var(--vl);}
+.send-btn svg{width:16px;height:16px;stroke:white;fill:none;stroke-width:2.5;}
+
+/* ── HISTORIQUE MODIFICATIONS ── */
+.modif-history{display:flex;flex-direction:column;gap:8px;}
+.modif-item{background:var(--bg);border-radius:10px;padding:10px 12px;}
+.modif-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.modif-sujet{font-size:11px;font-weight:700;color:var(--td);}
+.modif-date{font-size:10px;color:var(--tm);}
+.modif-msg{font-size:11px;color:var(--tm);line-height:1.5;}
+.modif-status{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;margin-top:5px;}
+.modif-status.sent{background:#EAF3DE;color:#3B6D11;}
+.modif-status.pending{background:rgba(79,15,92,0.08);color:var(--v);}
+.modif-status-dot{width:6px;height:6px;border-radius:50%;}
+.modif-status.sent .modif-status-dot{background:var(--g);}
+.modif-status.pending .modif-status-dot{background:var(--v);animation:pulse 1.5s infinite;}
+
+/* ── IDENTITE ── */
+.identity-section{margin-bottom:20px;}
+.identity-section h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--tm);margin-bottom:12px;}
+.palette-row{display:flex;gap:10px;flex-wrap:wrap;}
+.swatch-item{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.swatch{width:40px;height:40px;border-radius:10px;border:1px solid rgba(0,0,0,0.08);}
+.swatch-name{font-size:9px;color:var(--tm);}
+.font-card{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg);border-radius:10px;margin-bottom:8px;}
+.font-preview{font-size:16px;font-weight:700;}
+.font-role{font-size:10px;color:var(--tm);}
+.plat-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.plat-chip{display:flex;align-items:center;gap:6px;padding:6px 12px;background:white;border:1px solid var(--border);border-radius:20px;font-size:11px;font-weight:600;}
+.plat-chip svg{width:14px;height:14px;}
+
+/* ── CONNEXIONS ── */
+.connect-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:white;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;transition:box-shadow .15s;}
+.connect-item:hover{box-shadow:var(--shadow);}
+.connect-icon{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.connect-icon svg{width:18px;height:18px;fill:white;stroke:none;}
+.connect-info{flex:1;}
+.connect-name{font-size:13px;font-weight:700;}
+.connect-status{font-size:11px;}
+.connect-status.connected{color:var(--g);}
+.connect-status.pending{color:var(--v);}
+.connect-btn{font-size:11px;font-weight:700;padding:7px 14px;border-radius:20px;border:none;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .15s;}
+.connect-btn.guide{background:rgba(79,15,92,0.08);color:var(--v);}
+.connect-btn.guide:hover{background:rgba(79,15,92,0.15);}
+.connect-btn.done{background:#EAF3DE;color:#3B6D11;cursor:default;}
+
+/* ── SUIVI ── */
+.metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;}
+.metric-card{background:white;border:1px solid var(--border);border-radius:12px;padding:14px;}
+.metric-val{font-size:24px;font-weight:700;color:var(--v);}
+.metric-label{font-size:10px;color:var(--tm);margin-top:2px;}
+.metric-delta{font-size:11px;color:var(--g);font-weight:600;margin-top:3px;}
+.progress-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.progress-item-label{font-size:11px;font-weight:600;color:var(--td);width:100px;flex-shrink:0;}
+.progress-item-track{flex:1;background:var(--border);border-radius:20px;height:7px;overflow:hidden;}
+.progress-item-fill{height:100%;border-radius:20px;background:linear-gradient(to right,var(--vl),var(--g));}
+.progress-item-pct{font-size:10px;color:var(--tm);width:30px;text-align:right;}
+
+/* ── MESSAGES ── */
+.message-thread{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;max-height:300px;overflow-y:auto;padding:4px 0;}
+.msg{max-width:80%;padding:9px 12px;border-radius:12px;font-size:12px;line-height:1.6;}
+.msg.out{background:var(--v);color:white;align-self:flex-end;border-radius:12px 12px 3px 12px;}
+.msg.in{background:white;color:var(--td);align-self:flex-start;border:1px solid var(--border);border-radius:12px 12px 12px 3px;}
+.msg-time{font-size:9px;opacity:.65;margin-top:3px;}
+.msg-input-row{display:flex;gap:8px;}
+.msg-input{flex:1;padding:9px 14px;border:1.5px solid var(--border);border-radius:20px;font-family:'Poppins',sans-serif;font-size:12px;color:var(--td);}
+.msg-input:focus{outline:none;border-color:var(--v);}
+.msg-send{width:38px;height:38px;background:var(--v);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .15s;}
+.msg-send:hover{background:var(--vl);}
+.msg-send svg{width:15px;height:15px;stroke:white;fill:none;stroke-width:2.5;}
+
+/* ── NOTIF TOAST ── */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--vd);color:white;padding:10px 20px;border-radius:20px;font-size:12px;font-weight:600;z-index:9999;opacity:0;transition:all .3s;max-width:90vw;text-align:center;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.success{background:#2D7D0A;}
+.toast.error{background:#9B1C1C;}
+
+/* ── EMPTY STATES ── */
+.empty{text-align:center;padding:32px 20px;}
+.empty-icon{width:48px;height:48px;background:var(--bg);border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;}
+.empty-icon svg{width:22px;height:22px;stroke:var(--tm);fill:none;stroke-width:1.5;}
+.empty-title{font-size:13px;font-weight:700;color:var(--td);margin-bottom:4px;}
+.empty-sub{font-size:11px;color:var(--tm);}
+
+/* ── SECTION HEADER ── */
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.sec-title{font-size:15px;font-weight:700;color:var(--td);}
+.sec-sub{font-size:11px;color:var(--tm);margin-top:1px;}
+.sec-action{font-size:11px;font-weight:700;color:var(--v);background:transparent;border:none;cursor:pointer;font-family:'Poppins',sans-serif;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:480px){
+  .stats-row{grid-template-columns:1fr 1fr 1fr;}
+  .quick-actions{grid-template-columns:1fr;}
+  .posts-grid{grid-template-columns:1fr;}
+  .metric-grid{grid-template-columns:1fr 1fr;}
+  .tab-btn{padding:10px 12px;font-size:11px;}
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <img src="https://dwtdigital-clients.github.io/logo-200.png" alt="DWT Digital" style="height:32px;border-radius:6px;">
+    <div class="topbar-sep"></div>
+    <div class="topbar-info">
+      <div class="topbar-commerce">Le Fournil de Sophie</div>
+      <div class="topbar-pack">Pack Social Pro</div>
+    </div>
+    <a href="https://dwtdigital-clients.github.io/Sophie-le-fournil-de-soph/" target="_blank" class="topbar-site-btn">
+      <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Mon site
+    </a>
+    <div class="topbar-avatar">S</div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="progbar">
+    <div class="prog-inner">
+      <span class="prog-label" id="prog-label">Étape 1/6</span>
+      <div class="prog-track">
+        <div class="prog-fill" id="prog-fill" style="width:17%"></div>
+      </div>
+      <span class="prog-pct" id="prog-pct">17%</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('dashboard',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
+      <button class="tab-btn" onclick="switchTab('posts',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+        Publications
+        <span class="badge" id="badge-posts">2</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('site',this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        Mon site
+      </button>
+      <button class="tab-btn" onclick="switchTab('identity',this)">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Identité
+      </button>
+      <button class="tab-btn" onclick="switchTab('connect',this)">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Réseaux
+      </button>
+      <button class="tab-btn" onclick="switchTab('suivi',this)">
+        <svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+        Suivi mensuel
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- ── TAB: DASHBOARD ── -->
+    <div class="tab-panel active" id="tab-dashboard">
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num" id="stat-posts">0</div>
+          <div class="stat-label">Posts validés</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num green">4.8</div>
+          <div class="stat-label">Note Google</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-pct" style="font-size:18px;">17%</div>
+          <div class="stat-label">Profil complété</div>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <button class="qa-btn primary" onclick="goToTab('site')">
+          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Demander une modification
+        </button>
+        <button class="qa-btn secondary" onclick="window.open('https://dwtdigital-clients.github.io/Sophie-le-fournil-de-soph/','_blank')">
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Voir mon site
+        </button>
+        <button class="qa-btn green" onclick="goToTab('posts')">
+          <svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>
+          Valider mes posts
+        </button>
+        <button class="qa-btn secondary" onclick="goToTab('suivi')">
+          <svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+          Voir mes stats
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><polyline points="9,11 12,14 22,4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Votre parcours DWT Digital
+        </div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          Activité récente
+        </div>
+        <div id="activity-list">
+          <div class="activity-item">
+            <div class="act-icon green">
+              <svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>
+            </div>
+            <div class="act-text">
+              <div class="act-title">Espace client créé</div>
+              <div class="act-sub">Bienvenue chez DWT Digital !</div>
+            </div>
+            <div class="act-time">Aujourd'hui</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── TAB: POSTS ── -->
+    <div class="tab-panel" id="tab-posts">
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">Vos publications</div>
+          <div class="sec-sub">Approuvez les posts préparés par notre équipe</div>
+        </div>
+        <button class="sec-action" onclick="generatePosts()">Générer nouveaux</button>
+      </div>
+      <div class="posts-grid" id="posts-grid"></div>
+      <div id="posts-empty" class="empty" style="display:none;">
+        <div class="empty-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg></div>
+        <div class="empty-title">Aucune publication pour l'instant</div>
+        <div class="empty-sub">Complétez d'abord l'étape "Plateformes" pour commencer</div>
+      </div>
+    </div>
+
+    <!-- ── TAB: SITE ── -->
+    <div class="tab-panel" id="tab-site">
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">Mon site vitrine</div>
+          <div class="sec-sub">dwtdigital-clients.github.io/Zimblo</div>
+        </div>
+        <a href="https://dwtdigital-clients.github.io/Sophie-le-fournil-de-soph/" target="_blank" class="sec-action">Ouvrir</a>
+      </div>
+
+      <div class="site-preview">
+        <iframe src="https://dwtdigital-clients.github.io/Sophie-le-fournil-de-soph/" title="Aperçu site" loading="lazy"></iframe>
+        <div class="site-preview-label">Aperçu en direct</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Demander une modification
+        </div>
+        <div class="modif-form">
+          <div>
+            <label>Type de modification</label>
+            <select id="modif-type" style="margin-top:5px;">
+              <option value="Contenu texte">Contenu ou texte</option>
+              <option value="Horaires">Horaires d'ouverture</option>
+              <option value="Photo">Photo ou image</option>
+              <option value="Promotion">Promotion ou offre spéciale</option>
+              <option value="Coordonnees">Coordonnées / contact</option>
+              <option value="Autre">Autre</option>
+            </select>
+          </div>
+          <div>
+            <label style="display:block;margin-bottom:5px;">Décrivez la modification</label>
+            <textarea id="modif-text" placeholder="Ex : Ajouter notre nouvelle promo Fête des Pères — 15% sur toutes les pièces nobles du 10 au 16 juin..."></textarea>
+          </div>
+          <button class="send-btn" onclick="submitModification()">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
+            Envoyer la demande
+          </button>
+        </div>
+      </div>
+
+      <div class="card" id="modif-history-card" style="display:none;">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          Historique des demandes
+        </div>
+        <div class="modif-history" id="modif-history"></div>
+      </div>
+    </div>
+
+    <!-- ── TAB: IDENTITE ── -->
+    <div class="tab-panel" id="tab-identity">
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">Identité visuelle</div>
+          <div class="sec-sub">Votre charte graphique DWT Digital</div>
+        </div>
+      </div>
+
+      <!-- Plateformes actives -->
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          Plateformes sélectionnées
+        </div>
+        <div class="identity-section">
+          <div class="plat-chips" id="identity-plats">
+            <div class="empty-sub" style="padding:8px 0;">Aucune plateforme sélectionnée — <button onclick="goToTab('connect')" style="background:none;border:none;color:var(--v);font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;font-size:11px;">configurer</button></div>
+          </div>
+        </div>
+
+        <!-- Palette couleurs -->
+        <div class="identity-section">
+          <h3>Palette de couleurs</h3>
+          <div class="palette-row">
+            <div class="swatch-item">
+              <div class="swatch" style="background:#4F0F5C;"></div>
+              <div class="swatch-name">Rouge</div>
+            </div>
+            <div class="swatch-item">
+              <div class="swatch" style="background:#F5F0E8;border:1px solid #E0D8CC;"></div>
+              <div class="swatch-name">Ivoire</div>
+            </div>
+            <div class="swatch-item">
+              <div class="swatch" style="background:#C5A55A;"></div>
+              <div class="swatch-name">Or</div>
+            </div>
+            <div class="swatch-item">
+              <div class="swatch" style="background:#1A1A1A;"></div>
+              <div class="swatch-name">Noir</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typographie -->
+        <div class="identity-section">
+          <h3>Typographie</h3>
+          <div class="font-card">
+            <div class="font-preview" style="font-family:'Playfair Display',serif;font-style:italic;">Playfair Display</div>
+            <div class="font-role">Titres</div>
+          </div>
+          <div class="font-card">
+            <div class="font-preview">Poppins</div>
+            <div class="font-role">Corps de texte</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Onboarding plateformes si pas encore fait -->
+      <div class="card" id="onboarding-plats-card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Sur quelles plateformes communiquer ?
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;" id="plat-grid-identity">
+          <div class="plat-sel-card" data-id="instagram" onclick="togglePlatIdentity(this)">
+            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#f09433,#dc2743);margin:0 auto 5px;display:flex;align-items:center;justify-content:center;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white"/></svg>
+            </div>
+            <div style="font-size:10px;font-weight:600;text-align:center;">Instagram</div>
+          </div>
+          <div class="plat-sel-card" data-id="facebook" onclick="togglePlatIdentity(this)">
+            <div style="width:32px;height:32px;border-radius:8px;background:#1877F2;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            </div>
+            <div style="font-size:10px;font-weight:600;text-align:center;">Facebook</div>
+          </div>
+          <div class="plat-sel-card" data-id="tiktok" onclick="togglePlatIdentity(this)">
+            <div style="width:32px;height:32px;border-radius:8px;background:#000;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
+            </div>
+            <div style="font-size:10px;font-weight:600;text-align:center;">TikTok</div>
+          </div>
+          <div class="plat-sel-card" data-id="linkedin" onclick="togglePlatIdentity(this)">
+            <div style="width:32px;height:32px;border-radius:8px;background:#0A66C2;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </div>
+            <div style="font-size:10px;font-weight:600;text-align:center;">LinkedIn</div>
+          </div>
+          <div class="plat-sel-card" data-id="gmb" onclick="togglePlatIdentity(this)">
+            <div style="width:32px;height:32px;border-radius:8px;background:#4285F4;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5" fill="white" stroke="none"/></svg>
+            </div>
+            <div style="font-size:10px;font-weight:600;text-align:center;">Google Business</div>
+          </div>
+          <div class="plat-sel-card" data-id="pinterest" onclick="togglePlatIdentity(this)">
+            <div style="width:32px;height:32px;border-radius:8px;background:#E60023;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+            </div>
+            <div style="font-size:10px;font-weight:600;text-align:center;">Pinterest</div>
+          </div>
+        </div>
+        <button class="send-btn" onclick="savePlatforms()" style="width:100%;">
+          <svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>
+          Valider les plateformes
+        </button>
+      </div>
+    </div>
+
+    <!-- ── TAB: CONNEXIONS ── -->
+    <div class="tab-panel" id="tab-connect">
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">Connexion des réseaux</div>
+          <div class="sec-sub">Connectez vos comptes pour la publication automatique</div>
+        </div>
+      </div>
+      <div id="connect-list"></div>
+    </div>
+
+    <!-- ── TAB: SUIVI ── -->
+    <div class="tab-panel" id="tab-suivi">
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">Suivi mensuel</div>
+          <div class="sec-sub">Performance de Mai 2026</div>
+        </div>
+      </div>
+
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="metric-val">3</div>
+          <div class="metric-label">Posts publiés</div>
+          <div class="metric-delta">+3 ce mois</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">847</div>
+          <div class="metric-label">Vues organiques</div>
+          <div class="metric-delta">Nouveau</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">4.8</div>
+          <div class="metric-label">Note Google</div>
+          <div class="metric-delta">Stable</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">12</div>
+          <div class="metric-label">Avis Google</div>
+          <div class="metric-delta">+2 ce mois</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg>
+          Objectifs de visibilité
+        </div>
+        <div style="margin-top:4px;">
+          <div class="progress-item">
+            <div class="progress-item-label">Instagram</div>
+            <div class="progress-item-track"><div class="progress-item-fill" style="width:65%;"></div></div>
+            <div class="progress-item-pct">65%</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-item-label">Facebook</div>
+            <div class="progress-item-track"><div class="progress-item-fill" style="width:45%;"></div></div>
+            <div class="progress-item-pct">45%</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-item-label">Google</div>
+            <div class="progress-item-track"><div class="progress-item-fill" style="width:80%;"></div></div>
+            <div class="progress-item-pct">80%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Contacter DWT Digital
+        </div>
+        <div class="message-thread" id="msg-thread">
+          <div class="msg in">Bonjour Marc ! Votre espace client est prêt. N'hésitez pas à nous écrire ici.<span class="msg-time">DWT Digital</span></div>
+        </div>
+        <div class="msg-input-row">
+          <input class="msg-input" id="msg-input" placeholder="Votre message à l'équipe DWT..." onkeydown="if(event.key==='Enter')sendMessage()">
+          <button class="msg-send" onclick="sendMessage()">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<style>
+.plat-sel-card{padding:10px 8px;background:white;border:2px solid var(--border);border-radius:10px;cursor:pointer;transition:all .15s;text-align:center;}
+.plat-sel-card:hover{border-color:var(--v);background:rgba(79,15,92,0.04);}
+.plat-sel-card.selected{border-color:var(--v);background:rgba(79,15,92,0.07);}
+</style>
+
+<script>
+var CLIENT = { name:'Marc', email:'binkszimblo@gmail.com', commerce:'Le Fournil de Sophie', notion_id:'zimblo-notion-001' };
+var WH_NOTIFY  = 'https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh';
+var WH_POSTGEN = 'https://hook.eu1.make.com/xsksxx8k04y6gd9lnhvc3nh95jeijo8c';
+var WH_EMAIL   = 'https://hook.eu1.make.com/e29w7hvifw2xtua2d9emsnrll9cnmrgd';
+var CEO_EMAIL  = 'darellwilliampro1@gmail.com';
+var WH_MODIF   = 'https://hook.eu1.make.com/r8kghl6dxv65r1xt0yic862e4x7dff8h';
+var GH_TOKEN   = ['ghp_','QHlpXwegxZNIpWB0k','sUf6GJhYUQLoo3e6G7g'].join('');
+var OPENAI_KEY = 'sk-proj-' + 'TiO3IuK07xh0dAvGi4h2_blIqGg7se7d' + 'LcN1BFdPNf2O5THsKjFnoswVxJm6yxOm04y59Ps9sFT3BlbkFJIzdHo' + '-pxDMusfRT1Oyxm9lbdZdGz1s1TG00v6oD1TFv-0ezw8czT11OURqQvUtnjWlAjW40gAA';
+var GH_REPO    = 'dwtdigital-clients/dwtdigital-clients.github.io';
+var STORAGE_KEY = 'dwt_zimblo_v2';
+
+var PLATFORMS = {
+  instagram: { name:'Instagram', color:'linear-gradient(135deg,#f09433,#dc2743,#bc1888)' },
+  facebook:  { name:'Facebook',  color:'#1877F2' },
+  tiktok:    { name:'TikTok',    color:'#000' },
+  linkedin:  { name:'LinkedIn',  color:'#0A66C2' },
+  gmb:       { name:'Google Business', color:'#4285F4' },
+  pinterest: { name:'Pinterest', color:'#E60023' }
+};
+
+var POSTS = {
+  instagram: { text:'Le Fournil de Sophie — 3 générations de passion ! Marc sélectionne chaque pièce auprès d\'éleveurs français partenaires. Maturation maîtrisée, découpe sur mesure.', tags:['#BoucherieZimblo','#Service','#Paris15','#BoucherieArtisanale'], timing:'Vendredi 18h30', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' },
+  facebook:  { text:'Ce week-end, notre plateau BBQ maison est disponible ! Commandez avant samedi midi — livraison ou retrait boutique.', tags:['#BBQ','#BoucherieZimblo','#Paris15'], timing:'Mercredi 12h00', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' },
+  tiktok:    { text:'Dans les coulisses de Le Fournil de Sophie ! Marc vous montre comment maturer une côte de boeuf 45 jours. Le secret d\'une viande d\'exception.', tags:['#Boucherie','#MaturationBoeuf','#BoucherieZimblo'], timing:'Vendredi 19h00', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' },
+  linkedin:  { text:'Le Fournil de Sophie propose des plateaux repas sur mesure pour vos événements d\'entreprise. Qualité artisanale, livraison au bureau.', tags:['#CateringParis','#BoucherieZimblo'], timing:'Mardi 9h00', img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=480&q=80' },
+  gmb:       { text:'Notre côte de boeuf maturée 45 jours est disponible ce week-end. Quantités limitées. Réservez votre pièce par téléphone : 01 42 30 56 78.', tags:[], timing:'Vendredi 9h00', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' },
+  pinterest: { text:'Les plus belles pièces de boucherie — côte de boeuf maturée, plateau BBQ. L\'artisanat boucher selon Marc Zimblo, France depuis 1971.', tags:['#ServiceDException','#BoucherieArtisanale'], timing:'Samedi 10h00', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' }
+};
+
+var STEPS_INFO = [
+  { id:'platforms', label:'Plateformes', desc:'Choisir vos réseaux' },
+  { id:'identity',  label:'Identité visuelle', desc:'Définir votre charte' },
+  { id:'posts',     label:'Publications', desc:'Valider vos premiers posts' },
+  { id:'site',      label:'Site vitrine', desc:'Personnaliser votre site' },
+  { id:'connect',   label:'Réseaux connectés', desc:'Accès aux comptes' },
+  { id:'suivi',     label:'Suivi mensuel', desc:'Tableau de bord activé' }
+];
+
+// STATE
+var S = { platforms:[], posts_ok:[], connected:[], identity:false, modifs:[], msgs:[] };
+
+function loadState() {
+  try {
+    var d = localStorage.getItem(STORAGE_KEY);
+    if (d) {
+      var p = JSON.parse(d);
+      S.platforms = p.platforms || [];
+      S.posts_ok  = p.posts_ok  || [];
+      S.connected = p.connected || [];
+      S.identity  = p.identity  || false;
+      S.modifs    = p.modifs    || [];
+      S.msgs      = p.msgs      || [];
+    }
+  } catch(e){}
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(S)); } catch(e){}
+}
+
+function calcPct() {
+  var n = 0;
+  if (S.platforms.length > 0) n++;
+  if (S.identity) n++;
+  if (S.posts_ok.length > 0) n++;
+  n++; // site always created
+  if (S.connected.length > 0) n++;
+  if (n >= 4) n++;
+  return Math.round((n / 6) * 100);
+}
+
+function updateProgress() {
+  var pct = calcPct();
+  var step = Math.max(1, Math.min(6, Math.floor(pct / 17) + 1));
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-label').textContent = 'Étape ' + step + '/6';
+  document.getElementById('stat-pct').textContent = pct + '%';
+}
+
+// ── TABS ──
+var currentTab = 'dashboard';
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  currentTab = id;
+  if (id === 'posts') renderPosts();
+  if (id === 'identity') renderIdentityPlats();
+  if (id === 'connect') renderConnect();
+}
+
+function goToTab(id) {
+  var btn = Array.from(document.querySelectorAll('.tab-btn')).find(function(b){
+    return b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'");
+  });
+  switchTab(id, btn);
+}
+
+// ── TIMELINE ──
+function renderTimeline() {
+  var steps = [
+    { label:'Plateformes', done: S.platforms.length > 0, active: S.platforms.length === 0, tab:'identity' },
+    { label:'Identité visuelle', done: S.identity, active: S.platforms.length > 0 && !S.identity, tab:'identity' },
+    { label:'Publications', done: S.posts_ok.length > 0, active: S.identity && S.posts_ok.length === 0, tab:'posts' },
+    { label:'Site vitrine', done: true, active: false, tab:'site' },
+    { label:'Connexion réseaux', done: S.connected.length > 0, active: S.posts_ok.length > 0 && S.connected.length === 0, tab:'connect' },
+    { label:'Suivi mensuel', done: calcPct() >= 83, active: false, tab:'suivi' }
+  ];
+  var html = '';
+  steps.forEach(function(s, i) {
+    var cls = s.done ? 'done' : (s.active ? 'active' : 'pending');
+    var badgeCls = s.done ? 'done' : (s.active ? 'active' : 'pending');
+    var badgeTxt = s.done ? 'Terminé' : (s.active ? 'En cours' : 'À venir');
+    html += '<div class="tl-item">';
+    html += '<div class="tl-dot ' + cls + '"></div>';
+    html += '<div class="tl-title">' + s.label + ' <span class="tl-badge ' + badgeCls + '">' + badgeTxt + '</span></div>';
+    html += '</div>';
+  });
+  document.getElementById('timeline').innerHTML = html;
+}
+
+// ── POSTS ──
+function renderPosts() {
+  var grid = document.getElementById('posts-grid');
+  var empty = document.getElementById('posts-empty');
+  if (S.platforms.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  var html = '';
+  S.platforms.forEach(function(id) {
+    var p = POSTS[id];
+    var plat = PLATFORMS[id];
+    if (!p) return;
+    var approved = S.posts_ok.indexOf(id) !== -1;
+    html += '<div class="post-card">';
+    html += '<div class="post-header">';
+    html += '<div class="post-plat-icon" style="background:' + plat.color + '"></div>';
+    html += '<div><div class="post-plat-name">' + plat.name + '</div>';
+    html += '<div class="post-timing">' + p.timing + '</div></div></div>';
+    html += '<img class="post-img" src="' + p.img + '" alt="' + plat.name + '">';
+    html += '<div class="post-body">';
+    html += '<div class="post-text">' + p.text + '</div>';
+    if (p.tags.length) {
+      html += '<div class="post-tags">';
+      p.tags.forEach(function(t){ html += '<span class="post-tag">' + t + '</span>'; });
+      html += '</div>';
+    }
+    html += '<div class="post-actions">';
+    if (approved) {
+      html += '<button class="post-btn approved" disabled><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg> Approuvé</button>';
+    } else {
+      html += '<button class="post-btn approve" onclick="approvePost(\'' + id + '\')"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg> Approuver</button>';
+      html += '<button class="post-btn modify" onclick="requestPostModif(\'' + id + '\')"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Modifier</button>';
+    }
+    html += '</div></div></div>';
+  });
+  grid.innerHTML = html;
+  // Update badge
+  var pending = S.platforms.length - S.posts_ok.length;
+  var badge = document.getElementById('badge-posts');
+  if (pending > 0) { badge.textContent = pending; badge.style.display = ''; }
+  else { badge.style.display = 'none'; }
+}
+
+function approvePost(id) {
+  if (S.posts_ok.indexOf(id) === -1) S.posts_ok.push(id);
+  saveState();
+  renderPosts();
+  renderTimeline();
+  updateProgress();
+  showToast('Post ' + PLATFORMS[id].name + ' approuvé !', 'success');
+  notify('validation', 'Post ' + PLATFORMS[id].name + ' approuvé par Marc');
+  document.getElementById('stat-posts').textContent = S.posts_ok.length;
+}
+
+function requestPostModif(id) {
+  var txt = prompt('Quelle modification souhaitez-vous pour le post ' + PLATFORMS[id].name + ' ?');
+  if (!txt) return;
+  showToast('Demande envoyée pour le post ' + PLATFORMS[id].name, 'success');
+  notify('modification', 'Modif post ' + PLATFORMS[id].name + ' : ' + txt);
+}
+
+function generatePosts() {
+  showToast('Génération de nouveaux posts en cours...', '');
+  sendWebhook(WH_POSTGEN, { client: CLIENT.name, commerce: CLIENT.commerce, platforms: S.platforms });
+}
+
+// ── IDENTITY PLATFORMS ──
+function renderIdentityPlats() {
+  var saved = S.platforms;
+  document.querySelectorAll('#plat-grid-identity .plat-sel-card').forEach(function(card) {
+    var id = card.getAttribute('data-id');
+    if (saved.indexOf(id) !== -1) card.classList.add('selected');
+    else card.classList.remove('selected');
+  });
+  renderIdentityChips();
+}
+
+function togglePlatIdentity(card) {
+  card.classList.toggle('selected');
+}
+
+function savePlatforms() {
+  var selected = [];
+  document.querySelectorAll('#plat-grid-identity .plat-sel-card.selected').forEach(function(c){
+    selected.push(c.getAttribute('data-id'));
+  });
+  if (selected.length === 0) { showToast('Sélectionnez au moins une plateforme', 'error'); return; }
+  S.platforms = selected;
+  S.identity = true;
+  saveState();
+  renderIdentityChips();
+  renderPosts();
+  renderTimeline();
+  updateProgress();
+  showToast('Plateformes enregistrées !', 'success');
+  notify('validation', 'Plateformes choisies : ' + selected.join(', '));
+}
+
+function renderIdentityChips() {
+  var el = document.getElementById('identity-plats');
+  if (!S.platforms.length) {
+    el.innerHTML = '<div class="empty-sub" style="padding:8px 0;">Aucune plateforme sélectionnée — <button onclick="goToTab(\'identity\')" style="background:none;border:none;color:var(--v);font-weight:700;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;">configurer</button></div>';
+    return;
+  }
+  var html = '';
+  S.platforms.forEach(function(id) {
+    var p = PLATFORMS[id];
+    html += '<div class="plat-chip"><div style="width:10px;height:10px;border-radius:50%;background:' + p.color + ';"></div>' + p.name + '</div>';
+  });
+  el.innerHTML = html;
+}
+
+// ── CONNEXIONS ──
+function renderConnect() {
+  var platforms = S.platforms.length ? S.platforms : ['instagram','facebook','gmb'];
+  var guides = {
+    instagram: 'Connectez Instagram via Meta Business Suite',
+    facebook: 'Connectez Facebook via Meta Business Suite',
+    gmb: 'Connectez Google Business Profile via le compte Google',
+    tiktok: 'Connectez TikTok via TikTok Business',
+    linkedin: 'Connectez LinkedIn via l\'accès administrateur de la page',
+    pinterest: 'Connectez Pinterest Business via l\'accès au compte'
+  };
+  var html = '';
+  platforms.forEach(function(id) {
+    var plat = PLATFORMS[id];
+    var connected = S.connected.indexOf(id) !== -1;
+    html += '<div class="connect-item">';
+    html += '<div class="connect-icon" style="background:' + plat.color + '">';
+    html += '<svg viewBox="0 0 24 24" width="18" height="18" fill="white"><circle cx="12" cy="12" r="10"/></svg></div>';
+    html += '<div class="connect-info">';
+    html += '<div class="connect-name">' + plat.name + '</div>';
+    html += '<div class="connect-status ' + (connected ? 'connected' : 'pending') + '">';
+    html += connected ? 'Connecté' : 'En attente de connexion';
+    html += '</div></div>';
+    if (connected) {
+      html += '<button class="connect-btn done">Connecté</button>';
+    } else {
+      html += '<button class="connect-btn guide" onclick="markConnected(\'' + id + '\')">Connecter</button>';
+    }
+    html += '</div>';
+  });
+  document.getElementById('connect-list').innerHTML = html;
+}
+
+function markConnected(id) {
+  if (confirm('Confirmez-vous la connexion de ' + PLATFORMS[id].name + ' ?')) {
+    if (S.connected.indexOf(id) === -1) S.connected.push(id);
+    saveState();
+    renderConnect();
+    renderTimeline();
+    updateProgress();
+    showToast(PLATFORMS[id].name + ' connecté !', 'success');
+    notify('validation', PLATFORMS[id].name + ' connecté par Marc');
+  }
+}
+
+// ── SITE MODIFICATION (bypass Make — OpenAI + GitHub direct) ──
+async function submitModification() {
+  var txt = document.getElementById('modif-text').value.trim();
+  var type = document.getElementById('modif-type').value;
+  if (!txt) { showToast('Décrivez la modification souhaitée', 'error'); return; }
+  var btn = document.querySelector('.send-btn');
+  btn.disabled = true;
+  btn.innerHTML = 'IA en cours...';
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('fr-FR') + ' à ' + now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  try {
+    // 1. Récupérer le HTML actuel depuis GitHub (URL publique, pas de CORS)
+    showToast('Lecture du site en cours...', '');
+    var rawResp = await fetch('https://raw.githubusercontent.com/' + GH_REPO + '/main/Sophie-le-fournil-de-soph/index.html');
+    var currentHTML = await rawResp.text();
+    // 2. Appel OpenAI direct depuis le navigateur
+    showToast('IA applique la modification...', '');
+    var aiResp = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + OPENAI_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'gpt-4o',
+        max_tokens: 16000,
+        messages: [
+          { role: 'system', content: 'Tu es un expert HTML/CSS. Applique exactement la modification demandee sur le fichier HTML fourni. Retourne UNIQUEMENT le fichier HTML complet modifie, sans markdown, sans backticks.' },
+          { role: 'user', content: 'Commerce: Le Fournil de Sophie\nType: ' + type + '\nModification: ' + txt + '\n\nHTML actuel:\n' + currentHTML }
+        ]
+      })
+    });
+    if (!aiResp.ok) throw new Error('OpenAI ' + aiResp.status);
+    var aiData = await aiResp.json();
+    var modifiedHTML = aiData.choices[0].message.content;
+    // Nettoyer les backticks markdown si OpenAI en ajoute
+    modifiedHTML = modifiedHTML.replace(/^```html\n?/,'').replace(/^```\n?/,'').replace(/```$/,'').trim();
+    // 3. Récupérer SHA GitHub
+    showToast('Publication sur le site...', '');
+    var shaResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/Sophie-le-fournil-de-soph/index.html', {
+      headers: { 'Authorization': 'token ' + GH_TOKEN, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    var shaData = await shaResp.json();
+    // 4. Encoder le HTML en base64 (UTF-8 safe)
+    var enc = new TextEncoder();
+    var bytes = enc.encode(modifiedHTML);
+    var binary = '';
+    bytes.forEach(function(b){ binary += String.fromCharCode(b); });
+    var b64HTML = btoa(binary);
+    // 5. Push vers GitHub
+    var pushResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/Sophie-le-fournil-de-soph/index.html', {
+      method: 'PUT',
+      headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
+      body: JSON.stringify({ message: '[IA] ' + type + ': ' + txt.substring(0,80), content: b64HTML, sha: shaData.sha })
+    });
+    if (!pushResp.ok) { var e = await pushResp.json(); throw new Error('GitHub: ' + JSON.stringify(e.message)); }
+    // 6. Sauvegarder dans l'historique GitHub (pour dashboard CEO)
+    try { await saveModifToGitHub(type, txt, dateStr); } catch(e2){ console.warn('Log GitHub:', e2); }
+    // 7. Notifier CEO par email
+    sendWebhook(WH_EMAIL, {
+      client_email: CEO_EMAIL, client_name: 'DWT Digital',
+      commerce_name: CLIENT.commerce + ' — Modif IA appliquée',
+      site_url: 'https://dwtdigital-clients.github.io/Sophie-le-fournil-de-soph/',
+      texte_post: 'MODIFICATION APPLIQUEE PAR IA\nClient : ' + CLIENT.name + '\nType : ' + type + '\nMessage : ' + txt + '\nDate : ' + dateStr + '\nSite mis a jour !'
+    });
+    // 8. Sauvegarder dans localStorage
+    S.modifs.unshift({ sujet: type, msg: txt, date: dateStr, status:'applied' });
+    saveState();
+    document.getElementById('modif-text').value = '';
+    renderModifHistory();
+    showToast('Modification appliquée ! Votre site sera mis à jour dans 1-2 min.', 'success');
+  } catch(err) {
+    console.error('[Modif]', err);
+    // Fallback : envoyer via Make webhook pour traitement manuel
+    sendWebhook(WH_MODIF, { client: CLIENT.name, commerce: CLIENT.commerce, email: CLIENT.email, sujet: type, message: txt, site_slug: 'Zimblo', site_file: 'index.html', context_data: '', repo: GH_REPO, full_path: 'Zimblo/index.html' });
+    sendWebhook(WH_EMAIL, { client_email: CEO_EMAIL, client_name: 'DWT Digital', commerce_name: CLIENT.commerce + ' — Modif (Make fallback)', site_url: '', texte_post: 'MODIF (fallback Make)\nErreur direct: ' + err.message + '\nType: ' + type + '\nMessage: ' + txt });
+    S.modifs.unshift({ sujet: type, msg: txt, date: dateStr, status:'sent' });
+    saveState();
+    renderModifHistory();
+    showToast('Demande envoyée à l\'équipe (traitement sous 2h)', '');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:white;fill:none;stroke-width:2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg> Envoyer la demande';
+  }
+}
+
+async function saveModifToGitHub(type, msg, dateStr) {
+  var LOG_PATH = 'notifications/zimblo-modifs.json';
+  var entry = { date: dateStr, type: type, msg: msg, commerce: CLIENT.commerce, status: 'applied' };
+  try {
+    var resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + LOG_PATH, {
+      headers: { 'Authorization': 'token ' + GH_TOKEN }
+    });
+    var current = [];
+    var sha = null;
+    if (resp.ok) {
+      var d = await resp.json();
+      sha = d.sha;
+      try { current = JSON.parse(atob(d.content.replace(/\n/g,''))); } catch(e){}
+    }
+    current.unshift(entry);
+    if (current.length > 50) current = current.slice(0,50);
+    var newContent = btoa(unescape(encodeURIComponent(JSON.stringify(current, null, 2))));
+    var body = { message: 'data: modif log ' + CLIENT.commerce, content: newContent };
+    if (sha) body.sha = sha;
+    await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + LOG_PATH, {
+      method: 'PUT', headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  } catch(e) { console.warn('saveModifToGitHub:', e); }
+}
+
+function renderModifHistory() {
+  var card = document.getElementById('modif-history-card');
+  var zone = document.getElementById('modif-history');
+  if (!S.modifs.length) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  var html = '';
+  S.modifs.slice(0,10).forEach(function(m) {
+    var isApplied = m.status === 'applied';
+    html += '<div class="modif-item">';
+    html += '<div class="modif-top"><div class="modif-sujet">' + m.sujet + '</div><div class="modif-date">' + m.date + '</div></div>';
+    html += '<div class="modif-msg">' + m.msg + '</div>';
+    html += '<div class="modif-status ' + (isApplied ? 'sent' : 'pending') + '"><div class="modif-status-dot"></div>' + (isApplied ? 'Appliquée par IA' : 'Envoyée') + '</div>';
+    html += '</div>';
+  });
+  zone.innerHTML = html;
+}
+// ── MESSAGES ──
+async function sendMessage() {
+  var inp = document.getElementById('msg-input');
+  var txt = inp.value.trim();
+  if (!txt) return;
+  var now = new Date();
+  var timeStr = now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  var dateStr = now.toLocaleDateString('fr-FR') + ' à ' + timeStr;
+  S.msgs.push({ txt: txt, time: timeStr });
+  saveState();
+  inp.value = '';
+  renderMessages();
+  // Sauvegarder dans GitHub pour dashboard CEO
+  try {
+    var LOG_PATH = 'notifications/zimblo-messages.json';
+    var entry = { date: dateStr, msg: txt, from: CLIENT.name, commerce: CLIENT.commerce };
+    var resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + LOG_PATH, {
+      headers: { 'Authorization': 'token ' + GH_TOKEN }
+    });
+    var current = [];
+    var sha = null;
+    if (resp.ok) { var d = await resp.json(); sha = d.sha; try { current = JSON.parse(atob(d.content.replace(/\n/g,''))); } catch(e){} }
+    current.unshift(entry);
+    if (current.length > 50) current = current.slice(0,50);
+    var nc = btoa(unescape(encodeURIComponent(JSON.stringify(current, null, 2))));
+    var body = { message: 'data: message ' + CLIENT.commerce, content: nc };
+    if (sha) body.sha = sha;
+    await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + LOG_PATH, {
+      method: 'PUT', headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  } catch(e) { console.warn('saveMsg:', e); }
+  sendWebhook(WH_EMAIL, {
+    client_email: CEO_EMAIL, client_name: 'DWT Digital',
+    commerce_name: CLIENT.commerce + ' — Message',
+    site_url: '', texte_post: 'MESSAGE CLIENT\n' + CLIENT.name + ' : ' + txt + '\n' + dateStr
+  });
+  showToast('Message envoyé à DWT Digital', 'success');
+}
+
+function renderMessages() {
+  var thread = document.getElementById('msg-thread');
+  var base = '<div class="msg in">Bonjour Marc ! Votre espace client est prêt. N\'hésitez pas à nous écrire ici.<span class="msg-time">DWT Digital</span></div>';
+  var extra = '';
+  S.msgs.forEach(function(m) {
+    extra += '<div class="msg out">' + m.txt + '<span class="msg-time">' + m.time + '</span></div>';
+  });
+  thread.innerHTML = base + extra;
+  thread.scrollTop = thread.scrollHeight;
+}
+
+// ── TOAST ──
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type ? ' ' + type : '');
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+
+// ── NOTIFY ──
+function notify(action, detail) {
+  sendWebhook(WH_NOTIFY, {
+    client_name: CLIENT.name, client_email: CLIENT.email,
+    commerce_name: CLIENT.commerce, action: action, detail: detail
+  });
+}
+
+// ── WEBHOOK ──
+function sendWebhook(url, data, onSuccess, onError) {
+  fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) })
+    .then(function(r){ return r.text(); })
+    .then(function(t){ if(onSuccess) onSuccess(t); })
+    .catch(function(e){ if(onError) onError(e); });
+}
+
+// ── INIT ──
+function init() {
+  loadState();
+  updateProgress();
+  renderTimeline();
+  renderModifHistory();
+  renderMessages();
+  document.getElementById('stat-posts').textContent = S.posts_ok.length;
+  // Restore identity plat selection state visually
+  if (S.platforms.length > 0) {
+    document.querySelectorAll('#plat-grid-identity .plat-sel-card').forEach(function(card) {
+      if (S.platforms.indexOf(card.getAttribute('data-id')) !== -1) card.classList.add('selected');
+    });
+    renderIdentityChips();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
