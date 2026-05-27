@@ -365,6 +365,14 @@ async function handleContact(e) {
 
   let ok = false;
 
+  // Webhook direct Telegram (W10-backup) — en parallèle de W10
+  try {
+    fetch('https://hook.eu1.make.com/nharp7mxtgagkipyp7yhfdiwyrsmui37', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).catch(function(){});
+  } catch(e){}
+
   // Tentative 1 — CORS normal → W10
   try {
     const r = await fetch('https://hook.eu1.make.com/2hppj3cbl39q2b4lvsvdwm785tjprgtq', {
