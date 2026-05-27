@@ -1,1 +1,79 @@
-<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Le Fournil de Sophie — Site en cours de creation</title><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:"DM Sans",sans-serif;background:#0D0D0D;color:#F5F0E8;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px 20px;}.wrap{max-width:520px;}.logo-wrap{width:72px;height:72px;margin:0 auto 32px;}.logo-wrap img{width:100%;height:100%;object-fit:contain;border-radius:10px;}.h1{font-family:"Cormorant Garamond",serif;font-size:clamp(32px,5vw,52px);color:#F5F0E8;margin-bottom:12px;}.sub{font-size:15px;color:rgba(245,240,232,0.5);line-height:1.8;margin-bottom:36px;}.cta{display:inline-block;background:#4F0F5C;color:white;padding:13px 32px;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border-radius:4px;}.foot{margin-top:60px;font-size:11px;color:rgba(245,240,232,0.2);}a{color:rgba(245,240,232,0.3);text-decoration:none;}</style></head><body><div class="wrap"><div class="logo-wrap"><img src="https://dwtdigital-clients.github.io/logo-200.png" alt="DWT Digital"></div><h1 class="h1">Le Fournil de Sophie</h1><p class="sub">Notre site est en cours de creation.<br>Il sera disponible tres prochainement.</p><a href="mailto:binkszimblo@gmail.com" class="cta">Nous contacter</a><div class="foot">Site realise par <a href="https://dwtdigital-clients.github.io" target="_blank">DWT Digital</a></div></div></body></html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Fournil de Sophie — Boulangerie Pâtisserie</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: "DM Sans", sans-serif; background: #0D0D0D; color: #F5F0E8; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+        header, main, footer { max-width: 900px; width: 100%; text-align: center; margin-bottom: 40px; }
+        .logo-wrap { width: 72px; height: 72px; margin: 0 auto 32px; }
+        .logo-wrap img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
+        .h1 { font-family: "Cormorant Garamond", serif; font-size: clamp(32px, 5vw, 52px); color: #F5F0E8; margin-bottom: 12px; }
+        .sub { font-size: 15px; color: rgba(245, 240, 232, 0.5); line-height: 1.8; margin-bottom: 36px; }
+        .cta { display: inline-block; background: #4F0F5C; color: white; padding: 13px 32px; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; border-radius: 4px; }
+        .foot { font-size: 11px; color: rgba(245, 240, 232, 0.2); }
+        a { color: rgba(245, 240, 232, 0.3); text-decoration: none; }
+        nav a { margin: 0 15px; }
+        .order-form { display: flex; flex-direction: column; align-items: center; }
+        .order-form input, .order-form textarea, .order-form button { margin-top: 10px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        .order-form button { background: #4F0F5C; color: white; cursor: pointer; }
+        .images img { width: 200px; margin: 10px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-wrap">
+        <img src="https://dwtdigital-clients.github.io/logo-200.png" alt="Le Fournil de Sophie">
+    </div>
+    <h1 class="h1">Le Fournil de Sophie</h1>
+    <p>Ouvert de 7h30 à 20h</p>
+    <nav>
+        <a href="#apropos">À propos</a>
+        <a href="#patisseries">Nos Pâtisseries</a>
+        <a href="#contact">Contact</a>
+        <a href="#commander">Commander</a>
+    </nav>
+</header>
+
+<main>
+    <section id="patisseries" class="images">
+        <h2 class="h1">Nos Pâtisseries</h2>
+        <img src="https://via.placeholder.com/200" alt="Pâtisserie 1">
+        <img src="https://via.placeholder.com/200" alt="Pâtisserie 2">
+        <img src="https://via.placeholder.com/200" alt="Pâtisserie 3">
+        <img src="https://via.placeholder.com/200" alt="Pâtisserie 4">
+    </section>
+
+    <section id="apropos">
+        <h2 class="h1">À propos</h2>
+        <p class="sub">Situé en plein cœur de Versailles, Le Fournil de Sophie vous propose une large gamme de produits de boulangerie et pâtisserie, élaborés avec passion et savoir-faire.</p>
+        <p class="sub">Contactez-nous : <a href="mailto:contact@lefournildesophie.com">contact@lefournildesophie.com</a></p>
+        <p class="sub">Téléphone : 0123 456 789</p>
+    </section>
+</main>
+
+<section id="contact">
+    <h2 class="h1">Contact</h2>
+    <p class="sub">Vous avez une question ? Écrivez-nous à <a href="mailto:contact@lefournildesophie.com">contact@lefournildesophie.com</a></p>
+</section>
+
+<section id="commander">
+    <h2 class="h1">Passer Commande</h2>
+    <div class="order-form">
+        <input type="text" placeholder="Votre nom" required>
+        <input type="email" placeholder="Votre email" required>
+        <textarea placeholder="Votre commande" rows="5" required></textarea>
+        <button type="submit">Envoyer</button>
+    </div>
+</section>
+
+<footer class="foot">
+    Site réalisé par <a href="https://dwtdigital-clients.github.io" target="_blank">DWT Digital</a>
+</footer>
+
+</body>
+</html>
