@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "prenom": "sophie",
+    "nom": "Marchand",
+    "nom_commerce": "Le Fournil de Sophie",
+    "email": "binkszimblo@gmail.com",
+    "telephone": "0139528714",
+    "ville": "versaille",
+    "secteur": "Pâtisserie et boulangerie",
+    "objectif": "Tout à la fois — visibilité globale",
+    "budget": "500€ - 1000€/mois",
+    "site_web": "",
+    "date": "28/05/2026 à 01:09",
+    "statut": "prospect",
+    "source": "audit"
+  }
+]
