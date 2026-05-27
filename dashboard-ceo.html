@@ -512,63 +512,83 @@ function loadNotifs() {
   var badge = document.getElementById('notif-badge');
   zone.innerHTML = '<div style="text-align:center;color:rgba(239,222,201,0.4);padding:30px 0;font-size:13px">Chargement...</div>';
 
-  // Load latest-modif.json (dernière modif en temps réel)
-  var latestUrl = 'https://raw.githubusercontent.com/dwtdigital-clients/dwtdigital-clients.github.io/main/data/latest-modif.json?t=' + Date.now();
-
-  // Load recent GitHub commits (all files)
-  var commitsUrl = GH_API + '/commits?per_page=30';
+  var base = 'https://raw.githubusercontent.com/dwtdigital-clients/dwtdigital-clients.github.io/main/';
+  var ts = '?t=' + Date.now();
+  var modifUrl  = base + 'notifications/zimblo-modifs.json' + ts;
+  var msgUrl    = base + 'notifications/zimblo-messages.json' + ts;
+  var commitsUrl = GH_API + '/commits?per_page=20';
 
   Promise.all([
-    fetch(latestUrl).then(function(r) { return r.json(); }).catch(function() { return null; }),
-    fetch(commitsUrl, {headers: GH_HEADERS}).then(function(r) { return r.json(); }).catch(function() { return []; })
+    fetch(modifUrl).then(function(r){ return r.json(); }).catch(function(){ return []; }),
+    fetch(msgUrl).then(function(r){ return r.json(); }).catch(function(){ return []; }),
+    fetch(commitsUrl, {headers: GH_HEADERS}).then(function(r){ return r.json(); }).catch(function(){ return []; })
   ]).then(function(results) {
-    var latest = results[0];
-    var commits = Array.isArray(results[1]) ? results[1] : [];
+    var modifs  = Array.isArray(results[0]) ? results[0] : [];
+    var msgs    = Array.isArray(results[1]) ? results[1] : [];
+    var commits = Array.isArray(results[2]) ? results[2] : [];
 
     var html = '';
+    var totalPending = modifs.length + msgs.length;
 
-    // Section 1: Dernière modification en temps réel
-    if (latest && latest.statut !== 'vide' && latest.client) {
+    if (totalPending > 0) {
       badge.style.display = 'block';
-      badge.textContent = 'Dernière modification : ' + latest.sujet + ' — ' + latest.date;
-      html += '<div style="background:rgba(99,175,33,0.08);border:1px solid rgba(99,175,33,0.25);border-radius:10px;padding:14px;margin-bottom:16px">';
-      html += '<div style="font-size:11px;font-weight:700;color:#63AF21;margin-bottom:8px">DERNIÈRE MODIFICATION APPLIQUÉE</div>';
-      html += '<div style="font-size:13px;font-weight:600;color:#EFDEC9;margin-bottom:4px">' + latest.client + ' — ' + latest.commerce + '</div>';
-      html += '<div style="font-size:11px;color:rgba(239,222,201,0.5);margin-bottom:6px">' + latest.sujet + ' &nbsp;·&nbsp; ' + latest.date + '</div>';
-      html += '<div style="font-size:12px;color:rgba(239,222,201,0.7);background:rgba(255,255,255,0.02);padding:8px;border-radius:7px;margin-bottom:8px">' + String(latest.message||'').split('\n').join('<br>') + '</div>';
-      if (latest.context_data) {
-        html += '<div style="font-size:11px;color:rgba(239,222,201,0.5);margin-bottom:8px">Données : ' + latest.context_data + '</div>';
-      }
-      html += '<a href="' + (latest.url || latest.site_url || '#') + '" target="_blank" class="btn btn-g" style="font-size:11px;padding:5px 12px;text-decoration:none">Voir le site →</a>';
-      html += '</div>';
+      badge.textContent = totalPending + ' entrée(s) — ' + modifs.length + ' modification(s), ' + msgs.length + ' message(s)';
     } else {
       badge.style.display = 'none';
     }
 
-    // Section 2: Historique des commits (toutes les modifications IA)
-    html += '<div style="font-size:12px;font-weight:700;color:rgba(239,222,201,0.5);margin-bottom:10px;margin-top:4px">HISTORIQUE DES MODIFICATIONS</div>';
+    /* ─── MESSAGES CLIENTS ─── */
+    if (msgs.length > 0) {
+      html += '<div style="font-size:12px;font-weight:700;color:rgba(99,175,33,0.8);margin-bottom:10px;letter-spacing:.5px">MESSAGES CLIENTS</div>';
+      msgs.forEach(function(m) {
+        html += '<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(99,175,33,0.18);border-radius:9px;padding:11px 14px;margin-bottom:8px">';
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">';
+        html += '<div style="font-size:13px;font-weight:700;color:#EFDEC9">' + (m.from||'Client') + ' — ' + (m.commerce||'') + '</div>';
+        html += '<div style="font-size:10px;color:rgba(239,222,201,0.35)">' + (m.date||'') + '</div>';
+        html += '</div>';
+        html += '<div style="font-size:12px;color:rgba(239,222,201,0.75);line-height:1.5">' + String(m.msg||'').replace(/</g,'&lt;') + '</div>';
+        html += '</div>';
+      });
+    }
 
+    /* ─── MODIFICATIONS IA ─── */
+    if (modifs.length > 0) {
+      html += '<div style="font-size:12px;font-weight:700;color:rgba(239,222,201,0.5);margin-bottom:10px;margin-top:' + (msgs.length?'14px':'0') + ';letter-spacing:.5px">MODIFICATIONS IA APPLIQUÉES</div>';
+      modifs.forEach(function(m) {
+        html += '<div style="background:rgba(99,175,33,0.06);border:1px solid rgba(99,175,33,0.15);border-radius:9px;padding:11px 14px;margin-bottom:8px">';
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">';
+        html += '<div style="font-size:12px;font-weight:700;color:#63AF21">' + (m.type||m.sujet||'Modification') + '</div>';
+        html += '<div style="font-size:10px;color:rgba(239,222,201,0.35)">' + (m.date||'') + '</div>';
+        html += '</div>';
+        html += '<div style="font-size:11px;color:rgba(239,222,201,0.6);margin-bottom:5px">' + (m.commerce||'') + '</div>';
+        html += '<div style="font-size:12px;color:rgba(239,222,201,0.75);line-height:1.5">' + String(m.msg||'').replace(/</g,'&lt;') + '</div>';
+        html += '</div>';
+      });
+    }
+
+    /* ─── HISTORIQUE COMMITS ─── */
+    html += '<div style="font-size:12px;font-weight:700;color:rgba(239,222,201,0.4);margin-bottom:10px;margin-top:18px;letter-spacing:.5px">HISTORIQUE COMMITS GITHUB</div>';
     if (commits.length === 0) {
-      html += '<div style="text-align:center;color:rgba(239,222,201,0.3);padding:20px;font-size:12px">Aucune modification enregistrée.</div>';
+      html += '<div style="text-align:center;color:rgba(239,222,201,0.3);padding:20px;font-size:12px">Aucun commit trouvé.</div>';
     } else {
       commits.forEach(function(c) {
         var msg = c.commit.message;
         var isAI = msg.indexOf('[IA]') === 0;
         var date = new Date(c.commit.author.date);
         var dateStr = date.toLocaleDateString('fr-FR') + ' à ' + date.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
-        html += '<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(239,222,201,0.06);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:flex;align-items:flex-start;gap:10px">';
-        html += '<span style="font-size:14px;margin-top:1px">' + (isAI ? '<span style="font-size:10px;font-weight:700;color:#63AF21;background:rgba(99,175,33,0.12);padding:2px 6px;border-radius:4px">IA</span>' : '<span style="font-size:10px;color:rgba(239,222,201,0.4)">git</span>') + '</span>';
-        html += '<div style="flex:1;min-width:0">';
-        html += '<div style="font-size:12px;color:#EFDEC9;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + msg + '</div>';
-        html += '<div style="font-size:10px;color:rgba(239,222,201,0.35);margin-top:2px">' + dateStr + '</div>';
-        html += '</div>';
-        html += '<a href="https://github.com/dwtdigital-clients/dwtdigital-clients.github.io/commit/' + c.sha + '" target="_blank" style="font-size:10px;color:rgba(99,175,33,0.7);text-decoration:none;flex-shrink:0">voir →</a>';
+        html += '<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(239,222,201,0.05);border-radius:8px;padding:9px 12px;margin-bottom:5px;display:flex;align-items:flex-start;gap:10px">';
+        html += '<span>' + (isAI ? '<span style="font-size:9px;font-weight:700;color:#63AF21;background:rgba(99,175,33,0.12);padding:2px 6px;border-radius:4px">IA</span>' : '<span style="font-size:9px;color:rgba(239,222,201,0.3);background:rgba(255,255,255,0.03);padding:2px 6px;border-radius:4px">git</span>') + '</span>';
+        html += '<div style="flex:1;min-width:0"><div style="font-size:11px;color:#EFDEC9;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + msg + '</div><div style="font-size:10px;color:rgba(239,222,201,0.3);margin-top:1px">' + dateStr + '</div></div>';
+        html += '<a href="https://github.com/dwtdigital-clients/dwtdigital-clients.github.io/commit/' + c.sha + '" target="_blank" style="font-size:10px;color:rgba(99,175,33,0.6);text-decoration:none;flex-shrink:0">voir →</a>';
         html += '</div>';
       });
     }
 
+    if (!modifs.length && !msgs.length && !commits.length) {
+      html = '<div style="text-align:center;color:rgba(239,222,201,0.3);padding:40px;font-size:12px">Aucune activité enregistrée.</div>';
+    }
     zone.innerHTML = html;
-  }).catch(function(e) {
+  }).catch(function() {
     zone.innerHTML = '<div style="text-align:center;color:rgba(239,68,68,0.7);padding:30px;font-size:12px">Erreur de chargement. Vérifiez la connexion.</div>';
   });
 }
