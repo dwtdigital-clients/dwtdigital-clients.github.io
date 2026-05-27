@@ -472,11 +472,53 @@ function saveCRM(l) { try { localStorage.setItem(CK, JSON.stringify(l)); } catch
 
 function loadCRM() {
   var l = getCRM();
+  // Merge CRM_INIT
   CRM_INIT.forEach(function(d) {
-    if (!l.find(function(p) { return p.email === d.email; })) l.unshift(d);
+    if (!l.find(function(p){ return p.email === d.email; })) l.unshift(d);
   });
   saveCRM(l);
   renderProspects();
+  // Charger aussi depuis GitHub data/prospects.json
+  fetchProspectsGitHub();
+}
+
+function fetchProspectsGitHub() {
+  var url = 'https://raw.githubusercontent.com/dwtdigital-clients/dwtdigital-clients.github.io/main/data/prospects.json?t=' + Date.now();
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(ghProspects) {
+      if (!Array.isArray(ghProspects) || !ghProspects.length) return;
+      var l = getCRM();
+      var added = 0;
+      ghProspects.forEach(function(p) {
+        // Normaliser les champs GitHub → format CRM local
+        var normalized = {
+          prenom:    p.prenom || '',
+          nom:       p.nom || '',
+          email:     p.email || '',
+          tel:       p.telephone || '',
+          commerce:  p.nom_commerce || '',
+          ville:     p.ville || '',
+          secteur:   p.secteur || '',
+          date:      p.date || '',
+          statut:    p.statut || 'prospect',
+          source:    p.source || 'audit',
+          site:      p.site_web || '',
+          objectif:  p.objectif || '',
+          budget:    p.budget || ''
+        };
+        if (!l.find(function(x){ return x.email === normalized.email; })) {
+          l.unshift(normalized);
+          added++;
+        }
+      });
+      if (added > 0) {
+        saveCRM(l);
+        renderProspects();
+        console.log('[DWT CEO] ' + added + ' nouveau(x) prospect(s) depuis GitHub');
+      }
+    })
+    .catch(function(e){ console.warn('prospects.json:', e); });
 }
 
 function renderProspects() {
@@ -488,9 +530,9 @@ function renderProspects() {
   }
   var html = '';
   l.forEach(function(p, i) {
-    html += '<div class="pc">'
-      + '<div class="pc-name">' + (p.prenom||'') + (p.nom?' '+p.nom:'') + (p.commerce?' — '+p.commerce:'') + '</div>'
-      + '<div class="pc-sub">' + p.email + (p.tel?' · '+p.tel:'') + (p.secteur?' · '+p.secteur:'') + '</div>'
+    var isGH = p.source === 'audit';
+    var badge = isGH ? '<span style="font-size:9px;background:rgba(99,175,33,0.15);color:#63AF21;padding:2px 7px;border-radius:10px;font-weight:700;margin-left:6px">AUDIT</span>' : '';
+    html += '<div class="pc">'      + '<div class="pc-name">' + (p.prenom||'') + (p.nom?' '+p.nom:'') + (p.commerce?' — '+p.commerce:'') + badge + '</div>'      + '<div class="pc-sub">' + p.email + (p.tel?' · '+p.tel:'') + (p.secteur?' · '+p.secteur:'') + (p.ville?' · '+p.ville:'') + (p.date?' · '+p.date:'') + '</div>'
       + '<div class="pc-btns">'
       + '<button class="btn btn-y" onclick="openAudit(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\')">Audit</button>'
       + '<button class="btn btn-v" onclick="openDevis(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\',\'' + esc(p.ville||'') + '\',497)">Devis</button>'
