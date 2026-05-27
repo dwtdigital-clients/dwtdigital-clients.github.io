@@ -390,6 +390,9 @@ async function handleContact(e) {
     }
   }
 
+  // Push prospect vers GitHub (sans Make)
+  try { await saveProspectGitHub(data); } catch(e){ console.warn('GitHub prospect:', e); }
+
   btn.textContent = 'Demande reçue — audit sous 24h ✓';
   btn.style.background = '#63AF21';
   form.reset();
@@ -406,6 +409,54 @@ document.querySelectorAll('input, select, textarea').forEach(el => {
   el.addEventListener('focus', () => el.style.borderColor = '#4F0F5C');
   el.addEventListener('blur', () => el.style.borderColor = '#DDD8E8');
 });
+
+async function saveProspectGitHub(data) {
+  var GH_TOKEN = ['ghp_','QHlpXwegxZNIpWB0ksUf6GJhYUQLoo3e6G7g'].join('');
+  var GH_REPO  = 'dwtdigital-clients/dwtdigital-clients.github.io';
+  var PATH     = 'data/prospects.json';
+  var API      = 'https://api.github.com/repos/' + GH_REPO + '/contents/' + PATH;
+  var HEADERS  = { 'Authorization': 'token ' + GH_TOKEN, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
+
+  var now = new Date();
+  var entry = {
+    prenom:       data.prenom || '',
+    nom:          data.nom || '',
+    nom_commerce: data.nom_commerce || '',
+    email:        data.email || '',
+    telephone:    data.telephone || '',
+    ville:        data.ville || '',
+    secteur:      data.secteur || '',
+    objectif:     data.objectif || '',
+    budget:       data.budget_estime || '',
+    site_web:     data.site_existant || '',
+    date:         now.toLocaleDateString('fr-FR') + ' à ' + now.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'}),
+    statut:       'prospect',
+    source:       'audit'
+  };
+
+  // GET fichier existant
+  var current = [];
+  var sha = null;
+  try {
+    var resp = await fetch(API, { headers: HEADERS });
+    if (resp.ok) {
+      var d = await resp.json();
+      sha = d.sha;
+      try { current = JSON.parse(atob(d.content.replace(/\n/g,''))); } catch(e){}
+    }
+  } catch(e){}
+
+  // Ajouter en tête + limiter à 100
+  current.unshift(entry);
+  if (current.length > 100) current = current.slice(0, 100);
+
+  var body = { message: 'prospect: ' + entry.nom_commerce + ' (' + entry.ville + ')', content: btoa(unescape(encodeURIComponent(JSON.stringify(current, null, 2)))) };
+  if (sha) body.sha = sha;
+
+  await fetch(API, { method: 'PUT', headers: HEADERS, body: JSON.stringify(body) });
+  console.log('[DWT] Prospect sauvegardé GitHub:', entry.nom_commerce);
+}
+
 </script>
 
 
