@@ -1,8 +1,15 @@
 [
   {
-    "date": "28/05/2026 à 00:01",
+    "date": "28/05/2026 à 01:39",
     "type": "Contenu texte",
-    "msg": "ajouter la livraison en 24 à 48h et dans toute la France",
+    "msg": "Je souhaite un site pour boulangerie pâtisserie en plein cœur de Versailles. Ouvert de 7h30à 20h. Je veux des images de pâtisserie et plusieurs pages avec une page à propos avec nos informations de contact. Et une page pour envoyer des commandes",
+    "commerce": "Le Fournil de Sophie",
+    "status": "applied"
+  },
+  {
+    "date": "28/05/2026 Ã  00:01",
+    "type": "Contenu texte",
+    "msg": "ajouter la livraison en 24 Ã  48h et dans toute la France",
     "commerce": "Boucherie Zimblo",
     "status": "applied"
   }
