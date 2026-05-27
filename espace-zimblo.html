@@ -1,620 +1,661 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head><!-- v2 2026-05-26 -->
+<head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Espace Client — Boucherie Zimblo</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
 <style>
-/* ═══ RESET ═══ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; }
-body {
-  font-family: 'Poppins', sans-serif;
-  background: #F0ECF5;
-  color: #1A0820;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-text-size-adjust: 100%;
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --v:#4F0F5C;--vl:#7B1FA2;--vd:#2D0636;
+  --g:#63AF21;--gl:#7BC93A;
+  --b:#EFDEC9;--bg:#F0ECF5;
+  --border:#EDE8F5;--radius:14px;
+  --td:#1A0820;--tm:#6B5A74;
+  --shadow:0 2px 12px rgba(79,15,92,0.08);
 }
+html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);color:var(--td);-webkit-tap-highlight-color:transparent;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 
-/* ═══ VARIABLES ═══ */
-:root {
-  --v: #4F0F5C; --vl: #7B1FA2; --vd: #2D0636;
-  --g: #63AF21; --gl: #7BC93A;
-  --b: #EFDEC9; --bg: #F0ECF5;
-  --td: #1A0820; --tm: #4A3050;
-  --border: #EDE8F5; --radius: 12px;
-}
+/* ── LAYOUT ── */
+.layout{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
 
-/* ═══ TOPBAR ═══ */
-.topbar {
-  background: var(--vd);
-  padding: 11px 18px;
-  display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; z-index: 200;
-  border-bottom: 1px solid rgba(99,175,33,0.2);
-}
-.topbar-logo { display: flex; align-items: center; }
-.topbar-logo img { height: 36px; border-radius: 6px; display: block; }
-.topbar-right { display: flex; align-items: center; gap: 10px; }
-.topbar-commerce { font-size: 13px; font-weight: 700; color: var(--b); }
-.topbar-pack { font-size: 10px; color: var(--g); letter-spacing: 1px; text-transform: uppercase; }
-.topbar-av {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--g); color: white;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 14px; flex-shrink: 0;
-}
+/* ── TOPBAR ── */
+.topbar{background:var(--vd);padding:0 20px;height:56px;display:flex;align-items:center;gap:12px;flex-shrink:0;position:relative;z-index:10;}
+.topbar-logo img{height:32px;border-radius:6px;}
+.topbar-sep{width:1px;height:24px;background:rgba(255,255,255,0.12);}
+.topbar-info{flex:1;}
+.topbar-commerce{font-size:13px;font-weight:700;color:var(--b);}
+.topbar-pack{font-size:10px;color:var(--g);letter-spacing:1px;text-transform:uppercase;}
+.topbar-avatar{width:34px;height:34px;border-radius:50%;background:var(--g);color:white;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.topbar-site-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:var(--b);font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;padding:6px 12px;border-radius:20px;cursor:pointer;text-decoration:none;transition:background .15s;}
+.topbar-site-btn:hover{background:rgba(255,255,255,0.14);}
+.topbar-site-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;}
 
-/* ═══ PROGRESS BAR ═══ */
-.prog-bar-wrap {
-  background: var(--vd);
-  padding: 7px 18px 10px;
-  border-bottom: 1px solid rgba(99,175,33,0.15);
-  position: sticky; top: 58px; z-index: 199;
-}
-.prog-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-.prog-label { font-size: 11px; font-weight: 600; color: var(--g); }
-.prog-pct { font-size: 10px; color: rgba(239,222,201,0.45); }
-.prog-track { background: rgba(239,222,201,0.12); border-radius: 20px; height: 5px; overflow: hidden; }
-.prog-fill { height: 100%; background: linear-gradient(to right, var(--vl), var(--g)); border-radius: 20px; transition: width 0.4s ease; }
+/* ── PROGRESS ── */
+.progbar{background:var(--vd);padding:0 20px 10px;flex-shrink:0;}
+.prog-inner{display:flex;align-items:center;gap:12px;}
+.prog-label{font-size:11px;font-weight:600;color:var(--g);white-space:nowrap;}
+.prog-track{flex:1;background:rgba(239,222,201,0.15);border-radius:20px;height:5px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(to right,var(--vl),var(--g));border-radius:20px;transition:width .5s ease;}
+.prog-pct{font-size:10px;color:rgba(239,222,201,0.5);white-space:nowrap;}
 
-/* ═══ DESKTOP LAYOUT ═══ */
-.layout { display: flex; min-height: calc(100vh - 95px); }
+/* ── TABS ── */
+.tabs-wrap{background:white;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto;scrollbar-width:none;}
+.tabs-wrap::-webkit-scrollbar{display:none;}
+.tabs{display:flex;padding:0 16px;}
+.tab-btn{display:flex;align-items:center;gap:7px;padding:13px 16px;font-family:'Poppins',sans-serif;font-size:12px;font-weight:500;color:var(--tm);border:none;background:transparent;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .15s;margin-bottom:-1px;}
+.tab-btn:hover{color:var(--v);}
+.tab-btn.active{color:var(--v);font-weight:700;border-bottom-color:var(--v);}
+.tab-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;flex-shrink:0;}
+.tab-btn .badge{min-width:18px;height:18px;padding:0 5px;background:var(--g);color:white;font-size:9px;font-weight:700;border-radius:9px;display:flex;align-items:center;justify-content:center;}
 
-/* ═══ SIDEBAR ═══ */
-.sidebar {
-  width: 210px; flex-shrink: 0;
-  background: white; border-right: 1px solid var(--border);
-  padding: 18px 10px;
-  display: none; /* hidden by default, shown on desktop */
-}
-.sidebar-label { font-size: 10px; color: var(--tm); letter-spacing: 2px; text-transform: uppercase; font-weight: 600; padding: 0 6px; margin-bottom: 10px; }
-.sb-item {
-  display: flex; align-items: center; gap: 8px;
-  padding: 9px 10px; border-radius: 8px;
-  cursor: pointer; border: none; background: transparent;
-  width: 100%; text-align: left; font-family: 'Poppins', sans-serif;
-  margin-bottom: 2px; transition: background 0.15s;
-}
-.sb-item:hover { background: #F9F7FC; }
-.sb-item.active { background: rgba(79,15,92,0.08); }
-.sb-item.locked { opacity: 0.5; cursor: pointer; }
-.sb-dot {
-  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 700;
-}
-.dot-lock { background: #F0F0F0; color: #BBB; }
-.dot-active { background: var(--v); color: white; }
-.dot-done { background: var(--g); color: white; }
-.sb-text { font-size: 12px; font-weight: 500; color: var(--td); }
-.sb-item.active .sb-text { color: var(--v); font-weight: 700; }
-.sb-item.locked .sb-text { color: #BBB; }
-.sb-sub { font-size: 10px; color: var(--tm); }
-.sb-sub.done { color: var(--g); }
-.sb-sub.active { color: var(--v); font-weight: 700; }
-.sidebar-help { margin-top: 16px; padding: 12px; background: #F9F7FC; border-radius: 10px; }
-.sidebar-help p { font-size: 11px; color: var(--tm); margin-bottom: 8px; }
-.sidebar-help a { display: block; background: var(--v); color: white; text-align: center; padding: 8px; border-radius: 7px; font-size: 11px; font-weight: 600; text-decoration: none; }
+/* ── MAIN ── */
+.main{flex:1;overflow-y:auto;padding:20px;}
+.tab-panel{display:none;animation:fadeUp .2s ease;}
+.tab-panel.active{display:block;}
 
-/* ═══ MAIN ═══ */
-.main { flex: 1; padding: 20px 18px 100px; overflow-x: hidden; min-width: 0; }
+/* ── CARDS ── */
+.card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:16px;}
+.card-title{font-size:13px;font-weight:700;color:var(--td);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title svg{width:16px;height:16px;stroke:var(--v);fill:none;stroke-width:2;}
 
-/* ═══ STEPS — SHOW/HIDE PAR CLASSE ═══ */
-.step { display: none; }
-.step.active { display: block; animation: fadeUp 0.25s ease; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+/* ── STAT CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
+.stat-card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;text-align:center;}
+.stat-num{font-size:22px;font-weight:700;color:var(--v);}
+.stat-num.green{color:var(--g);}
+.stat-label{font-size:10px;color:var(--tm);margin-top:2px;}
 
-.step-badge {
-  display: inline-block;
-  background: rgba(99,175,33,0.08); border: 1px solid rgba(99,175,33,0.2);
-  color: var(--g); padding: 4px 12px; border-radius: 20px;
-  font-size: 11px; font-weight: 600; letter-spacing: 1px;
-  text-transform: uppercase; margin-bottom: 10px;
-}
-.step-title { font-size: 19px; font-weight: 700; color: var(--td); margin-bottom: 6px; }
-.step-desc { font-size: 13px; color: var(--tm); line-height: 1.7; margin-bottom: 18px; }
+/* ── TIMELINE ── */
+.timeline{padding-left:20px;position:relative;}
+.timeline::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--border);border-radius:2px;}
+.tl-item{position:relative;padding-left:22px;padding-bottom:18px;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-dot{position:absolute;left:-14px;top:3px;width:14px;height:14px;border-radius:50%;border:2px solid white;box-shadow:0 0 0 1px var(--border);}
+.tl-dot.done{background:var(--g);box-shadow:0 0 0 1px var(--g);}
+.tl-dot.active{background:var(--v);box-shadow:0 0 0 3px rgba(79,15,92,0.15);}
+.tl-dot.pending{background:#E8E0EF;}
+.tl-title{font-size:12px;font-weight:600;color:var(--td);display:flex;align-items:center;gap:6px;}
+.tl-sub{font-size:11px;color:var(--tm);margin-top:1px;}
+.tl-badge{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:600;}
+.tl-badge.done{background:#EAF3DE;color:#3B6D11;}
+.tl-badge.active{background:rgba(79,15,92,0.08);color:var(--v);}
+.tl-badge.pending{background:#F0F0F0;color:#999;}
 
-/* ═══ CARDS ═══ */
-.card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 14px; }
+/* ── QUICK ACTIONS ── */
+.quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.qa-btn{display:flex;align-items:center;gap:10px;padding:14px 16px;border-radius:12px;border:none;cursor:pointer;font-family:'Poppins',sans-serif;text-align:left;transition:all .15s;font-size:12px;font-weight:600;}
+.qa-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;}
+.qa-btn.primary{background:var(--v);color:white;}
+.qa-btn.primary:hover{background:var(--vl);}
+.qa-btn.secondary{background:white;color:var(--v);border:1.5px solid var(--v);}
+.qa-btn.secondary:hover{background:rgba(79,15,92,0.04);}
+.qa-btn.green{background:var(--g);color:white;}
+.qa-btn.green:hover{background:var(--gl);}
 
-/* ═══ PLATFORM CARDS ═══ */
-.platforms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
-.plat {
-  border: 2px solid var(--border); border-radius: 10px;
-  padding: 16px 10px; text-align: center;
-  cursor: pointer; user-select: none;
-  transition: border-color 0.15s, background 0.15s, transform 0.1s;
-  position: relative; background: white;
-}
-.plat:active { transform: scale(0.96); }
-.plat.sel { border-color: var(--v); background: rgba(79,15,92,0.04); }
-.plat.sel::after { content: '✓'; position: absolute; top: 6px; right: 8px; font-size: 11px; font-weight: 700; color: var(--g); }
-.plat-icon { width: 40px; height: 40px; border-radius: 10px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; }
-.plat-name { font-size: 11px; font-weight: 700; color: var(--td); margin-bottom: 2px; pointer-events: none; }
-.plat-sub { font-size: 10px; color: var(--tm); pointer-events: none; }
-.plat * { pointer-events: none; }
-.plat-count { font-size: 12px; color: var(--tm); margin-bottom: 14px; }
-.plat-count strong { color: var(--v); }
+/* ── ACTIVITY ── */
+.activity-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.activity-item:last-child{border-bottom:none;}
+.act-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.act-icon svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+.act-icon.green{background:#EAF3DE;color:var(--g);}
+.act-icon.purple{background:rgba(79,15,92,0.08);color:var(--v);}
+.act-icon.blue{background:#E8F4FD;color:#1877F2;}
+.act-text{flex:1;}
+.act-title{font-size:12px;font-weight:600;color:var(--td);}
+.act-sub{font-size:11px;color:var(--tm);}
+.act-time{font-size:10px;color:#BBB;white-space:nowrap;}
 
-/* ═══ BUTTONS ═══ */
-.btn-primary {
-  display: inline-block; background: var(--v); color: white;
-  border: none; border-radius: 9px; padding: 13px 28px;
-  font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 700;
-  cursor: pointer; transition: background 0.2s, transform 0.1s;
-  text-decoration: none; text-align: center;
-}
-.btn-primary:hover { background: var(--vl); }
-.btn-primary:active { transform: scale(0.97); }
-.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-.btn-primary.full { width: 100%; }
-.btn-success {
-  display: inline-block; background: var(--g); color: white;
-  border: none; border-radius: 9px; padding: 11px 22px;
-  font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: background 0.2s, transform 0.1s;
-}
-.btn-success:active { transform: scale(0.97); }
-.btn-outline {
-  display: inline-block; background: white; color: var(--td);
-  border: 1.5px solid var(--border); border-radius: 9px; padding: 10px 20px;
-  font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 500;
-  cursor: pointer; transition: border-color 0.2s;
-}
-.btn-outline:hover { border-color: var(--v); }
-.btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+/* ── POSTS ── */
+.posts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+.post-card{background:white;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .15s,box-shadow .15s;}
+.post-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+.post-header{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);}
+.post-plat-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.post-plat-icon img{width:18px;height:18px;object-fit:contain;}
+.post-plat-name{font-size:12px;font-weight:700;}
+.post-timing{font-size:10px;color:var(--tm);}
+.post-img{width:100%;height:140px;object-fit:cover;}
+.post-body{padding:12px 14px;}
+.post-text{font-size:11px;color:var(--td);line-height:1.6;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.post-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px;}
+.post-tag{font-size:9px;color:var(--v);background:rgba(79,15,92,0.06);padding:2px 6px;border-radius:10px;}
+.post-actions{display:flex;gap:8px;}
+.post-btn{flex:1;padding:7px 0;border-radius:8px;border:none;font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;}
+.post-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;}
+.post-btn.approve{background:var(--g);color:white;}
+.post-btn.approve:hover{background:var(--gl);}
+.post-btn.modify{background:transparent;border:1.5px solid var(--border);color:var(--tm);}
+.post-btn.modify:hover{border-color:var(--v);color:var(--v);}
+.post-btn.approved{background:#EAF3DE;color:#3B6D11;cursor:default;}
 
-/* ═══ NOTIFICATIONS ═══ */
-.notif {
-  display: flex; align-items: flex-start; gap: 8px;
-  background: rgba(99,175,33,0.07); border: 1px solid rgba(99,175,33,0.2);
-  border-radius: 8px; padding: 10px 13px;
-  font-size: 12px; color: #2D7A0A; margin-bottom: 14px; line-height: 1.5;
-}
-.notif-warn { background: rgba(245,158,11,0.07); border-color: rgba(245,158,11,0.25); color: #B7791F; }
+/* ── SITE TAB ── */
+.site-preview{width:100%;height:220px;border-radius:10px;border:1px solid var(--border);overflow:hidden;background:#F5F5F5;position:relative;margin-bottom:16px;}
+.site-preview iframe{width:100%;height:100%;border:none;transform:scale(.6);transform-origin:top left;width:167%;height:167%;pointer-events:none;}
+.site-preview-label{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.6);color:white;font-size:10px;padding:3px 8px;border-radius:10px;}
 
-/* ═══ IDENTITÉ VISUELLE ═══ */
-.palette { display: flex; gap: 10px; margin: 10px 0 14px; flex-wrap: wrap; }
-.swatch { text-align: center; }
-.swatch-dot { width: 38px; height: 38px; border-radius: 9px; margin-bottom: 4px; }
-.swatch-name { font-size: 9px; color: var(--tm); }
-.identity-typo { background: #FFF8F0; border-radius: 9px; padding: 12px; margin-bottom: 12px; }
-.identity-tagline { background: #FCF0F7; border-radius: 9px; padding: 12px; margin-bottom: 14px; }
-.identity-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--tm); margin-bottom: 7px; }
-.mockup-scroll { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; margin: 12px 0; }
-.mockup-scroll::-webkit-scrollbar { height: 4px; }
-.mockup-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-.mockup-item { flex-shrink: 0; }
-.mockup-label { font-size: 11px; font-weight: 700; color: var(--td); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
-.mock-ig { border: 1px solid #E5E5E5; border-radius: 8px; overflow: hidden; width: 190px; }
-.mock-head { background: white; padding: 6px 9px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid #F0F0F0; }
-.mock-av { width: 20px; height: 20px; border-radius: 50%; overflow: hidden; }
-.mock-av img { width: 100%; height: 100%; object-fit: cover; }
-.mock-un { font-size: 10px; font-weight: 700; color: #000; }
-.mock-img { height: 140px; overflow: hidden; }
-.mock-img img { width: 100%; height: 100%; object-fit: cover; }
-.mock-cap { padding: 6px 9px; font-size: 9px; color: #333; line-height: 1.4; background: white; }
-.mock-fb { border: 1px solid #E0E0E0; border-radius: 8px; overflow: hidden; width: 210px; background: white; }
-.mock-fb-head { padding: 9px; display: flex; align-items: center; gap: 7px; }
-.mock-fb-av { width: 32px; height: 32px; border-radius: 50%; background: #5C2E1A; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 700; flex-shrink: 0; }
-.mock-fb-name { font-size: 12px; font-weight: 700; color: #000; }
-.mock-fb-time { font-size: 10px; color: #999; }
-.mock-fb-text { padding: 0 9px 8px; font-size: 11px; color: #333; line-height: 1.5; }
-.mock-fb-img { height: 130px; overflow: hidden; }
-.mock-fb-img img { width: 100%; height: 100%; object-fit: cover; }
-.mock-tiktok { border-radius: 8px; overflow: hidden; width: 110px; height: 195px; position: relative; background: #000; }
-.mock-tt-img { position: absolute; inset: 0; }
-.mock-tt-img img { width: 100%; height: 100%; object-fit: cover; opacity: 0.75; }
-.mock-tt-over { position: absolute; bottom: 0; left: 0; right: 0; padding: 8px; background: linear-gradient(transparent, rgba(0,0,0,0.7)); }
-.mock-tt-user { color: white; font-size: 9px; font-weight: 700; margin-bottom: 2px; }
-.mock-tt-cap { color: rgba(255,255,255,0.8); font-size: 8px; line-height: 1.3; }
-.mock-gmb { border: 1px solid #E0E0E0; border-radius: 8px; overflow: hidden; width: 190px; background: white; }
-.mock-gmb-head { background: #4285F4; padding: 7px 9px; color: white; font-size: 10px; font-weight: 700; }
-.mock-gmb-img { height: 110px; overflow: hidden; }
-.mock-gmb-img img { width: 100%; height: 100%; object-fit: cover; }
-.mock-gmb-body { padding: 7px 9px; }
-.mock-gmb-biz { font-size: 12px; font-weight: 700; color: #000; }
-.mock-gmb-cat { font-size: 10px; color: #999; margin-bottom: 3px; }
-.mock-gmb-txt { font-size: 10px; color: #444; line-height: 1.4; }
-.mock-linkedin { border: 1px solid #E0E0E0; border-radius: 8px; overflow: hidden; width: 210px; background: white; }
-.mock-li-head { padding: 9px; display: flex; align-items: center; gap: 7px; }
-.mock-li-av { width: 36px; height: 36px; border-radius: 50%; overflow: hidden; flex-shrink: 0; }
-.mock-li-av img { width: 100%; height: 100%; object-fit: cover; }
-.mock-li-info { font-size: 12px; font-weight: 700; color: #000; }
-.mock-li-sub { font-size: 10px; color: #666; }
-.mock-li-text { padding: 0 9px 8px; font-size: 11px; color: #333; line-height: 1.5; }
-.mock-li-img { height: 120px; overflow: hidden; }
-.mock-li-img img { width: 100%; height: 100%; object-fit: cover; }
-.mock-pin { border-radius: 8px; overflow: hidden; width: 120px; position: relative; }
-.mock-pin-img { height: 190px; overflow: hidden; }
-.mock-pin-img img { width: 100%; height: 100%; object-fit: cover; }
-.mock-pin-cap { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); padding: 7px 8px; color: white; font-size: 9px; font-weight: 700; }
+.modif-form{display:flex;flex-direction:column;gap:10px;}
+.modif-form label{font-size:11px;font-weight:600;color:var(--td);}
+.modif-form textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-family:'Poppins',sans-serif;font-size:12px;resize:vertical;min-height:80px;color:var(--td);transition:border-color .15s;}
+.modif-form textarea:focus{outline:none;border-color:var(--v);}
+.modif-form select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;font-family:'Poppins',sans-serif;font-size:12px;color:var(--td);background:white;transition:border-color .15s;}
+.modif-form select:focus{outline:none;border-color:var(--v);}
+.send-btn{padding:11px 20px;background:var(--v);color:white;border:none;border-radius:10px;font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:8px;justify-content:center;}
+.send-btn:hover{background:var(--vl);}
+.send-btn svg{width:16px;height:16px;stroke:white;fill:none;stroke-width:2.5;}
 
-/* ═══ POSTS ═══ */
-.post-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 12px; }
-.post-head { padding: 11px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F5F0FC; }
-.post-plat { font-size: 12px; font-weight: 600; color: var(--td); display: flex; align-items: center; gap: 6px; }
-.post-plat-dot { width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0; }
-.post-body-grid { display: grid; grid-template-columns: 190px 1fr; }
-.post-preview { padding: 11px; border-right: 1px solid #F5F0FC; }
-.post-content { padding: 11px; }
-.field-label { font-size: 10px; font-weight: 700; color: var(--tm); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
-.post-text { font-size: 12px; color: var(--td); line-height: 1.7; background: #F9F7FC; padding: 9px; border-radius: 7px; margin-bottom: 7px; max-height: 80px; overflow-y: auto; }
-.tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 7px; }
-.tag { background: rgba(79,15,92,0.06); color: var(--v); font-size: 10px; padding: 3px 8px; border-radius: 20px; }
-.timing { font-size: 11px; color: var(--tm); background: #F9F7FC; padding: 6px 9px; border-radius: 6px; }
-.post-actions { padding: 11px 15px; background: #F9F7FC; border-top: 1px solid var(--border); display: flex; gap: 8px; flex-wrap: wrap; }
-.badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-.b-pend { background: rgba(245,158,11,0.1); color: #B7791F; }
-.b-ok { background: rgba(99,175,33,0.1); color: #2D7A0A; }
-.b-plan { background: rgba(59,130,246,0.1); color: #1D4ED8; }
-.b-wip { background: rgba(107,114,128,0.1); color: #374151; }
+/* ── HISTORIQUE MODIFICATIONS ── */
+.modif-history{display:flex;flex-direction:column;gap:8px;}
+.modif-item{background:var(--bg);border-radius:10px;padding:10px 12px;}
+.modif-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.modif-sujet{font-size:11px;font-weight:700;color:var(--td);}
+.modif-date{font-size:10px;color:var(--tm);}
+.modif-msg{font-size:11px;color:var(--tm);line-height:1.5;}
+.modif-status{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;margin-top:5px;}
+.modif-status.sent{background:#EAF3DE;color:#3B6D11;}
+.modif-status.pending{background:rgba(79,15,92,0.08);color:var(--v);}
+.modif-status-dot{width:6px;height:6px;border-radius:50%;}
+.modif-status.sent .modif-status-dot{background:var(--g);}
+.modif-status.pending .modif-status-dot{background:var(--v);animation:pulse 1.5s infinite;}
 
-/* ═══ CONNECT GRID ═══ */
-.connect-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; margin-bottom: 14px; }
-.connect-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; }
-.connect-icon { width: 44px; height: 44px; border-radius: 11px; display: flex; align-items: center; justify-content: center; margin: 0 auto 9px; }
-.connect-name { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
-.connect-status { font-size: 11px; margin-bottom: 10px; }
-.connect-btn { width: 100%; padding: 8px; border-radius: 7px; font-size: 11px; font-weight: 600; cursor: pointer; border: none; font-family: 'Poppins', sans-serif; transition: background 0.2s; }
-.connect-btn-v { background: var(--v); color: white; }
-.connect-btn-ok { background: rgba(99,175,33,0.1); color: #2D7A0A; border: 1px solid rgba(99,175,33,0.3) !important; cursor: default; }
+/* ── IDENTITE ── */
+.identity-section{margin-bottom:20px;}
+.identity-section h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--tm);margin-bottom:12px;}
+.palette-row{display:flex;gap:10px;flex-wrap:wrap;}
+.swatch-item{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.swatch{width:40px;height:40px;border-radius:10px;border:1px solid rgba(0,0,0,0.08);}
+.swatch-name{font-size:9px;color:var(--tm);}
+.font-card{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg);border-radius:10px;margin-bottom:8px;}
+.font-preview{font-size:16px;font-weight:700;}
+.font-role{font-size:10px;color:var(--tm);}
+.plat-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.plat-chip{display:flex;align-items:center;gap:6px;padding:6px 12px;background:white;border:1px solid var(--border);border-radius:20px;font-size:11px;font-weight:600;}
+.plat-chip svg{width:14px;height:14px;}
 
-/* ═══ STATS ═══ */
-.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
-.stat-box { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; }
-.stat-num { font-size: 28px; font-weight: 900; color: var(--v); }
-.stat-label { font-size: 11px; color: var(--tm); margin-top: 3px; }
+/* ── CONNEXIONS ── */
+.connect-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:white;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;transition:box-shadow .15s;}
+.connect-item:hover{box-shadow:var(--shadow);}
+.connect-icon{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.connect-icon svg{width:18px;height:18px;fill:white;stroke:none;}
+.connect-info{flex:1;}
+.connect-name{font-size:13px;font-weight:700;}
+.connect-status{font-size:11px;}
+.connect-status.connected{color:var(--g);}
+.connect-status.pending{color:var(--v);}
+.connect-btn{font-size:11px;font-weight:700;padding:7px 14px;border-radius:20px;border:none;cursor:pointer;font-family:'Poppins',sans-serif;transition:all .15s;}
+.connect-btn.guide{background:rgba(79,15,92,0.08);color:var(--v);}
+.connect-btn.guide:hover{background:rgba(79,15,92,0.15);}
+.connect-btn.done{background:#EAF3DE;color:#3B6D11;cursor:default;}
 
-/* ═══ HISTORY ═══ */
-.history-item { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 12px 15px; display: flex; align-items: center; gap: 11px; margin-bottom: 9px; }
-.history-thumb { width: 42px; height: 42px; border-radius: 7px; object-fit: cover; flex-shrink: 0; }
-.history-info { flex: 1; min-width: 0; }
-.history-title { font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.history-sub { font-size: 11px; color: var(--tm); }
+/* ── SUIVI ── */
+.metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px;}
+.metric-card{background:white;border:1px solid var(--border);border-radius:12px;padding:14px;}
+.metric-val{font-size:24px;font-weight:700;color:var(--v);}
+.metric-label{font-size:10px;color:var(--tm);margin-top:2px;}
+.metric-delta{font-size:11px;color:var(--g);font-weight:600;margin-top:3px;}
+.progress-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.progress-item-label{font-size:11px;font-weight:600;color:var(--td);width:100px;flex-shrink:0;}
+.progress-item-track{flex:1;background:var(--border);border-radius:20px;height:7px;overflow:hidden;}
+.progress-item-fill{height:100%;border-radius:20px;background:linear-gradient(to right,var(--vl),var(--g));}
+.progress-item-pct{font-size:10px;color:var(--tm);width:30px;text-align:right;}
 
-/* ═══ CONFIRMED STATE ═══ */
-.confirmed-state { text-align: center; padding: 28px 16px; }
-.confirmed-icon { width: 58px; height: 58px; border-radius: 50%; background: rgba(99,175,33,0.1); border: 2px solid rgba(99,175,33,0.3); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+/* ── MESSAGES ── */
+.message-thread{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;max-height:300px;overflow-y:auto;padding:4px 0;}
+.msg{max-width:80%;padding:9px 12px;border-radius:12px;font-size:12px;line-height:1.6;}
+.msg.out{background:var(--v);color:white;align-self:flex-end;border-radius:12px 12px 3px 12px;}
+.msg.in{background:white;color:var(--td);align-self:flex-start;border:1px solid var(--border);border-radius:12px 12px 12px 3px;}
+.msg-time{font-size:9px;opacity:.65;margin-top:3px;}
+.msg-input-row{display:flex;gap:8px;}
+.msg-input{flex:1;padding:9px 14px;border:1.5px solid var(--border);border-radius:20px;font-family:'Poppins',sans-serif;font-size:12px;color:var(--td);}
+.msg-input:focus{outline:none;border-color:var(--v);}
+.msg-send{width:38px;height:38px;background:var(--v);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .15s;}
+.msg-send:hover{background:var(--vl);}
+.msg-send svg{width:15px;height:15px;stroke:white;fill:none;stroke-width:2.5;}
 
-/* ═══ MODAL ═══ */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 1000; align-items: flex-end; justify-content: center; }
-.modal-overlay.open { display: flex; }
-.modal-sheet { background: white; border-radius: 18px 18px 0 0; width: 100%; max-width: 520px; padding: 22px 18px 32px; max-height: 80vh; overflow-y: auto; }
-.modal-handle { width: 36px; height: 4px; background: #DDD; border-radius: 4px; margin: 0 auto 16px; }
-.modal-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-.modal-sub { font-size: 13px; color: var(--tm); margin-bottom: 12px; }
-.modal-textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 9px; padding: 11px 13px; font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--td); resize: vertical; min-height: 80px; margin-bottom: 12px; }
-.modal-textarea:focus { outline: none; border-color: var(--v); }
-.modal-actions { display: flex; gap: 10px; }
+/* ── NOTIF TOAST ── */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--vd);color:white;padding:10px 20px;border-radius:20px;font-size:12px;font-weight:600;z-index:9999;opacity:0;transition:all .3s;max-width:90vw;text-align:center;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.success{background:#2D7D0A;}
+.toast.error{background:#9B1C1C;}
 
-/* ═══ MOBILE BOTTOM NAV ═══ */
-.bottom-nav {
-  display: none;
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: white; border-top: 1px solid var(--border);
-  z-index: 300; box-shadow: 0 -3px 14px rgba(79,15,92,0.07);
-}
-.bottom-nav-inner { display: flex; overflow-x: auto; scrollbar-width: none; }
-.bottom-nav-inner::-webkit-scrollbar { display: none; }
-.bn-item {
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-  padding: 10px 10px 12px; min-width: 58px; flex-shrink: 0;
-  cursor: pointer; border-top: 3px solid transparent;
-  transition: border-color 0.2s; -webkit-tap-highlight-color: transparent;
-}
-.bn-item.active { border-top-color: var(--v); }
-.bn-item.locked { opacity: 0.5; }
-.bn-dot { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
-.bn-dot-lock { background: #EDE8F5; color: #999; }
-.bn-dot-active { background: var(--v); color: white; }
-.bn-dot-done { background: var(--g); color: white; }
-.bn-label { font-size: 9px; color: var(--tm); text-align: center; line-height: 1.2; }
-.bn-item.active .bn-label { color: var(--v); font-weight: 700; }
+/* ── EMPTY STATES ── */
+.empty{text-align:center;padding:32px 20px;}
+.empty-icon{width:48px;height:48px;background:var(--bg);border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;}
+.empty-icon svg{width:22px;height:22px;stroke:var(--tm);fill:none;stroke-width:1.5;}
+.empty-title{font-size:13px;font-weight:700;color:var(--td);margin-bottom:4px;}
+.empty-sub{font-size:11px;color:var(--tm);}
 
-/* ═══ RESPONSIVE ═══ */
-@media (min-width: 769px) {
-  .sidebar { display: block; }
-  .main { padding-bottom: 40px; }
-  .modal-overlay { align-items: center; padding: 20px; }
-  .modal-sheet { border-radius: 18px; max-height: 80vh; }
-}
-@media (max-width: 768px) {
-  .bottom-nav { display: block; }
-  .platforms-grid { grid-template-columns: 1fr 1fr; }
-  .post-body-grid { grid-template-columns: 1fr; }
-  .post-preview { display: none; }
-  .connect-grid { grid-template-columns: 1fr 1fr; }
-  .stats-grid { grid-template-columns: 1fr 1fr; }
-  .btn-primary.full, .btn-group .btn-primary, .btn-group .btn-success { width: 100%; }
-  .btn-group { flex-direction: column; }
+/* ── SECTION HEADER ── */
+.sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.sec-title{font-size:15px;font-weight:700;color:var(--td);}
+.sec-sub{font-size:11px;color:var(--tm);margin-top:1px;}
+.sec-action{font-size:11px;font-weight:700;color:var(--v);background:transparent;border:none;cursor:pointer;font-family:'Poppins',sans-serif;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:480px){
+  .stats-row{grid-template-columns:1fr 1fr 1fr;}
+  .quick-actions{grid-template-columns:1fr;}
+  .posts-grid{grid-template-columns:1fr;}
+  .metric-grid{grid-template-columns:1fr 1fr;}
+  .tab-btn{padding:10px 12px;font-size:11px;}
 }
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <a href="/index.html" class="topbar-logo">
-    <img src="https://dwtdigital-clients.github.io/logo-200.png" alt="DWT Digital">
-  </a>
-  <div class="topbar-right">
-    <div>
+<div class="layout">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <img src="https://dwtdigital-clients.github.io/logo-200.png" alt="DWT Digital" style="height:32px;border-radius:6px;">
+    <div class="topbar-sep"></div>
+    <div class="topbar-info">
       <div class="topbar-commerce">Boucherie Zimblo</div>
       <div class="topbar-pack">Pack Social Pro</div>
     </div>
-    <div class="topbar-av" style="background:#B5121B">M</div>
+    <a href="https://dwtdigital-clients.github.io/Zimblo/" target="_blank" class="topbar-site-btn">
+      <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Mon site
+    </a>
+    <div class="topbar-avatar">M</div>
   </div>
-</div>
 
-<!-- PROGRESS BAR -->
-<div class="prog-bar-wrap">
-  <div class="prog-meta">
-    <span class="prog-label" id="prog-label">Étape 1 — Mes plateformes</span>
-    <span class="prog-pct" id="prog-pct">0%</span>
+  <!-- PROGRESS BAR -->
+  <div class="progbar">
+    <div class="prog-inner">
+      <span class="prog-label" id="prog-label">Étape 1/6</span>
+      <div class="prog-track">
+        <div class="prog-fill" id="prog-fill" style="width:17%"></div>
+      </div>
+      <span class="prog-pct" id="prog-pct">17%</span>
+    </div>
   </div>
-  <div class="prog-track">
-    <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+
+  <!-- TABS -->
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('dashboard',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
+      <button class="tab-btn" onclick="switchTab('posts',this)">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+        Publications
+        <span class="badge" id="badge-posts">2</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('site',this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        Mon site
+      </button>
+      <button class="tab-btn" onclick="switchTab('identity',this)">
+        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Identité
+      </button>
+      <button class="tab-btn" onclick="switchTab('connect',this)">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Réseaux
+      </button>
+      <button class="tab-btn" onclick="switchTab('suivi',this)">
+        <svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+        Suivi mensuel
+      </button>
+    </div>
   </div>
-</div>
-
-<!-- LAYOUT -->
-<div class="layout">
-
-  <!-- SIDEBAR (desktop uniquement) -->
-  <aside class="sidebar" id="sidebar"></aside>
 
   <!-- MAIN -->
-  <main class="main">
+  <div class="main">
 
-    <!-- ÉTAPE 1 — PLATEFORMES -->
-    <section class="step active" id="step-1">
-      <div class="step-badge">Étape 1 sur 6</div>
-      <h1 class="step-title">Sur quelles plateformes souhaitez-vous communiquer ?</h1>
-      <p class="step-desc">Sélectionnez une ou plusieurs plateformes. Nous adapterons votre identité visuelle et vos publications pour chacune.</p>
+    <!-- ── TAB: DASHBOARD ── -->
+    <div class="tab-panel active" id="tab-dashboard">
 
-      <p class="plat-count" id="plat-count">Aucune sélectionnée — choisissez au moins une</p>
-
-      <div class="platforms-grid" id="plat-grid">
-        <div class="plat" data-id="instagram">
-          <div class="plat-icon" style="background:linear-gradient(135deg,#f09433,#dc2743,#bc1888)">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="white" stroke="none"/></svg>
-          </div>
-          <div class="plat-name">Instagram</div>
-          <div class="plat-sub">Photos & stories</div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num" id="stat-posts">0</div>
+          <div class="stat-label">Posts validés</div>
         </div>
-        <div class="plat" data-id="facebook">
-          <div class="plat-icon" style="background:#1877F2">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-          </div>
-          <div class="plat-name">Facebook</div>
-          <div class="plat-sub">Publications & events</div>
+        <div class="stat-card">
+          <div class="stat-num green">4.8</div>
+          <div class="stat-label">Note Google</div>
         </div>
-        <div class="plat" data-id="tiktok">
-          <div class="plat-icon" style="background:#000">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.77 0 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.73a4.85 4.85 0 0 1-1.01-.04z"/></svg>
-          </div>
-          <div class="plat-name">TikTok</div>
-          <div class="plat-sub">Vidéos courtes</div>
-        </div>
-        <div class="plat" data-id="linkedin">
-          <div class="plat-icon" style="background:#0A66C2">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-          </div>
-          <div class="plat-name">LinkedIn</div>
-          <div class="plat-sub">Réseau pro</div>
-        </div>
-        <div class="plat" data-id="gmb">
-          <div class="plat-icon" style="background:#4285F4">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5" fill="white" stroke="none"/></svg>
-          </div>
-          <div class="plat-name">Google Business</div>
-          <div class="plat-sub">Fiche Google</div>
-        </div>
-        <div class="plat" data-id="pinterest">
-          <div class="plat-icon" style="background:#E60023">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.099.12.113.225.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
-          </div>
-          <div class="plat-name">Pinterest</div>
-          <div class="plat-sub">Inspiration</div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-pct" style="font-size:18px;">17%</div>
+          <div class="stat-label">Profil complété</div>
         </div>
       </div>
 
-      <div class="btn-group">
-        <button class="btn-primary" id="btn-validate-plat" disabled>Valider et continuer →</button>
+      <div class="quick-actions">
+        <button class="qa-btn primary" onclick="goToTab('site')">
+          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Demander une modification
+        </button>
+        <button class="qa-btn secondary" onclick="window.open('https://dwtdigital-clients.github.io/Zimblo/','_blank')">
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Voir mon site
+        </button>
+        <button class="qa-btn green" onclick="goToTab('posts')">
+          <svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>
+          Valider mes posts
+        </button>
+        <button class="qa-btn secondary" onclick="goToTab('suivi')">
+          <svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+          Voir mes stats
+        </button>
       </div>
-    </section>
 
-    <!-- ÉTAPE 2 — IDENTITÉ -->
-    <section class="step" id="step-2">
-      <div class="step-badge">Étape 2 sur 6</div>
-      <h1 class="step-title">Votre identité visuelle</h1>
-      <p class="step-desc">Proposition de charte graphique adaptée à votre secteur. Validez ou demandez des modifications.</p>
-
-      <div id="identity-zone">
-        <div class="notif">Validez votre identité pour débloquer la création de vos publications.</div>
-        <div class="card">
-          <div class="identity-label">Palette de couleurs</div>
-          <div class="palette">
-            <div class="swatch"><div class="swatch-dot" style="background:#B5121B"></div><div class="swatch-name">Rouge</div></div>
-            <div class="swatch"><div class="swatch-dot" style="background:#FAF0E6;border:1px solid #EEE"></div><div class="swatch-name">Ivoire</div></div>
-            <div class="swatch"><div class="swatch-dot" style="background:#C8A46E"></div><div class="swatch-name">Or chaud</div></div>
-            <div class="swatch"><div class="swatch-dot" style="background:#1C0A0A"></div><div class="swatch-name">Noir profond</div></div>
-          </div>
-          <div class="identity-typo">
-            <div class="identity-label">Typographie</div>
-            <div style="font-family:'Playfair Display',serif;font-size:22px;color:#B5121B;margin-bottom:3px">Boucherie Zimblo</div>
-            <div style="font-size:13px;color:#C8A46E;font-style:italic">Viandes d\'exception · Paris 15e</div>
-          </div>
-          <div class="identity-tagline">
-            <div class="identity-label">Tagline</div>
-            <div style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;color:#B5121B">"La viande d\'exception depuis 3 générations"</div>
-            <div style="font-size:12px;color:var(--tm);margin-top:5px">Ton : Artisanal, noble, expert, authentique</div>
-          </div>
-          <div class="identity-label">Aperçu sur vos plateformes</div>
-          <div class="mockup-scroll" id="mockup-zone"></div>
-          <div class="btn-group">
-            <button class="btn-success" onclick="validateIdentity()">Valider cette identité</button>
-            <button class="btn-outline" onclick="openModal('Identité visuelle')">Demander des modifications</button>
-          </div>
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><polyline points="9,11 12,14 22,4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Votre parcours DWT Digital
         </div>
+        <div class="timeline" id="timeline"></div>
       </div>
 
-      <div id="identity-confirmed" style="display:none">
-        <div class="notif">Identité validée ! Les publications sont en cours de génération.</div>
-        <div class="card">
-          <div class="confirmed-state">
-            <div class="confirmed-icon">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#63AF21" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          Activité récente
+        </div>
+        <div id="activity-list">
+          <div class="activity-item">
+            <div class="act-icon green">
+              <svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>
             </div>
-            <div style="font-size:17px;font-weight:700;margin-bottom:8px">Identité validée</div>
-            <div style="font-size:13px;color:var(--tm);margin-bottom:18px">Palette rouge/ivoire/or · Playfair Display · "La viande d\'exception depuis 3 générations"</div>
-            <button class="btn-primary" onclick="goTo(3)">Voir mes publications →</button>
+            <div class="act-text">
+              <div class="act-title">Espace client créé</div>
+              <div class="act-sub">Bienvenue chez DWT Digital !</div>
+            </div>
+            <div class="act-time">Aujourd'hui</div>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- ÉTAPE 3 — PUBLICATIONS -->
-    <section class="step" id="step-3">
-      <div class="step-badge">Étape 3 sur 6</div>
-      <h1 class="step-title">Vos publications</h1>
-      <p class="step-desc">Créées avec votre charte, adaptées à chaque plateforme choisie. Validez pour programmer automatiquement.</p>
-      <div class="notif" id="posts-notif">Validez chaque publication pour la programmer automatiquement.</div>
-      <div id="posts-zone"></div>
-      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
-        <div style="font-size:14px;font-weight:600;margin-bottom:10px">Historique</div>
-        <div class="history-item">
-          <img src="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=80&q=80" class="history-thumb" alt="">
-          <div class="history-info">
-            <div class="history-title">Post Instagram — Côte de bœuf maturée</div>
-            <div class="history-sub">22 mai · 183 mentions j'aime</div>
-          </div>
-          <span class="badge b-ok">Publié</span>
-        </div>
-      </div>
-      <div class="btn-group" style="margin-top:18px">
-        <button class="btn-primary" onclick="goTo(4)">Voir mon site →</button>
-      </div>
-    </section>
-
-    <!-- ÉTAPE 4 — SITE VITRINE -->
-    <section class="step" id="step-4">
-      <div class="step-badge">Étape 4 sur 6</div>
-      <h1 class="step-title">Votre site vitrine</h1>
-      <p class="step-desc">Votre site est en ligne, habillé avec votre identité validée.</p>
-      <div class="card">
-        <div style="border-radius:9px;overflow:hidden;border:1px solid var(--border);margin-bottom:14px">
-          <div style="background:#F0F0F0;padding:7px 12px;display:flex;gap:5px;align-items:center">
-            <span style="width:9px;height:9px;border-radius:50%;background:#ff5f57;display:block"></span>
-            <span style="width:9px;height:9px;border-radius:50%;background:#febc2e;display:block"></span>
-            <span style="width:9px;height:9px;border-radius:50%;background:#28c840;display:block"></span>
-            <span style="flex:1;background:white;border-radius:4px;padding:4px 10px;font-size:11px;color:#666">dwtdigital-clients.github.io/Zimblo/</span>
-          </div>
-          <img src="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=700&q=80" style="width:100%;height:170px;object-fit:cover;display:block" alt="Site Boucherie Zimblo">
-        </div>
-        <div class="btn-group">
-          <a href="https://dwtdigital-clients.github.io/Zimblo/" target="_blank" class="btn-success">Voir mon site</a>
-          <button class="btn-outline" onclick="openModal('Site vitrine')">Demander une modification</button>
-            <button class="btn-outline" onclick="showHistory()" style="margin-top:8px;width:100%">Historique de mes demandes</button>
-        </div>
-      </div>
-      <div class="btn-group" style="margin-top:18px">
-        <button class="btn-primary" onclick="goTo(5)">Connecter mes réseaux →</button>
-      </div>
-    </section>
-
-    <!-- ÉTAPE 5 — RÉSEAUX -->
-    <section class="step" id="step-5">
-      <div class="step-badge">Étape 5 sur 6</div>
-      <h1 class="step-title">Connexion de vos réseaux</h1>
-      <p class="step-desc">Connectez vos comptes pour que vos publications soient publiées automatiquement.</p>
-      <div class="connect-grid" id="connect-zone"></div>
-      <div class="notif notif-warn" style="font-size:12px">Connexion sécurisée — vous restez propriétaire de vos comptes à tout moment.</div>
-      <div class="btn-group" style="margin-top:18px">
-        <button class="btn-primary" onclick="goTo(6)">Accéder à mon suivi →</button>
-      </div>
-    </section>
-
-    <!-- ÉTAPE 6 — SUIVI -->
-    <section class="step" id="step-6">
-      <div class="step-badge">Étape 6 sur 6</div>
-      <h1 class="step-title">Votre suivi mensuel</h1>
-      <p class="step-desc">Tout est en place. Voici vos performances.</p>
-      <div class="notif">Félicitations — votre présence digitale est entièrement opérationnelle !</div>
-      <div class="stats-grid">
-        <div class="stat-box"><div class="stat-num">1 247</div><div class="stat-label">Portée / post</div></div>
-        <div class="stat-box"><div class="stat-num" style="color:var(--g)">4.8%</div><div class="stat-label">Engagement</div></div>
-        <div class="stat-box"><div class="stat-num">+12</div><div class="stat-label">Abonnés</div></div>
-      </div>
-      <div class="card">
-        <div style="font-size:14px;font-weight:700;margin-bottom:8px">Prochain bilan mensuel</div>
-        <p style="font-size:14px;color:var(--tm);line-height:1.7;margin-bottom:14px">Notre équipe fait le point chaque mois sur vos performances et prépare le mois suivant.</p>
-        <a href="/rappel.html?name=Marc&email=zimblobot@gmail.com&commerce=Boucherie+Zimblo" class="btn-primary">Planifier mon bilan</a>
-      </div>
-    </section>
-
-  </main>
-</div>
-
-<!-- BOTTOM NAV (mobile) -->
-<nav class="bottom-nav" id="bottom-nav"></nav>
-
-<!-- MODAL -->
-<div class="modal-overlay" id="history-overlay" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal-sheet" style="max-height:75vh">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Historique des modifications</div>
-    <div class="modal-sub">Toutes vos demandes envoyées à DWT Digital</div>
-    <div id="history-list" style="max-height:50vh;overflow-y:auto"></div>
-    <div class="modal-actions" style="margin-top:12px">
-      <button class="btn-outline" style="flex:1" onclick="document.getElementById('history-overlay').classList.remove('open')">Fermer</button>
     </div>
+
+    <!-- ── TAB: POSTS ── -->
+    <div class="tab-panel" id="tab-posts">
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">Vos publications</div>
+          <div class="sec-sub">Approuvez les posts préparés par notre équipe</div>
+        </div>
+        <button class="sec-action" onclick="generatePosts()">Générer nouveaux</button>
+      </div>
+      <div class="posts-grid" id="posts-grid"></div>
+      <div id="posts-empty" class="empty" style="display:none;">
+        <div class="empty-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg></div>
+        <div class="empty-title">Aucune publication pour l'instant</div>
+        <div class="empty-sub">Complétez d'abord l'étape "Plateformes" pour commencer</div>
+      </div>
+    </div>
+
+    <!-- ── TAB: SITE ── -->
+    <div class="tab-panel" id="tab-site">
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">Mon site vitrine</div>
+          <div class="sec-sub">dwtdigital-clients.github.io/Zimblo</div>
+        </div>
+        <a href="https://dwtdigital-clients.github.io/Zimblo/" target="_blank" class="sec-action">Ouvrir</a>
+      </div>
+
+      <div class="site-preview">
+        <iframe src="https://dwtdigital-clients.github.io/Zimblo/" title="Aperçu site" loading="lazy"></iframe>
+        <div class="site-preview-label">Aperçu en direct</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Demander une modification
+        </div>
+        <div class="modif-form">
+          <div>
+            <label>Type de modification</label>
+            <select id="modif-type" style="margin-top:5px;">
+              <option value="Contenu texte">Contenu ou texte</option>
+              <option value="Horaires">Horaires d'ouverture</option>
+              <option value="Photo">Photo ou image</option>
+              <option value="Promotion">Promotion ou offre spéciale</option>
+              <option value="Coordonnees">Coordonnées / contact</option>
+              <option value="Autre">Autre</option>
+            </select>
+          </div>
+          <div>
+            <label style="display:block;margin-bottom:5px;">Décrivez la modification</label>
+            <textarea id="modif-text" placeholder="Ex : Ajouter notre nouvelle promo Fête des Pères — 15% sur toutes les pièces nobles du 10 au 16 juin..."></textarea>
+          </div>
+          <button class="send-btn" onclick="submitModification()">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
+            Envoyer la demande
+          </button>
+        </div>
+      </div>
+
+      <div class="card" id="modif-history-card" style="display:none;">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+          Historique des demandes
+        </div>
+        <div class="modif-history" id="modif-history"></div>
+      </div>
+    </div>
+
+    <!-- ── TAB: IDENTITE ── -->
+    <div class="tab-panel" id="tab-identity">
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">Identité visuelle</div>
+          <div class="sec-sub">Votre charte graphique DWT Digital</div>
+        </div>
+      </div>
+
+      <!-- Plateformes actives -->
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          Plateformes sélectionnées
+        </div>
+        <div class="identity-section">
+          <div class="plat-chips" id="identity-plats">
+            <div class="empty-sub" style="padding:8px 0;">Aucune plateforme sélectionnée — <button onclick="goToTab('connect')" style="background:none;border:none;color:var(--v);font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;font-size:11px;">configurer</button></div>
+          </div>
+        </div>
+
+        <!-- Palette couleurs -->
+        <div class="identity-section">
+          <h3>Palette de couleurs</h3>
+          <div class="palette-row">
+            <div class="swatch-item">
+              <div class="swatch" style="background:#B5121B;"></div>
+              <div class="swatch-name">Rouge</div>
+            </div>
+            <div class="swatch-item">
+              <div class="swatch" style="background:#F5F0E8;border:1px solid #E0D8CC;"></div>
+              <div class="swatch-name">Ivoire</div>
+            </div>
+            <div class="swatch-item">
+              <div class="swatch" style="background:#C5A55A;"></div>
+              <div class="swatch-name">Or</div>
+            </div>
+            <div class="swatch-item">
+              <div class="swatch" style="background:#1A1A1A;"></div>
+              <div class="swatch-name">Noir</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Typographie -->
+        <div class="identity-section">
+          <h3>Typographie</h3>
+          <div class="font-card">
+            <div class="font-preview" style="font-family:'Playfair Display',serif;font-style:italic;">Playfair Display</div>
+            <div class="font-role">Titres</div>
+          </div>
+          <div class="font-card">
+            <div class="font-preview">Poppins</div>
+            <div class="font-role">Corps de texte</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Onboarding plateformes si pas encore fait -->
+      <div class="card" id="onboarding-plats-card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Sur quelles plateformes communiquer ?
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;" id="plat-grid-identity">
+          <div class="plat-sel-card" data-id="instagram" onclick="togglePlatIdentity(this)">
+            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#f09433,#dc2743);margin:0 auto 5px;display:flex;align-items:center;justify-content:center;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white"/></svg>
+            </div>
+            <div style="font-size:10px;font-weight:600;text-align:center;">Instagram</div>
+          </div>
+          <div class="plat-sel-card" data-id="facebook" onclick="togglePlatIdentity(this)">
+            <div style="width:32px;height:32px;border-radius:8px;background:#1877F2;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+            </div>
+            <div style="font-size:10px;font-weight:600;text-align:center;">Facebook</div>
+          </div>
+          <div class="plat-sel-card" data-id="tiktok" onclick="togglePlatIdentity(this)">
+            <div style="width:32px;height:32px;border-radius:8px;background:#000;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
+            </div>
+            <div style="font-size:10px;font-weight:600;text-align:center;">TikTok</div>
+          </div>
+          <div class="plat-sel-card" data-id="linkedin" onclick="togglePlatIdentity(this)">
+            <div style="width:32px;height:32px;border-radius:8px;background:#0A66C2;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </div>
+            <div style="font-size:10px;font-weight:600;text-align:center;">LinkedIn</div>
+          </div>
+          <div class="plat-sel-card" data-id="gmb" onclick="togglePlatIdentity(this)">
+            <div style="width:32px;height:32px;border-radius:8px;background:#4285F4;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5" fill="white" stroke="none"/></svg>
+            </div>
+            <div style="font-size:10px;font-weight:600;text-align:center;">Google Business</div>
+          </div>
+          <div class="plat-sel-card" data-id="pinterest" onclick="togglePlatIdentity(this)">
+            <div style="width:32px;height:32px;border-radius:8px;background:#E60023;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+            </div>
+            <div style="font-size:10px;font-weight:600;text-align:center;">Pinterest</div>
+          </div>
+        </div>
+        <button class="send-btn" onclick="savePlatforms()" style="width:100%;">
+          <svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>
+          Valider les plateformes
+        </button>
+      </div>
+    </div>
+
+    <!-- ── TAB: CONNEXIONS ── -->
+    <div class="tab-panel" id="tab-connect">
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">Connexion des réseaux</div>
+          <div class="sec-sub">Connectez vos comptes pour la publication automatique</div>
+        </div>
+      </div>
+      <div id="connect-list"></div>
+    </div>
+
+    <!-- ── TAB: SUIVI ── -->
+    <div class="tab-panel" id="tab-suivi">
+      <div class="sec-header">
+        <div>
+          <div class="sec-title">Suivi mensuel</div>
+          <div class="sec-sub">Performance de Mai 2026</div>
+        </div>
+      </div>
+
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="metric-val">3</div>
+          <div class="metric-label">Posts publiés</div>
+          <div class="metric-delta">+3 ce mois</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">847</div>
+          <div class="metric-label">Vues organiques</div>
+          <div class="metric-delta">Nouveau</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">4.8</div>
+          <div class="metric-label">Note Google</div>
+          <div class="metric-delta">Stable</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">12</div>
+          <div class="metric-label">Avis Google</div>
+          <div class="metric-delta">+2 ce mois</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg>
+          Objectifs de visibilité
+        </div>
+        <div style="margin-top:4px;">
+          <div class="progress-item">
+            <div class="progress-item-label">Instagram</div>
+            <div class="progress-item-track"><div class="progress-item-fill" style="width:65%;"></div></div>
+            <div class="progress-item-pct">65%</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-item-label">Facebook</div>
+            <div class="progress-item-track"><div class="progress-item-fill" style="width:45%;"></div></div>
+            <div class="progress-item-pct">45%</div>
+          </div>
+          <div class="progress-item">
+            <div class="progress-item-label">Google</div>
+            <div class="progress-item-track"><div class="progress-item-fill" style="width:80%;"></div></div>
+            <div class="progress-item-pct">80%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Contacter DWT Digital
+        </div>
+        <div class="message-thread" id="msg-thread">
+          <div class="msg in">Bonjour Marc ! Votre espace client est prêt. N'hésitez pas à nous écrire ici.<span class="msg-time">DWT Digital</span></div>
+        </div>
+        <div class="msg-input-row">
+          <input class="msg-input" id="msg-input" placeholder="Votre message à l'équipe DWT..." onkeydown="if(event.key==='Enter')sendMessage()">
+          <button class="msg-send" onclick="sendMessage()">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Demander une modification</div>
-    <div class="modal-sub" id="modal-sub"></div>
-    <textarea class="modal-textarea" id="modal-text" placeholder="Décrivez précisément ce que vous souhaitez modifier..."></textarea>
-    <div id="modal-context-wrap" style="display:none;margin-bottom:12px">
-      <div style="font-size:12px;color:#666;margin-bottom:6px;font-weight:600">Données à intégrer (optionnel)</div>
-      <div style="font-size:11px;color:#999;margin-bottom:6px">Collez ici votre liste de produits, prix, horaires, textes... Notre IA les intégrera directement sur le site.</div>
-      <textarea class="modal-textarea" id="modal-context" placeholder="Ex: Fraise 3€, Chocolat 3.50€, Vanille 3€..." style="min-height:60px;font-size:12px"></textarea>
-    </div>
-    <div style="margin-bottom:10px">
-      <button onclick="document.getElementById('modal-context-wrap').style.display=document.getElementById('modal-context-wrap').style.display==='none'?'block':'none'" style="font-size:11px;color:#9B6DBF;background:none;border:1px dashed #9B6DBF;border-radius:7px;padding:5px 12px;cursor:pointer;width:100%">+ Ajouter des données (produits, prix, horaires...)</button>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-primary" style="flex:1" onclick="sendModification()">Envoyer — Notre IA applique la modif</button>
-      <button class="btn-outline" onclick="closeModal()">Annuler</button>
-    </div>
-  </div>
-</div>
+<div class="toast" id="toast"></div>
+
+<style>
+.plat-sel-card{padding:10px 8px;background:white;border:2px solid var(--border);border-radius:10px;cursor:pointer;transition:all .15s;text-align:center;}
+.plat-sel-card:hover{border-color:var(--v);background:rgba(79,15,92,0.04);}
+.plat-sel-card.selected{border-color:var(--v);background:rgba(79,15,92,0.07);}
+</style>
 
 <script>
-// ═════════════════════════════════════════
-// DWT Digital — Espace Client v3
-// Architecture simple et fiable
-// ═════════════════════════════════════════
-
-var CLIENT = {
-  name: 'Marc',
-  email: 'zimblobot@gmail.com',
-  commerce: 'Boucherie Zimblo',
-  notion_id: 'zimblo-notion-001'
-};
+var CLIENT = { name:'Marc', email:'zimblobot@gmail.com', commerce:'Boucherie Zimblo', notion_id:'zimblo-notion-001' };
 var WH_NOTIFY  = 'https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh';
 var WH_POSTGEN = 'https://hook.eu1.make.com/xsksxx8k04y6gd9lnhvc3nh95jeijo8c';
 var WH_EMAIL   = 'https://hook.eu1.make.com/e29w7hvifw2xtua2d9emsnrll9cnmrgd';
 var CEO_EMAIL  = 'darellwilliampro1@gmail.com';
-var STORAGE_KEY = 'dwt_zimblo_v1';
-var STEPS = ['Plateformes','Identité visuelle','Publications','Site vitrine','Réseaux sociaux','Suivi mensuel'];
-var STEP_PCTS = [0, 17, 33, 50, 67, 83, 100];
+var WH_MODIF   = 'https://hook.eu1.make.com/r8kghl6dxv65r1xt0yic862e4x7dff8h';
+var STORAGE_KEY = 'dwt_zimblo_v2';
 
 var PLATFORMS = {
   instagram: { name:'Instagram', color:'linear-gradient(135deg,#f09433,#dc2743,#bc1888)' },
@@ -627,411 +668,352 @@ var PLATFORMS = {
 
 var POSTS = {
   instagram: { text:'Boucherie Zimblo — 3 générations de passion ! Marc sélectionne chaque pièce auprès d\'éleveurs français partenaires. Maturation maîtrisée, découpe sur mesure.', tags:['#BoucherieZimblo','#Viande','#Paris15','#BoucherieArtisanale'], timing:'Vendredi 18h30', img:'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=480&q=80' },
-  facebook:  { text:'Ce week-end, notre plateau BBQ maison est disponible ! Merguez artisanales, brochettes marinées, côtes d\'agneau. Commandez avant samedi midi — livraison ou retrait boutique.', tags:['#BBQ','#BoucherieZimblo','#Paris15'], timing:'Mercredi 12h00', img:'https://images.unsplash.com/photo-1529694157872-4e0c0f3b238b?auto=format&fit=crop&w=480&q=80' },
-  tiktok:    { text:'Dans les coulisses de Boucherie Zimblo ! Marc vous montre comment maturer une côte de bœuf 45 jours. Le secret d\'une viande d\'exception.', tags:['#Boucherie','#MaturationBoeuf','#BoucherieZimblo'], timing:'Vendredi 19h00', img:'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=480&q=80' },
-  linkedin:  { text:'Boucherie Zimblo propose des plateaux repas sur mesure pour vos événements d\'entreprise. Qualité artisanale, livraison au bureau. Idéal pour vos séminaires et déjeuners pros.', tags:['#CateringParis','#BoucherieZimblo','#EvenementEntreprise'], timing:'Mardi 9h00', img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=480&q=80' },
-  gmb:       { text:'Notre côte de bœuf maturée 45 jours est disponible ce week-end. Quantités limitées. Réservez votre pièce par téléphone : 01 42 30 56 78. Elevage Charolais français.', tags:[], timing:'Vendredi 9h00', img:'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=480&q=80' },
-  pinterest: { text:'Les plus belles pièces de boucherie — côte de bœuf maturée, gigot d\'agneau, plateau BBQ. L\'artisanat boucher selon Marc Zimblo, Paris 15e depuis 1971.', tags:['#ViandeDException','#BoucherieArtisanale'], timing:'Samedi 10h00', img:'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=480&q=80' }
+  facebook:  { text:'Ce week-end, notre plateau BBQ maison est disponible ! Commandez avant samedi midi — livraison ou retrait boutique.', tags:['#BBQ','#BoucherieZimblo','#Paris15'], timing:'Mercredi 12h00', img:'https://images.unsplash.com/photo-1529694157872-4e0c0f3b238b?auto=format&fit=crop&w=480&q=80' },
+  tiktok:    { text:'Dans les coulisses de Boucherie Zimblo ! Marc vous montre comment maturer une côte de boeuf 45 jours. Le secret d\'une viande d\'exception.', tags:['#Boucherie','#MaturationBoeuf','#BoucherieZimblo'], timing:'Vendredi 19h00', img:'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=480&q=80' },
+  linkedin:  { text:'Boucherie Zimblo propose des plateaux repas sur mesure pour vos événements d\'entreprise. Qualité artisanale, livraison au bureau.', tags:['#CateringParis','#BoucherieZimblo'], timing:'Mardi 9h00', img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=480&q=80' },
+  gmb:       { text:'Notre côte de boeuf maturée 45 jours est disponible ce week-end. Quantités limitées. Réservez votre pièce par téléphone : 01 42 30 56 78.', tags:[], timing:'Vendredi 9h00', img:'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=480&q=80' },
+  pinterest: { text:'Les plus belles pièces de boucherie — côte de boeuf maturée, plateau BBQ. L\'artisanat boucher selon Marc Zimblo, Paris 15e depuis 1971.', tags:['#ViandeDException','#BoucherieArtisanale'], timing:'Samedi 10h00', img:'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=480&q=80' }
 };
 
-// ── État ──
-var S = { step:1, max:1, platforms:[], identity:false, posts_ok:[], connected:[] };
+var STEPS_INFO = [
+  { id:'platforms', label:'Plateformes', desc:'Choisir vos réseaux' },
+  { id:'identity',  label:'Identité visuelle', desc:'Définir votre charte' },
+  { id:'posts',     label:'Publications', desc:'Valider vos premiers posts' },
+  { id:'site',      label:'Site vitrine', desc:'Personnaliser votre site' },
+  { id:'connect',   label:'Réseaux connectés', desc:'Accès aux comptes' },
+  { id:'suivi',     label:'Suivi mensuel', desc:'Tableau de bord activé' }
+];
+
+// STATE
+var S = { platforms:[], posts_ok:[], connected:[], identity:false, modifs:[], msgs:[] };
 
 function loadState() {
   try {
-    var saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      var parsed = JSON.parse(saved);
-      S.step = parsed.step || 1;
-      S.max = parsed.max || 1;
-      S.platforms = parsed.platforms || [];
-      S.identity = parsed.identity || false;
-      S.posts_ok = parsed.posts_ok || [];
-      S.connected = parsed.connected || [];
+    var d = localStorage.getItem(STORAGE_KEY);
+    if (d) {
+      var p = JSON.parse(d);
+      S.platforms = p.platforms || [];
+      S.posts_ok  = p.posts_ok  || [];
+      S.connected = p.connected || [];
+      S.identity  = p.identity  || false;
+      S.modifs    = p.modifs    || [];
+      S.msgs      = p.msgs      || [];
     }
-  } catch(e) { console.log('State load error', e); }
+  } catch(e){}
 }
 
 function saveState() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(S)); } catch(e) {}
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(S)); } catch(e){}
 }
 
-// ── Navigation ──
-function goTo(n) {
-  n = parseInt(n);
-  if (n < 1 || n > 6) return; // navigation libre, pas de verrou
-
-  // Masquer tous les steps
-  for (var i = 1; i <= 6; i++) {
-    var el = document.getElementById('step-' + i);
-    if (el) el.className = 'step';
-  }
-  // Afficher le step actif
-  var active = document.getElementById('step-' + n);
-  if (active) active.className = 'step active';
-
-  S.step = n;
-  saveState();
-
-  updateProgress(n);
-  updateSidebar(n);
-  updateBottomNav(n);
-
-  // Rendu spécifique
-  if (n === 2) renderMockups();
-  if (n === 3) renderPosts();
-  if (n === 5) renderConnect();
-
-  window.scrollTo(0, 0);
+function calcPct() {
+  var n = 0;
+  if (S.platforms.length > 0) n++;
+  if (S.identity) n++;
+  if (S.posts_ok.length > 0) n++;
+  n++; // site always created
+  if (S.connected.length > 0) n++;
+  if (n >= 4) n++;
+  return Math.round((n / 6) * 100);
 }
 
-function unlock(n) {
-  if (n > S.max) { S.max = n; saveState(); }
-}
-
-// ── Progress bar ──
-function updateProgress(n) {
-  var pct = STEP_PCTS[n] || 0;
+function updateProgress() {
+  var pct = calcPct();
+  var step = Math.max(1, Math.min(6, Math.floor(pct / 17) + 1));
   document.getElementById('prog-fill').style.width = pct + '%';
   document.getElementById('prog-pct').textContent = pct + '%';
-  document.getElementById('prog-label').textContent = 'Étape ' + n + '/6 — ' + (STEPS[n-1] || '');
+  document.getElementById('prog-label').textContent = 'Étape ' + step + '/6';
+  document.getElementById('stat-pct').textContent = pct + '%';
 }
 
-// ── Sidebar (desktop) ──
-function updateSidebar(active) {
-  var sb = document.getElementById('sidebar');
-  if (!sb) return;
-  var html = '<p class="sidebar-label">Votre parcours</p>';
-  for (var i = 1; i <= 6; i++) {
-    var isDone = i < active;
-    var isActive = i === active;
-    var isLocked = i > S.max;
-    var cls = 'sb-item' + (isActive ? ' active' : '') + (isLocked ? ' locked' : '');
-    var dotCls = isLocked ? 'sb-dot dot-lock' : isDone ? 'sb-dot dot-done' : isActive ? 'sb-dot dot-active' : 'sb-dot dot-lock';
-    var dotTxt = isDone ? '✓' : i;
-    var subCls = 'sb-sub' + (isDone ? ' done' : isActive ? ' active' : '');
-    var subTxt = isDone ? 'Terminé' : isActive ? 'En cours' : isLocked ? 'Après étape '+(i-1) : 'À venir';
-    html += '<button class="' + cls + '" onclick="goTo(' + i + ')">'
-      + '<span class="' + dotCls + '">' + dotTxt + '</span>'
-      + '<span><div class="sb-text">' + STEPS[i-1] + '</div><div class="' + subCls + '">' + subTxt + '</div></span>'
-      + '</button>';
-  }
-  html += '<div class="sidebar-help"><p>Notre équipe vous accompagne</p><a href="/rappel.html?name=Marc&email=zimblobot@gmail.com&commerce=Boucherie+Zimblo">Demander un rappel</a></div>';
-  sb.innerHTML = html;
+// ── TABS ──
+var currentTab = 'dashboard';
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  currentTab = id;
+  if (id === 'posts') renderPosts();
+  if (id === 'identity') renderIdentityPlats();
+  if (id === 'connect') renderConnect();
 }
 
-// ── Bottom nav (mobile) ──
-function updateBottomNav(active) {
-  var bn = document.getElementById('bottom-nav');
-  if (!bn) return;
-  var html = '<div class="bottom-nav-inner">';
-  var labels = ['Plateformes','Identité','Posts','Site','Réseaux','Suivi'];
-  for (var i = 1; i <= 6; i++) {
-    var isDone = i < active;
-    var isActive = i === active;
-    var isLocked = i > S.max;
-    var itemCls = 'bn-item' + (isActive ? ' active' : '') + (isLocked ? ' locked' : '');
-    var dotCls = isLocked ? 'bn-dot bn-dot-lock' : isDone ? 'bn-dot bn-dot-done' : isActive ? 'bn-dot bn-dot-active' : 'bn-dot bn-dot-lock';
-    html += '<div class="' + itemCls + '" onclick="goTo(' + i + ')">'
-      + '<span class="' + dotCls + '">' + (isDone ? '✓' : i) + '</span>'
-      + '<span class="bn-label">' + labels[i-1] + '</span></div>';
-  }
-  html += '</div>';
-  bn.innerHTML = html;
-}
-
-// ── Plateformes ──
-function initPlatforms() {
-  var cards = document.querySelectorAll('.plat');
-  for (var i = 0; i < cards.length; i++) {
-    (function(card) {
-      // Marquer les sélectionnées au chargement
-      if (S.platforms.indexOf(card.dataset.id) >= 0) card.classList.add('sel');
-      // Event listener
-      card.addEventListener('click', function() {
-        var id = card.dataset.id;
-        card.classList.toggle('sel');
-        var idx = S.platforms.indexOf(id);
-        if (card.classList.contains('sel')) {
-          if (idx < 0) S.platforms.push(id);
-        } else {
-          if (idx >= 0) S.platforms.splice(idx, 1);
-        }
-        saveState();
-        updatePlatCount();
-      });
-    })(cards[i]);
-  }
-  updatePlatCount();
-}
-
-function updatePlatCount() {
-  var n = S.platforms.length;
-  var el = document.getElementById('plat-count');
-  var btn = document.getElementById('btn-validate-plat');
-  if (n === 0) {
-    el.innerHTML = 'Aucune sélectionnée — choisissez au moins une';
-    if (btn) btn.disabled = true;
-  } else {
-    var names = S.platforms.map(function(id) { return (PLATFORMS[id] && PLATFORMS[id].name) || id; }).join(', ');
-    el.innerHTML = '<strong>' + n + '</strong> sélectionnée' + (n > 1 ? 's' : '') + ' : ' + names;
-    if (btn) btn.disabled = false;
-  }
-}
-
-function validatePlatforms() {
-  if (S.platforms.length === 0) return;
-  unlock(2);
-  var names = S.platforms.map(function(id) { return (PLATFORMS[id] && PLATFORMS[id].name) || id; }).join(', ');
-  notify('plateforme', 'Plateformes choisies par ' + CLIENT.name + ' : ' + names);
-  goTo(2);
-}
-
-// ── Identité visuelle ──
-function renderMockups() {
-  var container = document.getElementById('mockup-zone');
-  if (!container) return;
-  container.innerHTML = '';
-  var img1 = 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=480&q=80';
-  var img2 = 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=480&q=80';
-  var mockupFns = {
-    instagram: function() {
-      return '<div class="mock-ig"><div class="mock-head"><div class="mock-av"><img src="'+img1+'" alt=""></div><span class="mock-un">boucheriezimblo</span></div><div class="mock-img"><img src="'+img1+'" alt=""></div><div class="mock-cap"><strong>boucheriezimblo</strong> La viande d\'exception depuis 3 générations</div></div>';
-    },
-    facebook: function() {
-      return '<div class="mock-fb"><div class="mock-fb-head"><div class="mock-fb-av" style="background:#B5121B">Z</div><div><div class="mock-fb-name">Boucherie Zimblo</div><div class="mock-fb-time">Il y a 2h · Paris 15e</div></div></div><div class="mock-fb-text">Plateau BBQ maison ce week-end ! <strong>Boucherie Zimblo</strong></div><div class="mock-fb-img"><img src="'+img2+'" alt=""></div></div>';
-    },
-    tiktok: function() {
-      return '<div class="mock-tiktok"><div class="mock-tt-img"><img src="'+img1+'" alt=""></div><div class="mock-tt-over"><div class="mock-tt-user">@boucherie_zimblo</div><div class="mock-tt-cap">Maturation 45 jours #boucherie #viande</div></div></div>';
-    },
-    gmb: function() {
-      return '<div class="mock-gmb"><div class="mock-gmb-head">Google · Boucherie Zimblo</div><div class="mock-gmb-img"><img src="'+img2+'" alt=""></div><div class="mock-gmb-body"><div class="mock-gmb-biz">Boucherie Zimblo</div><div class="mock-gmb-cat">★★★★★ · Boucherie</div><div class="mock-gmb-txt">Viandes d\'exception depuis 1971 !</div></div></div>';
-    },
-    linkedin: function() {
-      return '<div class="mock-linkedin"><div class="mock-li-head"><div class="mock-li-av"><img src="'+img2+'" alt=""></div><div><div class="mock-li-info">Boucherie Zimblo</div><div class="mock-li-sub">Boucherie · Paris 15e</div></div></div><div class="mock-li-text">Plateaux repas premium pour vos événements d\'entreprise.</div><div class="mock-li-img"><img src="'+img1+'" alt=""></div></div>';
-    },
-    pinterest: function() {
-      return '<div class="mock-pin"><div class="mock-pin-img"><img src="'+img1+'" alt=""></div><div class="mock-pin-cap">Boucherie Zimblo — Paris 15e</div></div>';
-    }
-  };
-  S.platforms.forEach(function(id) {
-    if (!mockupFns[id]) return;
-    var plat = PLATFORMS[id];
-    var wrap = document.createElement('div');
-    wrap.className = 'mockup-item';
-    var colorStyle = plat.color.indexOf('gradient') >= 0 ? 'background:' + plat.color : 'background:' + plat.color;
-    wrap.innerHTML = '<div class="mockup-label"><span style="width:14px;height:14px;border-radius:4px;display:inline-block;' + colorStyle + '"></span>' + plat.name + '</div>' + mockupFns[id]();
-    container.appendChild(wrap);
+function goToTab(id) {
+  var btn = Array.from(document.querySelectorAll('.tab-btn')).find(function(b){
+    return b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'");
   });
-  // Restaurer état si déjà validé
-  if (S.identity) {
-    document.getElementById('identity-zone').style.display = 'none';
-    document.getElementById('identity-confirmed').style.display = 'block';
-  }
+  switchTab(id, btn);
 }
 
-function validateIdentity() {
-  S.identity = true;
-  unlock(3);
-  saveState();
-  document.getElementById('identity-zone').style.display = 'none';
-  document.getElementById('identity-confirmed').style.display = 'block';
-  var platNames = S.platforms.map(function(id) { return (PLATFORMS[id] && PLATFORMS[id].name) || id; }).join(', ');
-  notify('validation', 'IDENTITÉ VISUELLE validée — Palette rouge/ivoire/or — Plateformes : ' + platNames);
-  // Déclencher génération posts
-  sendWebhook(WH_POSTGEN, {
-    client_name: CLIENT.name, client_email: CLIENT.email, commerce_name: CLIENT.commerce,
-    platforms: platNames, notion_page_id: CLIENT.notion_id,
-    identity: 'Palette rouge/ivoire/or | Playfair Display | Tagline: La viande d\'exception depuis 3 générations'
+// ── TIMELINE ──
+function renderTimeline() {
+  var steps = [
+    { label:'Plateformes', done: S.platforms.length > 0, active: S.platforms.length === 0, tab:'identity' },
+    { label:'Identité visuelle', done: S.identity, active: S.platforms.length > 0 && !S.identity, tab:'identity' },
+    { label:'Publications', done: S.posts_ok.length > 0, active: S.identity && S.posts_ok.length === 0, tab:'posts' },
+    { label:'Site vitrine', done: true, active: false, tab:'site' },
+    { label:'Connexion réseaux', done: S.connected.length > 0, active: S.posts_ok.length > 0 && S.connected.length === 0, tab:'connect' },
+    { label:'Suivi mensuel', done: calcPct() >= 83, active: false, tab:'suivi' }
+  ];
+  var html = '';
+  steps.forEach(function(s, i) {
+    var cls = s.done ? 'done' : (s.active ? 'active' : 'pending');
+    var badgeCls = s.done ? 'done' : (s.active ? 'active' : 'pending');
+    var badgeTxt = s.done ? 'Terminé' : (s.active ? 'En cours' : 'À venir');
+    html += '<div class="tl-item">';
+    html += '<div class="tl-dot ' + cls + '"></div>';
+    html += '<div class="tl-title">' + s.label + ' <span class="tl-badge ' + badgeCls + '">' + badgeTxt + '</span></div>';
+    html += '</div>';
   });
+  document.getElementById('timeline').innerHTML = html;
 }
 
-// ── Publications ──
+// ── POSTS ──
 function renderPosts() {
-  var zone = document.getElementById('posts-zone');
-  if (!zone) return;
-  zone.innerHTML = '';
-  S.platforms.forEach(function(platId, idx) {
-    var plat = PLATFORMS[platId];
-    var post = POSTS[platId];
-    if (!post) return;
-    var isOk = S.posts_ok.indexOf(platId) >= 0;
-    var isFirst = idx === 0;
-    var badgeHtml = (isFirst && !isOk)
-      ? '<span class="badge b-pend">En attente</span>'
-      : isOk ? '<span class="badge b-ok">Validé</span>'
-      : '<span class="badge b-plan">Planifié</span>';
-    var color = plat.color.indexOf('gradient') >= 0 ? plat.color : plat.color;
-    var tagsHtml = post.tags.map(function(t) { return '<span class="tag">' + t + '</span>'; }).join('');
-    var actionsHtml = (isFirst && !isOk)
-      ? '<button class="btn-success" onclick="validatePost(\'' + platId + '\',this)">Valider et programmer</button><button class="btn-outline" onclick="openModal(\'' + plat.name + '\')">Modifier</button>'
-      : isOk ? '<span style="font-size:12px;color:var(--tm)">Publication approuvée et programmée.</span>'
-      : '<span style="font-size:12px;color:var(--tm)">Programmée automatiquement.</span>';
-
-    var card = document.createElement('div');
-    card.className = 'post-card';
-    card.id = 'pc-' + platId;
-    card.innerHTML = '<div class="post-head"><span class="post-plat"><span class="post-plat-dot" style="background:' + color + '"></span>' + plat.name + ' — Semaine 21</span><span id="badge-' + platId + '">' + badgeHtml + '</span></div>'
-      + '<div class="post-body-grid">'
-      + '<div class="post-preview"><div class="field-label">Aperçu</div><div style="border:1px solid #E5E5E5;border-radius:7px;overflow:hidden"><div style="background:' + color + ';padding:4px 7px"><span style="color:white;font-size:9px;font-weight:700">' + plat.name + '</span></div><img src="' + post.img + '" style="width:100%;height:90px;object-fit:cover;display:block" alt=""><div style="padding:5px 7px;font-size:9px;color:#333;line-height:1.3">' + post.text.substring(0, 60) + '...</div></div></div>'
-      + '<div class="post-content"><div class="field-label">Texte</div><div class="post-text">' + post.text + '</div>' + (tagsHtml ? '<div class="field-label">Hashtags</div><div class="tags">' + tagsHtml + '</div>' : '') + '<div class="timing">Meilleur horaire : ' + post.timing + '</div></div>'
-      + '</div>'
-      + '<div class="post-actions" id="pa-' + platId + '">' + actionsHtml + '</div>';
-    zone.appendChild(card);
-  });
-}
-
-function validatePost(platId, btn) {
-  btn.textContent = 'Validation envoyée !';
-  btn.style.background = '#2D7A0A';
-  btn.disabled = true;
-  var badge = document.getElementById('badge-' + platId);
-  if (badge) badge.innerHTML = '<span class="badge b-ok">Validé</span>';
-  var actions = document.getElementById('pa-' + platId);
-  if (actions) actions.innerHTML = '<span style="font-size:12px;color:var(--tm)">Publication approuvée et programmée.</span>';
-  if (S.posts_ok.indexOf(platId) < 0) S.posts_ok.push(platId);
-  unlock(4);
-  saveState();
-  notify('validation', 'Post ' + ((PLATFORMS[platId] && PLATFORMS[platId].name) || platId) + ' — Approuvé par Marc');
-}
-
-// ── Connexion réseaux ──
-function renderConnect() {
-  var zone = document.getElementById('connect-zone');
-  if (!zone) return;
-  zone.innerHTML = '';
-  if (S.platforms.length <= 2) zone.style.gridTemplateColumns = '1fr 1fr';
-  else zone.style.gridTemplateColumns = 'repeat(3,1fr)';
-  S.platforms.forEach(function(id) {
-    var plat = PLATFORMS[id];
-    var isConnected = S.connected.indexOf(id) >= 0;
-    var color = plat.color.indexOf('gradient') >= 0 ? plat.color : plat.color;
-    var card = document.createElement('div');
-    card.className = 'connect-card';
-    card.innerHTML = '<div class="connect-icon" style="background:' + color + '"></div>'
-      + '<div class="connect-name">' + plat.name + '</div>'
-      + '<div class="connect-status" style="color:' + (isConnected ? '#2D7A0A' : '#EF4444') + '">' + (isConnected ? 'Connecté ✓' : 'Non connecté') + '</div>'
-      + '<button class="connect-btn ' + (isConnected ? 'connect-btn-ok' : 'connect-btn-v') + '" id="cnx-' + id + '" ' + (isConnected ? 'disabled' : '') + ' onclick="connectPlat(\'' + id + '\')">' + (isConnected ? 'Actif' : 'Connecter') + '</button>';
-    zone.appendChild(card);
-  });
-}
-
-function connectPlat(id) {
-  var plat = PLATFORMS[id];
-  // PAS de confirm() - bloqué par certains navigateurs sur GitHub Pages
-  if (S.connected.indexOf(id) < 0) S.connected.push(id);
-  saveState();
-  unlock(6);
-  renderConnect();
-  notify('connexion', plat.name + ' connecte');
-}
-
-// ── Modal modification ──
-var modalContext = '';
-function openModal(ctx) {
-  modalContext = ctx;
-  document.getElementById('modal-sub').textContent = 'Concernant : ' + ctx;
-  document.getElementById('modal-text').value = '';
-  if (document.getElementById('modal-context')) document.getElementById('modal-context').value = '';
-  if (document.getElementById('modal-context-wrap')) document.getElementById('modal-context-wrap').style.display = 'none';
-  document.getElementById('modal-overlay').classList.add('open');
-  setTimeout(function() { document.getElementById('modal-text').focus(); }, 100);
-}
-function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
-
-function showHistory() {
-  var demandes = JSON.parse(localStorage.getItem('dwt_zimblo_demandes_v1') || '[]');
-  var list = document.getElementById('history-list');
-  if (demandes.length === 0) {
-    list.innerHTML = '<div style="text-align:center;color:#999;padding:30px;font-size:13px">Aucune demande envoyée pour le moment.</div>';
-  } else {
-    var html = '';
-    demandes.forEach(function(d) {
-      var statusColor = d.statut === 'traite' || d.statut === 'applique' ? '#22c55e' : '#f59e0b';
-      var statusLabel = d.statut === 'traite' || d.statut === 'applique' ? 'Appliqué' : 'En cours';
-      html += '<div style="border:1px solid #eee;border-radius:10px;padding:12px;margin-bottom:8px">';
-      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">';
-      html += '<span style="font-size:12px;font-weight:700;color:#333">' + (d.sujet||'Modification') + '</span>';
-      html += '<span style="font-size:10px;font-weight:600;color:' + statusColor + '">' + statusLabel + '</span>';
-      html += '</div>';
-      html += '<div style="font-size:11px;color:#666;margin-bottom:4px">' + (d.date||'') + '</div>';
-      html += '<div style="font-size:12px;color:#444;background:#f9f9f9;padding:8px;border-radius:6px">' + (d.message||'') + '</div>';
-      if (d.context_data) {
-        html += '<div style="font-size:11px;color:#888;margin-top:6px">' + d.context_data + '</div>';
-      }
-      html += '</div>';
-    });
-    list.innerHTML = html;
+  var grid = document.getElementById('posts-grid');
+  var empty = document.getElementById('posts-empty');
+  if (S.platforms.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
   }
-  document.getElementById('history-overlay').classList.add('open');
-}
-function sendModification() {
-  var txt = document.getElementById('modal-text').value.trim();
-  if (!txt) { alert('Décrivez la modification souhaitée'); return; }
-  var sujet = modalContext || 'Modification site';
-  var now = new Date();
-  var dateStr = now.toLocaleDateString('fr-FR') + ' a ' + now.toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
-  console.log('[W-Mod] === DEBUT PIPELINE MODIFICATION ===');
-  console.log('[W-Mod] Client:', CLIENT.commerce, '|', CLIENT.email);
-  console.log('[W-Mod] Sujet:', sujet);
-  console.log('[W-Mod] Message:', txt);
-  closeModal();
-
-  // 1) Pipeline IA : Make → Claude lit HTML → applique modif → redéploie GitHub
-  var ctxData = document.getElementById('modal-context') ? document.getElementById('modal-context').value.trim() : '';
-  var WH_MODIF = 'https://hook.eu1.make.com/r8kghl6dxv65r1xt0yic862e4x7dff8h';
-  var payload = {
-    client      : CLIENT.name,
-    commerce    : CLIENT.commerce,
-    email       : CLIENT.email,
-    sujet       : sujet,
-    message     : txt,
-    site_slug   : 'Zimblo',
-    site_file   : 'index.html',
-    context_data: ctxData,
-    repo        : 'dwtdigital-clients/dwtdigital-clients.github.io',
-    full_path   : 'Zimblo/index.html'
-  };
-  console.log('[W-Mod] Payload webhook:', JSON.stringify(payload));
-  notify('info', 'Demande en cours de traitement par notre IA...');
-  sendWebhook(WH_MODIF, payload,
-    function(resp) {
-      console.log('[W-Mod] Webhook Make OK:', resp);
-      notify('validation', 'Demande reçue par Make. Modification en cours (1-2 min).');
-    },
-    function(err) {
-      console.error('[W-Mod] Webhook ECHEC:', err);
-      notify('info', 'Erreur réseau. Vérifiez la console F12 et contactez DWT Digital.');
+  empty.style.display = 'none';
+  var html = '';
+  S.platforms.forEach(function(id) {
+    var p = POSTS[id];
+    var plat = PLATFORMS[id];
+    if (!p) return;
+    var approved = S.posts_ok.indexOf(id) !== -1;
+    html += '<div class="post-card">';
+    html += '<div class="post-header">';
+    html += '<div class="post-plat-icon" style="background:' + plat.color + '"></div>';
+    html += '<div><div class="post-plat-name">' + plat.name + '</div>';
+    html += '<div class="post-timing">' + p.timing + '</div></div></div>';
+    html += '<img class="post-img" src="' + p.img + '" alt="' + plat.name + '">';
+    html += '<div class="post-body">';
+    html += '<div class="post-text">' + p.text + '</div>';
+    if (p.tags.length) {
+      html += '<div class="post-tags">';
+      p.tags.forEach(function(t){ html += '<span class="post-tag">' + t + '</span>'; });
+      html += '</div>';
     }
-  );
-
-  // 2) Email CEO (notification parallèle)
-  var emailBody = 'MODIFICATION IA EN COURS\n\n'
-    + 'Client : ' + CLIENT.name + ' (' + CLIENT.commerce + ')\n'
-    + 'Sujet : ' + modalContext + '\n'
-    + 'Message : ' + txt + '\n'
-    + 'Date : ' + dateStr + '\n\n'
-    + 'Claude applique la modification automatiquement.\n'
-    + 'Site : https://dwtdigital-clients.github.io/Zimblo/';
-  sendWebhook(WH_EMAIL, {
-    client_email   : CEO_EMAIL,
-    client_name    : 'DWT Digital',
-    commerce_name  : CLIENT.commerce + ' — Modif IA',
-    site_url       : 'https://dwtdigital-clients.github.io/Zimblo/',
-    texte_post     : emailBody
+    html += '<div class="post-actions">';
+    if (approved) {
+      html += '<button class="post-btn approved" disabled><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg> Approuvé</button>';
+    } else {
+      html += '<button class="post-btn approve" onclick="approvePost(\'' + id + '\')"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg> Approuver</button>';
+      html += '<button class="post-btn modify" onclick="requestPostModif(\'' + id + '\')"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Modifier</button>';
+    }
+    html += '</div></div></div>';
   });
-
-  // 3) Sauvegarder localement
-  var demandes = JSON.parse(localStorage.getItem('dwt_zimblo_demandes_v1') || '[]');
-  demandes.unshift({
-    id: Date.now(), date: dateStr, sujet: modalContext,
-    message: txt, client: CLIENT.name, commerce: CLIENT.commerce,
-    email: CLIENT.email, context_data: ctxData, statut: 'applique'
-  });
-  localStorage.setItem('dwt_zimblo_demandes_v1', JSON.stringify(demandes));
+  grid.innerHTML = html;
+  // Update badge
+  var pending = S.platforms.length - S.posts_ok.length;
+  var badge = document.getElementById('badge-posts');
+  if (pending > 0) { badge.textContent = pending; badge.style.display = ''; }
+  else { badge.style.display = 'none'; }
 }
 
-// ── Webhooks ──
+function approvePost(id) {
+  if (S.posts_ok.indexOf(id) === -1) S.posts_ok.push(id);
+  saveState();
+  renderPosts();
+  renderTimeline();
+  updateProgress();
+  showToast('Post ' + PLATFORMS[id].name + ' approuvé !', 'success');
+  notify('validation', 'Post ' + PLATFORMS[id].name + ' approuvé par Marc');
+  document.getElementById('stat-posts').textContent = S.posts_ok.length;
+}
+
+function requestPostModif(id) {
+  var txt = prompt('Quelle modification souhaitez-vous pour le post ' + PLATFORMS[id].name + ' ?');
+  if (!txt) return;
+  showToast('Demande envoyée pour le post ' + PLATFORMS[id].name, 'success');
+  notify('modification', 'Modif post ' + PLATFORMS[id].name + ' : ' + txt);
+}
+
+function generatePosts() {
+  showToast('Génération de nouveaux posts en cours...', '');
+  sendWebhook(WH_POSTGEN, { client: CLIENT.name, commerce: CLIENT.commerce, platforms: S.platforms });
+}
+
+// ── IDENTITY PLATFORMS ──
+function renderIdentityPlats() {
+  var saved = S.platforms;
+  document.querySelectorAll('#plat-grid-identity .plat-sel-card').forEach(function(card) {
+    var id = card.getAttribute('data-id');
+    if (saved.indexOf(id) !== -1) card.classList.add('selected');
+    else card.classList.remove('selected');
+  });
+  renderIdentityChips();
+}
+
+function togglePlatIdentity(card) {
+  card.classList.toggle('selected');
+}
+
+function savePlatforms() {
+  var selected = [];
+  document.querySelectorAll('#plat-grid-identity .plat-sel-card.selected').forEach(function(c){
+    selected.push(c.getAttribute('data-id'));
+  });
+  if (selected.length === 0) { showToast('Sélectionnez au moins une plateforme', 'error'); return; }
+  S.platforms = selected;
+  S.identity = true;
+  saveState();
+  renderIdentityChips();
+  renderPosts();
+  renderTimeline();
+  updateProgress();
+  showToast('Plateformes enregistrées !', 'success');
+  notify('validation', 'Plateformes choisies : ' + selected.join(', '));
+}
+
+function renderIdentityChips() {
+  var el = document.getElementById('identity-plats');
+  if (!S.platforms.length) {
+    el.innerHTML = '<div class="empty-sub" style="padding:8px 0;">Aucune plateforme sélectionnée — <button onclick="goToTab(\'identity\')" style="background:none;border:none;color:var(--v);font-weight:700;cursor:pointer;font-family:Poppins,sans-serif;font-size:11px;">configurer</button></div>';
+    return;
+  }
+  var html = '';
+  S.platforms.forEach(function(id) {
+    var p = PLATFORMS[id];
+    html += '<div class="plat-chip"><div style="width:10px;height:10px;border-radius:50%;background:' + p.color + ';"></div>' + p.name + '</div>';
+  });
+  el.innerHTML = html;
+}
+
+// ── CONNEXIONS ──
+function renderConnect() {
+  var platforms = S.platforms.length ? S.platforms : ['instagram','facebook','gmb'];
+  var guides = {
+    instagram: 'Connectez Instagram via Meta Business Suite',
+    facebook: 'Connectez Facebook via Meta Business Suite',
+    gmb: 'Connectez Google Business Profile via le compte Google',
+    tiktok: 'Connectez TikTok via TikTok Business',
+    linkedin: 'Connectez LinkedIn via l\'accès administrateur de la page',
+    pinterest: 'Connectez Pinterest Business via l\'accès au compte'
+  };
+  var html = '';
+  platforms.forEach(function(id) {
+    var plat = PLATFORMS[id];
+    var connected = S.connected.indexOf(id) !== -1;
+    html += '<div class="connect-item">';
+    html += '<div class="connect-icon" style="background:' + plat.color + '">';
+    html += '<svg viewBox="0 0 24 24" width="18" height="18" fill="white"><circle cx="12" cy="12" r="10"/></svg></div>';
+    html += '<div class="connect-info">';
+    html += '<div class="connect-name">' + plat.name + '</div>';
+    html += '<div class="connect-status ' + (connected ? 'connected' : 'pending') + '">';
+    html += connected ? 'Connecté' : 'En attente de connexion';
+    html += '</div></div>';
+    if (connected) {
+      html += '<button class="connect-btn done">Connecté</button>';
+    } else {
+      html += '<button class="connect-btn guide" onclick="markConnected(\'' + id + '\')">Connecter</button>';
+    }
+    html += '</div>';
+  });
+  document.getElementById('connect-list').innerHTML = html;
+}
+
+function markConnected(id) {
+  if (confirm('Confirmez-vous la connexion de ' + PLATFORMS[id].name + ' ?')) {
+    if (S.connected.indexOf(id) === -1) S.connected.push(id);
+    saveState();
+    renderConnect();
+    renderTimeline();
+    updateProgress();
+    showToast(PLATFORMS[id].name + ' connecté !', 'success');
+    notify('validation', PLATFORMS[id].name + ' connecté par Marc');
+  }
+}
+
+// ── SITE MODIFICATION ──
+function submitModification() {
+  var txt = document.getElementById('modif-text').value.trim();
+  var type = document.getElementById('modif-type').value;
+  if (!txt) { showToast('Décrivez la modification souhaitée', 'error'); return; }
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('fr-FR') + ' à ' + now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  var payload = {
+    client: CLIENT.name, commerce: CLIENT.commerce, email: CLIENT.email,
+    sujet: type, message: txt,
+    site_slug: 'Zimblo', site_file: 'index.html',
+    context_data: '',
+    repo: 'dwtdigital-clients/dwtdigital-clients.github.io',
+    full_path: 'Zimblo/index.html'
+  };
+  sendWebhook(WH_MODIF, payload,
+    function(){ showToast('Modification en cours — votre site sera mis à jour dans 1-2 min', 'success'); },
+    function(){ showToast('Demande envoyée. Traitement en cours...', ''); }
+  );
+  sendWebhook(WH_EMAIL, {
+    client_email: CEO_EMAIL, client_name: 'DWT Digital',
+    commerce_name: CLIENT.commerce + ' — Modif IA',
+    site_url: 'https://dwtdigital-clients.github.io/Zimblo/',
+    texte_post: 'MODIFICATION\nClient : ' + CLIENT.name + '\nType : ' + type + '\nMessage : ' + txt + '\nDate : ' + dateStr
+  });
+  S.modifs.unshift({ sujet: type, msg: txt, date: dateStr, status:'sent' });
+  saveState();
+  document.getElementById('modif-text').value = '';
+  renderModifHistory();
+}
+
+function renderModifHistory() {
+  if (!S.modifs.length) { document.getElementById('modif-history-card').style.display = 'none'; return; }
+  document.getElementById('modif-history-card').style.display = 'block';
+  var html = '';
+  S.modifs.slice(0,5).forEach(function(m) {
+    html += '<div class="modif-item">';
+    html += '<div class="modif-top"><div class="modif-sujet">' + m.sujet + '</div><div class="modif-date">' + m.date + '</div></div>';
+    html += '<div class="modif-msg">' + m.msg + '</div>';
+    html += '<div class="modif-status sent"><div class="modif-status-dot"></div>Envoyée</div>';
+    html += '</div>';
+  });
+  document.getElementById('modif-history').innerHTML = html;
+}
+
+// ── MESSAGES ──
+function sendMessage() {
+  var inp = document.getElementById('msg-input');
+  var txt = inp.value.trim();
+  if (!txt) return;
+  var now = new Date();
+  var timeStr = now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  S.msgs.push({ txt: txt, time: timeStr });
+  saveState();
+  inp.value = '';
+  renderMessages();
+  sendWebhook(WH_EMAIL, {
+    client_email: CEO_EMAIL, client_name: 'DWT Digital',
+    commerce_name: CLIENT.commerce + ' — Message',
+    site_url: '', texte_post: 'MESSAGE CLIENT\n' + CLIENT.name + ' : ' + txt
+  });
+  showToast('Message envoyé à DWT Digital', 'success');
+}
+
+function renderMessages() {
+  var thread = document.getElementById('msg-thread');
+  var base = '<div class="msg in">Bonjour Marc ! Votre espace client est prêt. N\'hésitez pas à nous écrire ici.<span class="msg-time">DWT Digital</span></div>';
+  var extra = '';
+  S.msgs.forEach(function(m) {
+    extra += '<div class="msg out">' + m.txt + '<span class="msg-time">' + m.time + '</span></div>';
+  });
+  thread.innerHTML = base + extra;
+  thread.scrollTop = thread.scrollHeight;
+}
+
+// ── TOAST ──
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type ? ' ' + type : '');
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+
+// ── NOTIFY ──
 function notify(action, detail) {
   sendWebhook(WH_NOTIFY, {
     client_name: CLIENT.name, client_email: CLIENT.email,
@@ -1039,71 +1021,32 @@ function notify(action, detail) {
   });
 }
 
+// ── WEBHOOK ──
 function sendWebhook(url, data, onSuccess, onError) {
-  var body = JSON.stringify(data);
-  console.log('[Webhook] Envoi vers:', url);
-  console.log('[Webhook] Payload:', JSON.stringify(data, null, 2));
-  // Make webhooks acceptent les requetes JSON cross-origin
-  fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: body
-  })
-  .then(function(resp) {
-    console.log('[Webhook] Statut HTTP:', resp.status);
-    return resp.text();
-  })
-  .then(function(txt) {
-    console.log('[Webhook] Reponse Make:', txt);
-    if (onSuccess) onSuccess(txt);
-  })
-  .catch(function(err) {
-    console.warn('[Webhook] Echec CORS, fallback no-cors...', err);
-    // Fallback no-cors: le navigateur envoie quand meme la requete
-    // Make la recoit mais on ne peut pas lire la reponse (comportement normal no-cors)
-    fetch(url, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: body
-    })
-    .then(function() {
-      console.log('[Webhook] Fallback no-cors envoye (reponse opaque - normal)');
-      if (onSuccess) onSuccess('sent-no-cors');
-    })
-    .catch(function(e) {
-      console.error('[Webhook] ECHEC TOTAL:', e);
-      if (onError) onError(e);
-    });
-  });
+  fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) })
+    .then(function(r){ return r.text(); })
+    .then(function(t){ if(onSuccess) onSuccess(t); })
+    .catch(function(e){ if(onError) onError(e); });
 }
 
-// ── Initialisation ──
+// ── INIT ──
 function init() {
   loadState();
-  // Débloquer toutes les étapes dès le début (navigation libre)
-  S.max = 6;
-  initPlatforms();
-
-  // Bouton valider plateformes
-  var btnPlat = document.getElementById('btn-validate-plat');
-  if (btnPlat) btnPlat.onclick = validatePlatforms;
-
-  // Modal — fermer en cliquant l'overlay
-  var overlay = document.getElementById('modal-overlay');
-  if (overlay) {
-    overlay.addEventListener('click', function(e) { if (e.target === overlay) closeModal(); });
+  updateProgress();
+  renderTimeline();
+  renderModifHistory();
+  renderMessages();
+  document.getElementById('stat-posts').textContent = S.posts_ok.length;
+  // Restore identity plat selection state visually
+  if (S.platforms.length > 0) {
+    document.querySelectorAll('#plat-grid-identity .plat-sel-card').forEach(function(card) {
+      if (S.platforms.indexOf(card.getAttribute('data-id')) !== -1) card.classList.add('selected');
+    });
+    renderIdentityChips();
   }
-  // Escape
-  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
-
-  // Aller à l'étape sauvegardée
-  goTo(S.step);
 }
 
-// Appel direct — script en bas du body, DOM déjà prêt
-init();
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
-
