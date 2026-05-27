@@ -272,15 +272,27 @@ select.fi { background: #1A0820; }
 
 <!-- MODAL AUDIT -->
 <div class="modal-ov" id="m-audit">
-  <div class="modal-box">
-    <div class="mh"><h3>Envoyer l'audit</h3><button class="mc" onclick="hideModal('m-audit')">x</button></div>
+  <div class="modal-box" style="max-width:600px">
+    <div class="mh"><h3>Audit IA — Envoyer</h3><button class="mc" onclick="hideModal('m-audit')">x</button></div>
     <div class="mb">
-      <div class="fg"><label>Email *</label><input id="a-em" class="fi" placeholder="client@email.fr"></div>
-      <div class="fg"><label>Prenom *</label><input id="a-nm" class="fi" placeholder="Marie"></div>
-      <div class="fg" style="margin-bottom:14px"><label>Commerce</label><input id="a-co" class="fi" placeholder="Boulangerie Martin"></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-g btn-lg" id="b-ab" onclick="sendAuditB()">Envoyer (Brevo)</button>
-        <button class="btn btn-b btn-lg" onclick="sendAuditGmail()">Gmail</button>
+      <div class="g2" style="margin-bottom:10px">
+        <div class="fg"><label>Prenom *</label><input id="a-nm" class="fi" placeholder="Marie"></div>
+        <div class="fg"><label>Email *</label><input id="a-em" class="fi" placeholder="client@email.fr"></div>
+      </div>
+      <div class="g2" style="margin-bottom:10px">
+        <div class="fg"><label>Commerce</label><input id="a-co" class="fi" placeholder="Boulangerie Martin"></div>
+        <div class="fg"><label>Secteur</label><input id="a-se" class="fi" placeholder="Boulangerie"></div>
+      </div>
+      <div class="fg" style="margin-bottom:10px"><label>Ville</label><input id="a-vi" class="fi" placeholder="Paris"></div>
+      <button class="btn btn-v btn-lg" id="b-gen" onclick="genAudit()" style="width:100%;margin-bottom:12px">Generer l'audit IA</button>
+      <div id="a-loading" style="display:none;text-align:center;color:rgba(239,222,201,0.5);font-size:12px;padding:10px">Claude genere l'audit...</div>
+      <div class="fg" id="a-result-wrap" style="display:none">
+        <label>Audit genere</label>
+        <textarea id="a-result" class="fi" style="min-height:200px;resize:vertical;font-size:11px;line-height:1.5"></textarea>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+        <button class="btn btn-b btn-lg" onclick="sendAuditGmail()" style="flex:1">Gmail</button>
+        <button class="btn btn-g btn-lg" id="b-ab" onclick="sendAuditB()" style="flex:1">Brevo</button>
       </div>
       <div id="a-msg" style="display:none;margin-top:10px;font-size:12px;padding:9px;border-radius:7px"></div>
     </div>
@@ -534,7 +546,7 @@ function renderProspects() {
     var badge = isGH ? '<span style="font-size:9px;background:rgba(99,175,33,0.15);color:#63AF21;padding:2px 7px;border-radius:10px;font-weight:700;margin-left:6px">AUDIT</span>' : '';
     html += '<div class="pc">'      + '<div class="pc-name">' + (p.prenom||'') + (p.nom?' '+p.nom:'') + (p.commerce?' — '+p.commerce:'') + badge + '</div>'      + '<div class="pc-sub">' + p.email + (p.tel?' · '+p.tel:'') + (p.secteur?' · '+p.secteur:'') + (p.ville?' · '+p.ville:'') + (p.date?' · '+p.date:'') + '</div>'
       + '<div class="pc-btns">'
-      + '<button class="btn btn-y" onclick="openAudit(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\')">Audit</button>'
+      + '<button class="btn btn-y" onclick="openAudit(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\',\'' + esc(p.secteur||'') + '\',\'' + esc(p.ville||'') + '\')">Audit</button>'
       + '<button class="btn btn-v" onclick="openDevis(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\',\'' + esc(p.ville||'') + '\',497)">Devis</button>'
       + '<button class="btn btn-g" onclick="openEspace(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\')">Creer espace</button>'
       + '<button class="btn btn-r" onclick="delP(' + i + ')">x</button>'
@@ -673,7 +685,59 @@ function addP() {
 }
 
 // ━━━━ AUDIT ━━━━
-function openAudit(n, em, co) { g('a-nm').value=n; g('a-em').value=em; g('a-co').value=co; g('a-msg').style.display='none'; showModal('m-audit'); }
+function openAudit(n, em, co, se, vi) {
+  g('a-nm').value = n||'';
+  g('a-em').value = em||'';
+  g('a-co').value = co||'';
+  g('a-se').value = se||'';
+  g('a-vi').value = vi||'';
+  g('a-msg').style.display = 'none';
+  g('a-result-wrap').style.display = 'none';
+  g('a-loading').style.display = 'none';
+  g('a-result').value = '';
+  showModal('m-audit');
+}
+
+async function genAudit() {
+  var nm = g('a-nm').value.trim();
+  var em = g('a-em').value.trim();
+  var co = g('a-co').value.trim() || 'Commerce local';
+  var se = g('a-se').value.trim() || 'Commerce';
+  var vi = g('a-vi').value.trim() || 'France';
+  if (!em) { alert('Email requis'); return; }
+
+  var btn = g('b-gen');
+  btn.disabled = true;
+  btn.textContent = 'Generation...';
+  g('a-loading').style.display = 'block';
+  g('a-result-wrap').style.display = 'none';
+
+  try {
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: 'Tu es un expert marketing digital pour DWT Digital. Genere un audit de visibilite locale court et percutant pour ' + nm + ', ' + co + ' (' + se + ') a ' + vi + '.\n\nStructure en 5 parties concises:\n1. DIAGNOSTIC RAPIDE — Score global /100 avec 5 criteres notes /10\n2. POINTS FORTS — 2 atouts\n3. PRIORITES — 3 actions classees par impact\n4. RECOMMANDATIONS DWT DIGITAL — 2 packs proposes avec tarifs\n5. PROCHAINE ETAPE — CTA appel decouverte gratuit 30min\n\nTon : pro, bienveillant, tutoie le prospect.\nSigne : Tirera Darell - Fondateur DWT Digital\nPas de markdown ni caracteres speciaux.'
+        }]
+      })
+    });
+    var data = await resp.json();
+    var audit = data.content && data.content[0] ? data.content[0].text : 'Erreur de generation.';
+    g('a-result').value = audit;
+    g('a-result-wrap').style.display = 'block';
+    g('a-loading').style.display = 'none';
+  } catch(e) {
+    g('a-loading').style.display = 'none';
+    g('a-result').value = 'Erreur API Claude : ' + e.message;
+    g('a-result-wrap').style.display = 'block';
+  }
+  btn.disabled = false;
+  btn.textContent = 'Regenerer l\'audit IA';
+}
 async function sendAuditB() {
   var btn=g('b-ab'), msg=g('a-msg');
   var em=g('a-em').value.trim(), nm=g('a-nm').value.trim(), co=g('a-co').value.trim();
@@ -686,9 +750,18 @@ async function sendAuditB() {
   btn.textContent='Envoyer (Brevo)'; btn.disabled=false;
 }
 function sendAuditGmail() {
-  var em=g('a-em').value, nm=g('a-nm').value, co=g('a-co').value;
-  var rappel='https://dwtdigital-clients.github.io/rappel.html?name='+encodeURIComponent(nm)+'&email='+encodeURIComponent(em)+'&commerce='+encodeURIComponent(co);
-  window.open('https://mail.google.com/mail/?view=cm&to='+em+'&su='+encodeURIComponent('Votre audit DWT Digital')+'&body='+encodeURIComponent('Bonjour '+nm+'!\n\nVoici votre audit.\n\nEtre rappele gratuitement:\n'+rappel+'\n\nTirera - DWT Digital'),'_blank');
+  var em  = g('a-em').value;
+  var nm  = g('a-nm').value;
+  var co  = g('a-co').value;
+  var audit = g('a-result').value;
+  var rappel = 'https://dwtdigital-clients.github.io/rappel.html?name='+encodeURIComponent(nm)+'&email='+encodeURIComponent(em)+'&commerce='+encodeURIComponent(co);
+  var body;
+  if (audit && audit.length > 50) {
+    body = 'Bonjour ' + nm + ' !\n\n' + audit + '\n\n---\nPour aller plus loin, prenez 30 min avec moi :\n' + rappel + '\n\nTirera Darell\nFondateur DWT Digital';
+  } else {
+    body = 'Bonjour ' + nm + ' !\n\nCliquez sur "Generer l\'audit IA" dans le dashboard pour creer l\'audit avant d\'envoyer.\n\n' + rappel;
+  }
+  window.open('https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(em)+'&su='+encodeURIComponent('Votre audit de visibilite locale — DWT Digital')+'&body='+encodeURIComponent(body),'_blank');
 }
 
 // ━━━━ ESPACE CLIENT ━━━━
