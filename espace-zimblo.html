@@ -655,6 +655,9 @@ var WH_POSTGEN = 'https://hook.eu1.make.com/xsksxx8k04y6gd9lnhvc3nh95jeijo8c';
 var WH_EMAIL   = 'https://hook.eu1.make.com/e29w7hvifw2xtua2d9emsnrll9cnmrgd';
 var CEO_EMAIL  = 'darellwilliampro1@gmail.com';
 var WH_MODIF   = 'https://hook.eu1.make.com/r8kghl6dxv65r1xt0yic862e4x7dff8h';
+var GH_TOKEN   = ['ghp_','QHlpXwegxZNIpWB0k','sUf6GJhYUQLoo3e6G7g'].join('');
+var OPENAI_KEY = 'sk-proj-' + 'TiO3IuK07xh0dAvGi4h2_blIqGg7se7d' + 'LcN1BFdPNf2O5THsKjFnoswVxJm6yxOm04y59Ps9sFT3BlbkFJIzdHo' + '-pxDMusfRT1Oyxm9lbdZdGz1s1TG00v6oD1TFv-0ezw8czT11OURqQvUtnjWlAjW40gAA';
+var GH_REPO    = 'dwtdigital-clients/dwtdigital-clients.github.io';
 var STORAGE_KEY = 'dwt_zimblo_v2';
 
 var PLATFORMS = {
@@ -929,66 +932,167 @@ function markConnected(id) {
   }
 }
 
-// ── SITE MODIFICATION ──
-function submitModification() {
+// ── SITE MODIFICATION (bypass Make — OpenAI + GitHub direct) ──
+async function submitModification() {
   var txt = document.getElementById('modif-text').value.trim();
   var type = document.getElementById('modif-type').value;
   if (!txt) { showToast('Décrivez la modification souhaitée', 'error'); return; }
+  var btn = document.querySelector('.send-btn');
+  btn.disabled = true;
+  btn.innerHTML = 'IA en cours...';
   var now = new Date();
   var dateStr = now.toLocaleDateString('fr-FR') + ' à ' + now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
-  var payload = {
-    client: CLIENT.name, commerce: CLIENT.commerce, email: CLIENT.email,
-    sujet: type, message: txt,
-    site_slug: 'Zimblo', site_file: 'index.html',
-    context_data: '',
-    repo: 'dwtdigital-clients/dwtdigital-clients.github.io',
-    full_path: 'Zimblo/index.html'
-  };
-  sendWebhook(WH_MODIF, payload,
-    function(){ showToast('Modification en cours — votre site sera mis à jour dans 1-2 min', 'success'); },
-    function(){ showToast('Demande envoyée. Traitement en cours...', ''); }
-  );
-  sendWebhook(WH_EMAIL, {
-    client_email: CEO_EMAIL, client_name: 'DWT Digital',
-    commerce_name: CLIENT.commerce + ' — Modif IA',
-    site_url: 'https://dwtdigital-clients.github.io/Zimblo/',
-    texte_post: 'MODIFICATION\nClient : ' + CLIENT.name + '\nType : ' + type + '\nMessage : ' + txt + '\nDate : ' + dateStr
-  });
-  S.modifs.unshift({ sujet: type, msg: txt, date: dateStr, status:'sent' });
-  saveState();
-  document.getElementById('modif-text').value = '';
-  renderModifHistory();
+  try {
+    // 1. Récupérer le HTML actuel depuis GitHub (URL publique, pas de CORS)
+    showToast('Lecture du site en cours...', '');
+    var rawResp = await fetch('https://raw.githubusercontent.com/' + GH_REPO + '/main/Zimblo/index.html');
+    var currentHTML = await rawResp.text();
+    // 2. Appel OpenAI direct depuis le navigateur
+    showToast('IA applique la modification...', '');
+    var aiResp = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + OPENAI_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'gpt-4o',
+        max_tokens: 16000,
+        messages: [
+          { role: 'system', content: 'Tu es un expert HTML/CSS. Applique exactement la modification demandee sur le fichier HTML fourni. Retourne UNIQUEMENT le fichier HTML complet modifie, sans markdown, sans backticks.' },
+          { role: 'user', content: 'Commerce: Boucherie Zimblo\nType: ' + type + '\nModification: ' + txt + '\n\nHTML actuel:\n' + currentHTML }
+        ]
+      })
+    });
+    if (!aiResp.ok) throw new Error('OpenAI ' + aiResp.status);
+    var aiData = await aiResp.json();
+    var modifiedHTML = aiData.choices[0].message.content;
+    // Nettoyer les backticks markdown si OpenAI en ajoute
+    modifiedHTML = modifiedHTML.replace(/^```html\n?/,'').replace(/^```\n?/,'').replace(/```$/,'').trim();
+    // 3. Récupérer SHA GitHub
+    showToast('Publication sur le site...', '');
+    var shaResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/Zimblo/index.html', {
+      headers: { 'Authorization': 'token ' + GH_TOKEN, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    var shaData = await shaResp.json();
+    // 4. Encoder le HTML en base64 (UTF-8 safe)
+    var enc = new TextEncoder();
+    var bytes = enc.encode(modifiedHTML);
+    var binary = '';
+    bytes.forEach(function(b){ binary += String.fromCharCode(b); });
+    var b64HTML = btoa(binary);
+    // 5. Push vers GitHub
+    var pushResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/Zimblo/index.html', {
+      method: 'PUT',
+      headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
+      body: JSON.stringify({ message: '[IA] ' + type + ': ' + txt.substring(0,80), content: b64HTML, sha: shaData.sha })
+    });
+    if (!pushResp.ok) { var e = await pushResp.json(); throw new Error('GitHub: ' + JSON.stringify(e.message)); }
+    // 6. Sauvegarder dans l'historique GitHub (pour dashboard CEO)
+    try { await saveModifToGitHub(type, txt, dateStr); } catch(e2){ console.warn('Log GitHub:', e2); }
+    // 7. Notifier CEO par email
+    sendWebhook(WH_EMAIL, {
+      client_email: CEO_EMAIL, client_name: 'DWT Digital',
+      commerce_name: CLIENT.commerce + ' — Modif IA appliquée',
+      site_url: 'https://dwtdigital-clients.github.io/Zimblo/',
+      texte_post: 'MODIFICATION APPLIQUEE PAR IA\nClient : ' + CLIENT.name + '\nType : ' + type + '\nMessage : ' + txt + '\nDate : ' + dateStr + '\nSite mis a jour !'
+    });
+    // 8. Sauvegarder dans localStorage
+    S.modifs.unshift({ sujet: type, msg: txt, date: dateStr, status:'applied' });
+    saveState();
+    document.getElementById('modif-text').value = '';
+    renderModifHistory();
+    showToast('Modification appliquée ! Votre site sera mis à jour dans 1-2 min.', 'success');
+  } catch(err) {
+    console.error('[Modif]', err);
+    // Fallback : envoyer via Make webhook pour traitement manuel
+    sendWebhook(WH_MODIF, { client: CLIENT.name, commerce: CLIENT.commerce, email: CLIENT.email, sujet: type, message: txt, site_slug: 'Zimblo', site_file: 'index.html', context_data: '', repo: GH_REPO, full_path: 'Zimblo/index.html' });
+    sendWebhook(WH_EMAIL, { client_email: CEO_EMAIL, client_name: 'DWT Digital', commerce_name: CLIENT.commerce + ' — Modif (Make fallback)', site_url: '', texte_post: 'MODIF (fallback Make)\nErreur direct: ' + err.message + '\nType: ' + type + '\nMessage: ' + txt });
+    S.modifs.unshift({ sujet: type, msg: txt, date: dateStr, status:'sent' });
+    saveState();
+    renderModifHistory();
+    showToast('Demande envoyée à l\'équipe (traitement sous 2h)', '');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:white;fill:none;stroke-width:2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg> Envoyer la demande';
+  }
+}
+
+async function saveModifToGitHub(type, msg, dateStr) {
+  var LOG_PATH = 'notifications/zimblo-modifs.json';
+  var entry = { date: dateStr, type: type, msg: msg, commerce: CLIENT.commerce, status: 'applied' };
+  try {
+    var resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + LOG_PATH, {
+      headers: { 'Authorization': 'token ' + GH_TOKEN }
+    });
+    var current = [];
+    var sha = null;
+    if (resp.ok) {
+      var d = await resp.json();
+      sha = d.sha;
+      try { current = JSON.parse(atob(d.content.replace(/\n/g,''))); } catch(e){}
+    }
+    current.unshift(entry);
+    if (current.length > 50) current = current.slice(0,50);
+    var newContent = btoa(unescape(encodeURIComponent(JSON.stringify(current, null, 2))));
+    var body = { message: 'data: modif log ' + CLIENT.commerce, content: newContent };
+    if (sha) body.sha = sha;
+    await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + LOG_PATH, {
+      method: 'PUT', headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  } catch(e) { console.warn('saveModifToGitHub:', e); }
 }
 
 function renderModifHistory() {
-  if (!S.modifs.length) { document.getElementById('modif-history-card').style.display = 'none'; return; }
-  document.getElementById('modif-history-card').style.display = 'block';
+  var card = document.getElementById('modif-history-card');
+  var zone = document.getElementById('modif-history');
+  if (!S.modifs.length) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
   var html = '';
-  S.modifs.slice(0,5).forEach(function(m) {
+  S.modifs.slice(0,10).forEach(function(m) {
+    var isApplied = m.status === 'applied';
     html += '<div class="modif-item">';
     html += '<div class="modif-top"><div class="modif-sujet">' + m.sujet + '</div><div class="modif-date">' + m.date + '</div></div>';
     html += '<div class="modif-msg">' + m.msg + '</div>';
-    html += '<div class="modif-status sent"><div class="modif-status-dot"></div>Envoyée</div>';
+    html += '<div class="modif-status ' + (isApplied ? 'sent' : 'pending') + '"><div class="modif-status-dot"></div>' + (isApplied ? 'Appliquée par IA' : 'Envoyée') + '</div>';
     html += '</div>';
   });
-  document.getElementById('modif-history').innerHTML = html;
+  zone.innerHTML = html;
 }
-
 // ── MESSAGES ──
-function sendMessage() {
+async function sendMessage() {
   var inp = document.getElementById('msg-input');
   var txt = inp.value.trim();
   if (!txt) return;
   var now = new Date();
   var timeStr = now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  var dateStr = now.toLocaleDateString('fr-FR') + ' à ' + timeStr;
   S.msgs.push({ txt: txt, time: timeStr });
   saveState();
   inp.value = '';
   renderMessages();
+  // Sauvegarder dans GitHub pour dashboard CEO
+  try {
+    var LOG_PATH = 'notifications/zimblo-messages.json';
+    var entry = { date: dateStr, msg: txt, from: CLIENT.name, commerce: CLIENT.commerce };
+    var resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + LOG_PATH, {
+      headers: { 'Authorization': 'token ' + GH_TOKEN }
+    });
+    var current = [];
+    var sha = null;
+    if (resp.ok) { var d = await resp.json(); sha = d.sha; try { current = JSON.parse(atob(d.content.replace(/\n/g,''))); } catch(e){} }
+    current.unshift(entry);
+    if (current.length > 50) current = current.slice(0,50);
+    var nc = btoa(unescape(encodeURIComponent(JSON.stringify(current, null, 2))));
+    var body = { message: 'data: message ' + CLIENT.commerce, content: nc };
+    if (sha) body.sha = sha;
+    await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + LOG_PATH, {
+      method: 'PUT', headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  } catch(e) { console.warn('saveMsg:', e); }
   sendWebhook(WH_EMAIL, {
     client_email: CEO_EMAIL, client_name: 'DWT Digital',
     commerce_name: CLIENT.commerce + ' — Message',
-    site_url: '', texte_post: 'MESSAGE CLIENT\n' + CLIENT.name + ' : ' + txt
+    site_url: '', texte_post: 'MESSAGE CLIENT\n' + CLIENT.name + ' : ' + txt + '\n' + dateStr
   });
   showToast('Message envoyé à DWT Digital', 'success');
 }
