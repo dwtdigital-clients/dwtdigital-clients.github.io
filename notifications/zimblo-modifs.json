@@ -1,15 +1,22 @@
 [
   {
-    "date": "28/05/2026 à 01:39",
+    "date": "28/05/2026 à 02:40",
     "type": "Contenu texte",
-    "msg": "Je souhaite un site pour boulangerie pâtisserie en plein cœur de Versailles. Ouvert de 7h30à 20h. Je veux des images de pâtisserie et plusieurs pages avec une page à propos avec nos informations de contact. Et une page pour envoyer des commandes",
+    "msg": "Remplacer la photo principale de la page d'accueil par une photo de pain sortant du four (photo fournie par Sophie)",
     "commerce": "Le Fournil de Sophie",
     "status": "applied"
   },
   {
-    "date": "28/05/2026 Ã  00:01",
+    "date": "28/05/2026 Ã  01:39",
     "type": "Contenu texte",
-    "msg": "ajouter la livraison en 24 Ã  48h et dans toute la France",
+    "msg": "Je souhaite un site pour boulangerie pÃ¢tisserie en plein cÅur de Versailles. Ouvert de 7h30Ã  20h. Je veux des images de pÃ¢tisserie et plusieurs pages avec une page Ã  propos avec nos informations de contact. Et une page pour envoyer des commandes",
+    "commerce": "Le Fournil de Sophie",
+    "status": "applied"
+  },
+  {
+    "date": "28/05/2026 ÃÂ  00:01",
+    "type": "Contenu texte",
+    "msg": "ajouter la livraison en 24 ÃÂ  48h et dans toute la France",
     "commerce": "Boucherie Zimblo",
     "status": "applied"
   }
