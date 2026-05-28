@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notre Histoire — Le Fournil de Sophie</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#1C0F07;--bg2:#261509;--bg3:#321C0B;--accent:#C2522D;--accent2:#E8956D;--cream:#F5E6D0;--cream-dim:rgba(245,230,208,0.55);--cream-faint:rgba(245,230,208,0.12);--border:rgba(245,230,208,0.1);}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);min-height:100vh;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(28,15,7,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.nav-brand{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--cream);text-decoration:none;}
+.nav-links{display:flex;gap:32px;}
+.nav-links a{font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--cream-dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--accent2);}
+.nav-cta{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;background:var(--accent);color:white;padding:10px 22px;border-radius:2px;text-decoration:none;}
+
+.story-hero{padding:160px 40px 0;max-width:900px;margin:0 auto;text-align:center;}
+.label{font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--accent2);margin-bottom:20px;display:block;}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:clamp(48px,7vw,82px);font-style:italic;line-height:.95;color:var(--cream);}
+.hero-img{width:100%;height:500px;object-fit:cover;margin-top:60px;border-radius:4px;}
+
+.story-body{max-width:800px;margin:0 auto;padding:80px 40px;}
+.story-chapter{margin-bottom:70px;}
+.chapter-year{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+.chapter-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,42px);font-style:italic;color:var(--cream);margin-bottom:20px;line-height:1.1;}
+.chapter-text{font-size:15px;font-weight:300;color:var(--cream-dim);line-height:1.9;}
+.chapter-text + .chapter-text{margin-top:16px;}
+.divider{width:60px;height:2px;background:var(--accent);margin:50px auto;}
+
+.quote{background:var(--bg2);border-left:3px solid var(--accent);padding:40px 48px;margin:70px 0;border-radius:0 4px 4px 0;}
+.quote-text{font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;color:var(--cream);line-height:1.4;margin-bottom:16px;}
+.quote-author{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--accent2);}
+
+.valeurs{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:80px;padding:0 40px 100px;max-width:1100px;margin-left:auto;margin-right:auto;}
+.valeur{text-align:center;padding:40px 24px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;}
+.valeur-icon{width:44px;height:44px;margin:0 auto 20px;stroke:var(--accent);fill:none;}
+.valeur-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--cream);margin-bottom:12px;}
+.valeur-desc{font-size:13px;color:var(--cream-dim);line-height:1.7;}
+
+footer{background:var(--bg3);border-top:1px solid var(--border);padding:40px;text-align:center;}
+.foot-brand{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--cream);margin-bottom:12px;}
+.foot-links{display:flex;justify-content:center;gap:28px;margin-bottom:24px;}
+.foot-links a{font-size:12px;color:var(--cream-dim);text-decoration:none;}
+.foot-links a:hover{color:var(--accent2);}
+.foot-copy{font-size:11px;color:rgba(245,230,208,0.2);}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+@media(max-width:768px){nav{padding:16px 20px;}.nav-links{display:none;}.story-hero{padding:130px 20px 0;}.story-body{padding:50px 20px;}.valeurs{grid-template-columns:1fr;padding:0 20px 60px;}.quote{padding:28px 24px;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-brand">Le Fournil de Sophie</a>
+  <div class="nav-links">
+    <a href="index.html">Accueil</a>
+    <a href="patisseries.html">Nos Pâtisseries</a>
+    <a href="histoire.html" class="active">Notre Histoire</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <a href="contact.html" class="nav-cta">Commander</a>
+</nav>
+
+<div class="story-hero">
+  <span class="label reveal">Notre histoire</span>
+  <h1 class="page-title reveal">L'histoire d'une<br><em>passion artisanale</em></h1>
+  <img class="hero-img reveal" src="https://images.unsplash.com/photo-1574615522789-e77fe6e4df70?w=1400&q=80&fit=crop&auto=format" alt="Le Fournil de Sophie">
+</div>
+
+<div class="story-body">
+  <div class="story-chapter reveal">
+    <div class="chapter-year">2010 — Les débuts</div>
+    <h2 class="chapter-title">Un rêve transformé en fournil</h2>
+    <p class="chapter-text">Sophie Marchand grandit dans la boulangerie familiale de sa grand-mère, à Chartres. L'odeur du pain chaud, le bruit de la pâte qu'on façonne, la satisfaction des clients le matin — autant de souvenirs qui ont forgé une vocation.</p>
+    <p class="chapter-text">Après un CAP Boulangerie et cinq ans de compagnonnage à Paris, Sophie pose ses valises à Versailles et ouvre Le Fournil de Sophie en janvier 2010, dans une petite boutique de la rue des Artisans.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="story-chapter reveal">
+    <div class="chapter-year">2015 — L'expansion</div>
+    <h2 class="chapter-title">La pâtisserie entre en scène</h2>
+    <p class="chapter-text">Portée par le succès de ses pains et viennoiseries, Sophie décide d'élargir sa carte aux pâtisseries fine. Elle se forme auprès de Philippe Conticini et intègre une brigade parisienne pendant six mois pour perfectionner ses techniques.</p>
+    <p class="chapter-text">En 2015, Le Fournil de Sophie double sa surface et accueille un laboratoire de pâtisserie. Les entremets, macarons et gâteaux sur commande deviennent rapidement la signature de la maison.</p>
+  </div>
+
+  <div class="quote reveal">
+    <div class="quote-text">"Je voulais que chaque client repart avec quelque chose d'unique — pas seulement du pain, mais un moment de plaisir authentique."</div>
+    <div class="quote-author">— Sophie Marchand, Fondatrice</div>
+  </div>
+
+  <div class="story-chapter reveal">
+    <div class="chapter-year">Aujourd'hui</div>
+    <h2 class="chapter-title">Quatorze ans d'artisanat exigeant</h2>
+    <p class="chapter-text">Le Fournil de Sophie emploie aujourd'hui une équipe de six artisans passionnés. Chaque produit est encore façonné à la main, avec des matières premières soigneusement sélectionnées auprès de producteurs locaux et de meuniers partenaires.</p>
+    <p class="chapter-text">La maison remporte chaque année le concours de la Meilleure Baguette de Versailles, et a été sélectionnée parmi les 50 meilleures boulangeries d'Île-de-France par le guide Fooding en 2023.</p>
+  </div>
+</div>
+
+<div class="valeurs">
+  <div class="valeur reveal">
+    <svg class="valeur-icon" viewBox="0 0 24 24" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1M4.22 4.22l.707.707m12.728 12.728.707.707M1 12h1m18 0h1M4.22 19.78l.707-.707M18.95 5.05l.707-.707M12 7a5 5 0 110 10A5 5 0 0112 7z"/>
+    </svg>
+    <div class="valeur-title">Fraîcheur absolue</div>
+    <div class="valeur-desc">Tout est fabriqué la nuit et le matin pour une fraîcheur maximale. Rien ne se vend d'un jour sur l'autre.</div>
+  </div>
+  <div class="valeur reveal">
+    <svg class="valeur-icon" viewBox="0 0 24 24" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
+    </svg>
+    <div class="valeur-title">Artisanat pur</div>
+    <div class="valeur-desc">Aucun additif, aucun améliorant. Juste la farine, l'eau, le sel, le temps et le savoir-faire.</div>
+  </div>
+  <div class="valeur reveal">
+    <svg class="valeur-icon" viewBox="0 0 24 24" stroke-width="1.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+    </svg>
+    <div class="valeur-title">Ancrage local</div>
+    <div class="valeur-desc">Farines du moulin de Bourgogne, beurre AOP de Charentes, fruits des producteurs franciliens.</div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-brand">Le Fournil de Sophie</div>
+  <div class="foot-links">
+    <a href="index.html">Accueil</a>
+    <a href="patisseries.html">Pâtisseries</a>
+    <a href="histoire.html">Histoire</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="foot-copy">&copy; 2025 Le Fournil de Sophie — Site réalisé par <a href="https://dwtdigital-clients.github.io" style="color:rgba(245,230,208,0.35);text-decoration:none;">DWT Digital</a></div>
+</footer>
+
+<script>
+var reveals = document.querySelectorAll('.reveal');
+var io = new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});},{threshold:0.1});
+reveals.forEach(function(el){io.observe(el);});
+</script>
+</body>
+</html>
