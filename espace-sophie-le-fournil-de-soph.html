@@ -467,11 +467,24 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 
         <!-- Palette couleurs -->
         <div class="identity-section" id="palette-section">
-          <h3>Palette de couleurs</h3>
-          <div class="palette-row" id="palette-preview-row">
+          <h3>Votre palette de marque</h3>
+
+          <!-- État validé -->
+          <div id="identity-validated-banner" style="display:none;background:linear-gradient(135deg,rgba(99,175,33,0.12),rgba(99,175,33,0.05));border:1px solid rgba(99,175,33,0.3);border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#63AF21" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <div style="flex:1;">
+              <div style="font-size:12px;font-weight:700;color:#63AF21;">Identite visuelle validee</div>
+              <div style="font-size:11px;color:var(--tm);margin-top:2px;">DWT Digital mettra a jour votre site sous 48h.</div>
+            </div>
+            <button onclick="editPalette()" style="font-size:10px;font-weight:600;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:5px 12px;color:var(--td);cursor:pointer;">Modifier</button>
+            <button onclick="downloadIdentity()" style="font-size:10px;font-weight:600;background:#63AF21;border:none;border-radius:8px;padding:5px 12px;color:white;cursor:pointer;">Telecharger</button>
+          </div>
+
+          <!-- Swatches preview -->
+          <div class="palette-row" id="palette-preview-row" style="margin-bottom:20px;">
             <div class="swatch-item">
               <div class="swatch" id="sw-primary" style="background:#C2522D;"></div>
-              <div class="swatch-name">Primaire</div>
+              <div class="swatch-name">Principale</div>
             </div>
             <div class="swatch-item">
               <div class="swatch" id="sw-secondary" style="background:#E8956D;"></div>
@@ -486,22 +499,48 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
               <div class="swatch-name">Texte</div>
             </div>
           </div>
-          <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px;" id="palette-editors">
-            <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--td);">
-              <input type="color" id="cp-primary" value="#C2522D" style="width:32px;height:32px;border:none;border-radius:6px;cursor:pointer;padding:0;" oninput="updateSwatch('primary',this.value)">
-              <span>Couleur principale</span>
+
+          <!-- Editeur couleurs + explications -->
+          <div id="palette-editor-zone">
+            <div style="display:flex;flex-direction:column;gap:14px;">
+
+              <div style="background:var(--bg);border-radius:10px;padding:14px;border:1px solid var(--border);">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                  <input type="color" id="cp-primary" value="#C2522D" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:0;flex-shrink:0;" oninput="updateSwatch('primary',this.value)">
+                  <div>
+                    <div style="font-size:12px;font-weight:700;color:var(--td);">Couleur principale</div>
+                    <div style="font-size:10px;color:var(--tm);font-family:monospace;" id="hex-primary">#C2522D</div>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:var(--tm);line-height:1.6;padding-left:46px;">Le terra cotta evoque la chaleur du four artisanal, la brique des vieilles boulangeries et la convivialite d'un commerce de quartier. Chaud, rassurant, appetissant.</div>
+              </div>
+
+              <div style="background:var(--bg);border-radius:10px;padding:14px;border:1px solid var(--border);">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                  <input type="color" id="cp-secondary" value="#E8956D" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:0;flex-shrink:0;" oninput="updateSwatch('secondary',this.value)">
+                  <div>
+                    <div style="font-size:12px;font-weight:700;color:var(--td);">Couleur secondaire</div>
+                    <div style="font-size:10px;color:var(--tm);font-family:monospace;" id="hex-secondary">#E8956D</div>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:var(--tm);line-height:1.6;padding-left:46px;">La peche doree rappelle la croute des viennoiseries et le miel. Elle adoucit le terra cotta tout en gardant sa chaleur — un degrader naturel qui donne de la profondeur.</div>
+              </div>
+
+              <div style="background:var(--bg);border-radius:10px;padding:14px;border:1px solid var(--border);">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                  <input type="color" id="cp-bg" value="#1C0F07" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:0;flex-shrink:0;" oninput="updateSwatch('bg',this.value)">
+                  <div>
+                    <div style="font-size:12px;font-weight:700;color:var(--td);">Couleur de fond</div>
+                    <div style="font-size:10px;color:var(--tm);font-family:monospace;" id="hex-bg">#1C0F07</div>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:var(--tm);line-height:1.6;padding-left:46px;">Brun profond, presque noir — evoque le chocolat, le cafe, les grains torrefies. Contraste parfait pour faire ressortir vos couleurs chaudes. Premium et moderne.</div>
+              </div>
+
             </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--td);">
-              <input type="color" id="cp-secondary" value="#E8956D" style="width:32px;height:32px;border:none;border-radius:6px;cursor:pointer;padding:0;" oninput="updateSwatch('secondary',this.value)">
-              <span>Couleur secondaire / accent</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--td);">
-              <input type="color" id="cp-bg" value="#1C0F07" style="width:32px;height:32px;border:none;border-radius:6px;cursor:pointer;padding:0;" oninput="updateSwatch('bg',this.value)">
-              <span>Couleur de fond</span>
-            </div>
+
+            <button class="send-btn" id="btn-valider-palette" style="margin-top:16px;font-size:12px;padding:11px 0;" onclick="savePalette()">Valider cette palette</button>
           </div>
-          <button class="send-btn" style="margin-top:14px;font-size:12px;padding:10px 0;" onclick="savePalette()">Valider cette palette</button>
-          <div id="palette-saved-msg" style="display:none;font-size:11px;color:var(--g);margin-top:8px;text-align:center;">Palette sauvegardee. DWT Digital mettra a jour votre site sous 48h.</div>
         </div>
 
         <!-- Typographie -->
@@ -728,6 +767,7 @@ function loadState() {
       S.posts_ok  = p.posts_ok  || [];
       S.connected = p.connected || [];
       S.identity  = p.identity  || false;
+      S.palette   = p.palette   || null;
       S.modifs    = p.modifs    || [];
       S.msgs      = p.msgs      || [];
     }
@@ -1185,9 +1225,13 @@ document.addEventListener('DOMContentLoaded', init);
 // ── PALETTE ÉDITABLE ──
 function updateSwatch(key, val) {
   var map = {primary:'sw-primary', secondary:'sw-secondary', bg:'sw-bg'};
+  var hexMap = {primary:'hex-primary', secondary:'hex-secondary', bg:'hex-bg'};
   var el = document.getElementById(map[key]);
   if(el) el.style.background = val;
+  var hexEl = document.getElementById(hexMap[key]);
+  if(hexEl) hexEl.textContent = val;
 }
+
 function savePalette() {
   var primary = document.getElementById('cp-primary').value;
   var secondary = document.getElementById('cp-secondary').value;
@@ -1195,35 +1239,139 @@ function savePalette() {
   S.palette = {primary: primary, secondary: secondary, bg: bg};
   S.identity = true;
   saveState();
-  document.getElementById('palette-saved-msg').style.display = 'block';
+  showIdentityValidated();
   renderTimeline();
   updateProgress();
-  showToast('Palette sauvegardée !');
-  // Notif CEO via Make
+  showToast('Identite visuelle validee !');
+  // Notif CEO
   fetch('https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({
-      type: 'identite_validee',
-      commerce: S.commerce || 'Le Fournil de Sophie',
-      palette: {primary: primary, secondary: secondary, bg: bg},
-      date: new Date().toISOString().slice(0,10)
-    })
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({type:'identite_validee', commerce: S.commerce || 'Le Fournil de Sophie',
+      palette: {primary: primary, secondary: secondary, bg: bg}, date: new Date().toISOString().slice(0,10)})
   }).catch(function(){});
 }
+
+function showIdentityValidated() {
+  var banner = document.getElementById('identity-validated-banner');
+  var editorZone = document.getElementById('palette-editor-zone');
+  if(banner) banner.style.display = 'flex';
+  if(editorZone) editorZone.style.display = 'none';
+}
+
+function editPalette() {
+  var banner = document.getElementById('identity-validated-banner');
+  var editorZone = document.getElementById('palette-editor-zone');
+  if(banner) banner.style.display = 'none';
+  if(editorZone) editorZone.style.display = 'block';
+  var btn = document.getElementById('btn-valider-palette');
+  if(btn) btn.textContent = 'Sauvegarder les modifications';
+}
+
 function loadPaletteState() {
-  if(S.palette) {
-    var p = S.palette;
-    if(document.getElementById('cp-primary')) document.getElementById('cp-primary').value = p.primary || '#C2522D';
-    if(document.getElementById('cp-secondary')) document.getElementById('cp-secondary').value = p.secondary || '#E8956D';
-    if(document.getElementById('cp-bg')) document.getElementById('cp-bg').value = p.bg || '#1C0F07';
-    updateSwatch('primary', p.primary || '#C2522D');
-    updateSwatch('secondary', p.secondary || '#E8956D');
-    updateSwatch('bg', p.bg || '#1C0F07');
-    if(S.identity) document.getElementById('palette-saved-msg').style.display = 'block';
+  var pal = S.palette || null;
+  var primary = (pal && pal.primary) ? pal.primary : '#C2522D';
+  var secondary = (pal && pal.secondary) ? pal.secondary : '#E8956D';
+  var bg = (pal && pal.bg) ? pal.bg : '#1C0F07';
+
+  var cpP = document.getElementById('cp-primary');
+  var cpS = document.getElementById('cp-secondary');
+  var cpB = document.getElementById('cp-bg');
+  if(cpP) cpP.value = primary;
+  if(cpS) cpS.value = secondary;
+  if(cpB) cpB.value = bg;
+
+  updateSwatch('primary', primary);
+  updateSwatch('secondary', secondary);
+  updateSwatch('bg', bg);
+
+  if(S.identity) {
+    showIdentityValidated();
   }
 }
 
+function downloadIdentity() {
+  var primary = (S.palette && S.palette.primary) ? S.palette.primary : '#C2522D';
+  var secondary = (S.palette && S.palette.secondary) ? S.palette.secondary : '#E8956D';
+  var bg = (S.palette && S.palette.bg) ? S.palette.bg : '#1C0F07';
+
+  var canvas = document.createElement('canvas');
+  canvas.width = 900; canvas.height = 540;
+  var ctx = canvas.getContext('2d');
+
+  // Fond
+  ctx.fillStyle = '#1a1a2e'; ctx.fillRect(0, 0, 900, 540);
+
+  // Bande accent gauche
+  ctx.fillStyle = primary; ctx.fillRect(0, 0, 6, 540);
+
+  // Titre
+  ctx.fillStyle = '#EFDEC9'; ctx.font = 'bold 28px sans-serif';
+  ctx.fillText('Charte Identite Visuelle', 40, 56);
+  ctx.fillStyle = 'rgba(239,222,201,0.4)'; ctx.font = '14px sans-serif';
+  ctx.fillText('Le Fournil de Sophie  —  par DWT Digital', 40, 82);
+
+  // Ligne séparatrice
+  ctx.strokeStyle = 'rgba(239,222,201,0.1)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(40, 98); ctx.lineTo(860, 98); ctx.stroke();
+
+  // Section Couleurs
+  ctx.fillStyle = 'rgba(239,222,201,0.4)'; ctx.font = '11px sans-serif';
+  ctx.fillText('PALETTE DE COULEURS', 40, 130);
+
+  var colors = [
+    {color: primary, label: 'Principale', hex: primary},
+    {color: secondary, label: 'Secondaire', hex: secondary},
+    {color: bg, label: 'Fond', hex: bg},
+    {color: '#F5E6D0', label: 'Texte', hex: '#F5E6D0'}
+  ];
+  colors.forEach(function(col, i) {
+    var x = 40 + i * 210;
+    // Swatch
+    ctx.fillStyle = col.color;
+    ctx.beginPath(); ctx.roundRect(x, 148, 180, 90, 8); ctx.fill();
+    // Bordure
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth = 1;
+    ctx.stroke();
+    // Label
+    ctx.fillStyle = '#EFDEC9'; ctx.font = 'bold 13px sans-serif';
+    ctx.fillText(col.label, x, 262);
+    ctx.fillStyle = 'rgba(239,222,201,0.5)'; ctx.font = '12px monospace';
+    ctx.fillText(col.hex.toUpperCase(), x, 280);
+  });
+
+  // Section Typographie
+  ctx.strokeStyle = 'rgba(239,222,201,0.1)'; ctx.beginPath();
+  ctx.moveTo(40, 306); ctx.lineTo(860, 306); ctx.stroke();
+  ctx.fillStyle = 'rgba(239,222,201,0.4)'; ctx.font = '11px sans-serif';
+  ctx.fillText('TYPOGRAPHIE', 40, 330);
+
+  ctx.fillStyle = '#EFDEC9'; ctx.font = 'italic 36px Georgia,serif';
+  ctx.fillText('Cormorant Garamond', 40, 382);
+  ctx.fillStyle = 'rgba(239,222,201,0.5)'; ctx.font = '12px sans-serif';
+  ctx.fillText('Titres  —  Serif classique, elegant, artisanal', 40, 406);
+
+  ctx.fillStyle = '#EFDEC9'; ctx.font = '24px Arial,sans-serif';
+  ctx.fillText('DM Sans — Regular & Medium', 40, 450);
+  ctx.fillStyle = 'rgba(239,222,201,0.5)'; ctx.font = '12px sans-serif';
+  ctx.fillText('Corps de texte  —  Moderne, lisible, accessible', 40, 472);
+
+  // Footer
+  ctx.strokeStyle = 'rgba(239,222,201,0.1)'; ctx.beginPath();
+  ctx.moveTo(40, 498); ctx.lineTo(860, 498); ctx.stroke();
+  ctx.fillStyle = 'rgba(239,222,201,0.25)'; ctx.font = '11px sans-serif';
+  ctx.fillText('dwt-digital.fr  —  Genere le ' + new Date().toLocaleDateString('fr-FR'), 40, 522);
+  ctx.fillStyle = primary; ctx.font = 'bold 11px sans-serif';
+  ctx.fillText('DWT DIGITAL', 780, 522);
+
+  // Download
+  canvas.toBlob(function(blob) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'identite-visuelle-le-fournil-de-sophie.png';
+    a.click(); URL.revokeObjectURL(url);
+  });
+  showToast('Telechargement de votre charte...');
+}
 
 // ── UPLOAD IDENTITE VISUELLE ──
 var uploadFiles_list = [];
