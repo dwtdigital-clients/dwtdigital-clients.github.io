@@ -229,7 +229,13 @@ select.fi{background:var(--bg2);}
     <div class="pane" id="pane-devis">
       <div class="panel">
         <div class="ptitle">Generateur de devis</div>
-        <div class="psub">Remplissez et envoyez</div>
+        <div class="psub">Remplissez ou selectionnez un client existant.</div>
+        <div class="fg" style="margin-bottom:16px">
+          <label>Client existant</label>
+          <select id="dv-client-sel" class="fi" onchange="fillDevisFromCRM(this)" onfocus="refreshDevisSelect()">
+            <option value="">-- Choisir un client --</option>
+          </select>
+        </div>
         <div class="g2" style="margin-bottom:12px">
           <div class="fg"><label>Prenom</label><input id="dv-pr" class="fi" placeholder="Marie"></div>
           <div class="fg"><label>Commerce</label><input id="dv-co" class="fi" placeholder="Boulangerie Martin"></div>
@@ -252,18 +258,33 @@ select.fi{background:var(--bg2);}
           <span id="dv-st" style="font-size:12px;display:none"></span>
         </div>
       </div>
-      <div class="panel">
-        <div class="ptitle">Generateur de facture</div>
-        <div class="g2" style="margin-bottom:12px">
-          <div class="fg"><label>N devis</label><input id="fa-dv" class="fi" placeholder="DWT-2025-001"></div>
-          <div class="fg"><label>N facture</label><input id="fa-nu" class="fi" value="FAC-2025-001"></div>
-          <div class="fg"><label>Email</label><input id="fa-em" type="email" class="fi" placeholder="client@email.fr"></div>
-          <div class="fg"><label>Montant</label><input id="fa-mo" type="number" class="fi" placeholder="497"></div>
-          <div class="fg"><label>Commerce</label><input id="fa-co" class="fi" placeholder="Cake Delice"></div>
-          <div class="fg"><label>Pack</label><input id="fa-pa" class="fi" placeholder="Social Pro"></div>
+      <div class="panel" style="border:1px solid rgba(245,158,11,0.15);background:linear-gradient(135deg,rgba(245,158,11,0.04),rgba(15,11,30,0));">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          <div class="ptitle" style="color:#F59E0B;">Comptabilite & Facturation</div>
         </div>
-        <button class="btn btn-g btn-lg" onclick="prevFa()">Generer PDF</button>
-        <span style="font-size:11px;color:rgba(239,222,201,0.3);margin-left:10px">Ctrl+P pour PDF</span>
+        <div class="psub" style="margin-bottom:16px;">La facturation et la comptabilite sont gerees par un logiciel dedie pour rester conforme aux obligations legales (numerotation, TVA, archivage 10 ans).</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <a href="https://www.pennylane.com" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);text-decoration:none;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(245,158,11,0.3)'" onmouseout="this.style.borderColor='var(--border)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+            <div><div style="font-size:12px;font-weight:700;color:var(--cr);">Pennylane</div><div style="font-size:10px;color:var(--cr2);">Compta + facturation FR</div></div>
+          </a>
+          <a href="https://www.quickbooks.intuit.com" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);text-decoration:none;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(245,158,11,0.3)'" onmouseout="this.style.borderColor='var(--border)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+            <div><div style="font-size:12px;font-weight:700;color:var(--cr);">QuickBooks</div><div style="font-size:10px;color:var(--cr2);">Facturation + suivi CA</div></div>
+          </a>
+          <a href="https://www.fresha.com" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);text-decoration:none;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(245,158,11,0.3)'" onmouseout="this.style.borderColor='var(--border)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+            <div><div style="font-size:12px;font-weight:700;color:var(--cr);">Fresha</div><div style="font-size:10px;color:var(--cr2);">Ideal beaute / bien-etre</div></div>
+          </a>
+          <a href="https://www.sumeria.eu" target="_blank" style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);text-decoration:none;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(245,158,11,0.3)'" onmouseout="this.style.borderColor='var(--border)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+            <div><div style="font-size:12px;font-weight:700;color:var(--cr);">Sumeria (ex Lydia)</div><div style="font-size:10px;color:var(--cr2);">Compte pro auto-entrepreneur</div></div>
+          </a>
+        </div>
+        <div style="margin-top:14px;padding:10px 14px;background:rgba(245,158,11,0.06);border-radius:var(--radius2);font-size:11px;color:rgba(245,158,11,0.7);line-height:1.6;">
+          Recommande : <strong style="color:#F59E0B;">Pennylane</strong> — logiciel francais concu pour les auto-entrepreneurs et petites agences. Connexion bancaire, TVA automatique, facturation conforme.
+        </div>
       </div>
     </div>
 
@@ -460,7 +481,7 @@ var EC_URL = '';
 var TABS = [
   {id:'crm', label:'CRM & Prospects'},
   {id:'notif', label:'Demandes clients'},
-  {id:'devis', label:'Devis & Factures'},
+  {id:'devis', label:'Devis'},
   {id:'controle', label:'Controle manuel'},
   {id:'scenarios', label:'Scenarios Make'}
 ];
@@ -626,8 +647,9 @@ function renderClientsChauds() {
   if (!chauds.length) { el.innerHTML = ''; return; }
   var html = '';
   chauds.forEach(function(p) {
-    var slug = 'espace-' + (p.prenom||'').toLowerCase().replace(/[^a-z0-9]/g,'-') + '-' + (p.commerce||'').toLowerCase().replace(/[^a-z0-9]/g,'-');
-    var hasEspace = p.espace_url || false;
+    // Construire URL espace depuis slug (même logique que doCreateEspace)
+    var espaceSlug = 'espace-' + slug((p.prenom||'') + '-' + (p.commerce||''));
+    var espaceUrl = '/' + espaceSlug + '.html';
     html += '<div class="pc-client">'
       + '<div class="pc-client-header">'
       + '<div class="pc-client-dot"></div>'
@@ -635,14 +657,13 @@ function renderClientsChauds() {
       + '</div>'
       + '<div class="pc-client-sub">' + p.email + (p.secteur?' · '+p.secteur:'') + (p.ville?' · '+p.ville:'') + '</div>'
       + '<div class="pc-client-btns">'
-      + (hasEspace ? '<button class="btn btn-g" onclick="window.open(\'' + p.espace_url + '\',\'_blank\')">Voir espace</button>' : '')
+      + '<button class="btn btn-g" onclick="window.open(\'' + espaceUrl + '\',\'_blank\')">Voir espace</button>'
       + '<button class="btn btn-y" onclick="openAudit(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\')">Audit</button>'
       + '<button class="btn btn-v" onclick="openDevis(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\',\'' + esc(p.ville||'') + '\',497)">Devis</button>'
       + '</div></div>';
   });
   el.innerHTML = html;
 }
-
 function renderProspects() {
   var l = getCRM();
   // Trier : prospect → froid → perdu (chaud → Clients actifs)
@@ -1102,6 +1123,33 @@ function cpCreds() { navigator.clipboard.writeText(CREDS).then(function(){alert(
 function gmailCreds() { var em=g('ec-em').value; window.open('https://mail.google.com/mail/?view=cm&to='+em+'&su='+encodeURIComponent('Vos acces espace client DWT Digital')+'&body='+encodeURIComponent('Bonjour !\n\nVotre espace est pret.\n\n'+CREDS+'\n\nTirera - DWT Digital'),'_blank'); }
 
 // ━━━━ DEVIS ━━━━
+
+function fillDevisFromCRM(sel) {
+  var val = sel.value;
+  if (!val) return;
+  var data = JSON.parse(decodeURIComponent(val));
+  if(g('dv-pr')) g('dv-pr').value = data.prenom || '';
+  if(g('dv-co')) g('dv-co').value = data.commerce || '';
+  if(g('dv-em')) g('dv-em').value = data.email || '';
+  if(g('dv-vi')) g('dv-vi').value = data.ville || '';
+}
+
+function refreshDevisSelect() {
+  var sel = g('dv-client-sel');
+  if (!sel) return;
+  var l = getCRM();
+  var hardcoded = [
+    {prenom:'Lise',commerce:'Cake Delice',email:'lisevernet@yahoo.com',ville:'Valence'},
+    {prenom:'Marc',commerce:'Boucherie Zimblo',email:'zimblobot@gmail.com',ville:'Paris 15e'}
+  ];
+  var all = hardcoded.concat(l.filter(function(p){ return p.email && p.prenom; }));
+  sel.innerHTML = '<option value="">-- Choisir un client --</option>';
+  all.forEach(function(p) {
+    var d = encodeURIComponent(JSON.stringify({prenom:p.prenom,commerce:p.commerce||'',email:p.email,ville:p.ville||''}));
+    sel.innerHTML += '<option value="' + d + '">' + (p.prenom||'') + (p.nom?' '+p.nom:'') + (p.commerce?' — '+p.commerce:'') + '</option>';
+  });
+}
+
 function openDevis(n,em,co,vi,price) { g('dv-pr').value=n; g('dv-em').value=em; g('dv-co').value=co; g('dv-vi').value=vi; g('dv-mo').value=price||497; document.querySelectorAll('.tab')[1].click(); }
 function selP(btn) { document.querySelectorAll('.pbtn').forEach(function(b){b.classList.remove('sel');}); btn.classList.add('sel'); g('dv-mo').value=btn.dataset.price; }
 function getPack() { var s=document.querySelector('.pbtn.sel'); return s?s.dataset.pack:'Social Pro'; }
