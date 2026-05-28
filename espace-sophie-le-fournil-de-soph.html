@@ -1510,10 +1510,18 @@ function genererPalettesIA() {
   .then(function(text) {
     var data;
     try {
-      var clean = text.replace(/```json|```/g, '').trim();
+      var clean = text.replace(/```json[\s\S]*?```|```/g, '').trim();
+      // Extraire le JSON si encapsulé dans du texte
+      var jsonMatch = clean.match(/\{[\s\S]*\}/);
+      if(jsonMatch) clean = jsonMatch[0];
       data = JSON.parse(clean);
-    } catch(e) { throw new Error('JSON invalide'); }
-
+    } catch(e) {
+      console.error('Parse error:', e, 'Raw:', text.substring(0,200));
+      throw new Error('Reponse invalide');
+    }
+    if(!data || !data.palettes || !data.palettes.length) {
+      throw new Error('Aucune palette generee');
+    }
     window._iaPalettes = data.palettes || [];
     results.style.display = 'flex';
     results.innerHTML = '';
@@ -1573,9 +1581,10 @@ function genererPalettesIA() {
   })
   .catch(function(err) {
     btn.disabled = false;
-    btn.textContent = 'Generer 3 palettes sur mesure';
-    showToast('Erreur — reessayez dans quelques secondes');
-    console.error(err);
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Generer 3 palettes sur mesure';
+    var msg = err.message === 'Failed to fetch' ? 'Connexion impossible — verifiez votre internet' : 'Erreur de generation — reessayez';
+    showToast(msg);
+    console.error('PaletteGen error:', err);
   });
 }
 
