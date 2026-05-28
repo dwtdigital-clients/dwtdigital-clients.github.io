@@ -113,6 +113,19 @@ select.fi { background: #1A0820; }
 .warn { color: #F59E0B; font-size: 10px; font-weight: 700; }
 
 @media(max-width:700px) { .g2 { grid-template-columns: 1fr; } .pack-grid { grid-template-columns: 1fr 1fr; } .content { padding: 14px; } }
+
+/* ── STATUTS ── */
+.statut-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 9px;border-radius:20px;margin-left:8px;vertical-align:middle;}
+.statut-prospect{background:rgba(239,222,201,0.1);color:rgba(239,222,201,0.6);}
+.statut-chaud{background:rgba(99,175,33,0.15);color:#63AF21;}
+.statut-froid{background:rgba(59,130,246,0.15);color:#60A5FA;}
+.statut-perdu{background:rgba(239,68,68,0.12);color:#F87171;}
+.statut-select{font-size:11px;background:rgba(255,255,255,0.05);border:1px solid rgba(239,222,201,0.15);border-radius:6px;color:#EFDEC9;padding:4px 8px;cursor:pointer;font-family:inherit;margin-left:8px;}
+.identity-badge{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:20px;display:inline-block;margin-left:6px;}
+.identity-ok{background:rgba(99,175,33,0.15);color:#63AF21;}
+.identity-nok{background:rgba(239,68,68,0.1);color:#F87171;}
+.site-blocked{opacity:0.4;pointer-events:none;cursor:not-allowed;position:relative;}
+.site-blocked-msg{font-size:10px;color:#F87171;margin-top:4px;display:none;}
 </style>
 </head>
 <body>
@@ -533,6 +546,24 @@ function fetchProspectsGitHub() {
     .catch(function(e){ console.warn('prospects.json:', e); });
 }
 
+function getStatutClass(s){
+  if(s==='chaud') return 'statut-chaud';
+  if(s==='froid') return 'statut-froid';
+  if(s==='perdu') return 'statut-perdu';
+  return 'statut-prospect';
+}
+function getStatutLabel(s){
+  if(s==='chaud') return 'Client chaud';
+  if(s==='froid') return 'Client froid';
+  if(s==='perdu') return 'Client perdu';
+  return 'Prospect';
+}
+function updateStatut(i, val) {
+  var l = getCRM();
+  if(l[i]) { l[i].statut = val; saveCRM(l); }
+  var badge = document.getElementById('st-badge-'+i);
+  if(badge) { badge.className = 'statut-badge ' + getStatutClass(val); badge.textContent = getStatutLabel(val); }
+}
 function renderProspects() {
   var l = getCRM();
   var el = g('p-list');
@@ -543,12 +574,32 @@ function renderProspects() {
   var html = '';
   l.forEach(function(p, i) {
     var isGH = p.source === 'audit';
-    var badge = isGH ? '<span style="font-size:9px;background:rgba(99,175,33,0.15);color:#63AF21;padding:2px 7px;border-radius:10px;font-weight:700;margin-left:6px">AUDIT</span>' : '';
-    html += '<div class="pc">'      + '<div class="pc-name">' + (p.prenom||'') + (p.nom?' '+p.nom:'') + (p.commerce?' — '+p.commerce:'') + badge + '</div>'      + '<div class="pc-sub">' + p.email + (p.tel?' · '+p.tel:'') + (p.secteur?' · '+p.secteur:'') + (p.ville?' · '+p.ville:'') + (p.date?' · '+p.date:'') + '</div>'
+    var auditBadge = isGH ? '<span style="font-size:9px;background:rgba(99,175,33,0.15);color:#63AF21;padding:2px 7px;border-radius:10px;font-weight:700;margin-left:6px">AUDIT</span>' : '';
+    var st = p.statut || 'prospect';
+    var stClass = getStatutClass(st);
+    var stLabel = getStatutLabel(st);
+    var identOk = p.identity_validated ? true : false;
+    var identBadge = identOk
+      ? '<span class="identity-badge identity-ok">Identite validee</span>'
+      : '<span class="identity-badge identity-nok">Identite en attente</span>';
+    var siteBtn = identOk
+      ? '<button class="btn btn-g" onclick="openEspace(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\')">Creer espace</button>'
+      : '<button class="btn btn-g" title="Identite visuelle non validee" onclick="alert(\'Le client doit valider son identite visuelle avant la creation du site.\')" style="opacity:0.5">Creer espace</button>';
+    html += '<div class="pc">'
+      + '<div class="pc-name">' + (p.prenom||'') + (p.nom?' '+p.nom:'') + (p.commerce?' — '+p.commerce:'') + auditBadge
+      + '<span class="statut-badge ' + stClass + '" id="st-badge-' + i + '">' + stLabel + '</span>'
+      + identBadge + '</div>'
+      + '<div class="pc-sub">' + p.email + (p.tel?' · '+p.tel:'') + (p.secteur?' · '+p.secteur:'') + (p.ville?' · '+p.ville:'') + (p.date?' · '+p.date:'')
+      + ' &nbsp;<select class="statut-select" onchange="updateStatut(' + i + ',this.value)">'
+      + '<option value="prospect"' + (st==='prospect'?' selected':'') + '>Prospect</option>'
+      + '<option value="chaud"' + (st==='chaud'?' selected':'') + '>Client chaud</option>'
+      + '<option value="froid"' + (st==='froid'?' selected':'') + '>Client froid</option>'
+      + '<option value="perdu"' + (st==='perdu'?' selected':'') + '>Client perdu</option>'
+      + '</select></div>'
       + '<div class="pc-btns">'
       + '<button class="btn btn-y" onclick="openAudit(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\',\'' + esc(p.secteur||'') + '\',\'' + esc(p.ville||'') + '\')">Audit</button>'
       + '<button class="btn btn-v" onclick="openDevis(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\',\'' + esc(p.ville||'') + '\',497)">Devis</button>'
-      + '<button class="btn btn-g" onclick="openEspace(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\')">Creer espace</button>'
+      + siteBtn
       + '<button class="btn btn-r" onclick="delP(' + i + ')">x</button>'
       + '</div></div>';
   });
@@ -826,7 +877,9 @@ async function doCreateEspace() {
       ["commerce: 'Boucherie Zimblo'","commerce: '"+co+"'"],
       ["notion_id: 'zimblo-notion-001'","notion_id: '"+sl+"-notion-001'"],
       ["'dwt_zimblo_v1'","'dwt_"+sl+"_v1'"],
+      ["'dwt_zimblo_v2'","'dwt_"+sl+"_v2'"],
       ["'dwt_zimblo_demandes_v1'","'dwt_"+sl+"_demandes_v1'"],
+      ["'dwt_zimblo_demandes_v2'","'dwt_"+sl+"_demandes_v2'"],
       ["site_slug   : 'Zimblo'","site_slug   : '"+capSlug+"'"],
       ["dwtdigital-clients.github.io/Zimblo/","dwtdigital-clients.github.io/"+capSlug+"/"],
       ["/Zimblo/index.html","/"+capSlug+"/index.html"],
