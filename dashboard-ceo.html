@@ -252,11 +252,25 @@ select.fi{background:var(--bg2);}
           <button class="pbtn" data-pack="Publicites" data-price="597" onclick="selP(this)">Publicites<br><small>597/mois</small></button>
           <button class="pbtn" data-pack="Full Digital" data-price="897" onclick="selP(this)">Full Digital<br><small>897/mois</small></button>
         </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <!-- Total live -->
+        <div id="dv-total-display" style="display:none;font-size:12px;color:var(--cr2);margin-bottom:14px;padding:10px 14px;background:var(--g3);border-radius:var(--radius2);border:1px solid rgba(99,175,33,0.2);"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
           <button class="btn btn-o btn-lg" onclick="prevDv()">Previsualiser</button>
-          <button class="btn btn-g btn-lg" id="b-senddv" onclick="sendDv()">Envoyer le devis</button>
+          <button class="btn btn-g btn-lg" id="b-senddv" onclick="sendDv()">Envoyer</button>
+          <button class="btn btn-b btn-lg" id="btn-enreg-devis" onclick="enregistrerDevis()">Enregistrer le devis</button>
           <span id="dv-st" style="font-size:12px;display:none"></span>
         </div>
+        <div style="margin-top:6px;padding:10px 14px;background:rgba(245,158,11,0.05);border-radius:var(--radius2);border:1px solid rgba(245,158,11,0.12);font-size:11px;color:rgba(245,158,11,0.7);">
+          Enregistrer = sauvegarde dans votre registre devis. Apres acceptation client, cliquer "Accepte" pour ouvrir Notion Finances et y saisir la facture.
+        </div>
+      </div>
+      <div class="panel" style="margin-bottom:14px;">
+        <div class="panel-header" style="margin-bottom:6px;">
+          <div class="ptitle">Registre devis</div>
+          <button class="btn btn-o" style="font-size:10px" onclick="loadDevisHistory()">Actualiser</button>
+        </div>
+        <div class="psub">Devis enregistres — cliquer "Accepte" quand le client valide.</div>
+        <div id="devis-history"><div style="font-size:11px;color:var(--cr3);padding:10px 0;text-align:center;">Cliquer Actualiser pour charger.</div></div>
       </div>
       <div class="panel" style="border:1px solid rgba(245,158,11,0.15);background:linear-gradient(135deg,rgba(245,158,11,0.04),rgba(15,11,30,0));">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
@@ -1150,10 +1164,149 @@ function refreshDevisSelect() {
   });
 }
 
+
+// ── REGISTRE DEVIS/FACTURES GitHub ──
+var GH_DEVIS_URL = 'https://api.github.com/repos/dwtdigital-clients/dwtdigital-clients.github.io/contents/data/devis.json';
+var NOTION_FINANCES_URL = 'https://www.notion.so/3474d14985b58071a6a9e3498e593693';
+
+function getDevisRegistry(cb) {
+  fetch(GH_DEVIS_URL+'?t='+Date.now(), {headers:GH_HEADERS})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      var list=[]; try{list=JSON.parse(atob(d.content.replace(/\n/g,'')));}catch(e){}
+      cb(list, d.sha);
+    }).catch(function(){cb([],null);});
+}
+
+function saveDevisToGH(entry, cb) {
+  getDevisRegistry(function(list, sha) {
+    list.unshift(entry);
+    var b64=btoa(unescape(encodeURIComponent(JSON.stringify(list,null,2))));
+    var body={message:'devis: '+entry.num+' — '+entry.commerce, content:b64};
+    if(sha) body.sha=sha;
+    fetch(GH_DEVIS_URL,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},GH_HEADERS),body:JSON.stringify(body)})
+      .then(function(r){return r.json();})
+      .then(function(){if(cb)cb(true);}).catch(function(){if(cb)cb(false);});
+  });
+}
+
+function updateDevisStatusGH(num, newStatut, cb) {
+  getDevisRegistry(function(list, sha) {
+    var idx=list.findIndex(function(d){return d.num===num;});
+    if(idx<0){if(cb)cb(false);return;}
+    list[idx].statut=newStatut;
+    list[idx].date_update=new Date().toISOString().slice(0,10);
+    var b64=btoa(unescape(encodeURIComponent(JSON.stringify(list,null,2))));
+    var body={message:'statut: '+num+' → '+newStatut, content:b64, sha:sha};
+    fetch(GH_DEVIS_URL,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},GH_HEADERS),body:JSON.stringify(body)})
+      .then(function(){if(cb)cb(true);}).catch(function(){if(cb)cb(false);});
+  });
+}
+
+function enregistrerDevis() {
+  var p=g('dv-pr').value.trim(),co=g('dv-co').value.trim(),e=g('dv-em').value.trim(),v=g('dv-vi').value.trim(),m=g('dv-mo').value,n=g('dv-nu').value.trim()||'DWT-'+new Date().getFullYear()+'-001';
+  if(!co||!e){showToastDv('Commerce et email requis','#EF4444');return;}
+  var packs=getSelectedPacks();
+  if(!packs.length){showToastDv('Selectionnez au moins un pack','#EF4444');return;}
+  var entry={num:n,type:'devis',client:p,commerce:co,email:e,ville:v,packs:packs.map(function(p){return p.pack;}).join(' + '),montant:parseInt(m||0),statut:'envoye',date:new Date().toISOString().slice(0,10)};
+  var btn=g('btn-enreg-devis');btn.disabled=true;btn.textContent='Enregistrement...';
+  saveDevisToGH(entry,function(ok){
+    btn.disabled=false;btn.textContent='Enregistre !';
+    if(ok){
+      showToastDv('Devis '+n+' enregistre','var(--g)');
+      loadDevisHistory();
+      // Notif Telegram via Make
+      fetch('https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'devis_enregistre',num:n,commerce:co,packs:entry.packs,montant:entry.montant,email:e})}).catch(function(){});
+    } else {
+      showToastDv('Erreur enregistrement','#EF4444');
+    }
+    setTimeout(function(){btn.textContent='Enregistrer le devis';btn.disabled=false;},3000);
+  });
+}
+
+function transformerEnFacture(num) {
+  if(!confirm('Marquer le devis '+num+' comme ACCEPTE et creer la facture ?')) return;
+  updateDevisStatusGH(num,'facture_acceptee',function(ok){
+    if(ok){
+      showToastDv('Devis accepte — Enregistre dans Notion Finances','var(--g)');
+      // Ouvrir Notion Finances
+      window.open(NOTION_FINANCES_URL,'_blank');
+      loadDevisHistory();
+    }
+  });
+}
+
+function showToastDv(msg,color) {
+  var t=document.createElement('div');
+  t.textContent=msg;
+  t.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:'+color+';color:white;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.4);';
+  document.body.appendChild(t);
+  setTimeout(function(){t.remove();},3000);
+}
+
+function loadDevisHistory() {
+  var el=g('devis-history');
+  if(!el) return;
+  el.innerHTML='<div style="font-size:11px;color:var(--cr3);padding:10px 0;">Chargement...</div>';
+  getDevisRegistry(function(list) {
+    if(!list.length){el.innerHTML='<div style="font-size:11px;color:var(--cr3);padding:10px 0;text-align:center;">Aucun devis enregistre.</div>';return;}
+    var html='';
+    list.forEach(function(d){
+      var sc=d.statut==='facture_acceptee'?'var(--g)':d.statut==='envoye'?'#F59E0B':'var(--cr2)';
+      var sl=d.statut==='facture_acceptee'?'Accepte':'Envoye';
+      html+='<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius2);margin-bottom:6px;flex-wrap:wrap;gap:8px;">'
+        +'<div><div style="font-size:12px;font-weight:700;color:var(--cr);">'+d.num+' — '+d.commerce+'</div>'
+        +'<div style="font-size:10px;color:var(--cr2);font-family:var(--mono);">'+d.packs+' · '+d.montant+' €/mois · '+d.date+'</div></div>'
+        +'<div style="display:flex;align-items:center;gap:8px;">'
+        +'<span style="font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:10px;background:rgba(0,0,0,0.3);color:'+sc+';">'+sl+'</span>'
+        +(d.statut==='envoye'?'<button class="btn btn-g" style="font-size:10px;padding:5px 10px;" onclick="transformerEnFacture(''+d.num+'')">Accepte</button>':'')
+        +'</div></div>';
+    });
+    el.innerHTML=html;
+  });
+}
+
 function openDevis(n,em,co,vi,price) { g('dv-pr').value=n; g('dv-em').value=em; g('dv-co').value=co; g('dv-vi').value=vi; g('dv-mo').value=price||497; document.querySelectorAll('.tab')[1].click(); }
-function selP(btn) { document.querySelectorAll('.pbtn').forEach(function(b){b.classList.remove('sel');}); btn.classList.add('sel'); g('dv-mo').value=btn.dataset.price; }
+function selP(btn) {
+  btn.classList.toggle('sel');
+  var total = 0, names = [];
+  document.querySelectorAll('.pbtn.sel').forEach(function(b){
+    total += parseInt(b.dataset.price||0);
+    names.push(b.dataset.pack);
+  });
+  if(g('dv-mo')) g('dv-mo').value = total || '';
+  var disp = g('dv-total-display');
+  if(disp) {
+    if(names.length) {
+      disp.style.display='block';
+      disp.innerHTML = '<span style="color:var(--g);font-weight:700;font-family:var(--mono);">' + total + ' €/mois</span> — ' + names.join(' + ');
+    } else {
+      disp.style.display='none';
+    }
+  }
+}
+function getSelectedPacks() {
+  var packs=[];
+  document.querySelectorAll('.pbtn.sel').forEach(function(b){
+    packs.push({pack:b.dataset.pack,price:parseInt(b.dataset.price||0)});
+  });
+  return packs;
+}
+function getPack() {
+  var packs=getSelectedPacks();
+  return packs.length ? packs.map(function(p){return p.pack;}).join(' + ') : 'Sur Mesure';
+}
+function getServicesParam() {
+  var packs=getSelectedPacks();
+  if(!packs.length) return '';
+  return packs.map(function(p){return encodeURIComponent(p.pack+':'+p.price);}).join('%7C');
+}
 function getPack() { var s=document.querySelector('.pbtn.sel'); return s?s.dataset.pack:'Social Pro'; }
-function prevDv() { var p=g('dv-pr').value||'Client',e=g('dv-em').value||'',c=g('dv-co').value||'',v=g('dv-vi').value||'',m=g('dv-mo').value||'497',n=g('dv-nu').value||'DWT-2025-001'; window.open('https://dwtdigital-clients.github.io/devis/index.html?client='+encodeURIComponent(p)+'&email='+encodeURIComponent(e)+'&commerce='+encodeURIComponent(c)+'&ville='+encodeURIComponent(v)+'&num='+encodeURIComponent(n)+'&pack='+encodeURIComponent(getPack())+'&montant='+m+'&setup=0','_blank'); }
+function prevDv() {
+  var p=g('dv-pr').value||'Client',e=g('dv-em').value||'',co=g('dv-co').value||'',v=g('dv-vi').value||'',m=g('dv-mo').value||'497',n=g('dv-nu').value||'DWT-2025-001';
+  var url='https://dwtdigital-clients.github.io/devis/index.html?client='+encodeURIComponent(p)+'&email='+encodeURIComponent(e)+'&commerce='+encodeURIComponent(co)+'&ville='+encodeURIComponent(v)+'&num='+encodeURIComponent(n)+'&pack='+encodeURIComponent(getPack())+'&montant='+m+'&setup=0&services='+getServicesParam();
+  window.open(url,'_blank');
+}
 async function sendDv() {
   var btn=g('b-senddv'), st=g('dv-st'), em=g('dv-em').value;
   if (!em) { alert('Email requis'); return; }
