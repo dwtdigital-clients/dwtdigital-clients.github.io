@@ -466,26 +466,42 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
         </div>
 
         <!-- Palette couleurs -->
-        <div class="identity-section">
+        <div class="identity-section" id="palette-section">
           <h3>Palette de couleurs</h3>
-          <div class="palette-row">
+          <div class="palette-row" id="palette-preview-row">
             <div class="swatch-item">
-              <div class="swatch" style="background:#4F0F5C;"></div>
-              <div class="swatch-name">Rouge</div>
+              <div class="swatch" id="sw-primary" style="background:#C2522D;"></div>
+              <div class="swatch-name">Primaire</div>
             </div>
             <div class="swatch-item">
-              <div class="swatch" style="background:#F5F0E8;border:1px solid #E0D8CC;"></div>
-              <div class="swatch-name">Ivoire</div>
+              <div class="swatch" id="sw-secondary" style="background:#E8956D;"></div>
+              <div class="swatch-name">Secondaire</div>
             </div>
             <div class="swatch-item">
-              <div class="swatch" style="background:#C5A55A;"></div>
-              <div class="swatch-name">Or</div>
+              <div class="swatch" id="sw-bg" style="background:#1C0F07;border:1px solid rgba(255,255,255,0.1);"></div>
+              <div class="swatch-name">Fond</div>
             </div>
             <div class="swatch-item">
-              <div class="swatch" style="background:#1A1A1A;"></div>
-              <div class="swatch-name">Noir</div>
+              <div class="swatch" id="sw-text" style="background:#F5E6D0;border:1px solid #E0D8CC;"></div>
+              <div class="swatch-name">Texte</div>
             </div>
           </div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px;" id="palette-editors">
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--td);">
+              <input type="color" id="cp-primary" value="#C2522D" style="width:32px;height:32px;border:none;border-radius:6px;cursor:pointer;padding:0;" oninput="updateSwatch('primary',this.value)">
+              <span>Couleur principale</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--td);">
+              <input type="color" id="cp-secondary" value="#E8956D" style="width:32px;height:32px;border:none;border-radius:6px;cursor:pointer;padding:0;" oninput="updateSwatch('secondary',this.value)">
+              <span>Couleur secondaire / accent</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--td);">
+              <input type="color" id="cp-bg" value="#1C0F07" style="width:32px;height:32px;border:none;border-radius:6px;cursor:pointer;padding:0;" oninput="updateSwatch('bg',this.value)">
+              <span>Couleur de fond</span>
+            </div>
+          </div>
+          <button class="send-btn" style="margin-top:14px;font-size:12px;padding:10px 0;" onclick="savePalette()">Valider cette palette</button>
+          <div id="palette-saved-msg" style="display:none;font-size:11px;color:var(--g);margin-top:8px;text-align:center;">Palette sauvegardee. DWT Digital mettra a jour votre site sous 48h.</div>
         </div>
 
         <!-- Typographie -->
@@ -658,7 +674,7 @@ var WH_MODIF   = 'https://hook.eu1.make.com/r8kghl6dxv65r1xt0yic862e4x7dff8h';
 var GH_TOKEN   = ['ghp_','QHlpXwegxZNIpWB0k','sUf6GJhYUQLoo3e6G7g'].join('');
 var OPENAI_KEY = 'sk-proj-' + 'TiO3IuK07xh0dAvGi4h2_blIqGg7se7d' + 'LcN1BFdPNf2O5THsKjFnoswVxJm6yxOm04y59Ps9sFT3BlbkFJIzdHo' + '-pxDMusfRT1Oyxm9lbdZdGz1s1TG00v6oD1TFv-0ezw8czT11OURqQvUtnjWlAjW40gAA';
 var GH_REPO    = 'dwtdigital-clients/dwtdigital-clients.github.io';
-var STORAGE_KEY = 'dwt_zimblo_v2';
+var STORAGE_KEY = 'dwt_sophie_le_fournil_de_soph_v2';
 
 var PLATFORMS = {
   instagram: { name:'Instagram', color:'linear-gradient(135deg,#f09433,#dc2743,#bc1888)' },
@@ -1136,6 +1152,7 @@ function sendWebhook(url, data, onSuccess, onError) {
 // ── INIT ──
 function init() {
   loadState();
+  loadPaletteState();
   updateProgress();
   renderTimeline();
   renderModifHistory();
@@ -1151,6 +1168,49 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+// ── PALETTE ÉDITABLE ──
+function updateSwatch(key, val) {
+  var map = {primary:'sw-primary', secondary:'sw-secondary', bg:'sw-bg'};
+  var el = document.getElementById(map[key]);
+  if(el) el.style.background = val;
+}
+function savePalette() {
+  var primary = document.getElementById('cp-primary').value;
+  var secondary = document.getElementById('cp-secondary').value;
+  var bg = document.getElementById('cp-bg').value;
+  S.palette = {primary: primary, secondary: secondary, bg: bg};
+  S.identity = true;
+  saveState();
+  document.getElementById('palette-saved-msg').style.display = 'block';
+  renderTimeline();
+  updateProgress();
+  showToast('Palette sauvegardée !');
+  // Notif CEO via Make
+  fetch('https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      type: 'identite_validee',
+      commerce: S.commerce || 'Le Fournil de Sophie',
+      palette: {primary: primary, secondary: secondary, bg: bg},
+      date: new Date().toISOString().slice(0,10)
+    })
+  }).catch(function(){});
+}
+function loadPaletteState() {
+  if(S.palette) {
+    var p = S.palette;
+    if(document.getElementById('cp-primary')) document.getElementById('cp-primary').value = p.primary || '#C2522D';
+    if(document.getElementById('cp-secondary')) document.getElementById('cp-secondary').value = p.secondary || '#E8956D';
+    if(document.getElementById('cp-bg')) document.getElementById('cp-bg').value = p.bg || '#1C0F07';
+    updateSwatch('primary', p.primary || '#C2522D');
+    updateSwatch('secondary', p.secondary || '#E8956D');
+    updateSwatch('bg', p.bg || '#1C0F07');
+    if(S.identity) document.getElementById('palette-saved-msg').style.display = 'block';
+  }
+}
+
 </script>
 </body>
 </html>
