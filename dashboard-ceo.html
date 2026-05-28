@@ -285,7 +285,7 @@ select.fi { background: #1A0820; }
       </div>
       <div class="fg" style="margin-bottom:10px"><label>Ville</label><input id="a-vi" class="fi" placeholder="Paris"></div>
       <button class="btn btn-v btn-lg" id="b-gen" onclick="genAudit()" style="width:100%;margin-bottom:12px">Generer l'audit IA</button>
-      <div id="a-loading" style="display:none;text-align:center;color:rgba(239,222,201,0.5);font-size:12px;padding:10px">Claude genere l'audit...</div>
+      <div id="a-loading" style="display:none;text-align:center;color:rgba(239,222,201,0.5);font-size:12px;padding:10px">IA genere l'audit...</div>
       <div class="fg" id="a-result-wrap" style="display:none">
         <label>Audit genere</label>
         <textarea id="a-result" class="fi" style="min-height:200px;resize:vertical;font-size:11px;line-height:1.5"></textarea>
@@ -713,30 +713,23 @@ async function genAudit() {
   g('a-result-wrap').style.display = 'none';
 
   try {
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    var resp = await fetch('https://hook.eu1.make.com/5j8knhyctkunwm7x9aplf3xt9e7u9gx1', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{
-          role: 'user',
-          content: 'Tu es un expert marketing digital pour DWT Digital. Genere un audit de visibilite locale court et percutant pour ' + nm + ', ' + co + ' (' + se + ') a ' + vi + '.\n\nStructure en 5 parties concises:\n1. DIAGNOSTIC RAPIDE — Score global /100 avec 5 criteres notes /10\n2. POINTS FORTS — 2 atouts\n3. PRIORITES — 3 actions classees par impact\n4. RECOMMANDATIONS DWT DIGITAL — 2 packs proposes avec tarifs\n5. PROCHAINE ETAPE — CTA appel decouverte gratuit 30min\n\nTon : pro, bienveillant, tutoie le prospect.\nSigne : Tirera Darell - Fondateur DWT Digital\nPas de markdown ni caracteres speciaux.'
-        }]
-      })
+      body: JSON.stringify({ nom: nm, commerce: co, secteur: se, ville: vi })
     });
-    var data = await resp.json();
-    var audit = data.content && data.content[0] ? data.content[0].text : 'Erreur de generation.';
+    var audit = await resp.text();
+    if (!audit || audit.length < 10) audit = 'Erreur de generation. Veuillez reessayer.';
     g('a-result').value = audit;
     g('a-result-wrap').style.display = 'block';
     g('a-loading').style.display = 'none';
   } catch(e) {
     g('a-loading').style.display = 'none';
-    g('a-result').value = 'Erreur API Claude : ' + e.message;
+    g('a-result').value = 'Erreur reseau : ' + e.message;
     g('a-result-wrap').style.display = 'block';
   }
   btn.disabled = false;
-  btn.textContent = 'Regenerer l\'audit IA';
+  btn.textContent = "Regenerer l'audit IA";
 }
 async function sendAuditB() {
   var btn=g('b-ab'), msg=g('a-msg');
