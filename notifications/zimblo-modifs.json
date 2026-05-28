@@ -1,50 +1,57 @@
 [
   {
-    "date": "28/05/2026 à 02:42",
+    "date": "28/05/2026 à 02:43",
     "type": "Contenu texte",
-    "msg": "harmoniser les couleurs du site : remplacer le bleu (#3B82F6) par le vert DWT (#63AF21) sur tous les boutons et liens",
+    "msg": "Ajouter une page \"Nos creations\" avec 6 categories : Pains, Viennoiseries, Patisseries, Gateaux sur commande, Sandwichs, Boissons",
     "commerce": "Le Fournil de Sophie",
     "status": "applied"
   },
   {
     "date": "28/05/2026 Ã  02:42",
     "type": "Contenu texte",
-    "msg": "Creer une section avis clients avec 3 temoignages Google : Marie L. (5 etoiles), Jean-Pierre M. (5 etoiles), Camille R. (4 etoiles)",
+    "msg": "harmoniser les couleurs du site : remplacer le bleu (#3B82F6) par le vert DWT (#63AF21) sur tous les boutons et liens",
     "commerce": "Le Fournil de Sophie",
     "status": "applied"
   },
   {
-    "date": "28/05/2026 ÃÂ  02:41",
+    "date": "28/05/2026 ÃÂ  02:42",
     "type": "Contenu texte",
-    "msg": "Ajouter un bouton CTA \"Commander par telephone\" lie au numero 01 39 52 87 14 sur toutes les pages (header et footer)",
+    "msg": "Creer une section avis clients avec 3 temoignages Google : Marie L. (5 etoiles), Jean-Pierre M. (5 etoiles), Camille R. (4 etoiles)",
     "commerce": "Le Fournil de Sophie",
     "status": "applied"
   },
   {
     "date": "28/05/2026 ÃÂÃÂ  02:41",
     "type": "Contenu texte",
+    "msg": "Ajouter un bouton CTA \"Commander par telephone\" lie au numero 01 39 52 87 14 sur toutes les pages (header et footer)",
+    "commerce": "Le Fournil de Sophie",
+    "status": "applied"
+  },
+  {
+    "date": "28/05/2026 ÃÂÃÂÃÂÃÂ  02:41",
+    "type": "Contenu texte",
     "msg": "Ajouter une section \"Nouveautes\" sur la page d'accueil avec 3 produits de saison (macarons ete, tarte framboise, baguette tradition)",
     "commerce": "Le Fournil de Sophie",
     "status": "applied"
   },
   {
-    "date": "28/05/2026 ÃÂÃÂÃÂÃÂ  02:40",
+    "date": "28/05/2026 ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ  02:40",
     "type": "Contenu texte",
     "msg": "Remplacer la photo principale de la page d'accueil par une photo de pain sortant du four (photo fournie par Sophie)",
     "commerce": "Le Fournil de Sophie",
     "status": "applied"
   },
   {
-    "date": "28/05/2026 ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ  01:39",
+    "date": "28/05/2026 ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ  01:39",
     "type": "Contenu texte",
-    "msg": "Je souhaite un site pour boulangerie pÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢tisserie en plein cÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂur de Versailles. Ouvert de 7h30ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ  20h. Je veux des images de pÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢tisserie et plusieurs pages avec une page ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ  propos avec nos informations de contact. Et une page pour envoyer des commandes",
+    "msg": "Je souhaite un site pour boulangerie pÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢tisserie en plein cÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂur de Versailles. Ouvert de 7h30ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ  20h. Je veux des images de pÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢tisserie et plusieurs pages avec une page ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ  propos avec nos informations de contact. Et une page pour envoyer des commandes",
     "commerce": "Le Fournil de Sophie",
     "status": "applied"
   },
   {
-    "date": "28/05/2026 ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ  00:01",
+    "date": "28/05/2026 ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ  00:01",
     "type": "Contenu texte",
-    "msg": "ajouter la livraison en 24 ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ  48h et dans toute la France",
+    "msg": "ajouter la livraison en 24 ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ  48h et dans toute la France",
     "commerce": "Boucherie Zimblo",
     "status": "applied"
   }
