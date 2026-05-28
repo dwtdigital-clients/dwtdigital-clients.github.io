@@ -560,12 +560,36 @@ function getStatutLabel(s){
 }
 function updateStatut(i, val) {
   var l = getCRM();
-  if(l[i]) { l[i].statut = val; saveCRM(l); }
+  if(l[i]) {
+    l[i].statut = val;
+    saveCRM(l);
+    // Sync Notion via Make
+    var prospect = l[i];
+    fetch('https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        type: 'statut_update',
+        email: prospect.email,
+        commerce: prospect.commerce || '',
+        prenom: prospect.prenom || '',
+        statut: val,
+        date: new Date().toISOString().slice(0,10)
+      })
+    }).catch(function(){});
+  }
   var badge = document.getElementById('st-badge-'+i);
   if(badge) { badge.className = 'statut-badge ' + getStatutClass(val); badge.textContent = getStatutLabel(val); }
+  // Re-render après délai pour réordonner
+  setTimeout(renderProspects, 300);
 }
 function renderProspects() {
   var l = getCRM();
+  // Trier : chaud → prospect → froid → perdu
+  var order = {chaud:0, prospect:1, froid:2, perdu:3};
+  l = l.slice().sort(function(a,b){
+    return (order[a.statut||'prospect']||1) - (order[b.statut||'prospect']||1);
+  });
   var el = g('p-list');
   if (!l.length) {
     el.innerHTML = '<div style="text-align:center;padding:20px;color:rgba(239,222,201,0.3);font-size:13px">Aucun prospect. Les formulaires remplis sur le site apparaitront ici.</div>';
@@ -582,9 +606,7 @@ function renderProspects() {
     var identBadge = identOk
       ? '<span class="identity-badge identity-ok">Identite validee</span>'
       : '<span class="identity-badge identity-nok">Identite en attente</span>';
-    var siteBtn = identOk
-      ? '<button class="btn btn-g" onclick="openEspace(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\')">Creer espace</button>'
-      : '<button class="btn btn-g" title="Identite visuelle non validee" onclick="alert(\'Le client doit valider son identite visuelle avant la creation du site.\')" style="opacity:0.5">Creer espace</button>';
+    var siteBtn = '<button class="btn btn-g" onclick="openEspace(\'' + esc(p.prenom) + '\',\'' + esc(p.email) + '\',\'' + esc(p.commerce||'') + '\')">Creer espace</button>';
     html += '<div class="pc">'
       + '<div class="pc-name">' + (p.prenom||'') + (p.nom?' '+p.nom:'') + (p.commerce?' — '+p.commerce:'') + auditBadge
       + '<span class="statut-badge ' + stClass + '" id="st-badge-' + i + '">' + stLabel + '</span>'
