@@ -161,6 +161,7 @@ select.fi { background: #1A0820; }
           <div style="display:flex;gap:8px">
             <button class="btn btn-b" onclick="showModal('m-add')">+ Ajouter</button>
             <button class="btn btn-o" onclick="renderProspects()">Actualiser</button>
+            <button class="btn btn-g" style="font-size:10px" onclick="loadStatutsFromGH()" title="Lire les statuts depuis GitHub/Notion">Sync Notion</button>
           </div>
         </div>
         <div class="psub">Clients ayant rempli le formulaire. Audit, devis, creation espace client.</div>
@@ -471,6 +472,7 @@ function boot() {
   try { g('d-badge').textContent = new Date().toLocaleDateString('fr-FR',{month:'long',year:'numeric'}); } catch(e) {}
   buildTabs();
   loadCRM();
+  setTimeout(loadStatutsFromGH, 1000);
 }
 
 // ━━━━ TABS ━━━━
@@ -563,20 +565,9 @@ function updateStatut(i, val) {
   if(l[i]) {
     l[i].statut = val;
     saveCRM(l);
-    // Sync Notion via Make
+    // Sync GitHub statuts.json
     var prospect = l[i];
-    fetch('https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        type: 'statut_update',
-        email: prospect.email,
-        commerce: prospect.commerce || '',
-        prenom: prospect.prenom || '',
-        statut: val,
-        date: new Date().toISOString().slice(0,10)
-      })
-    }).catch(function(){});
+    saveStatutToGH(prospect.email, val);
   }
   var badge = document.getElementById('st-badge-'+i);
   if(badge) { badge.className = 'statut-badge ' + getStatutClass(val); badge.textContent = getStatutLabel(val); }
@@ -633,6 +624,52 @@ function delP(i) { if (!confirm('Supprimer?')) return; var l=getCRM(); l.splice(
 var GH_API = 'https://api.github.com/repos/dwtdigital-clients/dwtdigital-clients.github.io';
 var GH_TOKEN = 'ghp_' + 'QHlpXwegxZNIpWB0ksUf6GJhYUQLoo3e6G7g';
 var GH_HEADERS = {'Authorization': 'token ' + GH_TOKEN, 'Accept': 'application/vnd.github.v3+json'};
+
+
+// ── SYNC STATUTS GITHUB ──
+var GH_STATUTS_URL = 'https://api.github.com/repos/dwtdigital-clients/dwtdigital-clients.github.io/contents/data/statuts.json';
+
+function loadStatutsFromGH() {
+  fetch(GH_STATUTS_URL + '?t=' + Date.now(), {headers: GH_HEADERS})
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if (!data.content) return;
+      var statuts = JSON.parse(atob(data.content.replace(/\n/g,'')));
+      var l = getCRM();
+      var changed = false;
+      l.forEach(function(p) {
+        if (statuts[p.email] && statuts[p.email] !== p.statut) {
+          p.statut = statuts[p.email];
+          changed = true;
+        }
+      });
+      if (changed) { saveCRM(l); renderProspects(); showSyncToast('Statuts mis a jour depuis Notion'); }
+    }).catch(function(){});
+}
+
+function saveStatutToGH(email, statut) {
+  fetch(GH_STATUTS_URL + '?t=' + Date.now(), {headers: GH_HEADERS})
+    .then(function(r){return r.json();})
+    .then(function(data){
+      var statuts = {};
+      if (data.content) statuts = JSON.parse(atob(data.content.replace(/\n/g,'')));
+      statuts[email] = statut;
+      var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(statuts, null, 2))));
+      return fetch(GH_STATUTS_URL, {
+        method: 'PUT',
+        headers: Object.assign({'Content-Type':'application/json'}, GH_HEADERS),
+        body: JSON.stringify({message: 'statut: ' + email + ' → ' + statut, content: b64, sha: data.sha})
+      });
+    }).catch(function(){});
+}
+
+function showSyncToast(msg) {
+  var t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#63AF21;color:white;padding:10px 18px;border-radius:8px;font-size:12px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+  document.body.appendChild(t);
+  setTimeout(function(){t.remove();}, 3000);
+}
 
 function loadNotifs() {
   var zone = document.getElementById('notif-zone');
