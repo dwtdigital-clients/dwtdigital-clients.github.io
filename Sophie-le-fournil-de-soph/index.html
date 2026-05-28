@@ -1,92 +1,294 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Fournil de Sophie — Boulangerie Pâtisserie</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: "DM Sans", sans-serif; background: #0D0D0D; color: #F5F0E8; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
-        header, main, footer { max-width: 900px; width: 100%; text-align: center; margin-bottom: 40px; }
-        .logo-wrap { width: 72px; height: 72px; margin: 0 auto 32px; }
-        .logo-wrap img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
-        .h1 { font-family: "Cormorant Garamond", serif; font-size: clamp(32px, 5vw, 52px); color: #F5F0E8; margin-bottom: 12px; }
-        .sub { font-size: 15px; color: rgba(245, 240, 232, 0.5); line-height: 1.8; margin-bottom: 36px; }
-        .cta { display: inline-block; background: #4F0F5C; color: white; padding: 13px 32px; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; border-radius: 4px; }
-        .foot { font-size: 11px; color: rgba(245, 240, 232, 0.2); }
-        a { color: rgba(245, 240, 232, 0.3); text-decoration: none; }
-        nav a { margin: 0 15px; }
-        .order-form { display: flex; flex-direction: column; align-items: center; }
-        .order-form input, .order-form textarea, .order-form button { margin-top: 10px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
-        .order-form button { background: #4F0F5C; color: white; cursor: pointer; }
-        .images img { width: 200px; margin: 10px; border-radius: 10px; object-fit: cover; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Fournil de Sophie — Boulangerie Pâtisserie à Versailles</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#1C0F07;--bg2:#261509;--bg3:#321C0B;
+  --accent:#C2522D;--accent2:#E8956D;
+  --cream:#F5E6D0;--cream-dim:rgba(245,230,208,0.55);--cream-faint:rgba(245,230,208,0.15);
+  --border:rgba(245,230,208,0.1);
+}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);min-height:100vh;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(28,15,7,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.nav-brand{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--cream);text-decoration:none;letter-spacing:0.5px;}
+.nav-links{display:flex;gap:32px;}
+.nav-links a{font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--cream-dim);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--accent2);}
+.nav-cta{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;background:var(--accent);color:white;padding:10px 22px;border-radius:2px;text-decoration:none;transition:background .2s;}
+.nav-cta:hover{background:var(--accent2);}
+
+/* ── HERO ── */
+.hero{height:100vh;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1574615522789-e77fe6e4df70?w=1600&q=85&fit=crop&auto=format') center/cover no-repeat;filter:brightness(0.35);}
+.hero-grain{position:absolute;inset:0;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;}
+.hero-content{position:relative;z-index:2;padding:0 20px;}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--accent2);margin-bottom:24px;opacity:0;animation:fadeUp .8s .2s forwards;}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,9vw,110px);font-style:italic;line-height:.95;color:var(--cream);margin-bottom:28px;opacity:0;animation:fadeUp .8s .4s forwards;}
+.hero-title em{color:var(--accent2);font-style:italic;}
+.hero-sub{font-size:16px;font-weight:300;color:var(--cream-dim);line-height:1.7;max-width:480px;margin:0 auto 44px;opacity:0;animation:fadeUp .8s .6s forwards;}
+.hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .8s forwards;}
+.btn-primary{font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;background:var(--accent);color:white;padding:14px 36px;border-radius:2px;text-decoration:none;transition:all .2s;border:1.5px solid var(--accent);}
+.btn-primary:hover{background:transparent;color:var(--accent2);border-color:var(--accent2);}
+.btn-secondary{font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;background:transparent;color:var(--cream);padding:14px 36px;border-radius:2px;text-decoration:none;border:1.5px solid rgba(245,230,208,0.3);transition:all .2s;}
+.btn-secondary:hover{border-color:var(--cream);color:var(--cream);}
+.hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;z-index:2;opacity:0;animation:fadeIn 1s 1.2s forwards;}
+.hero-scroll span{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--cream-faint);}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollPulse 2s ease-in-out infinite;}
+
+/* ── SECTION BASE ── */
+section{padding:100px 40px;}
+.section-inner{max-width:1100px;margin:0 auto;}
+.label{font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--accent2);margin-bottom:20px;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,58px);font-style:italic;line-height:1.1;color:var(--cream);margin-bottom:20px;}
+.section-sub{font-size:15px;font-weight:300;color:var(--cream-dim);line-height:1.8;max-width:560px;}
+
+/* ── PRODUITS ── */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:60px;}
+.product-card{position:relative;overflow:hidden;border-radius:4px;cursor:pointer;group:true;}
+.product-card img{width:100%;height:320px;object-fit:cover;transition:transform .5s ease;}
+.product-card:hover img{transform:scale(1.06);}
+.product-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(28,15,7,0.9) 0%,rgba(28,15,7,0.1) 55%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:28px 24px;}
+.product-cat{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent2);margin-bottom:6px;}
+.product-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-style:italic;color:var(--cream);}
+.product-desc{font-size:12px;color:var(--cream-dim);margin-top:6px;opacity:0;transform:translateY(10px);transition:all .3s;}
+.product-card:hover .product-desc{opacity:1;transform:translateY(0);}
+
+/* ── STRIP ── */
+.strip{background:var(--accent);padding:60px 40px;text-align:center;}
+.strip-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,46px);font-style:italic;color:white;margin-bottom:8px;}
+.strip-sub{font-size:14px;color:rgba(255,255,255,0.75);margin-bottom:32px;}
+.btn-white{font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;background:white;color:var(--accent);padding:14px 36px;border-radius:2px;text-decoration:none;transition:all .2s;display:inline-block;}
+.btn-white:hover{background:var(--cream);}
+
+/* ── SAVOIR-FAIRE ── */
+.savoir-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-top:60px;}
+.savoir-img{position:relative;}
+.savoir-img img{width:100%;height:500px;object-fit:cover;border-radius:4px;}
+.savoir-tag{position:absolute;bottom:-20px;right:-20px;background:var(--accent);padding:20px 28px;border-radius:2px;}
+.savoir-tag-num{font-family:'Cormorant Garamond',serif;font-size:42px;font-style:italic;color:white;line-height:1;}
+.savoir-tag-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-top:2px;}
+.savoir-items{display:flex;flex-direction:column;gap:32px;margin-top:40px;}
+.savoir-item{border-left:2px solid var(--accent);padding-left:20px;}
+.savoir-item-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--cream);margin-bottom:8px;}
+.savoir-item-desc{font-size:13px;color:var(--cream-dim);line-height:1.7;}
+
+/* ── HORAIRES ── */
+.horaires{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:50px;max-width:700px;margin:60px auto 0;}
+.horaires-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-style:italic;color:var(--cream);text-align:center;margin-bottom:36px;}
+.horaires-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border);}
+.horaires-row:last-child{border-bottom:none;}
+.horaires-day{font-size:13px;font-weight:500;color:var(--cream-dim);}
+.horaires-time{font-size:13px;font-weight:600;color:var(--cream);}
+.horaires-closed{font-size:13px;color:rgba(245,230,208,0.25);font-style:italic;}
+
+/* ── FOOTER ── */
+footer{background:var(--bg3);border-top:1px solid var(--border);padding:60px 40px 40px;}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;margin-bottom:60px;}
+.footer-brand{font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;color:var(--cream);margin-bottom:16px;}
+.footer-desc{font-size:13px;color:var(--cream-dim);line-height:1.8;}
+.footer-col-title{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent2);margin-bottom:20px;}
+.footer-col a{display:block;font-size:13px;color:var(--cream-dim);text-decoration:none;margin-bottom:10px;transition:color .2s;}
+.footer-col a:hover{color:var(--cream);}
+.footer-bottom{border-top:1px solid var(--border);padding-top:30px;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:11px;color:rgba(245,230,208,0.25);}
+.footer-dwt{font-size:11px;color:rgba(245,230,208,0.25);text-decoration:none;}
+.footer-dwt:hover{color:var(--accent2);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes scrollPulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  nav{padding:16px 20px;}
+  .nav-links{display:none;}
+  section{padding:70px 20px;}
+  .savoir-grid{grid-template-columns:1fr;}
+  .savoir-tag{right:0;bottom:-10px;}
+  .footer-top{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;gap:10px;text-align:center;}
+  .horaires{padding:30px 20px;}
+}
+</style>
 </head>
 <body>
 
-<header>
-    <div class="logo-wrap">
-        <img src="https://dwtdigital-clients.github.io/logo-200.png" alt="Le Fournil de Sophie">
+<nav>
+  <a href="index.html" class="nav-brand">Le Fournil de Sophie</a>
+  <div class="nav-links">
+    <a href="index.html">Accueil</a>
+    <a href="patisseries.html">Nos Pâtisseries</a>
+    <a href="histoire.html">Notre Histoire</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <a href="contact.html" class="nav-cta">Commander</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Boulangerie &amp; Pâtisserie — Versailles</div>
+    <h1 class="hero-title">Le Fournil<br>de <em>Sophie</em></h1>
+    <p class="hero-sub">Pains artisanaux, viennoiseries et pâtisseries de saison — réalisés chaque matin avec passion depuis 2010.</p>
+    <div class="hero-actions">
+      <a href="patisseries.html" class="btn-primary">Découvrir nos créations</a>
+      <a href="histoire.html" class="btn-secondary">Notre histoire</a>
     </div>
-    <h1 class="h1">Le Fournil de Sophie</h1>
-    <p>Ouvert de 7h30 à 20h</p>
-    <nav>
-        <a href="#apropos">À propos</a>
-        <a href="#patisseries">Nos Pâtisseries</a>
-        <a href="#creations">Nos Créations</a>
-        <a href="#contact">Contact</a>
-        <a href="#commander">Commander</a>
-    </nav>
-</header>
+  </div>
+  <div class="hero-scroll">
+    <span>Découvrir</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
 
-<main>
-    <section id="patisseries" class="images">
-        <h2 class="h1">Nos Pâtisseries</h2>
-        <img src="img/patisserie1.jpg" alt="Pâtisserie 1">
-        <img src="img/patisserie2.jpg" alt="Pâtisserie 2">
-        <img src="img/patisserie3.jpg" alt="Pâtisserie 3">
-        <img src="img/patisserie4.jpg" alt="Pâtisserie 4">
-    </section>
-    
-    <section id="creations">
-        <h2 class="h1">Nos Créations</h2>
-        <ul class="sub">
-            <li>Pains</li>
-            <li>Viennoiseries</li>
-            <li>Pâtisseries</li>
-            <li>Gâteaux sur commande</li>
-            <li>Sandwichs</li>
-            <li>Boissons</li>
-        </ul>
-    </section>
-
-    <section id="apropos">
-        <h2 class="h1">À propos</h2>
-        <p class="sub">Situé en plein cœur de Versailles, Le Fournil de Sophie vous propose une large gamme de produits de boulangerie et pâtisserie, élaborés avec passion et savoir-faire.</p>
-        <p class="sub">Contactez-nous : <a href="mailto:contact@lefournildesophie.com">contact@lefournildesophie.com</a></p>
-        <p class="sub">Téléphone : 0123 456 789</p>
-    </section>
-</main>
-
-<section id="contact">
-    <h2 class="h1">Contact</h2>
-    <p class="sub">Vous avez une question ? Écrivez-nous à <a href="mailto:contact@lefournildesophie.com">contact@lefournildesophie.com</a></p>
+<section>
+  <div class="section-inner">
+    <div class="label reveal">Sélection du moment</div>
+    <h2 class="section-title reveal">Nos créations<br><em>incontournables</em></h2>
+    <div class="products-grid">
+      <div class="product-card reveal">
+        <img src="https://images.unsplash.com/photo-1603190287605-e6ade32fa852?w=800&q=80&fit=crop&auto=format" alt="Croissants au beurre" loading="lazy">
+        <div class="product-overlay">
+          <div class="product-cat">Viennoiserie</div>
+          <div class="product-name">Croissants au beurre</div>
+          <div class="product-desc">Feuilletage pur beurre AOP, croustillant et moelleux.</div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80&fit=crop&auto=format" alt="Pain au levain" loading="lazy">
+        <div class="product-overlay">
+          <div class="product-cat">Boulangerie</div>
+          <div class="product-name">Pain au levain</div>
+          <div class="product-desc">Fermentation lente 24h, croûte dorée, mie alvéolée.</div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&q=80&fit=crop&auto=format" alt="Macarons de saison" loading="lazy">
+        <div class="product-overlay">
+          <div class="product-cat">Pâtisserie</div>
+          <div class="product-name">Macarons de saison</div>
+          <div class="product-desc">Ganaches créatives, renouvelées chaque mois.</div>
+        </div>
+      </div>
+      <div class="product-card reveal">
+        <img src="https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=800&q=80&fit=crop&auto=format" alt="Gâteaux sur commande" loading="lazy">
+        <div class="product-overlay">
+          <div class="product-cat">Sur commande</div>
+          <div class="product-name">Gâteaux personnalisés</div>
+          <div class="product-desc">Mariages, anniversaires — créations sur mesure.</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:48px;" class="reveal">
+      <a href="patisseries.html" class="btn-primary">Voir toute la carte</a>
+    </div>
+  </div>
 </section>
 
-<section id="commander">
-    <h2 class="h1">Passer Commande</h2>
-    <div class="order-form">
-        <input type="text" placeholder="Votre nom" required>
-        <input type="email" placeholder="Votre email" required>
-        <textarea placeholder="Votre commande" rows="5" required></textarea>
-        <button type="submit">Envoyer</button>
+<div class="strip">
+  <div class="strip-title">Ouvert du mardi au dimanche</div>
+  <div class="strip-sub">7h30 — 20h00 · 12 rue des Artisans, Versailles</div>
+  <a href="contact.html" class="btn-white">Nous trouver</a>
+</div>
+
+<section>
+  <div class="section-inner">
+    <div class="savoir-grid">
+      <div class="savoir-img reveal">
+        <img src="https://images.unsplash.com/photo-1574615522789-e77fe6e4df70?w=900&q=80&fit=crop&auto=format" alt="Fournil de Sophie">
+        <div class="savoir-tag">
+          <div class="savoir-tag-num">14</div>
+          <div class="savoir-tag-label">Ans de passion</div>
+        </div>
+      </div>
+      <div>
+        <div class="label reveal">Notre savoir-faire</div>
+        <h2 class="section-title reveal">L'artisanat<br><em>avant tout</em></h2>
+        <p class="section-sub reveal">Chaque produit est façonné à la main, avec des matières premières soigneusement sélectionnées auprès de producteurs locaux.</p>
+        <div class="savoir-items">
+          <div class="savoir-item reveal">
+            <div class="savoir-item-title">Farines de meunerie locale</div>
+            <div class="savoir-item-desc">Farine Label Rouge du moulin de Bourgogne, tracée de la parcelle au fournil.</div>
+          </div>
+          <div class="savoir-item reveal">
+            <div class="savoir-item-title">Levain naturel maison</div>
+            <div class="savoir-item-desc">Notre levain chef a 8 ans. Il donne caractère et digestibilité à chaque pain.</div>
+          </div>
+          <div class="savoir-item reveal">
+            <div class="savoir-item-title">Beurre AOP de qualité</div>
+            <div class="savoir-item-desc">Beurre de Charentes-Poitou pour des viennoiseries au feuilletage irréprochable.</div>
+          </div>
+        </div>
+        <div style="margin-top:40px;" class="reveal">
+          <a href="histoire.html" class="btn-primary">Notre histoire</a>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
-<footer class="foot">
-    Site réalisé par <a href="https://dwtdigital-clients.github.io" target="_blank">DWT Digital</a>
+<section>
+  <div class="section-inner">
+    <div class="label reveal" style="text-align:center;">Nous retrouver</div>
+    <h2 class="section-title reveal" style="text-align:center;margin-bottom:0;">Horaires d'ouverture</h2>
+    <div class="horaires reveal">
+      <div class="horaires-title">Le Fournil de Sophie</div>
+      <div class="horaires-row"><span class="horaires-day">Lundi</span><span class="horaires-closed">Fermé</span></div>
+      <div class="horaires-row"><span class="horaires-day">Mardi — Vendredi</span><span class="horaires-time">7h30 — 20h00</span></div>
+      <div class="horaires-row"><span class="horaires-day">Samedi</span><span class="horaires-time">7h00 — 20h30</span></div>
+      <div class="horaires-row"><span class="horaires-day">Dimanche</span><span class="horaires-time">7h00 — 14h00</span></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">Le Fournil de Sophie</div>
+        <div class="footer-desc">Boulangerie-pâtisserie artisanale à Versailles.<br>Pains au levain, viennoiseries et créations pâtissières depuis 2010.</div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Navigation</div>
+        <a href="index.html">Accueil</a>
+        <a href="patisseries.html">Nos Pâtisseries</a>
+        <a href="histoire.html">Notre Histoire</a>
+        <a href="contact.html">Contact &amp; Commandes</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Informations</div>
+        <a href="tel:0123456789">01 23 45 67 89</a>
+        <a href="mailto:contact@lefournildesophie.com">contact@lefournildesophie.com</a>
+        <a href="#">12 rue des Artisans, Versailles</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">&copy; 2025 Le Fournil de Sophie. Tous droits réservés.</span>
+      <a href="https://dwtdigital-clients.github.io" class="footer-dwt" target="_blank">Site réalisé par DWT Digital</a>
+    </div>
+  </div>
 </footer>
 
+<script>
+// Reveal on scroll
+var reveals = document.querySelectorAll('.reveal');
+var io = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});
+},{threshold:0.1});
+reveals.forEach(function(el){io.observe(el);});
+</script>
 </body>
 </html>
