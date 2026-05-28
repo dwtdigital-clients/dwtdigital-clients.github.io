@@ -502,6 +502,59 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 
           <!-- Editeur couleurs + explications -->
           <div id="palette-editor-zone">
+
+            <!-- ═══ GÉNÉRATEUR IA ═══ -->
+            <div style="background:linear-gradient(135deg,rgba(79,15,92,0.12),rgba(99,175,33,0.06));border:1px solid rgba(99,175,33,0.2);border-radius:12px;padding:16px;margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#63AF21" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <div style="font-size:12px;font-weight:700;color:var(--td);">Generateur de palette IA</div>
+              </div>
+
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div>
+                  <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tm);display:block;margin-bottom:5px;">Ambiance souhaitee</label>
+                  <select id="ia-ambiance" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--td);font-size:12px;font-family:inherit;">
+                    <option value="Chaleureux et artisanal, convivial et rassurant">Chaleureux & Artisanal</option>
+                    <option value="Moderne et premium, elegance minimaliste">Moderne & Premium</option>
+                    <option value="Naturel et bio, frais et authentique">Naturel & Bio</option>
+                    <option value="Joyeux et accessible, dynamique et coloré">Joyeux & Accessible</option>
+                    <option value="Elegant et raffine, luxueux et sophistiqué">Elegant & Raffine</option>
+                    <option value="Traditionnel et local, patrimonial et familial">Traditionnel & Local</option>
+                    <option value="Technologique et innovant, futuriste et dynamique">Tech & Innovant</option>
+                    <option value="Zen et serein, apaisant et equilibré">Zen & Apaisant</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tm);display:block;margin-bottom:5px;">3 mots qui vous definissent</label>
+                  <input type="text" id="ia-mots" placeholder="ex: artisanal, chaleureux, genereux" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--td);font-size:12px;font-family:inherit;" />
+                </div>
+
+                <div>
+                  <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tm);display:block;margin-bottom:5px;">Couleur de reference (optionnel)</label>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <input type="color" id="ia-couleur" value="#C2522D" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:0;flex-shrink:0;">
+                    <input type="text" id="ia-couleur-txt" placeholder="Aucune preference" style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--td);font-size:12px;font-family:inherit;">
+                  </div>
+                </div>
+              </div>
+
+              <button onclick="genererPalettesIA()" id="btn-ia-gen" style="width:100%;margin-top:12px;padding:11px;background:var(--v);border:none;border-radius:8px;color:white;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .2s;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                Generer 3 palettes sur mesure
+              </button>
+
+              <!-- Résultats IA -->
+              <div id="ia-results" style="display:none;margin-top:14px;display:flex;flex-direction:column;gap:10px;"></div>
+            </div>
+
+            <!-- Séparateur -->
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+              <div style="flex:1;height:1px;background:var(--border);"></div>
+              <span style="font-size:10px;color:var(--tm);font-weight:600;letter-spacing:1px;">OU CHOISISSEZ MANUELLEMENT</span>
+              <div style="flex:1;height:1px;background:var(--border);"></div>
+            </div>
+
             <div style="display:flex;flex-direction:column;gap:14px;">
 
               <div style="background:var(--bg);border-radius:10px;padding:14px;border:1px solid var(--border);">
@@ -1356,6 +1409,132 @@ function updatePreview() {
   // Footer
   var footer = document.getElementById('prev-footer');
   if(footer) footer.style.background = col.bg;
+}
+
+
+// ── GÉNÉRATEUR PALETTE IA ──
+document.addEventListener('DOMContentLoaded', function() {
+  var cpIA = document.getElementById('ia-couleur');
+  var txtIA = document.getElementById('ia-couleur-txt');
+  if(cpIA && txtIA) {
+    cpIA.addEventListener('input', function(){ txtIA.value = cpIA.value; });
+    txtIA.addEventListener('input', function(){
+      if(/^#[0-9A-Fa-f]{6}$/.test(txtIA.value)) cpIA.value = txtIA.value;
+    });
+  }
+});
+
+function genererPalettesIA() {
+  var ambiance = document.getElementById('ia-ambiance').value;
+  var mots = document.getElementById('ia-mots').value.trim() || 'authentique, local, qualite';
+  var couleur = document.getElementById('ia-couleur').value;
+  var commerce = 'Le Fournil de Sophie';
+  var secteur = 'Boulangerie-Patisserie';
+
+  var btn = document.getElementById('btn-ia-gen');
+  var results = document.getElementById('ia-results');
+  btn.disabled = true;
+  btn.textContent = 'Generation en cours...';
+  results.style.display = 'none';
+  results.innerHTML = '';
+
+  fetch('https://hook.eu1.make.com/4v3v4kf9p88lcc27epdnyy5qaqfeyoj6', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      commerce: commerce, secteur: secteur,
+      ambiance: ambiance, mots: mots, couleur_pref: couleur
+    })
+  })
+  .then(function(r){ return r.text(); })
+  .then(function(text) {
+    var data;
+    try {
+      var clean = text.replace(/```json|```/g, '').trim();
+      data = JSON.parse(clean);
+    } catch(e) { throw new Error('JSON invalide'); }
+
+    window._iaPalettes = data.palettes || [];
+    results.style.display = 'flex';
+    results.innerHTML = '';
+
+    window._iaPalettes.forEach(function(pal, i) {
+      var div = document.createElement('div');
+      div.style.cssText = 'background:var(--bg);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;';
+
+      // Bande couleurs
+      var strip = document.createElement('div');
+      strip.style.cssText = 'display:flex;height:32px;';
+      [pal.bg, pal.primary, pal.secondary, pal.text || '#F5E6D0'].forEach(function(col) {
+        var s = document.createElement('div');
+        s.style.cssText = 'flex:1;background:' + col + ';';
+        strip.appendChild(s);
+      });
+      div.appendChild(strip);
+
+      // Corps
+      var body = document.createElement('div');
+      body.style.cssText = 'padding:12px;';
+
+      // Header nom + bouton
+      var header = document.createElement('div');
+      header.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;';
+      var nameDiv = document.createElement('div');
+      nameDiv.innerHTML = '<div style="font-size:12px;font-weight:700;color:var(--td);">' + pal.nom + '</div>'
+        + '<div style="font-size:10px;color:var(--tm);margin-top:2px;font-style:italic;">' + (pal.mood || '') + '</div>';
+      var choisirBtn = document.createElement('button');
+      choisirBtn.textContent = 'Choisir';
+      choisirBtn.style.cssText = 'font-size:10px;font-weight:700;background:var(--v);border:none;border-radius:6px;padding:5px 12px;color:white;cursor:pointer;white-space:nowrap;font-family:inherit;';
+      choisirBtn.dataset.idx = i;
+      choisirBtn.onclick = function() { appliquerPalette(parseInt(this.dataset.idx)); };
+      header.appendChild(nameDiv);
+      header.appendChild(choisirBtn);
+      body.appendChild(header);
+
+      // Rationale
+      [[pal.primary, pal.rationale_primary], [pal.secondary, pal.rationale_secondary], [pal.bg, pal.rationale_bg]].forEach(function(pair) {
+        if(!pair[1]) return;
+        var row = document.createElement('div');
+        row.style.cssText = 'font-size:10px;color:var(--tm);line-height:1.5;display:flex;align-items:flex-start;gap:5px;margin-bottom:3px;';
+        var dot = document.createElement('span');
+        dot.style.cssText = 'display:inline-block;min-width:10px;height:10px;border-radius:2px;background:' + pair[0] + ';margin-top:2px;flex-shrink:0;';
+        row.appendChild(dot);
+        row.appendChild(document.createTextNode(pair[1]));
+        body.appendChild(row);
+      });
+
+      div.appendChild(body);
+      results.appendChild(div);
+    });
+
+    btn.disabled = false;
+    btn.textContent = 'Regenerer';
+    showToast('3 palettes generees !');
+  })
+  .catch(function(err) {
+    btn.disabled = false;
+    btn.textContent = 'Generer 3 palettes sur mesure';
+    showToast('Erreur — reessayez dans quelques secondes');
+    console.error(err);
+  });
+}
+
+function appliquerPalette(idx) {
+  var palettes = window._iaPalettes || [];
+  var pal = palettes[idx];
+  if(!pal) return;
+  var cpP = document.getElementById('cp-primary');
+  var cpS = document.getElementById('cp-secondary');
+  var cpB = document.getElementById('cp-bg');
+  if(cpP) cpP.value = pal.primary;
+  if(cpS) cpS.value = pal.secondary;
+  if(cpB) cpB.value = pal.bg;
+  updateSwatch('primary', pal.primary);
+  updateSwatch('secondary', pal.secondary);
+  updateSwatch('bg', pal.bg);
+  showToast('Palette "' + pal.nom + '" appliquee');
+  var btn = document.getElementById('btn-valider-palette');
+  if(btn) btn.scrollIntoView({behavior:'smooth', block:'center'});
 }
 
 // Palettes harmonieuses prédéfinies
