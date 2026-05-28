@@ -539,6 +539,60 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 
             </div>
 
+            <!-- Bouton couleurs aléatoires -->
+            <button onclick="randomPalette()" style="width:100%;margin-top:16px;padding:10px;background:transparent;border:1.5px dashed var(--border);border-radius:10px;color:var(--tm);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;font-family:inherit;" onmouseover="this.style.borderColor='var(--v)';this.style.color='var(--v)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--tm)'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              Generer une palette aleatoire <span id="current-palette-name" style="opacity:0.6;font-weight:400;"></span>
+            </button>
+
+            <!-- Preview live -->
+            <div style="margin-top:16px;">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--tm);margin-bottom:8px;">Apercu en direct</div>
+              <div id="palette-preview-mockup" style="border-radius:10px;overflow:hidden;border:1px solid var(--border);font-family:'DM Sans',sans-serif;">
+                <!-- Nav -->
+                <div id="prev-nav" style="padding:10px 16px;display:flex;align-items:center;justify-content:space-between;background:#1C0F07;">
+                  <span id="prev-brand" style="font-style:italic;font-size:13px;font-weight:700;color:#F5E6D0;">Le Fournil de Sophie</span>
+                  <span id="prev-cta" style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:3px;background:#C2522D;color:white;">Commander</span>
+                </div>
+                <!-- Hero -->
+                <div id="prev-hero" style="padding:28px 16px;background:#1C0F07;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);">
+                  <div id="prev-eyebrow" style="font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;color:#E8956D;">Boulangerie & Patisserie</div>
+                  <div id="prev-title" style="font-size:24px;font-style:italic;font-weight:700;color:#F5E6D0;line-height:1.1;margin-bottom:8px;font-family:Georgia,serif;">Le Fournil<br>de Sophie</div>
+                  <div id="prev-sub" style="font-size:11px;color:rgba(245,230,208,0.55);margin-bottom:14px;line-height:1.5;">Pains artisanaux, viennoiseries et patisseries de saison</div>
+                  <span id="prev-btn" style="font-size:10px;font-weight:700;padding:8px 18px;border-radius:3px;background:#C2522D;color:white;display:inline-block;">Decouvrir nos creations</span>
+                </div>
+                <!-- Cards -->
+                <div id="prev-cards-wrap" style="padding:16px;background:#261509;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+                  <div id="prev-card1" style="background:#1C0F07;border-radius:6px;overflow:hidden;border:1px solid rgba(245,230,208,0.08);">
+                    <div id="prev-card-accent" style="height:4px;background:#C2522D;"></div>
+                    <div style="padding:8px;">
+                      <div id="prev-cat" style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#E8956D;margin-bottom:3px;">Viennoiserie</div>
+                      <div id="prev-cname" style="font-size:11px;font-style:italic;color:#F5E6D0;font-family:Georgia,serif;">Croissant beurre</div>
+                    </div>
+                  </div>
+                  <div style="background:#1C0F07;border-radius:6px;overflow:hidden;border:1px solid rgba(245,230,208,0.08);">
+                    <div style="height:4px;" id="prev-card-accent2" style="background:#C2522D;"></div>
+                    <div style="padding:8px;">
+                      <div style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;" id="prev-cat2" style="color:#E8956D;">Boulangerie</div>
+                      <div style="font-size:11px;font-style:italic;font-family:Georgia,serif;" id="prev-cname2" style="color:#F5E6D0;">Pain au levain</div>
+                    </div>
+                  </div>
+                  <div style="background:#1C0F07;border-radius:6px;overflow:hidden;border:1px solid rgba(245,230,208,0.08);">
+                    <div style="height:4px;" id="prev-card-accent3"></div>
+                    <div style="padding:8px;">
+                      <div style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;" id="prev-cat3">Patisserie</div>
+                      <div style="font-size:11px;font-style:italic;font-family:Georgia,serif;" id="prev-cname3">Macarons saison</div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Footer mini -->
+                <div id="prev-footer" style="padding:8px 16px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(245,230,208,0.06);">
+                  <span id="prev-footer-brand" style="font-size:9px;font-style:italic;color:rgba(245,230,208,0.3);font-family:Georgia,serif;">Le Fournil de Sophie</span>
+                  <span style="font-size:8px;color:rgba(245,230,208,0.2);">DWT Digital</span>
+                </div>
+              </div>
+            </div>
+
             <button class="send-btn" id="btn-valider-palette" style="margin-top:16px;font-size:12px;padding:11px 0;" onclick="savePalette()">Valider cette palette</button>
           </div>
         </div>
@@ -1230,6 +1284,113 @@ function updateSwatch(key, val) {
   if(el) el.style.background = val;
   var hexEl = document.getElementById(hexMap[key]);
   if(hexEl) hexEl.textContent = val;
+  // Mise à jour aperçu live
+  updatePreview();
+}
+
+function getCurrentColors() {
+  var p = document.getElementById('cp-primary');
+  var s = document.getElementById('cp-secondary');
+  var b = document.getElementById('cp-bg');
+  return {
+    primary: p ? p.value : '#C2522D',
+    secondary: s ? s.value : '#E8956D',
+    bg: b ? b.value : '#1C0F07'
+  };
+}
+
+function hexToRgb(hex) {
+  var r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return {r:r,g:g,b:b};
+}
+function lighten(hex, pct) {
+  var {r,g,b} = hexToRgb(hex);
+  return 'rgb('+Math.min(255,r+pct)+','+Math.min(255,g+pct)+','+Math.min(255,b+pct)+')';
+}
+function textColor(hex) {
+  var {r,g,b} = hexToRgb(hex);
+  return (r*0.299+g*0.587+b*0.114) > 128 ? '#1a1a1a' : '#F5E6D0';
+}
+
+function updatePreview() {
+  var col = getCurrentColors();
+  var txt = textColor(col.bg);
+  var txtDim = col.bg === '#1C0F07' ? 'rgba(245,230,208,0.55)' : 'rgba(0,0,0,0.45)';
+  var bgLight = lighten(col.bg, 20);
+
+  // Nav
+  var nav = document.getElementById('prev-nav');
+  if(nav) nav.style.background = col.bg;
+  var brand = document.getElementById('prev-brand');
+  if(brand) brand.style.color = txt;
+  var cta = document.getElementById('prev-cta');
+  if(cta) { cta.style.background = col.primary; cta.style.color = textColor(col.primary); }
+
+  // Hero
+  var hero = document.getElementById('prev-hero');
+  if(hero) hero.style.background = col.bg;
+  var eyebrow = document.getElementById('prev-eyebrow');
+  if(eyebrow) eyebrow.style.color = col.secondary;
+  var title = document.getElementById('prev-title');
+  if(title) title.style.color = txt;
+  var sub = document.getElementById('prev-sub');
+  if(sub) sub.style.color = txtDim;
+  var btn = document.getElementById('prev-btn');
+  if(btn) { btn.style.background = col.primary; btn.style.color = textColor(col.primary); }
+
+  // Cards wrap
+  var wrap = document.getElementById('prev-cards-wrap');
+  if(wrap) wrap.style.background = bgLight;
+
+  // Cards
+  ['','2','3'].forEach(function(n) {
+    var card = document.getElementById(n==='' ? 'prev-card1' : null);
+    var accent = document.getElementById('prev-card-accent'+(n||''));
+    var cat = document.getElementById('prev-cat'+(n||''));
+    var cname = document.getElementById('prev-cname'+(n||''));
+    if(accent) accent.style.background = col.primary;
+    if(cat) cat.style.color = col.secondary;
+    if(cname) cname.style.color = txt;
+  });
+
+  // Footer
+  var footer = document.getElementById('prev-footer');
+  if(footer) footer.style.background = col.bg;
+}
+
+// Palettes harmonieuses prédéfinies
+var PALETTES = [
+  {primary:'#C2522D', secondary:'#E8956D', bg:'#1C0F07', name:'Terra Cotta (actuelle)'},
+  {primary:'#2D7DD2', secondary:'#6BAED6', bg:'#0A1628', name:'Ocean'},
+  {primary:'#8B5CF6', secondary:'#C4B5FD', bg:'#0D0A1A', name:'Violet Nuit'},
+  {primary:'#059669', secondary:'#6EE7B7', bg:'#071811', name:'Emeraude'},
+  {primary:'#DC2626', secondary:'#F87171', bg:'#1A0505', name:'Rouge Passion'},
+  {primary:'#D97706', secondary:'#FCD34D', bg:'#1A1205', name:'Ambre Doree'},
+  {primary:'#DB2777', secondary:'#F9A8D4', bg:'#1A0510', name:'Rose Fuchsia'},
+  {primary:'#0891B2', secondary:'#67E8F9', bg:'#071318', name:'Cyan Pro'},
+  {primary:'#65A30D', secondary:'#BEF264', bg:'#0A1205', name:'Vert Naturel'},
+  {primary:'#7C3AED', secondary:'#A78BFA', bg:'#0D0714', name:'Lavande Profonde'},
+  {primary:'#EA580C', secondary:'#FB923C', bg:'#180A03', name:'Orange Feu'},
+  {primary:'#0F766E', secondary:'#5EEAD4', bg:'#041511', name:'Teal Moderne'},
+];
+var _paletteIdx = 0;
+
+function randomPalette() {
+  _paletteIdx = (_paletteIdx + 1) % PALETTES.length;
+  var pal = PALETTES[_paletteIdx];
+  var cpP = document.getElementById('cp-primary');
+  var cpS = document.getElementById('cp-secondary');
+  var cpB = document.getElementById('cp-bg');
+  if(cpP) cpP.value = pal.primary;
+  if(cpS) cpS.value = pal.secondary;
+  if(cpB) cpB.value = pal.bg;
+  updateSwatch('primary', pal.primary);
+  updateSwatch('secondary', pal.secondary);
+  updateSwatch('bg', pal.bg);
+  // Nom de la palette
+  var palName = document.getElementById('current-palette-name');
+  if(palName) palName.textContent = pal.name;
+  showToast('Palette : ' + pal.name);
 }
 
 function savePalette() {
@@ -1287,6 +1448,7 @@ function loadPaletteState() {
   if(S.identity) {
     showIdentityValidated();
   }
+  updatePreview();
 }
 
 function downloadIdentity() {
