@@ -1638,33 +1638,108 @@ function genererPalettesIA() {
 function renderIAResults(palettes) {
   var results = document.getElementById('ia-results');
   results.style.display = 'flex';
-  results.innerHTML = '<div style="font-size:12px;font-weight:700;color:var(--g);margin-bottom:4px;">Voici 3 propositions sur mesure :</div>';
+  results.innerHTML = '';
+
+  var title = document.createElement('div');
+  title.style.cssText = 'font-size:13px;font-weight:700;color:var(--g);letter-spacing:.3px;margin-bottom:6px;';
+  title.textContent = 'Voici 3 propositions sur mesure';
+  results.appendChild(title);
+
   palettes.forEach(function(pal, i) {
-    var div = document.createElement('div');
-    div.style.cssText = 'background:var(--bg);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;';
-    var strip = document.createElement('div');
-    strip.style.cssText = 'display:flex;height:32px;';
-    [pal.bg, pal.primary, pal.secondary, pal.text||'#F5E6D0'].forEach(function(col){
-      var s = document.createElement('div'); s.style.cssText = 'flex:1;background:'+col+';'; strip.appendChild(s);
-    });
-    div.appendChild(strip);
-    var body = document.createElement('div'); body.style.cssText = 'padding:12px;';
-    var header = document.createElement('div'); header.style.cssText = 'display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;';
-    var nameDiv = document.createElement('div');
-    nameDiv.innerHTML = '<div style="font-size:12px;font-weight:700;color:var(--td);">'+pal.nom+'</div><div style="font-size:10px;color:var(--tm);margin-top:2px;font-style:italic;">'+(pal.mood||'')+'</div>';
+    var txt = pal.text || '#2A1B12';
+    var card = document.createElement('div');
+    card.style.cssText = 'background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s ease,box-shadow .25s ease;animation:fadeUp .5s ease ' + (i * 0.08) + 's both;';
+    card.onmouseenter = function(){ card.style.transform = 'translateY(-3px)'; card.style.boxShadow = '0 12px 32px rgba(79,15,92,0.15)'; };
+    card.onmouseleave = function(){ card.style.transform = 'none'; card.style.boxShadow = 'var(--shadow)'; };
+
+    // APERCU EN CONTEXTE (mini post)
+    var hero = document.createElement('div');
+    hero.style.cssText = 'background:' + pal.bg + ';padding:22px 24px;display:flex;align-items:center;gap:16px;';
+    var avatar = document.createElement('div');
+    avatar.style.cssText = 'width:46px;height:46px;border-radius:50%;flex-shrink:0;background:' + pal.primary + ';display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:' + pal.bg + ';';
+    avatar.textContent = 'S';
+    var heroText = document.createElement('div');
+    heroText.style.cssText = 'flex:1;min-width:0;';
+    var heroName = document.createElement('div');
+    heroName.style.cssText = 'font-weight:700;font-size:15px;color:' + txt + ';line-height:1.2;';
+    heroName.textContent = 'Le Fournil de Sophie';
+    var heroTag = document.createElement('div');
+    heroTag.style.cssText = 'font-size:11px;color:' + txt + ';opacity:.7;margin-top:3px;';
+    heroTag.textContent = 'Artisan boulanger, fait maison chaque jour';
+    heroText.appendChild(heroName);
+    heroText.appendChild(heroTag);
+    var heroBtn = document.createElement('div');
+    heroBtn.style.cssText = 'background:' + pal.secondary + ';color:' + pal.bg + ';font-size:11px;font-weight:700;padding:8px 15px;border-radius:20px;white-space:nowrap;';
+    heroBtn.textContent = 'Commander';
+    hero.appendChild(avatar);
+    hero.appendChild(heroText);
+    hero.appendChild(heroBtn);
+    card.appendChild(hero);
+
+    // CORPS
+    var body = document.createElement('div');
+    body.style.cssText = 'padding:16px 18px 18px;';
+
+    var header = document.createElement('div');
+    header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px;';
+    var nameWrap = document.createElement('div');
+    var nm = document.createElement('div');
+    nm.style.cssText = 'font-size:14px;font-weight:700;color:var(--td);';
+    nm.textContent = pal.nom || ('Palette ' + (i + 1));
+    var md = document.createElement('div');
+    md.style.cssText = 'font-size:11px;color:var(--tm);font-style:italic;margin-top:1px;';
+    md.textContent = pal.mood || '';
+    nameWrap.appendChild(nm);
+    nameWrap.appendChild(md);
     var btn = document.createElement('button');
-    btn.textContent = 'Choisir'; btn.dataset.idx = i;
-    btn.style.cssText = 'font-size:10px;font-weight:700;background:var(--v);border:none;border-radius:6px;padding:6px 14px;color:white;cursor:pointer;white-space:nowrap;font-family:inherit;';
+    btn.textContent = 'Choisir';
+    btn.dataset.idx = i;
+    btn.style.cssText = 'font-size:12px;font-weight:700;background:var(--v);border:none;border-radius:9px;padding:9px 20px;color:#fff;cursor:pointer;white-space:nowrap;font-family:inherit;transition:background .2s;';
+    btn.onmouseenter = function(){ this.style.background = 'var(--vl)'; };
+    btn.onmouseleave = function(){ this.style.background = 'var(--v)'; };
     btn.onclick = function(){ appliquerPalette(parseInt(this.dataset.idx)); };
-    header.appendChild(nameDiv); header.appendChild(btn); body.appendChild(header);
-    [[pal.primary,pal.rationale_primary],[pal.secondary,pal.rationale_secondary],[pal.bg,pal.rationale_bg]].forEach(function(pair){
+    header.appendChild(nameWrap);
+    header.appendChild(btn);
+    body.appendChild(header);
+
+    // NUANCIER + HEX
+    var sw = document.createElement('div');
+    sw.style.cssText = 'display:flex;gap:8px;margin-bottom:15px;';
+    [['Principale', pal.primary], ['Secondaire', pal.secondary], ['Fond', pal.bg], ['Texte', txt]].forEach(function(c){
+      var col = document.createElement('div');
+      col.style.cssText = 'flex:1;text-align:center;';
+      var chip = document.createElement('div');
+      chip.style.cssText = 'height:42px;border-radius:9px;background:' + c[1] + ';border:1px solid rgba(0,0,0,0.06);';
+      var hex = document.createElement('div');
+      hex.style.cssText = 'font-family:monospace;font-size:9.5px;color:var(--td);margin-top:6px;font-weight:600;';
+      hex.textContent = (c[1] || '').toUpperCase();
+      var lbl = document.createElement('div');
+      lbl.style.cssText = 'font-size:8.5px;color:var(--tm);margin-top:1px;';
+      lbl.textContent = c[0];
+      col.appendChild(chip);
+      col.appendChild(hex);
+      col.appendChild(lbl);
+      sw.appendChild(col);
+    });
+    body.appendChild(sw);
+
+    // JUSTIFICATIONS
+    var ratWrap = document.createElement('div');
+    ratWrap.style.cssText = 'border-top:1px solid var(--border);padding-top:13px;display:flex;flex-direction:column;gap:8px;';
+    [[pal.primary, pal.rationale_primary], [pal.secondary, pal.rationale_secondary], [pal.bg, pal.rationale_bg]].forEach(function(pair){
       if(!pair[1]) return;
       var row = document.createElement('div');
-      row.style.cssText = 'font-size:10px;color:var(--tm);line-height:1.5;display:flex;align-items:flex-start;gap:6px;margin-bottom:3px;';
-      var dot = document.createElement('span'); dot.style.cssText = 'display:inline-block;min-width:10px;height:10px;border-radius:2px;background:'+pair[0]+';margin-top:2px;flex-shrink:0;';
-      row.appendChild(dot); row.appendChild(document.createTextNode(pair[1])); body.appendChild(row);
+      row.style.cssText = 'font-size:11px;color:var(--tm);line-height:1.55;display:flex;align-items:flex-start;gap:9px;';
+      var dot = document.createElement('span');
+      dot.style.cssText = 'display:inline-block;min-width:8px;height:8px;border-radius:50%;background:' + pair[0] + ';margin-top:4px;flex-shrink:0;';
+      row.appendChild(dot);
+      row.appendChild(document.createTextNode(pair[1]));
+      ratWrap.appendChild(row);
     });
-    div.appendChild(body); results.appendChild(div);
+    body.appendChild(ratWrap);
+
+    card.appendChild(body);
+    results.appendChild(card);
   });
 }
 
