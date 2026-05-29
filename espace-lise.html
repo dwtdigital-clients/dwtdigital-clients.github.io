@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Espace Client — Cake Délice</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -243,7 +244,8 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
   .metric-grid{grid-template-columns:1fr 1fr;}
   .tab-btn{padding:10px 12px;font-size:11px;}
 }
-/* =================== THÈME OBSIDIENNE DWT (template) =================== */
+
+/* =================== THÈME OBSIDIENNE DWT =================== */
 :root{ --surface:#ffffff; --surface-2:#faf8fd; --border-lit:rgba(123,31,162,0.4); --violet-glow:#7B1FA2; --green-glow:#63AF21; }
 [data-theme="dark"]{
   --bg:#07050E; --td:#ECE6F2; --tm:#9286A3;
@@ -253,7 +255,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
   --border-lit:rgba(177,79,224,0.35); --violet-glow:#B14FE0; --green-glow:#9BE84A;
 }
 html{transition:background .4s;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+/* atmosphère */
 .atmo{display:none!important;}
 [data-theme="dark"] .atmo{display:block!important;}
 #dwt-stars{position:fixed;inset:0;z-index:0;opacity:.5;pointer-events:none;}
@@ -265,10 +267,26 @@ html{transition:background .4s;}
 @keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(8%,6%) scale(1.12)}}
 @keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-7%,9%) scale(1.08)}}
 @keyframes drift3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(5%,-8%) scale(1.15)}}
-.dwt-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(177,79,224,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(177,79,224,.05) 1px,transparent 1px);background-size:54px 54px;-webkit-mask-image:radial-gradient(circle at 70% 28%,#000,transparent 72%);mask-image:radial-gradient(circle at 70% 28%,#000,transparent 72%);}
+.dwt-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(177,79,224,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(177,79,224,.05) 1px,transparent 1px);
+  background-size:54px 54px;-webkit-mask-image:radial-gradient(circle at 70% 28%,#000,transparent 72%);mask-image:radial-gradient(circle at 70% 28%,#000,transparent 72%);}
+/* shell */
 [data-theme="dark"] body{background:var(--bg);}
+[data-theme="dark"] .layout{position:relative;z-index:2;background:transparent;}
 [data-theme="dark"] .main{background:transparent;}
-[data-theme="dark"] .card,[data-theme="dark"] .stat-card,[data-theme="dark"] .post-card,[data-theme="dark"] .metric-card,[data-theme="dark"] .connect-item,[data-theme="dark"] .font-card,[data-theme="dark"] .modif-item,[data-theme="dark"] .activity-item,[data-theme="dark"] .identity-section,[data-theme="dark"] .quick-actions,[data-theme="dark"] .guide,[data-theme="dark"] .plat-chip,[data-theme="dark"] .plat-sel-card,[data-theme="dark"] .modif-form select,[data-theme="dark"] .msg.in{background:var(--surface);border-color:var(--border);color:var(--td);box-shadow:none;}
+[data-theme="dark"] .topbar{background:rgba(11,8,23,0.62);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+[data-theme="dark"] .progbar{background:rgba(11,8,23,0.5);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);}
+[data-theme="dark"] .tabs-wrap{background:rgba(11,8,23,0.45);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+[data-theme="dark"] .tab-btn:hover{color:#fff;}
+[data-theme="dark"] .tab-btn.active{color:#fff;border-bottom-color:var(--violet-glow);}
+/* surfaces (cartes blanches -> verre) */
+[data-theme="dark"] .card,[data-theme="dark"] .stat-card,[data-theme="dark"] .post-card,
+[data-theme="dark"] .metric-card,[data-theme="dark"] .connect-item,[data-theme="dark"] .font-card,
+[data-theme="dark"] .modif-item,[data-theme="dark"] .activity-item,[data-theme="dark"] .identity-section,
+[data-theme="dark"] .quick-actions,[data-theme="dark"] .guide,[data-theme="dark"] .plat-chip,
+[data-theme="dark"] .plat-sel-card,[data-theme="dark"] .modif-form select,[data-theme="dark"] .msg.in{
+  background:var(--surface);border-color:var(--border);color:var(--td);box-shadow:none;
+}
 [data-theme="dark"] .card,[data-theme="dark"] .post-card,[data-theme="dark"] .metric-card{box-shadow:var(--shadow);}
 [data-theme="dark"] .card:hover,[data-theme="dark"] .post-card:hover,[data-theme="dark"] .metric-card:hover{background:var(--surface-2);border-color:var(--border-lit);}
 [data-theme="dark"] .site-preview{background:#100B1F;}
@@ -277,19 +295,24 @@ html{transition:background .4s;}
 [data-theme="dark"] .stat-num{color:var(--violet-glow);}
 [data-theme="dark"] .stat-num.green{color:var(--green-glow);}
 [data-theme="dark"] .card-title svg{stroke:var(--violet-glow);}
-[data-theme="dark"] input,[data-theme="dark"] textarea,[data-theme="dark"] .msg-input{background:var(--surface);color:var(--td);border:1px solid var(--border);}
+/* inputs */
+[data-theme="dark"] input,[data-theme="dark"] textarea,[data-theme="dark"] .msg-input{
+  background:var(--surface);color:var(--td);border:1px solid var(--border);
+}
 [data-theme="dark"] input::placeholder,[data-theme="dark"] textarea::placeholder{color:var(--tm);}
 [data-theme="dark"] input:focus,[data-theme="dark"] textarea:focus{border-color:var(--border-lit);outline:none;}
-[data-theme="dark"] .qa-btn.secondary{background:var(--surface);color:var(--td);border:1px solid var(--border);}
-[data-theme="dark"] .qa-btn.secondary:hover{background:var(--surface-2);border-color:var(--border-lit);}
-[data-theme="dark"] .qa-btn.secondary svg{stroke:var(--violet-glow);}
-.theme-tog{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;cursor:pointer;flex-shrink:0;background:var(--surface);border:1px solid var(--border);color:var(--td);transition:.2s;}
-.theme-tog:hover{transform:rotate(-12deg);border-color:var(--border-lit);}
+/* toggle thème */
+.theme-tog{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;cursor:pointer;flex-shrink:0;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:var(--b);transition:.2s;}
+.theme-tog:hover{background:rgba(255,255,255,0.18);transform:rotate(-12deg);}
 .theme-tog svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
 .theme-tog .ico-sun{display:none;}
 [data-theme="dark"] .theme-tog .ico-sun{display:block;}
 [data-theme="dark"] .theme-tog .ico-moon{display:none;}
-/* ====== LAYOUT SIDEBAR ====== */
+
+[data-theme="dark"] .qa-btn.secondary{background:var(--surface);color:var(--td);border:1px solid var(--border);}
+[data-theme="dark"] .qa-btn.secondary:hover{background:var(--surface-2);border-color:var(--border-lit);}
+[data-theme="dark"] .qa-btn.secondary svg{stroke:var(--violet-glow);}
+/* ====== LAYOUT SIDEBAR (maquette) ====== */
 .mono{font-family:ui-monospace,'JetBrains Mono','SF Mono',Menlo,monospace;}
 .layout-x{display:flex;height:100vh;overflow:hidden;position:relative;z-index:2;}
 .side{width:250px;flex-shrink:0;display:flex;flex-direction:column;padding:24px 16px;border-right:1px solid var(--border);background:var(--surface);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);}
@@ -310,7 +333,7 @@ html{transition:background .4s;}
 .taglinex{font-size:11px;line-height:1.5;color:var(--tm);padding:13px;border-radius:14px;background:var(--surface);border:1px solid var(--border);}
 .taglinex b{color:var(--green-glow);font-weight:600;}
 .usrx{display:flex;align-items:center;gap:11px;padding:12px 6px 2px;}
-.usrx .avx{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#7B1FA2,#63AF21);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;flex-shrink:0;}
+.usrx .avx{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#C2522D,#E8956D);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;flex-shrink:0;}
 .usrx .un{font-size:12.5px;font-weight:600;color:var(--td);}
 .usrx .ur{font-size:10px;color:var(--tm);}
 .main-x{flex:1;overflow-y:auto;padding:0 34px 56px;background:transparent;}
@@ -482,7 +505,7 @@ html{transition:background .4s;}
       <div class="sec-header">
         <div>
           <div class="sec-title">Mon site vitrine</div>
-          <div class="sec-sub">dwtdigital-clients.github.io/cake-delice</div>
+          <div class="sec-sub">dwtdigital-clients.github.io/Zimblo</div>
         </div>
         <a href="https://dwtdigital-clients.github.io/cake-delice/" target="_blank" class="sec-action">Ouvrir</a>
       </div>
@@ -511,7 +534,7 @@ html{transition:background .4s;}
           </div>
           <div>
             <label style="display:block;margin-bottom:5px;">Décrivez la modification</label>
-            <textarea id="modif-text" placeholder="Ex : Ajouter notre nouvelle gamme de macarons pour l\'été — disponible du 1er juin au 30 août..."></textarea>
+            <textarea id="modif-text" placeholder="Ex : Ajouter notre nouvelle promo Fête des Pères — 15% sur toutes les pièces nobles du 10 au 16 juin..."></textarea>
           </div>
           <button class="send-btn" onclick="submitModification()">
             <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>
@@ -551,25 +574,167 @@ html{transition:background .4s;}
         </div>
 
         <!-- Palette couleurs -->
-        <div class="identity-section">
-          <h3>Palette de couleurs</h3>
-          <div class="palette-row">
+        <div class="identity-section" id="palette-section">
+          <h3>Votre palette de marque</h3>
+
+          <!-- État validé -->
+          <div id="identity-validated-banner" style="display:none;background:linear-gradient(135deg,rgba(99,175,33,0.12),rgba(99,175,33,0.05));border:1px solid rgba(99,175,33,0.3);border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#63AF21" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <div style="flex:1;">
+              <div style="font-size:12px;font-weight:700;color:#63AF21;">Identite visuelle validee</div>
+              <div style="font-size:11px;color:var(--tm);margin-top:2px;">DWT Digital mettra a jour votre site sous 48h.</div>
+            </div>
+            <button onclick="editPalette()" style="font-size:10px;font-weight:600;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:5px 12px;color:var(--td);cursor:pointer;">Modifier</button>
+            <button onclick="downloadIdentity()" style="font-size:10px;font-weight:600;background:#63AF21;border:none;border-radius:8px;padding:5px 12px;color:white;cursor:pointer;">Telecharger</button>
+          </div>
+
+          <!-- Swatches preview -->
+          <div class="palette-row" id="palette-preview-row" style="margin-bottom:20px;">
             <div class="swatch-item">
-              <div class="swatch" style="background:#B5121B;"></div>
-              <div class="swatch-name">Rouge</div>
+              <div class="swatch" id="sw-primary" style="background:#C2522D;"></div>
+              <div class="swatch-name">Principale</div>
             </div>
             <div class="swatch-item">
-              <div class="swatch" style="background:#F5F0E8;border:1px solid #E0D8CC;"></div>
-              <div class="swatch-name">Ivoire</div>
+              <div class="swatch" id="sw-secondary" style="background:#E8956D;"></div>
+              <div class="swatch-name">Secondaire</div>
             </div>
             <div class="swatch-item">
-              <div class="swatch" style="background:#C5A55A;"></div>
-              <div class="swatch-name">Or</div>
+              <div class="swatch" id="sw-bg" style="background:#1C0F07;border:1px solid rgba(255,255,255,0.1);"></div>
+              <div class="swatch-name">Fond</div>
             </div>
             <div class="swatch-item">
-              <div class="swatch" style="background:#1A1A1A;"></div>
-              <div class="swatch-name">Noir</div>
+              <div class="swatch" id="sw-text" style="background:#F5E6D0;border:1px solid #E0D8CC;"></div>
+              <div class="swatch-name">Texte</div>
             </div>
+          </div>
+
+          <!-- Editeur couleurs + explications -->
+          <div id="palette-editor-zone">
+
+            <!-- ═══ PARCOURS IDENTITE IA ═══ -->
+            <div style="background:linear-gradient(135deg,rgba(79,15,92,0.12),rgba(99,175,33,0.06));border:1px solid rgba(99,175,33,0.2);border-radius:12px;padding:18px;margin-bottom:16px;" id="wizard-box">
+
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#63AF21" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <div style="font-size:13px;font-weight:700;color:var(--td);">Creons votre identite ensemble</div>
+              </div>
+              <div style="font-size:11px;color:var(--tm);margin-bottom:16px;line-height:1.5;">Quelques questions pour comprendre votre commerce. Plus vous etes precis, plus le resultat sera juste.</div>
+
+              <!-- Progress -->
+              <div style="display:flex;gap:4px;margin-bottom:18px;" id="wiz-progress"></div>
+
+              <!-- Steps container -->
+              <div id="wiz-steps"></div>
+
+              <!-- Navigation -->
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:10px;">
+                <button id="wiz-prev" onclick="wizPrev()" style="font-size:12px;font-weight:600;background:transparent;border:1px solid var(--border);border-radius:8px;padding:9px 16px;color:var(--tm);cursor:pointer;font-family:inherit;visibility:hidden;">Precedent</button>
+                <button id="wiz-next" onclick="wizNext()" style="flex:1;font-size:12px;font-weight:700;background:var(--v);border:none;border-radius:8px;padding:11px;color:white;cursor:pointer;font-family:inherit;">Suivant</button>
+              </div>
+
+              <!-- Résultats IA -->
+              <div id="ia-results" style="display:none;margin-top:16px;flex-direction:column;gap:10px;"></div>
+            </div>
+
+            <!-- Séparateur -->
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+              <div style="flex:1;height:1px;background:var(--border);"></div>
+              <span style="font-size:10px;color:var(--tm);font-weight:600;letter-spacing:1px;">OU CHOISISSEZ MANUELLEMENT</span>
+              <div style="flex:1;height:1px;background:var(--border);"></div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:14px;">
+
+              <div style="background:var(--bg);border-radius:10px;padding:14px;border:1px solid var(--border);">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                  <input type="color" id="cp-primary" value="#C2522D" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:0;flex-shrink:0;" oninput="updateSwatch('primary',this.value)">
+                  <div>
+                    <div style="font-size:12px;font-weight:700;color:var(--td);">Couleur principale</div>
+                    <div style="font-size:10px;color:var(--tm);font-family:monospace;" id="hex-primary">#C2522D</div>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:var(--tm);line-height:1.6;padding-left:46px;">Le terra cotta evoque la chaleur du four artisanal, la brique des vieilles boulangeries et la convivialite d'un commerce de quartier. Chaud, rassurant, appetissant.</div>
+              </div>
+
+              <div style="background:var(--bg);border-radius:10px;padding:14px;border:1px solid var(--border);">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                  <input type="color" id="cp-secondary" value="#E8956D" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:0;flex-shrink:0;" oninput="updateSwatch('secondary',this.value)">
+                  <div>
+                    <div style="font-size:12px;font-weight:700;color:var(--td);">Couleur secondaire</div>
+                    <div style="font-size:10px;color:var(--tm);font-family:monospace;" id="hex-secondary">#E8956D</div>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:var(--tm);line-height:1.6;padding-left:46px;">La peche doree rappelle la croute des viennoiseries et le miel. Elle adoucit le terra cotta tout en gardant sa chaleur — un degrader naturel qui donne de la profondeur.</div>
+              </div>
+
+              <div style="background:var(--bg);border-radius:10px;padding:14px;border:1px solid var(--border);">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                  <input type="color" id="cp-bg" value="#1C0F07" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:0;flex-shrink:0;" oninput="updateSwatch('bg',this.value)">
+                  <div>
+                    <div style="font-size:12px;font-weight:700;color:var(--td);">Couleur de fond</div>
+                    <div style="font-size:10px;color:var(--tm);font-family:monospace;" id="hex-bg">#1C0F07</div>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:var(--tm);line-height:1.6;padding-left:46px;">Brun profond, presque noir — evoque le chocolat, le cafe, les grains torrefies. Contraste parfait pour faire ressortir vos couleurs chaudes. Premium et moderne.</div>
+              </div>
+
+            </div>
+
+            <!-- Bouton couleurs aléatoires -->
+            <button onclick="randomPalette()" style="width:100%;margin-top:16px;padding:10px;background:transparent;border:1.5px dashed var(--border);border-radius:10px;color:var(--tm);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;font-family:inherit;" onmouseover="this.style.borderColor='var(--v)';this.style.color='var(--v)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--tm)'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              Generer une palette aleatoire <span id="current-palette-name" style="opacity:0.6;font-weight:400;"></span>
+            </button>
+
+            <!-- Preview live -->
+            <div style="margin-top:16px;">
+              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--tm);margin-bottom:8px;">Apercu en direct</div>
+              <div id="palette-preview-mockup" style="border-radius:10px;overflow:hidden;border:1px solid var(--border);font-family:'DM Sans',sans-serif;">
+                <!-- Nav -->
+                <div id="prev-nav" style="padding:10px 16px;display:flex;align-items:center;justify-content:space-between;background:#1C0F07;">
+                  <span id="prev-brand" style="font-style:italic;font-size:13px;font-weight:700;color:#F5E6D0;">Cake Délice</span>
+                  <span id="prev-cta" style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:3px;background:#C2522D;color:white;">Commander</span>
+                </div>
+                <!-- Hero -->
+                <div id="prev-hero" style="padding:28px 16px;background:#1C0F07;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);">
+                  <div id="prev-eyebrow" style="font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;color:#E8956D;">Boulangerie & Patisserie</div>
+                  <div id="prev-title" style="font-size:24px;font-style:italic;font-weight:700;color:#F5E6D0;line-height:1.1;margin-bottom:8px;font-family:Georgia,serif;">Le Fournil<br>de Sophie</div>
+                  <div id="prev-sub" style="font-size:11px;color:rgba(245,230,208,0.55);margin-bottom:14px;line-height:1.5;">Pains artisanaux, viennoiseries et patisseries de saison</div>
+                  <span id="prev-btn" style="font-size:10px;font-weight:700;padding:8px 18px;border-radius:3px;background:#C2522D;color:white;display:inline-block;">Decouvrir nos creations</span>
+                </div>
+                <!-- Cards -->
+                <div id="prev-cards-wrap" style="padding:16px;background:#261509;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+                  <div id="prev-card1" style="background:#1C0F07;border-radius:6px;overflow:hidden;border:1px solid rgba(245,230,208,0.08);">
+                    <div id="prev-card-accent" style="height:4px;background:#C2522D;"></div>
+                    <div style="padding:8px;">
+                      <div id="prev-cat" style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#E8956D;margin-bottom:3px;">Viennoiserie</div>
+                      <div id="prev-cname" style="font-size:11px;font-style:italic;color:#F5E6D0;font-family:Georgia,serif;">Croissant beurre</div>
+                    </div>
+                  </div>
+                  <div style="background:#1C0F07;border-radius:6px;overflow:hidden;border:1px solid rgba(245,230,208,0.08);">
+                    <div style="height:4px;" id="prev-card-accent2" style="background:#C2522D;"></div>
+                    <div style="padding:8px;">
+                      <div style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;" id="prev-cat2" style="color:#E8956D;">Boulangerie</div>
+                      <div style="font-size:11px;font-style:italic;font-family:Georgia,serif;" id="prev-cname2" style="color:#F5E6D0;">Pain au levain</div>
+                    </div>
+                  </div>
+                  <div style="background:#1C0F07;border-radius:6px;overflow:hidden;border:1px solid rgba(245,230,208,0.08);">
+                    <div style="height:4px;" id="prev-card-accent3"></div>
+                    <div style="padding:8px;">
+                      <div style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;" id="prev-cat3">Patisserie</div>
+                      <div style="font-size:11px;font-style:italic;font-family:Georgia,serif;" id="prev-cname3">Macarons saison</div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Footer mini -->
+                <div id="prev-footer" style="padding:8px 16px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(245,230,208,0.06);">
+                  <span id="prev-footer-brand" style="font-size:9px;font-style:italic;color:rgba(245,230,208,0.3);font-family:Georgia,serif;">Cake Délice</span>
+                  <span style="font-size:8px;color:rgba(245,230,208,0.2);">DWT Digital</span>
+                </div>
+              </div>
+            </div>
+
+            <button class="send-btn" id="btn-valider-palette" style="margin-top:16px;font-size:12px;padding:11px 0;" onclick="savePalette()">Valider cette palette</button>
           </div>
         </div>
 
@@ -584,6 +749,19 @@ html{transition:background .4s;}
             <div class="font-preview">Poppins</div>
             <div class="font-role">Corps de texte</div>
           </div>
+        </div>
+        <div class="identity-section">
+          <h3>Importer votre identite visuelle</h3>
+          <div style="font-size:12px;color:var(--tm);margin-bottom:14px;line-height:1.6;">Deposez votre logo, charte graphique ou photos du commerce. Formats acceptes : PNG, JPG, PDF (max 2 Mo).</div>
+          <div id="upload-zone" style="border:2px dashed var(--border);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:border-color .2s;" onclick="document.getElementById('upload-input').click()" ondragover="event.preventDefault();this.style.borderColor='var(--v)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleFileDrop(event)">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--v)" stroke-width="1.5" style="margin:0 auto 10px;display:block;"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+            <div style="font-size:12px;font-weight:600;color:var(--td);margin-bottom:4px;">Cliquer ou glisser un fichier</div>
+            <div style="font-size:11px;color:var(--tm);">PNG, JPG, PDF · max 2 Mo</div>
+          </div>
+          <input type="file" id="upload-input" style="display:none" accept=".png,.jpg,.jpeg,.pdf" onchange="handleFileSelect(this.files)">
+          <div id="upload-list" style="margin-top:12px;display:flex;flex-direction:column;gap:8px;"></div>
+          <button class="send-btn" id="btn-upload" style="display:none;margin-top:14px;font-size:12px;padding:10px 0;" onclick="uploadFiles()">Envoyer les fichiers a DWT Digital</button>
+          <div id="upload-msg" style="display:none;font-size:11px;color:var(--g);margin-top:8px;text-align:center;">Fichiers envoyes ! DWT Digital les recevra sous peu.</div>
         </div>
       </div>
 
@@ -711,7 +889,7 @@ html{transition:background .4s;}
           Contacter DWT Digital
         </div>
         <div class="message-thread" id="msg-thread">
-          <div class="msg in">Bonjour Lise ! Votre espace client est prêt. N'hésitez pas à nous écrire ici.<span class="msg-time">DWT Digital</span></div>
+          <div class="msg in">Bonjour Marc ! Votre espace client est prêt. N'hésitez pas à nous écrire ici.<span class="msg-time">DWT Digital</span></div>
         </div>
         <div class="msg-input-row">
           <input class="msg-input" id="msg-input" placeholder="Votre message à l'équipe DWT..." onkeydown="if(event.key==='Enter')sendMessage()">
@@ -734,7 +912,7 @@ html{transition:background .4s;}
 </style>
 
 <script>
-var CLIENT = { name:'Lise', email:'lise@cakedelice.fr', commerce:'Cake Délice', notion_id:'lise-notion-001' };
+var CLIENT = { name:'Marc', email:'binkszimblo@gmail.com', commerce:'Cake Délice', notion_id:'zimblo-notion-001' };
 var WH_NOTIFY  = 'https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh';
 var WH_POSTGEN = 'https://hook.eu1.make.com/xsksxx8k04y6gd9lnhvc3nh95jeijo8c';
 var WH_EMAIL   = 'https://hook.eu1.make.com/e29w7hvifw2xtua2d9emsnrll9cnmrgd';
@@ -755,12 +933,12 @@ var PLATFORMS = {
 };
 
 var POSTS = {
-  instagram: { text:'Cake Délice — l\'art de la pâtisserie artisanale depuis 3 générations ! Lise sélectionne chaque matin des produits frais pour créer des gourmandises d\'exception.', tags:['#CakeDelice','#PatisserieArtisanale','#FaitMaison'], timing:'Vendredi 18h30', img:'https://images.unsplash.com/photo-1558303715-00eb7cc03db8?auto=format&fit=crop&w=480&q=80' },
-  facebook:  { text:'Ce week-end, notre sélection de gâteaux de saison est disponible ! Framboises fraîches, pistache, agrumes... Commandez avant samedi midi — retrait en boutique.', tags:['#Patisserie','#CakeDelice','#GateauxMaison'], timing:'Mercredi 12h00', img:'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=480&q=80' },
-  tiktok:    { text:'Dans les coulisses de Cake Délice ! Lise vous montre comment réaliser un entremet chocolat-caramel de A à Z. La pâtisserie artisanale sans secrets.', tags:['#Patisserie','#DIY','#CakeDelice'], timing:'Vendredi 19h00', img:'https://images.unsplash.com/photo-1464195244916-405fa0a82545?auto=format&fit=crop&w=480&q=80' },
-  linkedin:  { text:'Cake Délice propose des buffets sucrés sur mesure pour vos événements d\'entreprise. Macarons, mignardises, pièces montées. Qualité artisanale, livraison possible.', tags:['#CakeDelice','#Traiteur','#EvenementEntreprise'], timing:'Mardi 9h00', img:'https://images.unsplash.com/photo-1535254973040-607b474cb50d?auto=format&fit=crop&w=480&q=80' },
-  gmb:       { text:'Notre nouvelle collection de macarons de saison est disponible ! Framboise, pistache, citron vert, vanille de Madagascar. Disponible jusqu\'à épuisement des stocks.', tags:[], timing:'Vendredi 9h00', img:'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=480&q=80' },
-  pinterest: { text:'Les plus belles créations de Cake Délice — entremets, gâteaux de mariage, pièces montées. L\'artisanat pâtissier selon Lise, passion et savoir-faire.', tags:['#GateauxArtisanaux','#Patisserie'], timing:'Samedi 10h00', img:'https://images.unsplash.com/photo-1464195244916-405fa0a82545?auto=format&fit=crop&w=480&q=80' }
+  instagram: { text:'Cake Délice — 3 générations de passion ! Marc sélectionne chaque pièce auprès d\'éleveurs français partenaires. Maturation maîtrisée, découpe sur mesure.', tags:['#BoucherieZimblo','#Service','#Paris15','#BoucherieArtisanale'], timing:'Vendredi 18h30', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' },
+  facebook:  { text:'Ce week-end, notre plateau BBQ maison est disponible ! Commandez avant samedi midi — livraison ou retrait boutique.', tags:['#BBQ','#BoucherieZimblo','#Paris15'], timing:'Mercredi 12h00', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' },
+  tiktok:    { text:'Dans les coulisses de Cake Délice ! Marc vous montre comment maturer une côte de boeuf 45 jours. Le secret d\'une viande d\'exception.', tags:['#Boucherie','#MaturationBoeuf','#BoucherieZimblo'], timing:'Vendredi 19h00', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' },
+  linkedin:  { text:'Cake Délice propose des plateaux repas sur mesure pour vos événements d\'entreprise. Qualité artisanale, livraison au bureau.', tags:['#CateringParis','#BoucherieZimblo'], timing:'Mardi 9h00', img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=480&q=80' },
+  gmb:       { text:'Notre côte de boeuf maturée 45 jours est disponible ce week-end. Quantités limitées. Réservez votre pièce par téléphone : 01 42 30 56 78.', tags:[], timing:'Vendredi 9h00', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' },
+  pinterest: { text:'Les plus belles pièces de boucherie — côte de boeuf maturée, plateau BBQ. L\'artisanat boucher selon Marc Zimblo, Versailles depuis 1971.', tags:['#ServiceDException','#BoucherieArtisanale'], timing:'Samedi 10h00', img:'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=480&q=80' }
 };
 
 var STEPS_INFO = [
@@ -784,6 +962,7 @@ function loadState() {
       S.posts_ok  = p.posts_ok  || [];
       S.connected = p.connected || [];
       S.identity  = p.identity  || false;
+      S.palette   = p.palette   || null;
       S.modifs    = p.modifs    || [];
       S.msgs      = p.msgs      || [];
     }
@@ -1090,7 +1269,7 @@ async function submitModification() {
   } catch(err) {
     console.error('[Modif]', err);
     // Fallback : envoyer via Make webhook pour traitement manuel
-    sendWebhook(WH_MODIF, { client: CLIENT.name, commerce: CLIENT.commerce, email: CLIENT.email, sujet: type, message: txt, site_slug: 'cake-delice', site_file: 'index.html', context_data: '', repo: GH_REPO, full_path: 'cake-delice/index.html' });
+    sendWebhook(WH_MODIF, { client: CLIENT.name, commerce: CLIENT.commerce, email: CLIENT.email, sujet: type, message: txt, site_slug: 'Zimblo', site_file: 'index.html', context_data: '', repo: GH_REPO, full_path: 'Zimblo/index.html' });
     sendWebhook(WH_EMAIL, { client_email: CEO_EMAIL, client_name: 'DWT Digital', commerce_name: CLIENT.commerce + ' — Modif (Make fallback)', site_url: '', texte_post: 'MODIF (fallback Make)\nErreur direct: ' + err.message + '\nType: ' + type + '\nMessage: ' + txt });
     S.modifs.unshift({ sujet: type, msg: txt, date: dateStr, status:'sent' });
     saveState();
@@ -1103,7 +1282,7 @@ async function submitModification() {
 }
 
 async function saveModifToGitHub(type, msg, dateStr) {
-  var LOG_PATH = 'notifications/lise-modifs.json';
+  var LOG_PATH = 'notifications/zimblo-modifs.json';
   var entry = { date: dateStr, type: type, msg: msg, commerce: CLIENT.commerce, status: 'applied' };
   try {
     var resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + LOG_PATH, {
@@ -1158,7 +1337,7 @@ async function sendMessage() {
   renderMessages();
   // Sauvegarder dans GitHub pour dashboard CEO
   try {
-    var LOG_PATH = 'notifications/lise-messages.json';
+    var LOG_PATH = 'notifications/zimblo-messages.json';
     var entry = { date: dateStr, msg: txt, from: CLIENT.name, commerce: CLIENT.commerce };
     var resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + LOG_PATH, {
       headers: { 'Authorization': 'token ' + GH_TOKEN }
@@ -1186,7 +1365,7 @@ async function sendMessage() {
 
 function renderMessages() {
   var thread = document.getElementById('msg-thread');
-  var base = '<div class="msg in">Bonjour Lise ! Votre espace client est prêt. N\'hésitez pas à nous écrire ici.<span class="msg-time">DWT Digital</span></div>';
+  var base = '<div class="msg in">Bonjour Marc ! Votre espace client est prêt. N\'hésitez pas à nous écrire ici.<span class="msg-time">DWT Digital</span></div>';
   var extra = '';
   S.msgs.forEach(function(m) {
     extra += '<div class="msg out">' + m.txt + '<span class="msg-time">' + m.time + '</span></div>';
@@ -1223,6 +1402,7 @@ function sendWebhook(url, data, onSuccess, onError) {
 // ── INIT ──
 function init() {
   loadState();
+  loadPaletteState();
   updateProgress();
   renderTimeline();
   renderModifHistory();
@@ -1239,8 +1419,734 @@ function init() {
 
 document.addEventListener('DOMContentLoaded', init);
 
-function dwtToggleTheme(){var cur=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",cur);try{localStorage.setItem("dwt_theme",cur);}catch(e){}}
-(function(){var c=document.getElementById("dwt-stars");if(!c)return;var x=c.getContext("2d"),pts=[],W,H;function size(){W=c.width=innerWidth;H=c.height=innerHeight;}size();addEventListener("resize",size);var N=Math.min(64,Math.floor(innerWidth/24));for(var i=0;i<N;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22});function draw(){x.clearRect(0,0,W,H);for(var i=0;i<pts.length;i++){var p=pts[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;x.beginPath();x.arc(p.x,p.y,1.4,0,7);x.fillStyle="rgba(177,79,224,.7)";x.fill();for(var j=i+1;j<pts.length;j++){var q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy);if(d<128){x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.strokeStyle="rgba(123,201,58,"+(0.12*(1-d/128))+")";x.lineWidth=.6;x.stroke();}}}requestAnimationFrame(draw);}draw();})();
+// ── PALETTE ÉDITABLE ──
+function updateSwatch(key, val) {
+  var map = {primary:'sw-primary', secondary:'sw-secondary', bg:'sw-bg'};
+  var hexMap = {primary:'hex-primary', secondary:'hex-secondary', bg:'hex-bg'};
+  var el = document.getElementById(map[key]);
+  if(el) el.style.background = val;
+  var hexEl = document.getElementById(hexMap[key]);
+  if(hexEl) hexEl.textContent = val;
+  // Mise à jour aperçu live
+  updatePreview();
+}
+
+function getCurrentColors() {
+  var p = document.getElementById('cp-primary');
+  var s = document.getElementById('cp-secondary');
+  var b = document.getElementById('cp-bg');
+  return {
+    primary: p ? p.value : '#C2522D',
+    secondary: s ? s.value : '#E8956D',
+    bg: b ? b.value : '#1C0F07'
+  };
+}
+
+function hexToRgb(hex) {
+  var r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+  return {r:r,g:g,b:b};
+}
+function lighten(hex, pct) {
+  var {r,g,b} = hexToRgb(hex);
+  return 'rgb('+Math.min(255,r+pct)+','+Math.min(255,g+pct)+','+Math.min(255,b+pct)+')';
+}
+function textColor(hex) {
+  var {r,g,b} = hexToRgb(hex);
+  return (r*0.299+g*0.587+b*0.114) > 128 ? '#1a1a1a' : '#F5E6D0';
+}
+
+function updatePreview() {
+  var col = getCurrentColors();
+  var txt = textColor(col.bg);
+  var txtDim = col.bg === '#1C0F07' ? 'rgba(245,230,208,0.55)' : 'rgba(0,0,0,0.45)';
+  var bgLight = lighten(col.bg, 20);
+
+  // Nav
+  var nav = document.getElementById('prev-nav');
+  if(nav) nav.style.background = col.bg;
+  var brand = document.getElementById('prev-brand');
+  if(brand) brand.style.color = txt;
+  var cta = document.getElementById('prev-cta');
+  if(cta) { cta.style.background = col.primary; cta.style.color = textColor(col.primary); }
+
+  // Hero
+  var hero = document.getElementById('prev-hero');
+  if(hero) hero.style.background = col.bg;
+  var eyebrow = document.getElementById('prev-eyebrow');
+  if(eyebrow) eyebrow.style.color = col.secondary;
+  var title = document.getElementById('prev-title');
+  if(title) title.style.color = txt;
+  var sub = document.getElementById('prev-sub');
+  if(sub) sub.style.color = txtDim;
+  var btn = document.getElementById('prev-btn');
+  if(btn) { btn.style.background = col.primary; btn.style.color = textColor(col.primary); }
+
+  // Cards wrap
+  var wrap = document.getElementById('prev-cards-wrap');
+  if(wrap) wrap.style.background = bgLight;
+
+  // Cards
+  ['','2','3'].forEach(function(n) {
+    var card = document.getElementById(n==='' ? 'prev-card1' : null);
+    var accent = document.getElementById('prev-card-accent'+(n||''));
+    var cat = document.getElementById('prev-cat'+(n||''));
+    var cname = document.getElementById('prev-cname'+(n||''));
+    if(accent) accent.style.background = col.primary;
+    if(cat) cat.style.color = col.secondary;
+    if(cname) cname.style.color = txt;
+  });
+
+  // Footer
+  var footer = document.getElementById('prev-footer');
+  if(footer) footer.style.background = col.bg;
+}
+
+
+// ── GÉNÉRATEUR PALETTE IA ──
+document.addEventListener('DOMContentLoaded', function() {
+  var cpIA = document.getElementById('ia-couleur');
+  var txtIA = document.getElementById('ia-couleur-txt');
+  if(cpIA && txtIA) {
+    cpIA.addEventListener('input', function(){ txtIA.value = cpIA.value; });
+    txtIA.addEventListener('input', function(){
+      if(/^#[0-9A-Fa-f]{6}$/.test(txtIA.value)) cpIA.value = txtIA.value;
+    });
+  }
+});
+
+
+// ══════════ PARCOURS IDENTITE IA ══════════
+var WIZ = {
+  step: 0,
+  answers: { clientele:[], emotion:'', valeurs:[], style_modern:'', style_rich:'', couleurs:'', eviter:'', inspiration:'' }
+};
+
+var WIZ_STEPS = [
+  {
+    key: 'clientele', type: 'multi', max: 2,
+    q: 'Qui sont vos clients principaux ?',
+    hint: 'Choisissez 1 ou 2 profils',
+    options: [
+      {v:'familles du quartier', l:'Familles', s:'du quartier'},
+      {v:'jeunes actifs presses', l:'Jeunes actifs', s:'presses'},
+      {v:'gourmets et fins palais', l:'Gourmets', s:'fins palais'},
+      {v:'touristes de passage', l:'Touristes', s:'de passage'},
+      {v:'habitues fideles', l:'Habitues', s:'fideles'},
+      {v:'professionnels et bureaux', l:'Professionnels', s:'bureaux'}
+    ]
+  },
+  {
+    key: 'emotion', type: 'single',
+    q: 'Quelle emotion votre marque doit-elle evoquer ?',
+    hint: 'Le ressenti au premier coup d oeil',
+    options: [
+      {v:'chaleur et convivialite', l:'Chaleur', s:'convivialite'},
+      {v:'luxe et raffinement', l:'Raffinement', s:'haut de gamme'},
+      {v:'fraicheur et naturel', l:'Fraicheur', s:'naturel'},
+      {v:'tradition et authenticite', l:'Tradition', s:'authenticite'},
+      {v:'joie et gourmandise', l:'Gourmandise', s:'joie'},
+      {v:'serenite et simplicite', l:'Serenite', s:'simplicite'}
+    ]
+  },
+  {
+    key: 'valeurs', type: 'multi', max: 3,
+    q: 'Qu est-ce qui compte le plus pour vous ?',
+    hint: 'Choisissez jusqu a 3 valeurs',
+    options: [
+      {v:'savoir-faire artisanal', l:'Artisanat', s:'fait main'},
+      {v:'qualite premium', l:'Qualite', s:'premium'},
+      {v:'produits locaux', l:'Local', s:'circuit court'},
+      {v:'innovation et creativite', l:'Creativite', s:'innovation'},
+      {v:'prix accessibles', l:'Accessible', s:'pour tous'},
+      {v:'tradition familiale', l:'Heritage', s:'familial'}
+    ]
+  },
+  {
+    key: 'style_modern', type: 'single',
+    q: 'Plutot moderne ou traditionnel ?',
+    hint: 'Le style visuel general',
+    options: [
+      {v:'tres moderne et epure', l:'Moderne', s:'epure'},
+      {v:'equilibre moderne-classique', l:'Equilibre', s:'les deux'},
+      {v:'classique et traditionnel', l:'Classique', s:'traditionnel'}
+    ]
+  },
+  {
+    key: 'couleurs', type: 'text',
+    q: 'Une couleur que vous aimez ?',
+    hint: 'Optionnel — decrivez ou laissez vide',
+    placeholder: 'ex: les tons chauds, le bordeaux, le vert sapin...'
+  },
+  {
+    key: 'eviter', type: 'text',
+    q: 'Une couleur a eviter absolument ?',
+    hint: 'Optionnel',
+    placeholder: 'ex: pas de rose, pas de fluo...'
+  }
+];
+
+function startWizard() {
+  WIZ.step = 0;
+  renderWizStep();
+}
+
+function renderWizProgress() {
+  var prog = document.getElementById('wiz-progress');
+  if(!prog) return;
+  var total = WIZ_STEPS.length;
+  var html = '';
+  for(var i=0;i<total;i++){
+    var bg = i <= WIZ.step ? 'var(--g)' : 'var(--border)';
+    html += '<div style="flex:1;height:3px;border-radius:3px;background:'+bg+';transition:background .3s;"></div>';
+  }
+  prog.innerHTML = html;
+}
+
+function renderWizStep() {
+  renderWizProgress();
+  var step = WIZ_STEPS[WIZ.step];
+  var cont = document.getElementById('wiz-steps');
+  if(!cont || !step) return;
+
+  var html = '<div style="font-size:14px;font-weight:700;color:var(--td);margin-bottom:3px;">' + step.q + '</div>';
+  html += '<div style="font-size:11px;color:var(--tm);margin-bottom:14px;">' + step.hint + '</div>';
+
+  if(step.type === 'text') {
+    var cur = WIZ.answers[step.key] || '';
+    html += '<input type="text" id="wiz-input" value="'+cur+'" placeholder="'+step.placeholder+'" style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:11px 13px;color:var(--td);font-size:13px;font-family:inherit;">';
+  } else {
+    html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;" id="wiz-options">';
+    step.options.forEach(function(opt, i) {
+      var sel = isOptSelected(step, opt.v);
+      var border = sel ? '2px solid var(--v)' : '1px solid var(--border)';
+      var bg = sel ? 'rgba(79,15,92,0.12)' : 'var(--bg)';
+      html += '<div onclick="wizSelect(\''+opt.v+'\')" style="border:'+border+';background:'+bg+';border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .15s;">'
+        + '<div style="font-size:12px;font-weight:700;color:var(--td);">'+opt.l+'</div>'
+        + '<div style="font-size:10px;color:var(--tm);margin-top:2px;">'+opt.s+'</div>'
+        + '</div>';
+    });
+    html += '</div>';
+  }
+  cont.innerHTML = html;
+
+  // Navigation
+  document.getElementById('wiz-prev').style.visibility = WIZ.step === 0 ? 'hidden' : 'visible';
+  var nextBtn = document.getElementById('wiz-next');
+  nextBtn.textContent = WIZ.step === WIZ_STEPS.length - 1 ? 'Generer mes palettes' : 'Suivant';
+}
+
+function isOptSelected(step, val) {
+  var a = WIZ.answers[step.key];
+  if(step.type === 'multi') return a.indexOf(val) >= 0;
+  return a === val;
+}
+
+function wizSelect(val) {
+  var step = WIZ_STEPS[WIZ.step];
+  if(step.type === 'multi') {
+    var a = WIZ.answers[step.key];
+    var idx = a.indexOf(val);
+    if(idx >= 0) { a.splice(idx,1); }
+    else { if(a.length < step.max) a.push(val); else { a.shift(); a.push(val); } }
+  } else {
+    WIZ.answers[step.key] = val;
+  }
+  renderWizStep();
+}
+
+function wizPrev() {
+  saveTextStep();
+  if(WIZ.step > 0) { WIZ.step--; renderWizStep(); }
+}
+
+function wizNext() {
+  saveTextStep();
+  var step = WIZ_STEPS[WIZ.step];
+  // Validation pour les étapes non-text
+  if(step.type === 'single' && !WIZ.answers[step.key]) { showToast('Choisissez une option'); return; }
+  if(step.type === 'multi' && WIZ.answers[step.key].length === 0) { showToast('Choisissez au moins une option'); return; }
+
+  if(WIZ.step < WIZ_STEPS.length - 1) {
+    WIZ.step++;
+    renderWizStep();
+  } else {
+    genererPalettesIA();
+  }
+}
+
+function saveTextStep() {
+  var step = WIZ_STEPS[WIZ.step];
+  if(step && step.type === 'text') {
+    var inp = document.getElementById('wiz-input');
+    if(inp) WIZ.answers[step.key] = inp.value.trim();
+  }
+}
+
+function genererPalettesIA() {
+  var a = WIZ.answers;
+  var brief = 'Clientele: ' + a.clientele.join(', ')
+    + '. Emotion recherchee: ' + a.emotion
+    + '. Valeurs: ' + a.valeurs.join(', ')
+    + '. Style: ' + a.style_modern
+    + (a.couleurs ? '. Couleur aimee: ' + a.couleurs : '')
+    + (a.eviter ? '. A eviter: ' + a.eviter : '');
+
+  var box = document.getElementById('wizard-box');
+  var results = document.getElementById('ia-results');
+  var nextBtn = document.getElementById('wiz-next');
+  nextBtn.disabled = true;
+  nextBtn.textContent = 'Generation en cours...';
+  results.style.display = 'none';
+  results.innerHTML = '';
+
+  var payload = {
+    commerce: 'Cake Délice',
+    secteur: 'Pâtisserie / Cake design',
+    ambiance: brief,
+    mots: a.valeurs.join(', '),
+    couleur_pref: a.couleurs || ''
+  };
+
+  fetch('https://dwt-palette.darellwilliampro1.workers.dev', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
+  })
+  .then(function(r){ return r.text(); })
+  .then(function(text) {
+    var data;
+    try {
+      var clean = text.replace(/```json|```/g, '').trim();
+      var m = clean.match(/\{[\s\S]*\}/);
+      if(m) clean = m[0];
+      data = JSON.parse(clean);
+    } catch(e) {
+      console.error('Parse error:', e, 'Raw:', text.substring(0,300));
+      throw new Error('Reponse invalide');
+    }
+    if(!data || !data.palettes || !data.palettes.length) throw new Error('Aucune palette');
+    window._iaPalettes = data.palettes;
+    renderIAResults(data.palettes);
+    nextBtn.disabled = false;
+    nextBtn.textContent = 'Recommencer le questionnaire';
+    nextBtn.onclick = function(){ WIZ.answers = {clientele:[],emotion:'',valeurs:[],style_modern:'',style_rich:'',couleurs:'',eviter:'',inspiration:''}; results.style.display='none'; nextBtn.onclick=wizNext; startWizard(); };
+    showToast('3 palettes generees pour vous !');
+  })
+  .catch(function(err) {
+    nextBtn.disabled = false;
+    nextBtn.textContent = 'Generer mes palettes';
+    var msg;
+    if(err.message === 'Failed to fetch') msg = 'Connexion bloquee — le serveur ne repond pas';
+    else if(err.message === 'Reponse invalide') msg = 'Reponse illisible du serveur';
+    else if(err.message === 'Aucune palette') msg = 'Le serveur a repondu mais sans palette';
+    else msg = 'Erreur : ' + err.message;
+    showToast(msg);
+    console.error('PaletteGen detail:', err);
+  });
+}
+
+function renderIAResults(palettes) {
+  var results = document.getElementById('ia-results');
+  results.style.display = 'flex';
+  results.innerHTML = '';
+
+  var title = document.createElement('div');
+  title.style.cssText = 'font-size:13px;font-weight:700;color:var(--g);letter-spacing:.3px;margin-bottom:6px;';
+  title.textContent = 'Voici 3 propositions sur mesure';
+  results.appendChild(title);
+
+  palettes.forEach(function(pal, i) {
+    var txt = pal.text || '#2A1B12';
+    var card = document.createElement('div');
+    card.style.cssText = 'background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s ease,box-shadow .25s ease;animation:fadeUp .5s ease ' + (i * 0.08) + 's both;';
+    card.onmouseenter = function(){ card.style.transform = 'translateY(-3px)'; card.style.boxShadow = '0 12px 32px rgba(79,15,92,0.15)'; };
+    card.onmouseleave = function(){ card.style.transform = 'none'; card.style.boxShadow = 'var(--shadow)'; };
+
+    // APERCU EN CONTEXTE (mini post)
+    var hero = document.createElement('div');
+    hero.style.cssText = 'background:' + pal.bg + ';padding:22px 24px;display:flex;align-items:center;gap:16px;';
+    var avatar = document.createElement('div');
+    avatar.style.cssText = 'width:46px;height:46px;border-radius:50%;flex-shrink:0;background:' + pal.primary + ';display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:' + pal.bg + ';';
+    avatar.textContent = 'S';
+    var heroText = document.createElement('div');
+    heroText.style.cssText = 'flex:1;min-width:0;';
+    var heroName = document.createElement('div');
+    heroName.style.cssText = 'font-weight:700;font-size:15px;color:' + txt + ';line-height:1.2;';
+    heroName.textContent = 'Cake Délice';
+    var heroTag = document.createElement('div');
+    heroTag.style.cssText = 'font-size:11px;color:' + txt + ';opacity:.7;margin-top:3px;';
+    heroTag.textContent = 'Pâtisseries sur mesure, faites avec passion';
+    heroText.appendChild(heroName);
+    heroText.appendChild(heroTag);
+    var heroBtn = document.createElement('div');
+    heroBtn.style.cssText = 'background:' + pal.secondary + ';color:' + pal.bg + ';font-size:11px;font-weight:700;padding:8px 15px;border-radius:20px;white-space:nowrap;';
+    heroBtn.textContent = 'Commander';
+    hero.appendChild(avatar);
+    hero.appendChild(heroText);
+    hero.appendChild(heroBtn);
+    card.appendChild(hero);
+
+    // CORPS
+    var body = document.createElement('div');
+    body.style.cssText = 'padding:16px 18px 18px;';
+
+    var header = document.createElement('div');
+    header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px;';
+    var nameWrap = document.createElement('div');
+    var nm = document.createElement('div');
+    nm.style.cssText = 'font-size:14px;font-weight:700;color:var(--td);';
+    nm.textContent = pal.nom || ('Palette ' + (i + 1));
+    var md = document.createElement('div');
+    md.style.cssText = 'font-size:11px;color:var(--tm);font-style:italic;margin-top:1px;';
+    md.textContent = pal.mood || '';
+    nameWrap.appendChild(nm);
+    nameWrap.appendChild(md);
+    var btn = document.createElement('button');
+    btn.textContent = 'Choisir';
+    btn.dataset.idx = i;
+    btn.style.cssText = 'font-size:12px;font-weight:700;background:var(--v);border:none;border-radius:9px;padding:9px 20px;color:#fff;cursor:pointer;white-space:nowrap;font-family:inherit;transition:background .2s;';
+    btn.onmouseenter = function(){ this.style.background = 'var(--vl)'; };
+    btn.onmouseleave = function(){ this.style.background = 'var(--v)'; };
+    btn.onclick = function(){ appliquerPalette(parseInt(this.dataset.idx)); };
+    header.appendChild(nameWrap);
+    header.appendChild(btn);
+    body.appendChild(header);
+
+    // NUANCIER + HEX
+    var sw = document.createElement('div');
+    sw.style.cssText = 'display:flex;gap:8px;margin-bottom:15px;';
+    [['Principale', pal.primary], ['Secondaire', pal.secondary], ['Fond', pal.bg], ['Texte', txt]].forEach(function(c){
+      var col = document.createElement('div');
+      col.style.cssText = 'flex:1;text-align:center;';
+      var chip = document.createElement('div');
+      chip.style.cssText = 'height:42px;border-radius:9px;background:' + c[1] + ';border:1px solid rgba(0,0,0,0.06);';
+      var hex = document.createElement('div');
+      hex.style.cssText = 'font-family:monospace;font-size:9.5px;color:var(--td);margin-top:6px;font-weight:600;';
+      hex.textContent = (c[1] || '').toUpperCase();
+      var lbl = document.createElement('div');
+      lbl.style.cssText = 'font-size:8.5px;color:var(--tm);margin-top:1px;';
+      lbl.textContent = c[0];
+      col.appendChild(chip);
+      col.appendChild(hex);
+      col.appendChild(lbl);
+      sw.appendChild(col);
+    });
+    body.appendChild(sw);
+
+    // JUSTIFICATIONS
+    var ratWrap = document.createElement('div');
+    ratWrap.style.cssText = 'border-top:1px solid var(--border);padding-top:13px;display:flex;flex-direction:column;gap:8px;';
+    [[pal.primary, pal.rationale_primary], [pal.secondary, pal.rationale_secondary], [pal.bg, pal.rationale_bg]].forEach(function(pair){
+      if(!pair[1]) return;
+      var row = document.createElement('div');
+      row.style.cssText = 'font-size:11px;color:var(--tm);line-height:1.55;display:flex;align-items:flex-start;gap:9px;';
+      var dot = document.createElement('span');
+      dot.style.cssText = 'display:inline-block;min-width:8px;height:8px;border-radius:50%;background:' + pair[0] + ';margin-top:4px;flex-shrink:0;';
+      row.appendChild(dot);
+      row.appendChild(document.createTextNode(pair[1]));
+      ratWrap.appendChild(row);
+    });
+    body.appendChild(ratWrap);
+
+    card.appendChild(body);
+    results.appendChild(card);
+  });
+}
+
+function appliquerPalette(idx) {
+  var pal = (window._iaPalettes||[])[idx];
+  if(!pal) return;
+  var cpP=document.getElementById('cp-primary'),cpS=document.getElementById('cp-secondary'),cpB=document.getElementById('cp-bg');
+  if(cpP) cpP.value = pal.primary;
+  if(cpS) cpS.value = pal.secondary;
+  if(cpB) cpB.value = pal.bg;
+  updateSwatch('primary',pal.primary); updateSwatch('secondary',pal.secondary); updateSwatch('bg',pal.bg);
+  showToast('Palette "'+pal.nom+'" appliquee — validez en bas pour confirmer');
+  var vb = document.getElementById('btn-valider-palette');
+  if(vb) vb.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+// Palettes harmonieuses prédéfinies
+var PALETTES = [
+  {primary:'#C2522D', secondary:'#E8956D', bg:'#1C0F07', name:'Terra Cotta (actuelle)'},
+  {primary:'#2D7DD2', secondary:'#6BAED6', bg:'#0A1628', name:'Ocean'},
+  {primary:'#8B5CF6', secondary:'#C4B5FD', bg:'#0D0A1A', name:'Violet Nuit'},
+  {primary:'#059669', secondary:'#6EE7B7', bg:'#071811', name:'Emeraude'},
+  {primary:'#DC2626', secondary:'#F87171', bg:'#1A0505', name:'Rouge Passion'},
+  {primary:'#D97706', secondary:'#FCD34D', bg:'#1A1205', name:'Ambre Doree'},
+  {primary:'#DB2777', secondary:'#F9A8D4', bg:'#1A0510', name:'Rose Fuchsia'},
+  {primary:'#0891B2', secondary:'#67E8F9', bg:'#071318', name:'Cyan Pro'},
+  {primary:'#65A30D', secondary:'#BEF264', bg:'#0A1205', name:'Vert Naturel'},
+  {primary:'#7C3AED', secondary:'#A78BFA', bg:'#0D0714', name:'Lavande Profonde'},
+  {primary:'#EA580C', secondary:'#FB923C', bg:'#180A03', name:'Orange Feu'},
+  {primary:'#0F766E', secondary:'#5EEAD4', bg:'#041511', name:'Teal Moderne'},
+];
+var _paletteIdx = 0;
+
+function randomPalette() {
+  _paletteIdx = (_paletteIdx + 1) % PALETTES.length;
+  var pal = PALETTES[_paletteIdx];
+  var cpP = document.getElementById('cp-primary');
+  var cpS = document.getElementById('cp-secondary');
+  var cpB = document.getElementById('cp-bg');
+  if(cpP) cpP.value = pal.primary;
+  if(cpS) cpS.value = pal.secondary;
+  if(cpB) cpB.value = pal.bg;
+  updateSwatch('primary', pal.primary);
+  updateSwatch('secondary', pal.secondary);
+  updateSwatch('bg', pal.bg);
+  // Nom de la palette
+  var palName = document.getElementById('current-palette-name');
+  if(palName) palName.textContent = pal.name;
+  showToast('Palette : ' + pal.name);
+}
+
+function savePalette() {
+  var primary = document.getElementById('cp-primary').value;
+  var secondary = document.getElementById('cp-secondary').value;
+  var bg = document.getElementById('cp-bg').value;
+  S.palette = {primary: primary, secondary: secondary, bg: bg};
+  S.identity = true;
+  saveState();
+  showIdentityValidated();
+  renderTimeline();
+  updateProgress();
+  showToast('Identite visuelle validee !');
+  // Notif CEO
+  fetch('https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({type:'identite_validee', commerce: S.commerce || 'Cake Délice',
+      palette: {primary: primary, secondary: secondary, bg: bg}, date: new Date().toISOString().slice(0,10)})
+  }).catch(function(){});
+}
+
+function showIdentityValidated() {
+  var banner = document.getElementById('identity-validated-banner');
+  var editorZone = document.getElementById('palette-editor-zone');
+  if(banner) {
+    banner.style.display = 'flex';
+    if(!document.getElementById('iv-chips') && S.palette) {
+      var chips = document.createElement('div');
+      chips.id = 'iv-chips';
+      chips.style.cssText = 'display:flex;gap:6px;flex-shrink:0;';
+      [S.palette.primary, S.palette.secondary, S.palette.bg].forEach(function(col){
+        var d = document.createElement('div');
+        d.style.cssText = 'width:24px;height:24px;border-radius:7px;border:1px solid rgba(255,255,255,0.18);background:' + (col || '#888') + ';';
+        chips.appendChild(d);
+      });
+      var bbtn = banner.querySelector('button');
+      if(bbtn) banner.insertBefore(chips, bbtn); else banner.appendChild(chips);
+    }
+  }
+  if(editorZone) editorZone.style.display = 'none';
+}
+
+function editPalette() {
+  var banner = document.getElementById('identity-validated-banner');
+  var editorZone = document.getElementById('palette-editor-zone');
+  if(banner) banner.style.display = 'none';
+  if(editorZone) editorZone.style.display = 'block';
+  var btn = document.getElementById('btn-valider-palette');
+  if(btn) btn.textContent = 'Sauvegarder les modifications';
+}
+
+function loadPaletteState() {
+  var pal = S.palette || null;
+  var primary = (pal && pal.primary) ? pal.primary : '#C2522D';
+  var secondary = (pal && pal.secondary) ? pal.secondary : '#E8956D';
+  var bg = (pal && pal.bg) ? pal.bg : '#1C0F07';
+
+  var cpP = document.getElementById('cp-primary');
+  var cpS = document.getElementById('cp-secondary');
+  var cpB = document.getElementById('cp-bg');
+  if(cpP) cpP.value = primary;
+  if(cpS) cpS.value = secondary;
+  if(cpB) cpB.value = bg;
+
+  updateSwatch('primary', primary);
+  updateSwatch('secondary', secondary);
+  updateSwatch('bg', bg);
+
+  if(S.identity) {
+    showIdentityValidated();
+  } else {
+    if(typeof startWizard === 'function') startWizard();
+  }
+  updatePreview();
+}
+
+function downloadIdentity() {
+  var primary = (S.palette && S.palette.primary) ? S.palette.primary : '#C2522D';
+  var secondary = (S.palette && S.palette.secondary) ? S.palette.secondary : '#E8956D';
+  var bg = (S.palette && S.palette.bg) ? S.palette.bg : '#1C0F07';
+
+  var canvas = document.createElement('canvas');
+  canvas.width = 900; canvas.height = 540;
+  var ctx = canvas.getContext('2d');
+
+  // Fond
+  ctx.fillStyle = '#1a1a2e'; ctx.fillRect(0, 0, 900, 540);
+
+  // Bande accent gauche
+  ctx.fillStyle = primary; ctx.fillRect(0, 0, 6, 540);
+
+  // Titre
+  ctx.fillStyle = '#EFDEC9'; ctx.font = 'bold 28px sans-serif';
+  ctx.fillText('Charte Identite Visuelle', 40, 56);
+  ctx.fillStyle = 'rgba(239,222,201,0.4)'; ctx.font = '14px sans-serif';
+  ctx.fillText('Cake Délice  —  par DWT Digital', 40, 82);
+
+  // Ligne séparatrice
+  ctx.strokeStyle = 'rgba(239,222,201,0.1)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(40, 98); ctx.lineTo(860, 98); ctx.stroke();
+
+  // Section Couleurs
+  ctx.fillStyle = 'rgba(239,222,201,0.4)'; ctx.font = '11px sans-serif';
+  ctx.fillText('PALETTE DE COULEURS', 40, 130);
+
+  var colors = [
+    {color: primary, label: 'Principale', hex: primary},
+    {color: secondary, label: 'Secondaire', hex: secondary},
+    {color: bg, label: 'Fond', hex: bg},
+    {color: '#F5E6D0', label: 'Texte', hex: '#F5E6D0'}
+  ];
+  colors.forEach(function(col, i) {
+    var x = 40 + i * 210;
+    // Swatch
+    ctx.fillStyle = col.color;
+    ctx.beginPath(); ctx.roundRect(x, 148, 180, 90, 8); ctx.fill();
+    // Bordure
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth = 1;
+    ctx.stroke();
+    // Label
+    ctx.fillStyle = '#EFDEC9'; ctx.font = 'bold 13px sans-serif';
+    ctx.fillText(col.label, x, 262);
+    ctx.fillStyle = 'rgba(239,222,201,0.5)'; ctx.font = '12px monospace';
+    ctx.fillText(col.hex.toUpperCase(), x, 280);
+  });
+
+  // Section Typographie
+  ctx.strokeStyle = 'rgba(239,222,201,0.1)'; ctx.beginPath();
+  ctx.moveTo(40, 306); ctx.lineTo(860, 306); ctx.stroke();
+  ctx.fillStyle = 'rgba(239,222,201,0.4)'; ctx.font = '11px sans-serif';
+  ctx.fillText('TYPOGRAPHIE', 40, 330);
+
+  ctx.fillStyle = '#EFDEC9'; ctx.font = 'italic 36px Georgia,serif';
+  ctx.fillText('Cormorant Garamond', 40, 382);
+  ctx.fillStyle = 'rgba(239,222,201,0.5)'; ctx.font = '12px sans-serif';
+  ctx.fillText('Titres  —  Serif classique, elegant, artisanal', 40, 406);
+
+  ctx.fillStyle = '#EFDEC9'; ctx.font = '24px Arial,sans-serif';
+  ctx.fillText('DM Sans — Regular & Medium', 40, 450);
+  ctx.fillStyle = 'rgba(239,222,201,0.5)'; ctx.font = '12px sans-serif';
+  ctx.fillText('Corps de texte  —  Moderne, lisible, accessible', 40, 472);
+
+  // Footer
+  ctx.strokeStyle = 'rgba(239,222,201,0.1)'; ctx.beginPath();
+  ctx.moveTo(40, 498); ctx.lineTo(860, 498); ctx.stroke();
+  ctx.fillStyle = 'rgba(239,222,201,0.25)'; ctx.font = '11px sans-serif';
+  ctx.fillText('dwt-digital.fr  —  Genere le ' + new Date().toLocaleDateString('fr-FR'), 40, 522);
+  ctx.fillStyle = primary; ctx.font = 'bold 11px sans-serif';
+  ctx.fillText('DWT DIGITAL', 780, 522);
+
+  // Download
+  canvas.toBlob(function(blob) {
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'identite-visuelle-cake-delice.png';
+    a.click(); URL.revokeObjectURL(url);
+  });
+  showToast('Telechargement de votre charte...');
+}
+
+// ── UPLOAD IDENTITE VISUELLE ──
+var uploadFiles_list = [];
+function handleFileDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').style.borderColor = 'var(--border)';
+  handleFileSelect(e.dataTransfer.files);
+}
+function handleFileSelect(files) {
+  Array.from(files).forEach(function(f) {
+    if (f.size > 2 * 1024 * 1024) { showToast(f.name + ' trop lourd (max 2 Mo)'); return; }
+    uploadFiles_list.push(f);
+    var el = document.createElement('div');
+    el.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg);border-radius:8px;font-size:12px;';
+    el.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg><span style="color:var(--td);">' + f.name + '</span><span style="color:var(--tm);">(' + Math.round(f.size/1024) + ' Ko)</span>';
+    document.getElementById('upload-list').appendChild(el);
+  });
+  if (uploadFiles_list.length > 0) document.getElementById('btn-upload').style.display = 'block';
+}
+function uploadFiles() {
+  if (!uploadFiles_list.length) return;
+  var btn = document.getElementById('btn-upload');
+  btn.disabled = true; btn.textContent = 'Envoi...';
+  var slug = STORAGE_KEY.replace('dwt_','').replace('_v2','');
+  var GH_TOKEN = ['ghp_','QHlpXwegxZNIpWB0ksUf6GJhYUQLoo3e6G7g'].join('');
+  var GH_HEADERS = {'Authorization':'token ' + GH_TOKEN, 'Content-Type':'application/json'};
+  var promises = uploadFiles_list.map(function(file) {
+    return new Promise(function(resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var b64 = e.target.result.split(',')[1];
+        var path = 'data/uploads/' + slug + '/' + file.name;
+        var url = 'https://api.github.com/repos/dwtdigital-clients/dwtdigital-clients.github.io/contents/' + path;
+        fetch(url, {headers: GH_HEADERS})
+          .then(function(r){ return r.ok ? r.json() : null; })
+          .then(function(existing) {
+            var body = {message: 'upload: ' + file.name + ' — ' + slug, content: b64};
+            if (existing && existing.sha) body.sha = existing.sha;
+            return fetch(url, {method:'PUT', headers: GH_HEADERS, body: JSON.stringify(body)});
+          })
+          .then(function(r){ resolve(r.ok); })
+          .catch(function(){ resolve(false); });
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+  Promise.all(promises).then(function(results) {
+    var ok = results.every(function(r){return r;});
+    btn.style.display = 'none';
+    document.getElementById('upload-msg').style.display = 'block';
+    if (ok) showToast('Fichiers envoyes avec succes !');
+    else showToast('Certains fichiers n\'ont pas pu etre envoyes.');
+    uploadFiles_list = [];
+    document.getElementById('upload-list').innerHTML = '';
+  });
+}
+
+
+// ---- THEME TOGGLE ----
+function dwtToggleTheme(){
+  var cur = document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', cur);
+  try{ localStorage.setItem('dwt_theme', cur); }catch(e){}
+}
+// ---- CONSTELLATION ----
+(function(){
+  var c=document.getElementById('dwt-stars'); if(!c) return;
+  var x=c.getContext('2d'),pts=[],W,H;
+  function size(){W=c.width=innerWidth;H=c.height=innerHeight;}
+  size(); addEventListener('resize',size);
+  var N=Math.min(64,Math.floor(innerWidth/24));
+  for(var i=0;i<N;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22});
+  function draw(){
+    x.clearRect(0,0,W,H);
+    for(var i=0;i<pts.length;i++){
+      var p=pts[i];p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1; if(p.y<0||p.y>H)p.vy*=-1;
+      x.beginPath();x.arc(p.x,p.y,1.4,0,7);x.fillStyle='rgba(177,79,224,.7)';x.fill();
+      for(var j=i+1;j<pts.length;j++){
+        var q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<128){x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.strokeStyle='rgba(123,201,58,'+(0.12*(1-d/128))+')';x.lineWidth=.6;x.stroke();}
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+
 (function(){var el=document.getElementById("dwt-clock");if(!el)return;function t(){var d=new Date();el.textContent=(d.toLocaleDateString("fr-FR",{weekday:"short",day:"2-digit",month:"short"})+" \u00b7 "+d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})).toUpperCase();}t();setInterval(t,30000);})();
 
 </script>
