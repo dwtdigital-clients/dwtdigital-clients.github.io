@@ -1589,17 +1589,18 @@ function genererPalettesIA() {
   results.style.display = 'none';
   results.innerHTML = '';
 
-  var params = new URLSearchParams();
-  params.append('commerce', 'Le Fournil de Sophie');
-  params.append('secteur', 'Boulangerie-Patisserie');
-  params.append('ambiance', brief);
-  params.append('mots', a.valeurs.join(', '));
-  params.append('couleur_pref', a.couleurs || '');
+  var payload = {
+    commerce: 'Le Fournil de Sophie',
+    secteur: 'Boulangerie-Patisserie',
+    ambiance: brief,
+    mots: a.valeurs.join(', '),
+    couleur_pref: a.couleurs || ''
+  };
 
-  fetch('https://hook.eu1.make.com/tvmrf4wl44rebili5pybnjrjguxvxjn4', {
+  fetch('https://dwt-palette.darellwilliampro1.workers.dev', {
     method: 'POST',
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    body: params.toString()
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
   })
   .then(function(r){ return r.text(); })
   .then(function(text) {
