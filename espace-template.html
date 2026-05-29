@@ -1933,7 +1933,21 @@ function savePalette() {
 function showIdentityValidated() {
   var banner = document.getElementById('identity-validated-banner');
   var editorZone = document.getElementById('palette-editor-zone');
-  if(banner) banner.style.display = 'flex';
+  if(banner) {
+    banner.style.display = 'flex';
+    if(!document.getElementById('iv-chips') && S.palette) {
+      var chips = document.createElement('div');
+      chips.id = 'iv-chips';
+      chips.style.cssText = 'display:flex;gap:6px;flex-shrink:0;';
+      [S.palette.primary, S.palette.secondary, S.palette.bg].forEach(function(col){
+        var d = document.createElement('div');
+        d.style.cssText = 'width:24px;height:24px;border-radius:7px;border:1px solid rgba(255,255,255,0.18);background:' + (col || '#888') + ';';
+        chips.appendChild(d);
+      });
+      var bbtn = banner.querySelector('button');
+      if(bbtn) banner.insertBefore(chips, bbtn); else banner.appendChild(chips);
+    }
+  }
   if(editorZone) editorZone.style.display = 'none';
 }
 
@@ -1965,9 +1979,10 @@ function loadPaletteState() {
 
   if(S.identity) {
     showIdentityValidated();
+  } else {
+    if(typeof startWizard === 'function') startWizard();
   }
   updatePreview();
-  if(typeof startWizard === 'function') startWizard();
 }
 
 function downloadIdentity() {
