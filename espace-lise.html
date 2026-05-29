@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Espace Client — Cake Délice</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
 <style>
@@ -380,6 +381,21 @@ html{transition:background .4s;}
 <script>(function(){try{var t=localStorage.getItem("dwt_theme")||"dark";document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
 </head>
 <body>
+<!-- ÉCRAN DE CONNEXION SUPABASE -->
+<div id="dwt-login" style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 0%,rgba(99,175,33,.12),transparent 60%),#140319;font-family:'Poppins',sans-serif;padding:20px;">
+  <div style="width:min(94%,400px);background:rgba(44,7,53,.55);border:1px solid rgba(239,222,201,.12);border-radius:20px;padding:38px 32px;backdrop-filter:blur(14px);box-shadow:0 30px 80px rgba(0,0,0,.5);">
+    <div style="text-align:center;margin-bottom:24px;">
+      <img src="https://dwtdigital-clients.github.io/logo-200.png" alt="DWT Digital" style="height:46px;margin-bottom:14px;filter:drop-shadow(0 2px 10px rgba(99,175,33,.4));">
+      <div style="color:#fff;font-weight:700;font-size:1.15rem;">Espace client</div>
+      <div style="color:#c9b9a4;font-size:.85rem;margin-top:5px;">Connectez-vous pour accéder à votre tableau de bord</div>
+    </div>
+    <input id="login-email" type="email" placeholder="Votre email" autocomplete="email" style="width:100%;padding:13px 16px;margin-bottom:12px;background:rgba(20,3,25,.6);border:1px solid rgba(239,222,201,.18);border-radius:10px;color:#EFDEC9;font-size:.95rem;font-family:inherit;outline:none;">
+    <input id="login-pass" type="password" placeholder="Votre mot de passe" autocomplete="current-password" style="width:100%;padding:13px 16px;margin-bottom:6px;background:rgba(20,3,25,.6);border:1px solid rgba(239,222,201,.18);border-radius:10px;color:#EFDEC9;font-size:.95rem;font-family:inherit;outline:none;">
+    <div id="login-err" style="color:#ff7a7a;font-size:.82rem;min-height:18px;margin:4px 0 8px;"></div>
+    <button id="login-btn" onclick="dwtLogin()" style="width:100%;padding:14px;background:#63AF21;color:#140319;border:none;border-radius:40px;font-weight:600;font-size:.98rem;cursor:pointer;font-family:inherit;">Se connecter</button>
+  </div>
+</div>
+<button id="dwt-logout" onclick="dwtLogout()" style="display:none;position:fixed;top:14px;right:16px;z-index:9000;background:rgba(44,7,53,.7);color:#EFDEC9;border:1px solid rgba(239,222,201,.2);border-radius:30px;padding:8px 16px;font-size:.8rem;font-family:'Poppins',sans-serif;cursor:pointer;">Déconnexion</button>
 
 <canvas id="dwt-stars" class="atmo"></canvas>
 <div class="dwt-aurora atmo"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
@@ -912,16 +928,21 @@ html{transition:background .4s;}
 </style>
 
 <script>
-var CLIENT = { name:'Marc', email:'binkszimblo@gmail.com', commerce:'Cake Délice', notion_id:'zimblo-notion-001' };
+var CLIENT = { name:'', email:'', commerce:'Cake Délice', slug:'lise' };
 var WH_NOTIFY  = 'https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh';
 var WH_POSTGEN = 'https://hook.eu1.make.com/xsksxx8k04y6gd9lnhvc3nh95jeijo8c';
 var WH_EMAIL   = 'https://hook.eu1.make.com/e29w7hvifw2xtua2d9emsnrll9cnmrgd';
 var CEO_EMAIL  = 'darellwilliampro1@gmail.com';
 var WH_MODIF   = 'https://hook.eu1.make.com/r8kghl6dxv65r1xt0yic862e4x7dff8h';
-var GH_TOKEN   = ['ghp_','QHlpXwegxZNIpWB0k','sUf6GJhYUQLoo3e6G7g'].join('');
-var OPENAI_KEY = 'sk-proj-' + 'TiO3IuK07xh0dAvGi4h2_blIqGg7se7d' + 'LcN1BFdPNf2O5THsKjFnoswVxJm6yxOm04y59Ps9sFT3BlbkFJIzdHo' + '-pxDMusfRT1Oyxm9lbdZdGz1s1TG00v6oD1TFv-0ezw8czT11OURqQvUtnjWlAjW40gAA';
 var GH_REPO    = 'dwtdigital-clients/dwtdigital-clients.github.io';
 var STORAGE_KEY = 'dwt_lise_v2';
+var SITE_SLUG  = 'cake-delice';
+
+// ── SUPABASE ──
+var SUPABASE_URL = 'https://hamhnulwmqpixazffoc.supabase.co';
+var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhbWhobnVsd21xcGl4YXpmZm9jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzEzOTgsImV4cCI6MjA5NTY0NzM5OH0.bJfSJccRR6TXg-uDjf9Jo_vc9pdWX6NGWQwSCESkpHY';
+var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+var CLIENT_ID = null;
 
 var PLATFORMS = {
   instagram: { name:'Instagram', color:'linear-gradient(135deg,#f09433,#dc2743,#bc1888)' },
@@ -961,8 +982,6 @@ function loadState() {
       S.platforms = p.platforms || [];
       S.posts_ok  = p.posts_ok  || [];
       S.connected = p.connected || [];
-      S.identity  = p.identity  || false;
-      S.palette   = p.palette   || null;
       S.modifs    = p.modifs    || [];
       S.msgs      = p.msgs      || [];
     }
@@ -1205,107 +1224,38 @@ async function submitModification() {
   if (!txt) { showToast('Décrivez la modification souhaitée', 'error'); return; }
   var btn = document.querySelector('.send-btn');
   btn.disabled = true;
-  btn.innerHTML = 'IA en cours...';
+  btn.innerHTML = 'Envoi en cours...';
   var now = new Date();
   var dateStr = now.toLocaleDateString('fr-FR') + ' à ' + now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
   try {
-    // 1. Récupérer le HTML actuel depuis GitHub (URL publique, pas de CORS)
-    showToast('Lecture du site en cours...', '');
-    var rawResp = await fetch('https://raw.githubusercontent.com/' + GH_REPO + '/main/cake-delice/index.html');
-    var currentHTML = await rawResp.text();
-    // 2. Appel OpenAI direct depuis le navigateur
-    showToast('IA applique la modification...', '');
-    var aiResp = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + OPENAI_KEY, 'Content-Type': 'application/json' },
+    // La modification IA est traitée CÔTÉ SERVEUR par Make. Aucun secret dans cette page.
+    await fetch(WH_MODIF, {
+      method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        model: 'gpt-4o',
-        max_tokens: 16000,
-        messages: [
-          { role: 'system', content: 'Tu es un expert HTML/CSS. Applique exactement la modification demandee sur le fichier HTML fourni. Retourne UNIQUEMENT le fichier HTML complet modifie, sans markdown, sans backticks.' },
-          { role: 'user', content: 'Commerce: Cake Délice\nType: ' + type + '\nModification: ' + txt + '\n\nHTML actuel:\n' + currentHTML }
-        ]
+        client: CLIENT.name, commerce: CLIENT.commerce, email: CLIENT.email,
+        sujet: type, message: txt,
+        site_slug: SITE_SLUG, site_file: 'index.html',
+        full_path: SITE_SLUG + '/index.html', repo: GH_REPO, date: dateStr
       })
     });
-    if (!aiResp.ok) throw new Error('OpenAI ' + aiResp.status);
-    var aiData = await aiResp.json();
-    var modifiedHTML = aiData.choices[0].message.content;
-    // Nettoyer les backticks markdown si OpenAI en ajoute
-    modifiedHTML = modifiedHTML.replace(/^```html\n?/,'').replace(/^```\n?/,'').replace(/```$/,'').trim();
-    // 3. Récupérer SHA GitHub
-    showToast('Publication sur le site...', '');
-    var shaResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/cake-delice/index.html', {
-      headers: { 'Authorization': 'token ' + GH_TOKEN, 'Accept': 'application/vnd.github.v3+json' }
-    });
-    var shaData = await shaResp.json();
-    // 4. Encoder le HTML en base64 (UTF-8 safe)
-    var enc = new TextEncoder();
-    var bytes = enc.encode(modifiedHTML);
-    var binary = '';
-    bytes.forEach(function(b){ binary += String.fromCharCode(b); });
-    var b64HTML = btoa(binary);
-    // 5. Push vers GitHub
-    var pushResp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/cake-delice/index.html', {
-      method: 'PUT',
-      headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
-      body: JSON.stringify({ message: '[IA] ' + type + ': ' + txt.substring(0,80), content: b64HTML, sha: shaData.sha })
-    });
-    if (!pushResp.ok) { var e = await pushResp.json(); throw new Error('GitHub: ' + JSON.stringify(e.message)); }
-    // 6. Sauvegarder dans l'historique GitHub (pour dashboard CEO)
-    try { await saveModifToGitHub(type, txt, dateStr); } catch(e2){ console.warn('Log GitHub:', e2); }
-    // 7. Notifier CEO par email
-    sendWebhook(WH_EMAIL, {
-      client_email: CEO_EMAIL, client_name: 'DWT Digital',
-      commerce_name: CLIENT.commerce + ' — Modif IA appliquée',
-      site_url: 'https://dwtdigital-clients.github.io/cake-delice/',
-      texte_post: 'MODIFICATION APPLIQUEE PAR IA\nClient : ' + CLIENT.name + '\nType : ' + type + '\nMessage : ' + txt + '\nDate : ' + dateStr + '\nSite mis a jour !'
-    });
-    // 8. Sauvegarder dans localStorage
-    S.modifs.unshift({ sujet: type, msg: txt, date: dateStr, status:'applied' });
+    if (CLIENT_ID) {
+      try { await sb.from('modifications').insert({ client_id: CLIENT_ID, sujet: type, message_client: txt, statut: 'en_attente', fichier_cible: SITE_SLUG + '/index.html' }); } catch(e){}
+    }
+    S.modifs.unshift({ sujet: type, msg: txt, date: dateStr, status:'sent' });
     saveState();
     document.getElementById('modif-text').value = '';
     renderModifHistory();
-    showToast('Modification appliquée ! Votre site sera mis à jour dans 1-2 min.', 'success');
+    showToast('Demande envoyée ! Votre site sera mis à jour sous peu.', 'success');
   } catch(err) {
     console.error('[Modif]', err);
-    // Fallback : envoyer via Make webhook pour traitement manuel
-    sendWebhook(WH_MODIF, { client: CLIENT.name, commerce: CLIENT.commerce, email: CLIENT.email, sujet: type, message: txt, site_slug: 'Zimblo', site_file: 'index.html', context_data: '', repo: GH_REPO, full_path: 'Zimblo/index.html' });
-    sendWebhook(WH_EMAIL, { client_email: CEO_EMAIL, client_name: 'DWT Digital', commerce_name: CLIENT.commerce + ' — Modif (Make fallback)', site_url: '', texte_post: 'MODIF (fallback Make)\nErreur direct: ' + err.message + '\nType: ' + type + '\nMessage: ' + txt });
-    S.modifs.unshift({ sujet: type, msg: txt, date: dateStr, status:'sent' });
-    saveState();
-    renderModifHistory();
-    showToast('Demande envoyée à l\'équipe (traitement sous 2h)', '');
+    showToast('Erreur d\'envoi, réessayez dans un instant', 'error');
   } finally {
     btn.disabled = false;
     btn.innerHTML = '<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:white;fill:none;stroke-width:2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg> Envoyer la demande';
   }
 }
 
-async function saveModifToGitHub(type, msg, dateStr) {
-  var LOG_PATH = 'notifications/zimblo-modifs.json';
-  var entry = { date: dateStr, type: type, msg: msg, commerce: CLIENT.commerce, status: 'applied' };
-  try {
-    var resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + LOG_PATH, {
-      headers: { 'Authorization': 'token ' + GH_TOKEN }
-    });
-    var current = [];
-    var sha = null;
-    if (resp.ok) {
-      var d = await resp.json();
-      sha = d.sha;
-      try { current = JSON.parse(atob(d.content.replace(/\n/g,''))); } catch(e){}
-    }
-    current.unshift(entry);
-    if (current.length > 50) current = current.slice(0,50);
-    var newContent = btoa(unescape(encodeURIComponent(JSON.stringify(current, null, 2))));
-    var body = { message: 'data: modif log ' + CLIENT.commerce, content: newContent };
-    if (sha) body.sha = sha;
-    await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + LOG_PATH, {
-      method: 'PUT', headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-  } catch(e) { console.warn('saveModifToGitHub:', e); }
-}
+async function saveModifToGitHub() { /* retiré : log géré côté serveur (Make), aucun token ici */ }
 
 function renderModifHistory() {
   var card = document.getElementById('modif-history-card');
@@ -1335,26 +1285,11 @@ async function sendMessage() {
   saveState();
   inp.value = '';
   renderMessages();
-  // Sauvegarder dans GitHub pour dashboard CEO
-  try {
-    var LOG_PATH = 'notifications/zimblo-messages.json';
-    var entry = { date: dateStr, msg: txt, from: CLIENT.name, commerce: CLIENT.commerce };
-    var resp = await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + LOG_PATH, {
-      headers: { 'Authorization': 'token ' + GH_TOKEN }
-    });
-    var current = [];
-    var sha = null;
-    if (resp.ok) { var d = await resp.json(); sha = d.sha; try { current = JSON.parse(atob(d.content.replace(/\n/g,''))); } catch(e){} }
-    current.unshift(entry);
-    if (current.length > 50) current = current.slice(0,50);
-    var nc = btoa(unescape(encodeURIComponent(JSON.stringify(current, null, 2))));
-    var body = { message: 'data: message ' + CLIENT.commerce, content: nc };
-    if (sha) body.sha = sha;
-    await fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + LOG_PATH, {
-      method: 'PUT', headers: { 'Authorization': 'token ' + GH_TOKEN, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-  } catch(e) { console.warn('saveMsg:', e); }
+  // Enregistrer le message dans Supabase
+  if (CLIENT_ID) {
+    try { await sb.from('notifications').insert({ client_id: CLIENT_ID, type:'message', titre:'Message client', contenu: txt, direction:'client_to_ceo' }); } catch(e){}
+  }
+  // Notifier le CEO par email (webhook Make, sans secret)
   sendWebhook(WH_EMAIL, {
     client_email: CEO_EMAIL, client_name: 'DWT Digital',
     commerce_name: CLIENT.commerce + ' — Message',
@@ -1365,7 +1300,7 @@ async function sendMessage() {
 
 function renderMessages() {
   var thread = document.getElementById('msg-thread');
-  var base = '<div class="msg in">Bonjour Marc ! Votre espace client est prêt. N\'hésitez pas à nous écrire ici.<span class="msg-time">DWT Digital</span></div>';
+  var base = '<div class="msg in">Bonjour ' + (CLIENT.name || '') + ' ! Votre espace client est prêt. N\'hésitez pas à nous écrire ici.<span class="msg-time">DWT Digital</span></div>';
   var extra = '';
   S.msgs.forEach(function(m) {
     extra += '<div class="msg out">' + m.txt + '<span class="msg-time">' + m.time + '</span></div>';
@@ -1408,7 +1343,6 @@ function init() {
   renderModifHistory();
   renderMessages();
   document.getElementById('stat-posts').textContent = S.posts_ok.length;
-  // Restore identity plat selection state visually
   if (S.platforms.length > 0) {
     document.querySelectorAll('#plat-grid-identity .plat-sel-card').forEach(function(card) {
       if (S.platforms.indexOf(card.getAttribute('data-id')) !== -1) card.classList.add('selected');
@@ -1417,7 +1351,74 @@ function init() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', init);
+// ── AUTHENTIFICATION SUPABASE ──
+async function dwtLogin() {
+  var email = document.getElementById('login-email').value.trim();
+  var pass = document.getElementById('login-pass').value;
+  var errEl = document.getElementById('login-err');
+  var btn = document.getElementById('login-btn');
+  errEl.textContent = '';
+  if (!email || !pass) { errEl.textContent = 'Email et mot de passe requis.'; return; }
+  btn.disabled = true; btn.textContent = 'Connexion...';
+  try {
+    var res = await sb.auth.signInWithPassword({ email: email, password: pass });
+    if (res.error) { errEl.textContent = 'Email ou mot de passe incorrect.'; btn.disabled = false; btn.textContent = 'Se connecter'; return; }
+    await onAuthenticated();
+  } catch (e) {
+    errEl.textContent = 'Erreur de connexion, réessayez.';
+    btn.disabled = false; btn.textContent = 'Se connecter';
+  }
+}
+
+async function dwtLogout() {
+  try { await sb.auth.signOut(); } catch (e) {}
+  location.reload();
+}
+
+async function loadClientFromSupabase() {
+  var u = await sb.auth.getUser();
+  var uid = (u && u.data && u.data.user) ? u.data.user.id : null;
+  if (!uid) return false;
+  var r = await sb.from('clients').select('*').eq('user_id', uid).single();
+  if (r.error || !r.data) return false;
+  CLIENT.name = r.data.prenom || r.data.nom || '';
+  CLIENT.email = r.data.email || '';
+  CLIENT.commerce = r.data.commerce || CLIENT.commerce;
+  if (r.data.slug) CLIENT.slug = r.data.slug;
+  CLIENT_ID = r.data.id;
+  try {
+    var iv = await sb.from('identite_visuelle').select('*').eq('client_id', CLIENT_ID).limit(1);
+    if (iv.data && iv.data[0] && iv.data[0].couleur_principale) {
+      var d = iv.data[0];
+      S.palette = { primary: d.couleur_principale, secondary: d.couleur_secondaire, bg: d.couleur_accent };
+      S.identity = !!d.questionnaire_complete;
+    }
+  } catch (e) {}
+  return true;
+}
+
+async function onAuthenticated() {
+  var ok = await loadClientFromSupabase();
+  if (!ok) {
+    document.getElementById('login-err').textContent = 'Compte non relié à un client. Contactez DWT Digital.';
+    var b = document.getElementById('login-btn'); if (b) { b.disabled = false; b.textContent = 'Se connecter'; }
+    return;
+  }
+  var login = document.getElementById('dwt-login'); if (login) login.style.display = 'none';
+  var lo = document.getElementById('dwt-logout'); if (lo) lo.style.display = 'block';
+  init();
+}
+
+async function dwtBootstrap() {
+  var pass = document.getElementById('login-pass');
+  if (pass) pass.addEventListener('keydown', function (e) { if (e.key === 'Enter') dwtLogin(); });
+  try {
+    var s = await sb.auth.getSession();
+    if (s && s.data && s.data.session) { await onAuthenticated(); return; }
+  } catch (e) {}
+}
+
+document.addEventListener('DOMContentLoaded', dwtBootstrap);
 
 // ── PALETTE ÉDITABLE ──
 function updateSwatch(key, val) {
@@ -1911,13 +1912,18 @@ function savePalette() {
   showIdentityValidated();
   renderTimeline();
   updateProgress();
-  showToast('Identite visuelle validee !');
-  // Notif CEO
-  fetch('https://hook.eu1.make.com/h51b6ln5mwtw86b99cjhil8cqohfgzfh', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({type:'identite_validee', commerce: S.commerce || 'Cake Délice',
-      palette: {primary: primary, secondary: secondary, bg: bg}, date: new Date().toISOString().slice(0,10)})
-  }).catch(function(){});
+  showToast('Identité visuelle validée !');
+  // Sauvegarde dans Supabase (sélection puis insert/update, pas de contrainte unique requise)
+  if (CLIENT_ID) {
+    var payload = { couleur_principale: primary, couleur_secondaire: secondary, couleur_accent: bg, questionnaire_complete: true };
+    sb.from('identite_visuelle').select('id').eq('client_id', CLIENT_ID).then(function(r){
+      var row = (r.data && r.data[0]) ? r.data[0] : null;
+      if (row) { sb.from('identite_visuelle').update(payload).eq('id', row.id).then(function(){}); }
+      else { payload.client_id = CLIENT_ID; sb.from('identite_visuelle').insert(payload).then(function(){}); }
+    });
+  }
+  // Notif CEO (webhook, sans secret)
+  sendWebhook(WH_NOTIFY, { client_name: CLIENT.name, client_email: CLIENT.email, commerce_name: CLIENT.commerce, action:'identite_validee', detail: JSON.stringify({primary:primary,secondary:secondary,bg:bg}) });
 }
 
 function showIdentityValidated() {
@@ -2077,42 +2083,34 @@ function handleFileSelect(files) {
   });
   if (uploadFiles_list.length > 0) document.getElementById('btn-upload').style.display = 'block';
 }
-function uploadFiles() {
+async function uploadFiles() {
   if (!uploadFiles_list.length) return;
   var btn = document.getElementById('btn-upload');
   btn.disabled = true; btn.textContent = 'Envoi...';
-  var slug = STORAGE_KEY.replace('dwt_','').replace('_v2','');
-  var GH_TOKEN = ['ghp_','QHlpXwegxZNIpWB0ksUf6GJhYUQLoo3e6G7g'].join('');
-  var GH_HEADERS = {'Authorization':'token ' + GH_TOKEN, 'Content-Type':'application/json'};
-  var promises = uploadFiles_list.map(function(file) {
-    return new Promise(function(resolve, reject) {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        var b64 = e.target.result.split(',')[1];
-        var path = 'data/uploads/' + slug + '/' + file.name;
-        var url = 'https://api.github.com/repos/dwtdigital-clients/dwtdigital-clients.github.io/contents/' + path;
-        fetch(url, {headers: GH_HEADERS})
-          .then(function(r){ return r.ok ? r.json() : null; })
-          .then(function(existing) {
-            var body = {message: 'upload: ' + file.name + ' — ' + slug, content: b64};
-            if (existing && existing.sha) body.sha = existing.sha;
-            return fetch(url, {method:'PUT', headers: GH_HEADERS, body: JSON.stringify(body)});
-          })
-          .then(function(r){ resolve(r.ok); })
-          .catch(function(){ resolve(false); });
-      };
-      reader.readAsDataURL(file);
-    });
-  });
-  Promise.all(promises).then(function(results) {
-    var ok = results.every(function(r){return r;});
-    btn.style.display = 'none';
-    document.getElementById('upload-msg').style.display = 'block';
-    if (ok) showToast('Fichiers envoyes avec succes !');
-    else showToast('Certains fichiers n\'ont pas pu etre envoyes.');
-    uploadFiles_list = [];
-    document.getElementById('upload-list').innerHTML = '';
-  });
+  var u = await sb.auth.getUser();
+  var uid = (u && u.data && u.data.user) ? u.data.user.id : null;
+  if (!uid) { showToast('Session expirée, reconnectez-vous.'); btn.disabled = false; btn.textContent = 'Envoyer'; return; }
+  var results = [];
+  for (var i = 0; i < uploadFiles_list.length; i++) {
+    var file = uploadFiles_list[i];
+    var safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    var path = uid + '/' + Date.now() + '-' + safe;
+    try {
+      var up = await sb.storage.from('documents').upload(path, file, { upsert: true });
+      if (up.error) { results.push(false); continue; }
+      if (CLIENT_ID) {
+        try { await sb.from('fichiers_clients').insert({ client_id: CLIENT_ID, type:'document', nom_fichier: file.name, storage_path: path, taille_bytes: file.size }); } catch(e){}
+      }
+      results.push(true);
+    } catch (e) { results.push(false); }
+  }
+  var ok = results.every(function(r){ return r; });
+  btn.style.display = 'none';
+  var msg = document.getElementById('upload-msg'); if (msg) msg.style.display = 'block';
+  if (ok) showToast('Fichiers envoyés avec succès !');
+  else showToast('Certains fichiers n\'ont pas pu être envoyés.');
+  uploadFiles_list = [];
+  document.getElementById('upload-list').innerHTML = '';
 }
 
 
