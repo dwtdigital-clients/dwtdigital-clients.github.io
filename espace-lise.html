@@ -243,88 +243,173 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
   .metric-grid{grid-template-columns:1fr 1fr;}
   .tab-btn{padding:10px 12px;font-size:11px;}
 }
+/* =================== THÈME OBSIDIENNE DWT (template) =================== */
+:root{ --surface:#ffffff; --surface-2:#faf8fd; --border-lit:rgba(123,31,162,0.4); --violet-glow:#7B1FA2; --green-glow:#63AF21; }
+[data-theme="dark"]{
+  --bg:#07050E; --td:#ECE6F2; --tm:#9286A3;
+  --border:rgba(255,255,255,0.08); --vd:#0B0817;
+  --shadow:0 10px 34px rgba(0,0,0,0.55);
+  --surface:rgba(255,255,255,0.045); --surface-2:rgba(255,255,255,0.075);
+  --border-lit:rgba(177,79,224,0.35); --violet-glow:#B14FE0; --green-glow:#9BE84A;
+}
+html{transition:background .4s;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.atmo{display:none!important;}
+[data-theme="dark"] .atmo{display:block!important;}
+#dwt-stars{position:fixed;inset:0;z-index:0;opacity:.5;pointer-events:none;}
+.dwt-aurora{position:fixed;inset:-30%;z-index:0;filter:blur(90px);opacity:.55;pointer-events:none;}
+.dwt-aurora i{position:absolute;border-radius:50%;mix-blend-mode:screen;}
+.dwt-aurora .b1{width:46vw;height:46vw;left:-6%;top:-10%;background:radial-gradient(circle,#7B1FA2,transparent 70%);animation:drift1 26s ease-in-out infinite;}
+.dwt-aurora .b2{width:40vw;height:40vw;right:-8%;top:12%;background:radial-gradient(circle,#3A0B6E,transparent 70%);animation:drift2 32s ease-in-out infinite;}
+.dwt-aurora .b3{width:34vw;height:34vw;left:30%;bottom:-16%;background:radial-gradient(circle,#1E5E12,transparent 72%);animation:drift3 30s ease-in-out infinite;}
+@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(8%,6%) scale(1.12)}}
+@keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-7%,9%) scale(1.08)}}
+@keyframes drift3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(5%,-8%) scale(1.15)}}
+.dwt-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(177,79,224,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(177,79,224,.05) 1px,transparent 1px);background-size:54px 54px;-webkit-mask-image:radial-gradient(circle at 70% 28%,#000,transparent 72%);mask-image:radial-gradient(circle at 70% 28%,#000,transparent 72%);}
+[data-theme="dark"] body{background:var(--bg);}
+[data-theme="dark"] .main{background:transparent;}
+[data-theme="dark"] .card,[data-theme="dark"] .stat-card,[data-theme="dark"] .post-card,[data-theme="dark"] .metric-card,[data-theme="dark"] .connect-item,[data-theme="dark"] .font-card,[data-theme="dark"] .modif-item,[data-theme="dark"] .activity-item,[data-theme="dark"] .identity-section,[data-theme="dark"] .quick-actions,[data-theme="dark"] .guide,[data-theme="dark"] .plat-chip,[data-theme="dark"] .plat-sel-card,[data-theme="dark"] .modif-form select,[data-theme="dark"] .msg.in{background:var(--surface);border-color:var(--border);color:var(--td);box-shadow:none;}
+[data-theme="dark"] .card,[data-theme="dark"] .post-card,[data-theme="dark"] .metric-card{box-shadow:var(--shadow);}
+[data-theme="dark"] .card:hover,[data-theme="dark"] .post-card:hover,[data-theme="dark"] .metric-card:hover{background:var(--surface-2);border-color:var(--border-lit);}
+[data-theme="dark"] .site-preview{background:#100B1F;}
+[data-theme="dark"] .toast{background:#15102A;color:var(--td);border:1px solid var(--border);}
+[data-theme="dark"] .tl-dot{border-color:#0B0817;}
+[data-theme="dark"] .stat-num{color:var(--violet-glow);}
+[data-theme="dark"] .stat-num.green{color:var(--green-glow);}
+[data-theme="dark"] .card-title svg{stroke:var(--violet-glow);}
+[data-theme="dark"] input,[data-theme="dark"] textarea,[data-theme="dark"] .msg-input{background:var(--surface);color:var(--td);border:1px solid var(--border);}
+[data-theme="dark"] input::placeholder,[data-theme="dark"] textarea::placeholder{color:var(--tm);}
+[data-theme="dark"] input:focus,[data-theme="dark"] textarea:focus{border-color:var(--border-lit);outline:none;}
+[data-theme="dark"] .qa-btn.secondary{background:var(--surface);color:var(--td);border:1px solid var(--border);}
+[data-theme="dark"] .qa-btn.secondary:hover{background:var(--surface-2);border-color:var(--border-lit);}
+[data-theme="dark"] .qa-btn.secondary svg{stroke:var(--violet-glow);}
+.theme-tog{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;cursor:pointer;flex-shrink:0;background:var(--surface);border:1px solid var(--border);color:var(--td);transition:.2s;}
+.theme-tog:hover{transform:rotate(-12deg);border-color:var(--border-lit);}
+.theme-tog svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
+.theme-tog .ico-sun{display:none;}
+[data-theme="dark"] .theme-tog .ico-sun{display:block;}
+[data-theme="dark"] .theme-tog .ico-moon{display:none;}
+/* ====== LAYOUT SIDEBAR ====== */
+.mono{font-family:ui-monospace,'JetBrains Mono','SF Mono',Menlo,monospace;}
+.layout-x{display:flex;height:100vh;overflow:hidden;position:relative;z-index:2;}
+.side{width:250px;flex-shrink:0;display:flex;flex-direction:column;padding:24px 16px;border-right:1px solid var(--border);background:var(--surface);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);}
+[data-theme="dark"] .side{background:rgba(11,8,23,0.55);}
+.brandx{display:flex;align-items:center;gap:12px;padding:4px 8px 24px;}
+.brandx img{width:38px;height:38px;border-radius:11px;box-shadow:0 0 22px rgba(123,201,58,0.35);}
+.brandx .bt{font-weight:700;font-size:15px;color:var(--td);}
+.brandx .bs{font-size:9.5px;color:var(--tm);letter-spacing:2px;text-transform:uppercase;margin-top:1px;}
+.snav{display:flex;flex-direction:column;gap:4px;}
+.snav-l{font-size:9px;letter-spacing:2.5px;color:var(--tm);text-transform:uppercase;margin:14px 12px 7px;opacity:.7;}
+.snav-item{display:flex;align-items:center;gap:13px;padding:11px 14px;border-radius:12px;color:var(--tm);font-size:13.5px;font-weight:500;cursor:pointer;position:relative;transition:.25s;text-decoration:none;}
+.snav-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;flex-shrink:0;}
+.snav-item:hover{color:var(--td);background:var(--surface-2);}
+.snav-item.on{color:var(--td);background:linear-gradient(90deg,rgba(177,79,224,0.16),rgba(177,79,224,0.03));box-shadow:inset 0 0 0 1px var(--border-lit);}
+.snav-item.on::before{content:'';position:absolute;left:0;top:22%;bottom:22%;width:3px;border-radius:3px;background:linear-gradient(180deg,var(--violet-glow),var(--green-glow));}
+.snav-badge{margin-left:auto;font-size:10px;font-weight:700;background:var(--g);color:#06210a;border-radius:7px;padding:1px 7px;}
+.side-foot{margin-top:auto;}
+.taglinex{font-size:11px;line-height:1.5;color:var(--tm);padding:13px;border-radius:14px;background:var(--surface);border:1px solid var(--border);}
+.taglinex b{color:var(--green-glow);font-weight:600;}
+.usrx{display:flex;align-items:center;gap:11px;padding:12px 6px 2px;}
+.usrx .avx{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#7B1FA2,#63AF21);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;flex-shrink:0;}
+.usrx .un{font-size:12.5px;font-weight:600;color:var(--td);}
+.usrx .ur{font-size:10px;color:var(--tm);}
+.main-x{flex:1;overflow-y:auto;padding:0 34px 56px;background:transparent;}
+.main-x::-webkit-scrollbar{width:8px;}
+.main-x::-webkit-scrollbar-thumb{background:rgba(177,79,224,0.25);border-radius:8px;}
+.xtopbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:14px;padding:18px 0;background:linear-gradient(180deg,var(--bg) 62%,transparent);}
+[data-theme="dark"] .xtopbar{background:linear-gradient(180deg,#07050E 62%,transparent);}
+.statusx{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--tm);background:var(--surface);border:1px solid var(--border);padding:7px 13px;border-radius:30px;white-space:nowrap;}
+.dotx{width:7px;height:7px;border-radius:50%;background:var(--green-glow);box-shadow:0 0 10px var(--green-glow);animation:pulse 2s infinite;}
+.searchx{flex:1;max-width:300px;}
+.searchx input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:9px 16px;color:var(--td);font-family:inherit;font-size:12.5px;outline:none;transition:.25s;}
+.searchx input:focus{border-color:var(--border-lit);}
+.searchx input::placeholder{color:var(--tm);}
+.clockx{font-size:11.5px;color:var(--tm);white-space:nowrap;letter-spacing:.5px;}
+.sitebtn-x{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--td);text-decoration:none;background:var(--surface);border:1px solid var(--border);padding:8px 14px;border-radius:30px;white-space:nowrap;transition:.2s;}
+.sitebtn-x svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+.sitebtn-x:hover{border-color:var(--border-lit);}
+.xhero{padding:6px 0 26px;}
+.xhero h1{font-size:32px;font-weight:300;line-height:1.15;letter-spacing:-.5px;color:var(--td);}
+.xhero h1 b{font-weight:700;background:linear-gradient(100deg,var(--td),var(--violet-glow) 55%,var(--green-glow));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.xhero p{color:var(--tm);font-size:14px;margin-top:9px;}
+.xkpis{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:22px;}
+.xkpi{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;position:relative;transition:.3s;}
+.xkpi:hover{transform:translateY(-4px);background:var(--surface-2);border-color:var(--border-lit);}
+.xico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(177,79,224,0.12);margin-bottom:14px;}
+.xico svg{width:18px;height:18px;stroke:var(--violet-glow);fill:none;stroke-width:1.8;}
+.xkpi.g .xico{background:rgba(123,201,58,0.12);}
+.xkpi.g .xico svg{stroke:var(--green-glow);}
+.xnum{font-size:28px;font-weight:700;letter-spacing:-1px;color:var(--td);}
+.xlbl{font-size:11.5px;color:var(--tm);margin-top:3px;}
+@media(max-width:880px){
+  .side{width:62px;padding:18px 7px;}
+  .brandx{justify-content:center;padding:4px 0 22px;}
+  .brandx .bt,.brandx .bs,.snav-item span,.snav-l,.side-foot{display:none;}
+  .snav-item{justify-content:center;padding:12px 0;}
+  .snav-badge{position:absolute;top:4px;right:6px;margin:0;}
+  .main-x{padding:0 16px 50px;}
+  .xkpis{grid-template-columns:repeat(2,1fr);}
+  .xhero h1{font-size:24px;}
+  .searchx{display:none;}
+}
+
 </style>
+<script>(function(){try{var t=localStorage.getItem("dwt_theme")||"dark";document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","dark");}})();</script>
 </head>
 <body>
 
-<div class="layout">
+<canvas id="dwt-stars" class="atmo"></canvas>
+<div class="dwt-aurora atmo"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
+<div class="dwt-grid atmo"></div>
 
-  <!-- TOPBAR -->
-  <div class="topbar">
-    <img src="https://dwtdigital-clients.github.io/logo-200.png" alt="DWT Digital" style="height:32px;border-radius:6px;">
-    <div class="topbar-sep"></div>
-    <div class="topbar-info">
-      <div class="topbar-commerce">Cake Délice</div>
-      <div class="topbar-pack">Pack Social Pro</div>
+<div class="layout-x">
+
+  <aside class="side">
+    <div class="brandx">
+      <img src="https://dwtdigital-clients.github.io/logo-200.png" alt="DWT">
+      <div><div class="bt">DWT Digital</div><div class="bs">Espace client</div></div>
     </div>
-    <a href="https://dwtdigital-clients.github.io/cake-delice/" target="_blank" class="topbar-site-btn">
-      <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      Mon site
-    </a>
-    <div class="topbar-avatar">M</div>
-  </div>
+    <nav class="snav">
+      <div class="snav-l">Pilotage</div>
+      <a class="snav-item on" data-tab="dashboard" onclick="switchTab('dashboard',this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Tableau de bord</span></a>
+      <a class="snav-item" data-tab="posts" onclick="switchTab('posts',this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2.5"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg><span>Publications</span><span class="snav-badge" id="badge-posts">2</span></a>
+      <a class="snav-item" data-tab="site" onclick="switchTab('site',this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg><span>Mon site</span></a>
+      <div class="snav-l">Marque</div>
+      <a class="snav-item" data-tab="identity" onclick="switchTab('identity',this)"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 5 5.6.8-4 4 1 5.6L12 20l-5 2.4 1-5.6-4-4 5.6-.8z"/></svg><span>Identité</span></a>
+      <a class="snav-item" data-tab="connect" onclick="switchTab('connect',this)"><svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="2.5"/><circle cx="18" cy="7" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7.5 8.5l3 8M16.5 8.5l-3 8"/></svg><span>Réseaux</span></a>
+      <a class="snav-item" data-tab="suivi" onclick="switchTab('suivi',this)"><svg viewBox="0 0 24 24"><path d="M3 18l5-6 4 3 5-7 4 5"/><path d="M3 21h18"/></svg><span>Suivi mensuel</span></a>
+    </nav>
+    <div class="side-foot">
+      <div class="taglinex">« Le futur de demain, <b>à portée d'aujourd'hui.</b> »</div>
+      <div class="usrx"><div class="avx">C</div><div><div class="un">Cake Délice</div><div class="ur">Pack Social Pro</div></div></div>
+    </div>
+  </aside>
 
-  <!-- PROGRESS BAR -->
-  <div class="progbar">
-    <div class="prog-inner">
-      <span class="prog-label" id="prog-label">Étape 1/6</span>
-      <div class="prog-track">
-        <div class="prog-fill" id="prog-fill" style="width:17%"></div>
+  <main class="main-x">
+    <div class="xtopbar">
+      <div class="statusx"><span class="dotx"></span> Tout est synchronisé</div>
+      <div class="searchx"><input placeholder="Rechercher une publication, une stat…"></div>
+      <div class="clockx mono" id="dwt-clock">—</div>
+      <a href="https://dwtdigital-clients.github.io/cake-delice/" target="_blank" class="sitebtn-x"><svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Mon site</a>
+      <div class="theme-tog" onclick="dwtToggleTheme()" title="Theme clair / sombre">
+        <svg class="ico-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z"/></svg>
+        <svg class="ico-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
       </div>
-      <span class="prog-pct" id="prog-pct">17%</span>
     </div>
-  </div>
-
-  <!-- TABS -->
-  <div class="tabs-wrap">
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('dashboard',this)">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        Dashboard
-      </button>
-      <button class="tab-btn" onclick="switchTab('posts',this)">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
-        Publications
-        <span class="badge" id="badge-posts">2</span>
-      </button>
-      <button class="tab-btn" onclick="switchTab('site',this)">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-        Mon site
-      </button>
-      <button class="tab-btn" onclick="switchTab('identity',this)">
-        <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        Identité
-      </button>
-      <button class="tab-btn" onclick="switchTab('connect',this)">
-        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-        Réseaux
-      </button>
-      <button class="tab-btn" onclick="switchTab('suivi',this)">
-        <svg viewBox="0 0 24 24"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
-        Suivi mensuel
-      </button>
-    </div>
-  </div>
-
-  <!-- MAIN -->
-  <div class="main">
+    <div class="progbar" style="display:none"><span id="prog-label"></span><div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div><span id="prog-pct"></span></div>
 
     <!-- ── TAB: DASHBOARD ── -->
     <div class="tab-panel active" id="tab-dashboard">
 
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-num" id="stat-posts">0</div>
-          <div class="stat-label">Posts validés</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num green">4.8</div>
-          <div class="stat-label">Note Google</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num" id="stat-pct" style="font-size:18px;">17%</div>
-          <div class="stat-label">Profil complété</div>
-        </div>
+      <div class="xhero">
+        <h1>Cake Délice,<br><b>votre marque rayonne aujourd'hui.</b></h1>
+        <p>Voici l'essentiel de votre présence en ligne, en un coup d'œil.</p>
+      </div>
+      <div class="xkpis">
+        <div class="xkpi"><div class="xico"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div class="xnum" id="stat-posts">0</div><div class="xlbl">Posts validés</div></div>
+        <div class="xkpi g"><div class="xico"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.3 6.6.7-4.9 4.5 1.3 6.5L12 17.6 6.1 20.5l1.3-6.5L2.5 9l6.6-.7z"/></svg></div><div class="xnum">4.8</div><div class="xlbl">Note Google</div></div>
+        <div class="xkpi"><div class="xico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 12l4-2"/><path d="M12 3v3"/></svg></div><div class="xnum" id="stat-pct">17%</div><div class="xlbl">Profil complété</div></div>
+        <div class="xkpi g"><div class="xico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div><div class="xnum">2</div><div class="xlbl">Publications en attente</div></div>
       </div>
 
       <div class="quick-actions">
@@ -637,7 +722,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
       </div>
     </div>
 
-  </div>
+  </main>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -733,13 +818,15 @@ function updateProgress() {
 var currentTab = 'dashboard';
 function switchTab(id, btn) {
   document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.snav-item').forEach(function(b){ b.classList.remove('on'); });
   document.getElementById('tab-' + id).classList.add('active');
-  if (btn) btn.classList.add('active');
+  var nv = document.querySelector('.snav-item[data-tab="' + id + '"]');
+  if (nv) nv.classList.add('on');
   currentTab = id;
   if (id === 'posts') renderPosts();
   if (id === 'identity') renderIdentityPlats();
   if (id === 'connect') renderConnect();
+  var mx = document.querySelector('.main-x'); if (mx) mx.scrollTo({top:0,behavior:'smooth'});
 }
 
 function goToTab(id) {
@@ -1151,6 +1238,11 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+function dwtToggleTheme(){var cur=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",cur);try{localStorage.setItem("dwt_theme",cur);}catch(e){}}
+(function(){var c=document.getElementById("dwt-stars");if(!c)return;var x=c.getContext("2d"),pts=[],W,H;function size(){W=c.width=innerWidth;H=c.height=innerHeight;}size();addEventListener("resize",size);var N=Math.min(64,Math.floor(innerWidth/24));for(var i=0;i<N;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22});function draw(){x.clearRect(0,0,W,H);for(var i=0;i<pts.length;i++){var p=pts[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;x.beginPath();x.arc(p.x,p.y,1.4,0,7);x.fillStyle="rgba(177,79,224,.7)";x.fill();for(var j=i+1;j<pts.length;j++){var q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy);if(d<128){x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.strokeStyle="rgba(123,201,58,"+(0.12*(1-d/128))+")";x.lineWidth=.6;x.stroke();}}}requestAnimationFrame(draw);}draw();})();
+(function(){var el=document.getElementById("dwt-clock");if(!el)return;function t(){var d=new Date();el.textContent=(d.toLocaleDateString("fr-FR",{weekday:"short",day:"2-digit",month:"short"})+" \u00b7 "+d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})).toUpperCase();}t();setInterval(t,30000);})();
+
 </script>
 </body>
 </html>
