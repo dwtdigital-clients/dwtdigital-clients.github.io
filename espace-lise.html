@@ -1380,13 +1380,16 @@ async function loadClientFromSupabase() {
   var u = await sb.auth.getUser();
   var uid = (u && u.data && u.data.user) ? u.data.user.id : null;
   if (!uid) return false;
-  var r = await sb.from('clients').select('*').eq('user_id', uid).single();
-  if (r.error || !r.data) return false;
-  CLIENT.name = r.data.prenom || r.data.nom || '';
-  CLIENT.email = r.data.email || '';
-  CLIENT.commerce = r.data.commerce || CLIENT.commerce;
-  if (r.data.slug) CLIENT.slug = r.data.slug;
-  CLIENT_ID = r.data.id;
+  var r = await sb.from('clients').select('*').eq('user_id', uid);
+  var ee = document.getElementById('login-err');
+  if (r.error) { if (ee) ee.textContent = 'DB: ' + r.error.message + ' | uid=' + uid; return false; }
+  if (!r.data || r.data.length === 0) { if (ee) ee.textContent = 'Aucun client uid=' + uid + ' (0 lignes)'; return false; }
+  var row = r.data[0];
+  CLIENT.name = row.prenom || row.nom || '';
+  CLIENT.email = row.email || '';
+  CLIENT.commerce = row.commerce || CLIENT.commerce;
+  if (row.slug) CLIENT.slug = row.slug;
+  CLIENT_ID = row.id;
   try {
     var iv = await sb.from('identite_visuelle').select('*').eq('client_id', CLIENT_ID).limit(1);
     if (iv.data && iv.data[0] && iv.data[0].couleur_principale) {
@@ -1401,7 +1404,6 @@ async function loadClientFromSupabase() {
 async function onAuthenticated() {
   var ok = await loadClientFromSupabase();
   if (!ok) {
-    document.getElementById('login-err').textContent = 'Compte non relié à un client. Contactez DWT Digital.';
     var b = document.getElementById('login-btn'); if (b) { b.disabled = false; b.textContent = 'Se connecter'; }
     return;
   }
