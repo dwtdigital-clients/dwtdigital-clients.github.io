@@ -941,7 +941,7 @@ var SITE_SLUG  = 'cake-delice';
 // ── SUPABASE ──
 var SUPABASE_URL = 'https://hamhnulwmqpixazffoc.supabase.co';
 var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhbWhobnVsd21xcGl4YXpmZm9jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzEzOTgsImV4cCI6MjA5NTY0NzM5OH0.bJfSJccRR6TXg-uDjf9Jo_vc9pdWX6NGWQwSCESkpHY';
-var sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+var sb = (typeof supabase !== 'undefined' && supabase.createClient) ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON) : null;
 var CLIENT_ID = null;
 
 var PLATFORMS = {
@@ -1359,13 +1359,14 @@ async function dwtLogin() {
   var btn = document.getElementById('login-btn');
   errEl.textContent = '';
   if (!email || !pass) { errEl.textContent = 'Email et mot de passe requis.'; return; }
+  if (!sb) { errEl.textContent = 'Module de connexion non chargé (réseau / bloqueur ?). Rechargez la page.'; return; }
   btn.disabled = true; btn.textContent = 'Connexion...';
   try {
     var res = await sb.auth.signInWithPassword({ email: email, password: pass });
-    if (res.error) { errEl.textContent = 'Email ou mot de passe incorrect.'; btn.disabled = false; btn.textContent = 'Se connecter'; return; }
+    if (res.error) { errEl.textContent = 'Erreur : ' + (res.error.message || 'inconnue'); btn.disabled = false; btn.textContent = 'Se connecter'; return; }
     await onAuthenticated();
   } catch (e) {
-    errEl.textContent = 'Erreur de connexion, réessayez.';
+    errEl.textContent = 'Erreur : ' + (e && e.message ? e.message : e);
     btn.disabled = false; btn.textContent = 'Se connecter';
   }
 }
@@ -1412,6 +1413,7 @@ async function onAuthenticated() {
 async function dwtBootstrap() {
   var pass = document.getElementById('login-pass');
   if (pass) pass.addEventListener('keydown', function (e) { if (e.key === 'Enter') dwtLogin(); });
+  if (!sb) { var ee = document.getElementById('login-err'); if (ee) ee.textContent = 'Module de connexion non chargé (réseau / bloqueur ?). Rechargez la page.'; return; }
   try {
     var s = await sb.auth.getSession();
     if (s && s.data && s.data.session) { await onAuthenticated(); return; }
