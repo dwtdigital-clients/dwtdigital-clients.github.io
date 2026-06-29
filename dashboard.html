@@ -1,0 +1,1054 @@
+<!doctype html><html lang="fr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard CEO — DWT Digital</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --v:#7B1FA2; --vd:#4F0F5C; --vdd:#2D0636;
+  --g:#63AF21; --gl:#7BC93A;
+  --ink:#F6F1FA; --mut:rgba(246,241,250,.66); --acc:#d49bff;
+  --border:rgba(255,255,255,.15);
+  --disp:'Syne',sans-serif; --body:'Poppins',sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:clip}
+body{margin:0;background:#0a0014;color:var(--ink);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
+.pagebg{position:fixed;inset:0;z-index:-1;background-image:radial-gradient(1100px 760px at 82% -8%,rgba(123,31,162,.40),transparent 60%),radial-gradient(820px 620px at -8% 108%,rgba(99,175,33,.12),transparent 55%)}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--body);cursor:pointer}
+.gr{background:linear-gradient(120deg,var(--acc),var(--gl));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ===== LOGIN ===== */
+#dwt-login{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:22px;
+  background:radial-gradient(circle at 50% 0%,rgba(99,175,33,.12),transparent 60%),#0a0014}
+.login-card{position:relative;width:100%;max-width:400px;padding:34px 30px;border-radius:26px;overflow:hidden;
+  background:rgba(20,4,32,.6);-webkit-backdrop-filter:blur(26px) saturate(1.6);backdrop-filter:blur(26px) saturate(1.6);
+  border:1px solid var(--border);box-shadow:0 40px 90px -30px rgba(0,0,0,.85)}
+.login-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(140deg,rgba(255,255,255,.16),transparent 42%,rgba(123,31,162,.12));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px;opacity:.75}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.login-logo img{height:30px}
+.login-logo b{font-family:var(--disp);font-weight:800;font-size:1.05rem}
+.login-tag{margin-left:auto;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);background:rgba(123,31,162,.25);border:1px solid rgba(212,155,255,.3);border-radius:999px;padding:3px 9px}
+.login-card h1{font-family:var(--disp);font-weight:800;font-size:1.5rem;margin:0 0 4px}
+.login-card .sub{color:var(--mut);font-size:.9rem;margin:0 0 24px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.78rem;font-weight:600;color:var(--mut);margin-bottom:6px;letter-spacing:.02em}
+.field input{width:100%;padding:13px 15px;border-radius:13px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font-size:.95rem;font-family:var(--body);transition:border-color .2s,background .2s}
+.field input:focus{outline:none;border-color:var(--acc);background:rgba(255,255,255,.08)}
+.btn-primary{width:100%;margin-top:8px;padding:14px;border-radius:999px;border:none;font-weight:600;font-size:.95rem;color:#fff;background:linear-gradient(120deg,var(--v),var(--g));box-shadow:0 14px 30px -12px rgba(123,31,162,.7);transition:transform .18s,opacity .2s}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.6;cursor:default;transform:none}
+.login-err{min-height:18px;margin-top:12px;font-size:.82rem;color:#ff8b8b;text-align:center}
+.login-foot{margin-top:18px;text-align:center;font-size:.78rem;color:var(--mut)}
+.login-foot a{color:var(--acc);cursor:pointer}
+.login-demo{margin-top:14px;text-align:center}
+.login-demo button{font-size:.8rem;color:var(--acc);background:none;border:none;text-decoration:underline;text-underline-offset:3px}
+
+/* ===== APP SHELL ===== */
+#dwt-app{display:none;min-height:100vh}
+#dwt-app.on{display:grid;grid-template-columns:248px 1fr}
+.snav{position:sticky;top:0;align-self:start;height:100vh;display:flex;flex-direction:column;gap:6px;padding:22px 16px;
+  background:rgba(15,3,24,.7);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border-right:1px solid var(--border)}
+.snav-brand{display:flex;align-items:center;gap:9px;padding:6px 10px 4px}
+.snav-brand img{height:26px}
+.snav-brand b{font-family:var(--disp);font-weight:800;font-size:1rem}
+.snav-brand .role{margin-left:auto;font-size:.58rem;font-weight:700;letter-spacing:.1em;color:var(--acc);background:rgba(123,31,162,.25);border:1px solid rgba(212,155,255,.3);border-radius:999px;padding:2px 7px}
+.snav-sep{height:1px;background:var(--border);margin:14px 6px}
+.snav-item{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:13px;color:var(--mut);font-size:.92rem;font-weight:500;cursor:pointer;transition:background .18s,color .18s;position:relative}
+.snav-item svg{width:20px;height:20px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.snav-item:hover{color:var(--ink);background:rgba(255,255,255,.05)}
+.snav-item.on{color:#fff;background:linear-gradient(120deg,rgba(123,31,162,.55),rgba(99,175,33,.28));box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.snav-badge{margin-left:auto;background:var(--g);color:#0a0014;font-size:.68rem;font-weight:700;border-radius:999px;padding:1px 7px}
+.snav-logout{margin-top:auto;display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:13px;color:var(--mut);font-size:.88rem;border:1px solid var(--border);background:rgba(255,255,255,.04)}
+.snav-logout:hover{color:var(--ink);background:rgba(255,255,255,.08)}
+
+.main{padding:34px 38px 60px;min-width:0}
+.main-head{margin-bottom:22px}
+.main-head .hi{font-family:var(--disp);font-weight:800;font-size:1.9rem;line-height:1.1;margin:0}
+.main-head .meta{margin-top:7px;color:var(--mut);font-size:.95rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:.78rem;font-weight:600;background:rgba(123,31,162,.25);border:1px solid rgba(212,155,255,.3);color:var(--acc)}
+
+/* ===== BANNIÈRE DÉMO ===== */
+.demobar{display:none;align-items:center;gap:10px;margin-bottom:22px;padding:11px 16px;border-radius:14px;
+  background:rgba(232,163,61,.14);border:1px solid rgba(232,163,61,.4);color:#e8a33d;font-size:.85rem;font-weight:500}
+.demobar.on{display:flex}
+.demobar svg{flex-shrink:0}
+.demobar b{color:#f3c27a}
+
+.tab-panel{display:none}
+.tab-panel.on{display:block}
+
+/* ===== KPI STRIP ===== */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:22px}
+.kpi{position:relative;padding:16px 18px;border-radius:16px;overflow:hidden;background:rgba(20,4,32,.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border:1px solid var(--border)}
+.kpi .kv{font-family:var(--disp);font-weight:800;font-size:1.7rem;line-height:1}
+.kpi .kl{margin-top:5px;font-size:.78rem;color:var(--mut)}
+
+/* ===== CARTES (générique) ===== */
+.card{position:relative;padding:22px;border-radius:20px;overflow:hidden;background:rgba(20,4,32,.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border:1px solid var(--border)}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(140deg,rgba(255,255,255,.12),transparent 42%,rgba(123,31,162,.10));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px;opacity:.65}
+.card h3{font-family:var(--disp);font-weight:700;font-size:1.05rem;margin:0 0 8px}
+.card p{color:var(--mut);font-size:.9rem;margin:0}
+.soon{display:inline-block;margin-top:10px;font-size:.74rem;font-weight:600;color:var(--gl);background:rgba(99,175,33,.14);border:1px solid rgba(99,175,33,.3);border-radius:999px;padding:2px 10px}
+
+/* ===== ONGLET CLIENTS ===== */
+.sec-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.sec-head h2{font-family:var(--disp);font-weight:800;font-size:1.2rem;margin:0}
+.clients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.client-card{position:relative;padding:18px;border-radius:18px;overflow:hidden;background:rgba(20,4,32,.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border:1px solid var(--border);cursor:pointer;transition:transform .18s,border-color .18s}
+.client-card:hover{transform:translateY(-2px);border-color:rgba(212,155,255,.45)}
+.cc-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.cc-ava{width:46px;height:46px;border-radius:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:800;font-size:1.05rem;color:#fff;background:linear-gradient(135deg,var(--v),var(--g))}
+.cc-id{min-width:0}
+.cc-id b{display:block;font-size:.98rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cc-id span{font-size:.82rem;color:var(--mut)}
+.cc-meta{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.tag{font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut)}
+.tag.pack{color:var(--acc);background:rgba(123,31,162,.22);border-color:rgba(212,155,255,.3)}
+.cc-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:13px;border-top:1px solid var(--border)}
+.cc-swatches{display:flex;gap:5px}
+.cc-swatches i{width:18px;height:18px;border-radius:6px;border:1px solid rgba(255,255,255,.16);display:inline-block}
+.cc-pal-none{font-size:.74rem;color:var(--mut)}
+.cc-pend{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(232,163,61,.18);color:#e8a33d;border:1px solid rgba(232,163,61,.35)}
+.cc-pend.zero{background:rgba(99,175,33,.14);color:var(--gl);border-color:rgba(99,175,33,.3)}
+.empty{color:var(--mut);font-size:.9rem;padding:30px;text-align:center}
+
+/* statuts (repris espace) */
+.mstatut{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.mstatut.en_attente{background:rgba(232,163,61,.18);color:#e8a33d;border:1px solid rgba(232,163,61,.35)}
+.mstatut.en_cours{background:rgba(63,169,255,.16);color:#3fa9ff;border:1px solid rgba(63,169,255,.32)}
+.mstatut.termine{background:rgba(99,175,33,.16);color:var(--gl);border:1px solid rgba(99,175,33,.32)}
+
+/* ===== ONGLET DEMANDES ===== */
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.fbtn{font-size:.78rem;font-weight:600;padding:6px 13px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut);cursor:pointer;transition:color .16s,background .16s,border-color .16s}
+.fbtn:hover{color:var(--ink);border-color:rgba(212,155,255,.4)}
+.fbtn.on{color:#fff;background:linear-gradient(120deg,rgba(123,31,162,.55),rgba(99,175,33,.28));border-color:transparent}
+.fbtn .c{opacity:.7;margin-left:5px;font-variant-numeric:tabular-nums}
+.demandes-list{display:flex;flex-direction:column;gap:12px}
+.dem-item{position:relative;padding:16px 18px;border-radius:16px;overflow:hidden;background:rgba(20,4,32,.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border:1px solid var(--border)}
+.dem-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.dem-ava{width:34px;height:34px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:800;font-size:.78rem;color:#fff;background:linear-gradient(135deg,var(--v),var(--g))}
+.dem-who{min-width:0}
+.dem-who b{display:block;font-size:.9rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dem-who span{font-size:.76rem;color:var(--mut)}
+.dem-date{margin-left:auto;font-size:.72rem;color:var(--mut);flex-shrink:0}
+.dem-sujet{font-size:.8rem;font-weight:600;color:var(--acc);margin-bottom:4px}
+.dem-msg{font-size:.9rem;color:var(--ink);margin:0 0 14px;overflow-wrap:break-word}
+.dem-foot{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding-top:13px;border-top:1px solid var(--border)}
+.dem-foot .lbl{font-size:.74rem;color:var(--mut)}
+.seg{display:inline-flex;border-radius:10px;border:1px solid var(--border);overflow:hidden}
+.seg button{font-size:.74rem;font-weight:600;padding:6px 12px;border:none;background:transparent;color:var(--mut);cursor:pointer;transition:color .16s,background .16s}
+.seg button:not(:last-child){border-right:1px solid var(--border)}
+.seg button:hover{color:var(--ink);background:rgba(255,255,255,.05)}
+.seg button.on.en_attente{background:rgba(232,163,61,.22);color:#e8a33d}
+.seg button.on.en_cours{background:rgba(63,169,255,.2);color:#3fa9ff}
+.seg button.on.termine{background:rgba(99,175,33,.2);color:var(--gl)}
+
+/* ===== ONGLET MESSAGERIE ===== */
+.msgwrap{display:grid;grid-template-columns:308px 1fr;gap:18px;align-items:start}
+.msgwrap>*{min-width:0}
+.conv-list{display:flex;flex-direction:column;gap:8px;min-width:0}
+.conv{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.04);cursor:pointer;transition:border-color .16s,background .16s}
+.conv:hover{border-color:rgba(212,155,255,.4);background:rgba(255,255,255,.07)}
+.conv.on{border-color:rgba(212,155,255,.55);background:rgba(123,31,162,.2)}
+.conv .cv-ava{width:38px;height:38px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:800;font-size:.82rem;color:#fff;background:linear-gradient(135deg,var(--v),var(--g))}
+.conv .cv-main{min-width:0;flex:1}
+.conv .cv-main b{display:block;font-size:.86rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.conv .cv-main p{margin:0;font-size:.77rem;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.conv .cv-dot{width:9px;height:9px;border-radius:50%;background:var(--g);flex-shrink:0;box-shadow:0 0 0 3px rgba(99,175,33,.18)}
+.thread-card{display:flex;flex-direction:column}
+.thread-head{font-family:var(--disp);font-weight:700;font-size:1rem;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--border)}
+.thread{display:flex;flex-direction:column;gap:9px;max-height:430px;overflow-y:auto;margin-bottom:14px;padding-right:4px}
+.thread-empty{color:var(--mut);font-size:.88rem;text-align:center;margin:auto;padding:30px 0}
+.mb{max-width:80%;padding:9px 13px;border-radius:14px;font-size:.88rem;line-height:1.45}
+.mb .who{font-size:.62rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;opacity:.7;margin-bottom:3px}
+.mb p{margin:0;overflow-wrap:break-word}
+.mb .t{display:block;font-size:.62rem;color:var(--mut);margin-top:4px}
+.mb-in{align-self:flex-start;background:rgba(255,255,255,.07);border:1px solid var(--border);border-bottom-left-radius:4px}
+.mb-out{align-self:flex-end;background:linear-gradient(135deg,rgba(123,31,162,.34),rgba(99,175,33,.16));border:1px solid rgba(212,155,255,.25);border-bottom-right-radius:4px}
+.composer{display:flex;gap:9px;align-items:flex-end}
+.composer textarea{flex:1;padding:11px 13px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font-size:.88rem;font-family:var(--body);resize:vertical}
+.composer textarea:focus{outline:none;border-color:var(--acc);background:rgba(255,255,255,.08)}
+.composer textarea:disabled{opacity:.5}
+.composer .btn-primary{width:auto;margin-top:0;padding:11px 18px;white-space:nowrap}
+.msg-feedback{min-height:16px;margin-top:9px;font-size:.8rem;color:var(--gl)}
+@media(max-width:880px){.msgwrap{grid-template-columns:1fr}}
+
+/* ===== ONGLET NOUVEAU CLIENT ===== */
+.field select{width:100%;padding:13px 15px;border-radius:13px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font-size:.95rem;font-family:var(--body)}
+.field select:focus{outline:none;border-color:var(--acc);background:rgba(255,255,255,.08)}
+.field select option{background:#1a0b22;color:var(--ink)}
+.nc-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;align-items:start}
+.nc-grid>*{min-width:0}
+.nc-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.nc-msg{min-height:18px;margin-top:11px;font-size:.82rem;color:var(--gl)}
+.nc-fiche{display:flex;align-items:center;gap:13px;padding:14px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.04);margin-bottom:13px}
+.nc-cred{display:flex;flex-direction:column;gap:9px;margin-top:14px}
+.nc-cred-row{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.04)}
+.nc-cred-row .lbl{font-size:.72rem;color:var(--mut);width:104px;flex-shrink:0}
+.nc-cred-row code{font-family:monospace;font-size:.86rem;color:var(--ink);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nc-copy{font-size:.7rem;font-weight:600;padding:5px 11px;border-radius:8px;border:1px solid rgba(212,155,255,.4);background:rgba(123,31,162,.18);color:var(--acc);flex-shrink:0}
+.nc-copy:hover{background:rgba(123,31,162,.3)}
+.nc-success{display:flex;align-items:center;gap:9px;background:rgba(99,175,33,.12);border:1px solid rgba(99,175,33,.32);border-radius:13px;padding:11px 14px;margin-bottom:6px;font-size:.85rem;color:var(--gl)}
+.nc-cred-note{font-size:.8rem;color:var(--mut);margin:10px 0 0}
+.nc-again{margin-top:12px;width:100%;padding:11px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font-weight:600;font-size:.86rem}
+.nc-again:hover{background:rgba(255,255,255,.09)}
+@media(max-width:880px){.nc-grid{grid-template-columns:1fr}.nc-row{grid-template-columns:1fr}}
+
+/* ===== ONGLET DEVIS ===== */
+.dv-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:start}
+.dv-grid>*{min-width:0}
+.dv-lines-label{display:block;font-size:.78rem;font-weight:600;color:var(--mut);margin:8px 0 9px;letter-spacing:.02em}
+.dv-line{display:grid;grid-template-columns:1fr 92px 50px 84px 32px;gap:7px;align-items:center;margin-bottom:8px}
+.dv-line input,.dv-line select{padding:9px 10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font-size:.82rem;font-family:var(--body);min-width:0}
+.dv-line input:focus,.dv-line select:focus{outline:none;border-color:var(--acc);background:rgba(255,255,255,.08)}
+.dv-line select option{background:#1a0b22;color:var(--ink)}
+.dv-l-del{border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut);border-radius:9px;height:36px;font-size:1.05rem;line-height:1}
+.dv-l-del:hover{color:#ff8b8b;border-color:rgba(255,139,139,.4)}
+.dv-addline{margin:2px 0 14px;font-size:.8rem;font-weight:600;color:var(--acc);background:rgba(123,31,162,.14);border:1px solid rgba(212,155,255,.34);border-radius:999px;padding:7px 14px}
+.dv-addline:hover{background:rgba(123,31,162,.24)}
+.dv-totals{display:flex;gap:24px;flex-wrap:wrap;padding:13px 16px;border-radius:13px;border:1px solid var(--border);background:rgba(255,255,255,.04);margin:4px 0 14px}
+.dv-totals .tt span{display:block;font-size:.72rem;color:var(--mut);margin-bottom:2px}
+.dv-totals .tt b{font-family:var(--disp);font-weight:800;font-size:1.18rem}
+.dv-list{display:flex;flex-direction:column;gap:10px}
+.dv-item{padding:13px 15px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.04)}
+.dv-item .di-top{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+.dv-item .di-num{font-family:monospace;font-size:.76rem;color:var(--acc)}
+.dv-item .di-name{font-size:.92rem;font-weight:600;margin-bottom:2px}
+.dv-item .di-sub{font-size:.8rem;color:var(--mut);margin:0 0 9px;min-height:.9em}
+.dv-item .di-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.dv-item .di-tot{font-size:.86rem;font-weight:600}
+.di-actions{display:flex;gap:7px;align-items:center}
+.dv-open{font-size:.74rem;font-weight:600;padding:6px 13px;border-radius:999px;border:1px solid rgba(212,155,255,.4);background:rgba(123,31,162,.16);color:var(--acc);cursor:pointer;transition:background .16s}
+.dv-open:hover{background:rgba(123,31,162,.26)}
+.dv-conv{font-size:.74rem;font-weight:600;padding:6px 13px;border-radius:999px;border:1px solid rgba(99,175,33,.4);background:rgba(99,175,33,.14);color:var(--gl);cursor:pointer;transition:background .16s}
+.dv-conv:hover{background:rgba(99,175,33,.24)}
+.dv-converted{font-size:.72rem;font-weight:700;color:var(--gl);padding:5px 11px;border-radius:999px;background:rgba(99,175,33,.12);border:1px solid rgba(99,175,33,.28)}
+.nc-from-devis{display:flex;align-items:center;gap:10px;justify-content:space-between;background:rgba(99,175,33,.1);border:1px solid rgba(99,175,33,.3);border-radius:12px;padding:10px 13px;margin-bottom:15px}
+.nc-from-devis b{color:var(--gl);display:block;font-size:.82rem}
+.nc-from-devis span{color:var(--mut);font-size:.78rem}
+.nc-from-devis button{border:none;background:none;color:var(--mut);font-size:1.15rem;line-height:1;cursor:pointer;flex-shrink:0}
+.nc-from-devis button:hover{color:var(--ink)}
+.dstatut{font-size:.66rem;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;margin-left:auto}
+.dstatut.brouillon{background:rgba(246,241,250,.1);color:var(--mut);border:1px solid var(--border)}
+.dstatut.envoye{background:rgba(63,169,255,.16);color:#3fa9ff;border:1px solid rgba(63,169,255,.32)}
+.dstatut.accepte{background:rgba(99,175,33,.16);color:var(--gl);border:1px solid rgba(99,175,33,.3)}
+.dstatut.refuse{background:rgba(255,139,139,.14);color:#ff8b8b;border:1px solid rgba(255,139,139,.32)}
+@media(max-width:880px){.dv-grid{grid-template-columns:1fr}.dv-line{grid-template-columns:1fr 80px 46px 74px 30px}}
+
+/* ===== MOBILE ===== */
+@media(max-width:880px){
+  #dwt-app.on{grid-template-columns:1fr}
+  .snav{position:fixed;top:0;left:0;right:0;height:auto;flex-direction:row;align-items:center;gap:4px;overflow-x:auto;padding:12px;border-right:none;border-bottom:1px solid var(--border);z-index:50}
+  .snav-brand{padding:0 8px 0 4px;flex-shrink:0}
+  .snav-brand b,.snav-brand .role{display:none}
+  .snav-sep{display:none}
+  .snav-item{flex-direction:column;gap:4px;padding:7px 11px;font-size:.66rem;flex-shrink:0}
+  .snav-item span:not(.snav-badge){white-space:nowrap}
+  .snav-badge{position:absolute;top:2px;right:4px;margin:0}
+  .snav-logout{margin-top:0;flex-shrink:0;padding:9px 12px}
+  .snav-logout span{display:none}
+  .main{padding:90px 18px 80px}
+  .main-head .hi{font-size:1.5rem}
+}
+</style></head>
+<body>
+<div class="pagebg" aria-hidden="true"></div>
+
+<!-- ===== CONNEXION ADMIN ===== -->
+<div id="dwt-login">
+  <div class="login-card">
+    <div class="login-logo"><img src="assets/logo-cutout.png" alt="DWT" onerror="this.style.display='none'"><b>DWT</b><span class="login-tag">CEO</span></div>
+    <h1>Dashboard <span class="gr">CEO</span></h1>
+    <p class="sub">Accès réservé — pilotage de tous les clients.</p>
+    <div class="field"><label for="login-email">Email admin</label><input type="email" id="login-email" autocomplete="email" placeholder="vous@dwtdigital.fr"></div>
+    <div class="field"><label for="login-pass">Mot de passe</label><input type="password" id="login-pass" autocomplete="current-password" placeholder="••••••••"></div>
+    <button class="btn-primary" id="login-btn" type="button" onclick="dwtLogin()">Se connecter</button>
+    <div class="login-err" id="login-err" aria-live="polite"></div>
+    <div class="login-demo"><button type="button" onclick="enterDemo()">Aperçu démo (sans connexion)</button></div>
+  </div>
+</div>
+
+<!-- ===== APPLICATION ===== -->
+<div id="dwt-app">
+  <aside class="snav">
+    <div class="snav-brand"><img src="assets/logo-cutout.png" alt="DWT" onerror="this.style.display='none'"><b>DWT</b><span class="role">CEO</span></div>
+    <div class="snav-sep"></div>
+    <a class="snav-item on" data-tab="clients" onclick="switchTab('clients',this)"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><circle cx="17.5" cy="9" r="2.6"/><path d="M16 14.5a4.8 4.8 0 0 1 4.5 5.5"/></svg><span>Clients</span><span class="snav-badge" id="nav-clients-n" style="display:none"></span></a>
+    <a class="snav-item" data-tab="demandes" onclick="switchTab('demandes',this)"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h10"/></svg><span>Demandes</span><span class="snav-badge" id="nav-demandes-n" style="display:none"></span></a>
+    <a class="snav-item" data-tab="messagerie" onclick="switchTab('messagerie',this)"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-11.7 7.7L3 21l1.8-6.3A8.4 8.4 0 1 1 21 11.5z"/></svg><span>Messagerie</span><span class="snav-badge" id="nav-messagerie-n" style="display:none"></span></a>
+    <a class="snav-item" data-tab="devis" onclick="switchTab('devis',this)"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h8M8 17h5"/></svg><span>Devis</span></a>
+    <a class="snav-item" data-tab="nouveau" onclick="switchTab('nouveau',this)"><svg viewBox="0 0 24 24"><circle cx="11" cy="8" r="3.4"/><path d="M4.5 20a6.5 6.5 0 0 1 13 0"/><path d="M19 7v6M22 10h-6"/></svg><span>Nouveau client</span></a>
+    <button class="snav-logout" type="button" onclick="dwtLogout()"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Déconnexion</span></button>
+  </aside>
+
+  <main class="main">
+    <div class="main-head">
+      <h1 class="hi">Pilotage <span class="gr">DWT</span></h1>
+      <div class="meta"><span id="admin-id">—</span></div>
+    </div>
+
+    <div class="demobar" id="demobar">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+      <span><b>Mode démonstration</b> — données fictives. Le Worker admin n'est pas encore branché : aucune écriture réelle.</span>
+    </div>
+
+    <!-- ONGLET CLIENTS -->
+    <section class="tab-panel on" data-panel="clients">
+      <div class="kpis" id="kpis"></div>
+      <div class="sec-head"><h2>Tous les clients</h2></div>
+      <div class="clients-grid" id="clients-grid"><p class="empty">Chargement…</p></div>
+    </section>
+
+    <!-- ONGLET DEMANDES -->
+    <section class="tab-panel" data-panel="demandes">
+      <div class="sec-head"><h2>Demandes de modification</h2><div class="filters" id="dem-filters"></div></div>
+      <div class="demandes-list" id="demandes-list"><p class="empty">Chargement…</p></div>
+    </section>
+
+    <!-- ONGLET MESSAGERIE -->
+    <section class="tab-panel" data-panel="messagerie">
+      <div class="sec-head"><h2>Messagerie</h2></div>
+      <div class="msgwrap">
+        <div class="conv-list" id="conv-list"><p class="empty">Chargement…</p></div>
+        <div class="card thread-card">
+          <div class="thread-head" id="thread-head">Sélectionnez une conversation</div>
+          <div class="thread" id="thread"><p class="thread-empty">Choisissez un client à gauche pour voir le fil.</p></div>
+          <div class="composer">
+            <textarea id="msg-input" rows="2" placeholder="Votre réponse à ce client…" disabled></textarea>
+            <button class="btn-primary" id="msg-send" type="button" onclick="sendMessage()" disabled>Envoyer</button>
+          </div>
+          <div class="msg-feedback" id="msg-feedback" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ONGLET DEVIS -->
+    <section class="tab-panel" data-panel="devis">
+      <div class="sec-head"><h2>Devis</h2></div>
+      <div class="dv-grid">
+        <div class="card">
+          <h3>Nouveau devis</h3>
+          <p class="card-sub">Pour un prospect au téléphone — pas besoin de compte client.</p>
+          <div class="nc-row">
+            <div class="field"><label for="dv-nom">Nom</label><input id="dv-nom" placeholder="Julie Martin"></div>
+            <div class="field"><label for="dv-commerce">Commerce</label><input id="dv-commerce" placeholder="Fleurs &amp; Co"></div>
+          </div>
+          <div class="nc-row">
+            <div class="field"><label for="dv-email">Email</label><input id="dv-email" type="email" autocomplete="off" placeholder="prospect@email.fr"></div>
+            <div class="field"><label for="dv-tel">Téléphone</label><input id="dv-tel" placeholder="06 12 34 56 78"></div>
+          </div>
+          <div class="field"><label for="dv-pack">Pack (pré-remplit une ligne)</label>
+            <select id="dv-pack" onchange="dvPack()">
+              <option value="">— aucun / sur mesure —</option>
+              <option>Social Only</option>
+              <option>Social Pro</option>
+              <option>Essential</option>
+              <option>Premium</option>
+              <option>Sur Mesure</option>
+            </select>
+          </div>
+          <span class="dv-lines-label">Lignes du devis</span>
+          <div id="dv-lines"></div>
+          <button type="button" class="dv-addline" onclick="dvAddLine()">+ Ajouter une ligne</button>
+          <div class="dv-totals" id="dv-totals"></div>
+          <div class="field"><label for="dv-notes">Notes (optionnel)</label><textarea id="dv-notes" rows="2" placeholder="Engagement 3 mois, sans frais cachés…"></textarea></div>
+          <button class="btn-primary" type="button" id="dv-btn" onclick="createDevis()">Enregistrer le devis</button>
+          <div class="nc-msg" id="dv-msg" aria-live="polite"></div>
+        </div>
+        <div class="card">
+          <h3>Devis récents</h3>
+          <p class="card-sub">Suivi de vos propositions commerciales.</p>
+          <div class="dv-list" id="dv-list"><p class="empty">Chargement…</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ONGLET NOUVEAU CLIENT -->
+    <section class="tab-panel" data-panel="nouveau">
+      <div class="sec-head"><h2>Créer un client</h2></div>
+      <div class="nc-grid">
+        <div class="card">
+          <h3>Informations</h3>
+          <p class="card-sub">Crée le compte de connexion + la fiche client.</p>
+          <div class="nc-from-devis" id="nc-from-devis" style="display:none"></div>
+          <div class="nc-row">
+            <div class="field"><label for="nc-prenom">Prénom *</label><input id="nc-prenom" oninput="ncPreview()" placeholder="Lise"></div>
+            <div class="field"><label for="nc-nom">Nom *</label><input id="nc-nom" oninput="ncPreview()" placeholder="Martin"></div>
+          </div>
+          <div class="nc-row">
+            <div class="field"><label for="nc-email">Email *</label><input id="nc-email" type="email" autocomplete="off" placeholder="client@email.fr"></div>
+            <div class="field"><label for="nc-siret">SIRET *</label><input id="nc-siret" inputmode="numeric" autocomplete="off" placeholder="14 chiffres"></div>
+          </div>
+          <div class="field"><label for="nc-commerce">Commerce *</label><input id="nc-commerce" oninput="ncCommerce()" placeholder="Cake Délice"></div>
+          <div class="nc-row">
+            <div class="field"><label for="nc-slug">Slug (URL mini-site)</label><input id="nc-slug" oninput="ncSlugEdit()" placeholder="cake-delice"></div>
+            <div class="field"><label for="nc-pack">Pack</label>
+              <select id="nc-pack" onchange="ncPreview()">
+                <option value="">— choisir —</option>
+                <option>Social Only</option>
+                <option>Social Pro</option>
+                <option>Essential</option>
+                <option>Premium</option>
+                <option>Sur Mesure</option>
+              </select>
+            </div>
+          </div>
+          <div class="nc-row">
+            <div class="field"><label for="nc-secteur">Secteur</label><input id="nc-secteur" placeholder="pâtisserie, boucherie…"></div>
+            <div class="field"><label for="nc-ville">Ville</label><input id="nc-ville" oninput="ncPreview()" placeholder="Paris"></div>
+          </div>
+          <button class="btn-primary" id="nc-btn" type="button" onclick="createClient()">Créer le compte client</button>
+          <div class="nc-msg" id="nc-msg" aria-live="polite"></div>
+        </div>
+        <div class="card">
+          <h3>Fiche client</h3>
+          <p class="card-sub" id="nc-side-sub">Aperçu de ce qui sera créé.</p>
+          <div class="nc-fiche" id="nc-fiche">
+            <div class="cc-ava" id="nc-av">—</div>
+            <div class="cc-id"><b id="nc-f-com">Nouveau client</b><span id="nc-f-pre">—</span></div>
+          </div>
+          <div class="cc-meta" id="nc-f-meta"></div>
+          <div id="nc-creds" style="display:none"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ===== CONFIG =====
+  var SUPABASE_URL = 'https://hamhhnulwmqpixazffoc.supabase.co';
+  var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhbWhobnVsd21xcGl4YXpmZm9jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzEzOTgsImV4cCI6MjA5NTY0NzM5OH0.bJfSJccRR6TXg-uDjf9Jo_vc9pdWX6NGWQwSCESkpHY';
+  // Base du Worker admin (secrets + check ADMIN_EMAILS). Vide tant que pas deploye -> mode demo force.
+  var WORKER_BASE = 'https://dwt-admin.darellwilliampro1.workers.dev';
+
+  var sb = (typeof supabase !== 'undefined' && supabase.createClient) ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON) : null;
+
+  // ===== ETAT =====
+  var MODE = 'demo';          // 'demo' | 'live'
+  var JWT = null;             // token Supabase de l'admin (mode live)
+  var ADMIN_EMAIL = '';
+  var DATA = { clients: [], modifications: [], notifications: [], devis: [] };
+
+  function g(id){ return document.getElementById(id); }
+  function esc(t){ var d=document.createElement('div'); d.textContent=(t==null?'':String(t)); return d.innerHTML; }
+
+  // ===== DONNEES DE DEMO (fictives, clairement signalees) =====
+  function mockData(){
+    return {
+      clients: [
+        { id:'demo-1', prenom:'Lise', commerce:'Cake Délice', ville:'Paris', pack:'Premium', slug:'cake-delice',
+          palette:{ p:'#C2185B', s:'#F8BBD0', bg:'#1a0d14' } },
+        { id:'demo-2', prenom:'Marc', commerce:'Boucherie Zimblo', ville:'Créteil', pack:'Essential', slug:'zimblo',
+          palette:{ p:'#B71C1C', s:'#FFCDD2', bg:'#160a0a' } },
+        { id:'demo-3', prenom:'Sophie', commerce:'Le Fournil de Soph', ville:'Versailles', pack:'Social Pro',
+          slug:'sophie', palette:null }
+      ],
+      modifications: [
+        { id:'m1', client_id:'demo-1', sujet:'Photos & visuels', message_client:'Remplacer la photo d\'accueil par celle du nouveau gâteau framboise.', statut:'en_attente', created_at:'2026-06-23T09:12:00Z' },
+        { id:'m2', client_id:'demo-1', sujet:'Horaires & infos pratiques', message_client:'Fermeture exceptionnelle le 29 juin, à indiquer sur le site.', statut:'en_attente', created_at:'2026-06-22T16:40:00Z' },
+        { id:'m3', client_id:'demo-1', sujet:'Textes', message_client:'Corriger une faute dans la section « À propos ».', statut:'termine', created_at:'2026-06-20T11:00:00Z' },
+        { id:'m4', client_id:'demo-3', sujet:'Produits / menu', message_client:'Ajouter la nouvelle baguette aux céréales à la carte.', statut:'en_attente', created_at:'2026-06-24T08:05:00Z' },
+        { id:'m5', client_id:'demo-2', sujet:'Textes', message_client:'Mettre à jour le numéro de téléphone en bas de page.', statut:'en_cours', created_at:'2026-06-21T14:20:00Z' }
+      ],
+      notifications: [
+        { id:'n1', client_id:'demo-1', contenu:'Bonjour, est-ce que vous pourriez publier un post pour la fête des mères ?', direction:'client_to_ceo', lu:true, created_at:'2026-06-23T10:02:00Z' },
+        { id:'n2', client_id:'demo-1', contenu:'Bien sûr Lise, je prépare une proposition et je vous la montre demain.', direction:'ceo_to_client', lu:true, created_at:'2026-06-23T10:31:00Z' },
+        { id:'n3', client_id:'demo-1', contenu:'Super, merci ! Vous pourriez aussi mettre en avant les macarons ?', direction:'client_to_ceo', lu:false, created_at:'2026-06-24T08:15:00Z' },
+        { id:'n4', client_id:'demo-3', contenu:'Est-ce qu\'on peut voir les statistiques du mois quand vous avez un moment ?', direction:'client_to_ceo', lu:true, created_at:'2026-06-22T17:45:00Z' },
+        { id:'n5', client_id:'demo-3', contenu:'Oui, je vous prépare un récap clair en début de semaine prochaine.', direction:'ceo_to_client', lu:true, created_at:'2026-06-22T18:10:00Z' }
+      ],
+      devis: [
+        { id:'dv-1', numero:'DWT-2026-001', prospect_nom:'Julie Martin', prospect_commerce:'Fleurs & Co', prospect_email:'julie@fleursco.fr', prospect_tel:'06 12 34 56 78', pack:'Social Pro', lignes:[{label:'Pack Social Pro', type:'mensuel', qty:1, prix_unitaire:497}], total_mensuel:497, total_oneshot:0, statut:'envoye', created_at:'2026-06-22T11:00:00Z', valid_until:'2026-07-22' },
+        { id:'dv-2', numero:'DWT-2026-002', prospect_nom:'Ahmed', prospect_commerce:'Resto du Coin', prospect_email:'', prospect_tel:'06 98 76 54 32', pack:'Premium', lignes:[{label:'Pack Premium', type:'mensuel', qty:1, prix_unitaire:950},{label:'Création de logo', type:'one-shot', qty:1, prix_unitaire:250}], total_mensuel:950, total_oneshot:250, statut:'brouillon', created_at:'2026-06-24T09:30:00Z', valid_until:'2026-07-24' }
+      ]
+    };
+  }
+
+  // ===== APPEL API ADMIN (Worker) — abstrait demo/live =====
+  // En live: POST WORKER_BASE+path avec Bearer JWT. En demo: renvoie les mocks.
+  async function api(path, body){
+    if (path === '/admin-check'){
+      // Toujours un vrai appel réseau : c'est CE check qui décide si on passe en mode live.
+      if (!WORKER_BASE) return { ok:false, error:'WORKER_BASE non défini' };
+      try{
+        var r0 = await fetch(WORKER_BASE + path, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer ' + JWT },
+          body: JSON.stringify(body || {})
+        });
+        var txt0 = await r0.text();
+        var json0 = txt0 ? JSON.parse(txt0) : null;
+        if (!r0.ok) return { ok:false, error:(json0 && json0.error) || ('HTTP ' + r0.status) };
+        return { ok:true, data: json0 && (json0.data !== undefined ? json0.data : json0) };
+      }catch(e){ return { ok:false, error:(e && e.message) ? e.message : String(e) }; }
+    }
+    if (MODE === 'demo'){
+      if (path === '/admin/clients') return { ok:true, data: DATA.clients };
+      if (path === '/admin/modifications') return { ok:true, data: DATA.modifications };
+      if (path === '/admin/update-modification') return { ok:true, data:{ updated:true } }; // la mutation locale est faite par l'appelant
+      if (path === '/admin/notifications') return { ok:true, data: DATA.notifications };
+      if (path === '/admin/send-message') return { ok:true, data:{ sent:true } }; // l'ajout local est fait par l'appelant
+      if (path === '/create-client'){
+        var nid = 'demo-' + (DATA.clients.length + 1);
+        var pwd = genPwd();
+        DATA.clients.push({ id:nid, prenom:body.prenom, nom:body.nom, commerce:body.commerce, ville:body.ville, pack:body.pack, slug:body.slug, secteur:body.secteur, siret:body.siret, email:body.email, palette:null });
+        if(body.devis_id){ for(var di=0;di<DATA.devis.length;di++){ if(DATA.devis[di].id===body.devis_id){ DATA.devis[di].client_id=nid; break; } } }
+        return { ok:true, data:{ client_id:nid, email:body.email, temp_password:pwd } };
+      }
+      if (path === '/admin/devis') return { ok:true, data: DATA.devis };
+      if (path === '/create-devis'){
+        var dn = DATA.devis.length + 1;
+        var dnum = 'DWT-2026-' + String(dn).padStart(3,'0');
+        var did = 'dv-' + dn;
+        DATA.devis.push(Object.assign({ id:did, numero:dnum, statut:'brouillon' }, body));
+        return { ok:true, data:{ id:did, numero:dnum } };
+      }
+      if (path === '/admin/update-devis') return { ok:true, data:{ updated:true } };
+      return { ok:true, data: null };
+    }
+    try{
+      var r = await fetch(WORKER_BASE + path, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer ' + JWT },
+        body: JSON.stringify(body || {})
+      });
+      var txt = await r.text();
+      var json = txt ? JSON.parse(txt) : null;
+      if (!r.ok) return { ok:false, error:((json && json.error) || ('HTTP ' + r.status)) + (json && json.detail ? ' — ' + (typeof json.detail === 'string' ? json.detail : JSON.stringify(json.detail)) : '') };
+      return { ok:true, data: json && (json.data !== undefined ? json.data : json) };
+    }catch(e){ return { ok:false, error:(e && e.message) ? e.message : String(e) }; }
+  }
+
+  // ===== NAVIGATION =====
+  window.switchTab = function(id, el){
+    var items = document.querySelectorAll('.snav-item');
+    for (var i=0;i<items.length;i++){ items[i].classList.toggle('on', items[i].getAttribute('data-tab')===id); }
+    var panels = document.querySelectorAll('.tab-panel');
+    for (var j=0;j<panels.length;j++){ panels[j].classList.toggle('on', panels[j].getAttribute('data-panel')===id); }
+    // ouvrir Messagerie = marquer la conversation active comme lue
+    if (id==='messagerie' && MSG_ACTIVE && typeof window.selectConv==='function'){ window.selectConv(MSG_ACTIVE); }
+  };
+
+  // ===== CONNEXION =====
+  window.dwtLogin = async function(){
+    var email = g('login-email').value.trim();
+    var pass = g('login-pass').value;
+    var err = g('login-err'); err.textContent='';
+    var btn = g('login-btn');
+    if (!email || !pass){ err.textContent='Email et mot de passe requis.'; return; }
+    if (!sb){ err.textContent='Connexion indisponible (réseau ou bloqueur ?). Rechargez la page.'; return; }
+    btn.disabled=true; btn.textContent='Connexion...';
+    try{
+      var res = await sb.auth.signInWithPassword({ email:email, password:pass });
+      if (res.error){ err.textContent='Email ou mot de passe incorrect.'; btn.disabled=false; btn.textContent='Se connecter'; return; }
+      var sess = await sb.auth.getSession();
+      JWT = sess && sess.data && sess.data.session ? sess.data.session.access_token : null;
+      ADMIN_EMAIL = email;
+      if (!WORKER_BASE){
+        err.textContent='Worker admin pas encore déployé. Utilise l\'aperçu démo en attendant.';
+        try{ await sb.auth.signOut(); }catch(e){}
+        btn.disabled=false; btn.textContent='Se connecter'; return;
+      }
+      var chk = await api('/admin-check', {});
+      if (!chk.ok || !chk.data || !chk.data.admin){
+        err.textContent='Ce compte n\'est pas administrateur.';
+        try{ await sb.auth.signOut(); }catch(e){}
+        btn.disabled=false; btn.textContent='Se connecter'; return;
+      }
+      MODE='live';
+      await openApp();
+    }catch(e){
+      err.textContent='Erreur : '+((e && e.message)?e.message:e);
+      btn.disabled=false; btn.textContent='Se connecter';
+    }
+  };
+
+  window.enterDemo = async function(){
+    MODE='demo'; ADMIN_EMAIL='Aperçu démo'; DATA = mockData();
+    await openApp();
+  };
+
+  window.dwtLogout = async function(){
+    try{ if (MODE==='live') await sb.auth.signOut(); }catch(e){}
+    location.reload();
+  };
+
+  // ===== OUVERTURE APP =====
+  async function openApp(){
+    g('admin-id').textContent = ADMIN_EMAIL || '';
+    g('demobar').classList.toggle('on', MODE==='demo');
+    g('dwt-login').style.display='none';
+    g('dwt-app').classList.add('on');
+    await loadModifications();
+    await loadNotifications();
+    await loadClients();
+    await loadDevis();
+    renderDemandes();
+    renderMessagerie();
+    renderDevis();
+    dvInitForm();
+  }
+
+  // ===== ONGLET CLIENTS =====
+  function initials(c){
+    var src=(c.commerce||c.prenom||'?').trim();
+    var parts=src.split(/\s+/).filter(Boolean);
+    var s=(parts[0]||'')[0]||'';
+    if(parts.length>1) s+=(parts[1]||'')[0]||'';
+    return s.toUpperCase();
+  }
+
+  function clientById(id){ for(var i=0;i<DATA.clients.length;i++){ if(DATA.clients[i].id===id) return DATA.clients[i]; } return null; }
+
+  function fromClient(dir){ return String(dir||'').toLowerCase().indexOf('client')===0; } // 'client_to_ceo' -> entrant
+
+  // recalcule par client : demandes en attente + messages clients non lus
+  function recomputeCounts(){
+    for(var i=0;i<DATA.clients.length;i++){
+      var c=DATA.clients[i], nd=0, nm=0, j;
+      for(j=0;j<DATA.modifications.length;j++){
+        if(DATA.modifications[j].client_id===c.id && statutClass(DATA.modifications[j].statut)==='en_attente') nd++;
+      }
+      for(j=0;j<DATA.notifications.length;j++){
+        var n=DATA.notifications[j];
+        if(n.client_id===c.id && fromClient(n.direction) && !n.lu) nm++;
+      }
+      c.demandes_attente=nd; c.messages_non_lus=nm;
+    }
+  }
+
+  function renderKpis(rows){
+    var nClients=rows.length;
+    var nDem=rows.reduce(function(a,c){ return a+(c.demandes_attente||0); },0);
+    var nMsg=rows.reduce(function(a,c){ return a+(c.messages_non_lus||0); },0);
+    g('kpis').innerHTML =
+      '<div class="kpi"><div class="kv">'+nClients+'</div><div class="kl">Clients actifs</div></div>'+
+      '<div class="kpi"><div class="kv" style="color:#e8a33d">'+nDem+'</div><div class="kl">Demandes en attente</div></div>'+
+      '<div class="kpi"><div class="kv" style="color:var(--gl)">'+nMsg+'</div><div class="kl">Messages non lus</div></div>';
+    var nb=g('nav-clients-n'); if(nb){ nb.textContent=nClients; nb.style.display = nClients?'':'none'; }
+    var nbd=g('nav-demandes-n'); if(nbd){ nbd.textContent=nDem; nbd.style.display = nDem?'':'none'; }
+    var nbm=g('nav-messagerie-n'); if(nbm){ nbm.textContent=nMsg; nbm.style.display = nMsg?'':'none'; }
+  }
+
+  function clientCard(c){
+    var pal='';
+    if(c.palette && c.palette.p){
+      pal='<div class="cc-swatches"><i style="background:'+esc(c.palette.bg||'#141019')+'"></i><i style="background:'+esc(c.palette.p)+'"></i><i style="background:'+esc(c.palette.s||c.palette.p)+'"></i></div>';
+    } else {
+      pal='<span class="cc-pal-none">Palette à valider</span>';
+    }
+    var pend=c.demandes_attente||0;
+    var pendHtml = pend>0
+      ? '<span class="cc-pend">'+pend+' demande'+(pend>1?'s':'')+'</span>'
+      : '<span class="cc-pend zero">À jour</span>';
+    var meta='';
+    if(c.pack) meta+='<span class="tag pack">'+esc(c.pack)+'</span>';
+    if(c.ville) meta+='<span class="tag">'+esc(c.ville)+'</span>';
+    if(c.slug) meta+='<span class="tag">/'+esc(c.slug)+'</span>';
+    return '<div class="client-card" data-id="'+esc(c.id)+'" onclick="openClient(\''+esc(c.id)+'\')">'+
+      '<div class="cc-top"><div class="cc-ava">'+esc(initials(c))+'</div>'+
+      '<div class="cc-id"><b>'+esc(c.commerce||'Sans nom')+'</b><span>'+esc(c.prenom||'')+'</span></div></div>'+
+      '<div class="cc-meta">'+meta+'</div>'+
+      '<div class="cc-foot">'+pal+pendHtml+'</div></div>';
+  }
+
+  async function loadClients(){
+    var grid=g('clients-grid');
+    grid.innerHTML='<p class="empty">Chargement…</p>';
+    var res = await api('/admin/clients', {});
+    if(!res.ok){ grid.innerHTML='<p class="empty">Impossible de charger les clients : '+esc(res.error||'')+'</p>'; return; }
+    var rows = res.data || [];
+    DATA.clients = rows;
+    recomputeCounts();
+    renderKpis(rows);
+    if(!rows.length){ grid.innerHTML='<p class="empty">Aucun client pour l\'instant.</p>'; return; }
+    grid.innerHTML = rows.map(clientCard).join('');
+  }
+
+  // detail client — etape ulterieure
+  window.openClient = function(id){
+    /* 2c : ouvrira le detail (messages) du client */
+  };
+
+  // ===== ONGLET DEMANDES =====
+  function statutLabel(s){ return s==='termine' ? 'Terminé' : (s==='en_cours' ? 'En cours' : 'En attente'); }
+  function statutClass(s){ return (s==='termine'||s==='en_cours') ? s : 'en_attente'; }
+  function fmtDate(iso){ try{ return new Date(iso).toLocaleDateString('fr-FR',{ day:'numeric', month:'short' }); }catch(e){ return ''; } }
+
+  var DEM_FILTER = 'toutes';
+  window.demFilter = function(f){ DEM_FILTER = f; renderDemandes(); };
+
+  async function loadModifications(){
+    var res = await api('/admin/modifications', {});
+    DATA.modifications = res.ok ? (res.data || []) : [];
+  }
+
+  function demItem(m){
+    var c = clientById(m.client_id);
+    var commerce = c ? (c.commerce || 'Client') : 'Client';
+    var ava = c ? initials(c) : '?';
+    var prenom = c ? (c.prenom || '') : '';
+    var seg = ['en_attente','en_cours','termine'].map(function(s){
+      return '<button type="button" class="'+s+(statutClass(m.statut)===s?' on':'')+'" onclick="setStatut(\''+esc(m.id)+'\',\''+s+'\')">'+statutLabel(s)+'</button>';
+    }).join('');
+    return '<div class="dem-item">'+
+      '<div class="dem-head"><div class="dem-ava">'+esc(ava)+'</div>'+
+      '<div class="dem-who"><b>'+esc(commerce)+'</b><span>'+esc(prenom)+'</span></div>'+
+      '<span class="dem-date">'+esc(fmtDate(m.created_at))+'</span></div>'+
+      '<div class="dem-sujet">'+esc(m.sujet||'Demande')+'</div>'+
+      '<p class="dem-msg">'+esc(m.message_client||'')+'</p>'+
+      '<div class="dem-foot"><span class="lbl">Statut :</span><div class="seg">'+seg+'</div></div>'+
+    '</div>';
+  }
+
+  function renderDemandes(){
+    var mods = DATA.modifications.slice();
+    mods.sort(function(a,b){ return String(b.created_at||'').localeCompare(String(a.created_at||'')); });
+    var counts = { toutes:mods.length, en_attente:0, en_cours:0, termine:0 };
+    mods.forEach(function(m){ counts[statutClass(m.statut)]++; });
+    var defs = [['toutes','Toutes'],['en_attente','En attente'],['en_cours','En cours'],['termine','Terminées']];
+    var fb = g('dem-filters');
+    if(fb) fb.innerHTML = defs.map(function(d){
+      return '<button type="button" class="fbtn'+(DEM_FILTER===d[0]?' on':'')+'" onclick="demFilter(\''+d[0]+'\')">'+d[1]+'<span class="c">'+counts[d[0]]+'</span></button>';
+    }).join('');
+    var list = g('demandes-list'); if(!list) return;
+    var shown = mods.filter(function(m){ return DEM_FILTER==='toutes' || statutClass(m.statut)===DEM_FILTER; });
+    if(!shown.length){ list.innerHTML='<p class="empty">Aucune demande dans cette catégorie.</p>'; return; }
+    list.innerHTML = shown.map(demItem).join('');
+  }
+
+  window.setStatut = async function(id, statut){
+    var res = await api('/admin/update-modification', { id:id, statut:statut });
+    if(!res.ok) return;
+    for(var i=0;i<DATA.modifications.length;i++){ if(DATA.modifications[i].id===id){ DATA.modifications[i].statut=statut; break; } }
+    recomputeCounts();
+    renderDemandes();
+    renderKpis(DATA.clients);
+    var grid=g('clients-grid'); if(grid && DATA.clients.length){ grid.innerHTML=DATA.clients.map(clientCard).join(''); }
+  };
+
+  // ===== ONGLET MESSAGERIE =====
+  var MSG_ACTIVE = null;
+
+  async function loadNotifications(){
+    var res = await api('/admin/notifications', {});
+    DATA.notifications = res.ok ? (res.data || []) : [];
+  }
+
+  function msgsFor(cid){
+    var arr = DATA.notifications.filter(function(n){ return n.client_id===cid; });
+    arr.sort(function(a,b){ return String(a.created_at||'').localeCompare(String(b.created_at||'')); });
+    return arr;
+  }
+  function lastMsgFor(cid){ var a=msgsFor(cid); return a.length ? a[a.length-1] : null; }
+  function clientUnread(cid){ return DATA.notifications.filter(function(n){ return n.client_id===cid && fromClient(n.direction) && !n.lu; }).length; }
+  function fmtTime(iso){ try{ var d=new Date(iso); return d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'})+' · '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } }
+
+  function renderConvList(){
+    var box=g('conv-list'); if(!box) return;
+    var convs=DATA.clients.map(function(c){ return { c:c, last:lastMsgFor(c.id), unread:clientUnread(c.id) }; });
+    convs.sort(function(a,b){ var ta=a.last?String(a.last.created_at||''):''; var tb=b.last?String(b.last.created_at||''):''; return tb.localeCompare(ta); });
+    if(!convs.length){ box.innerHTML='<p class="empty">Aucun client.</p>'; return; }
+    box.innerHTML=convs.map(function(o){
+      var prev=o.last?(o.last.contenu||''):'Pas encore de message';
+      var dot=o.unread?'<span class="cv-dot"></span>':'';
+      return '<div class="conv'+(MSG_ACTIVE===o.c.id?' on':'')+'" onclick="selectConv(\''+esc(o.c.id)+'\')">'+
+        '<div class="cv-ava">'+esc(initials(o.c))+'</div>'+
+        '<div class="cv-main"><b>'+esc(o.c.commerce||'Client')+'</b><p>'+esc(prev)+'</p></div>'+dot+'</div>';
+    }).join('');
+  }
+
+  function renderThread(){
+    var head=g('thread-head'), thread=g('thread'), ta=g('msg-input'), btn=g('msg-send'), fb=g('msg-feedback');
+    if(fb) fb.textContent='';
+    if(!MSG_ACTIVE){
+      if(head) head.textContent='Sélectionnez une conversation';
+      if(thread) thread.innerHTML='<p class="thread-empty">Choisissez un client à gauche pour voir le fil.</p>';
+      if(ta) ta.disabled=true; if(btn) btn.disabled=true;
+      return;
+    }
+    var c=clientById(MSG_ACTIVE);
+    if(head) head.textContent = c ? (c.commerce||'Client') : 'Client';
+    var arr=msgsFor(MSG_ACTIVE);
+    if(thread){
+      if(!arr.length){ thread.innerHTML='<p class="thread-empty">Aucun message. Écrivez le premier ci-dessous.</p>'; }
+      else thread.innerHTML=arr.map(function(n){
+        var inc=fromClient(n.direction);
+        var who=inc ? (c?(c.prenom||'Client'):'Client') : 'DWT';
+        return '<div class="mb '+(inc?'mb-in':'mb-out')+'"><div class="who">'+esc(who)+'</div><p>'+esc(n.contenu||'')+'</p><span class="t">'+esc(fmtTime(n.created_at))+'</span></div>';
+      }).join('');
+      thread.scrollTop=thread.scrollHeight;
+    }
+    if(ta) ta.disabled=false; if(btn) btn.disabled=false;
+  }
+
+  function renderMessagerie(){
+    if(!MSG_ACTIVE){
+      var withMsg=DATA.clients.filter(function(c){ return lastMsgFor(c.id); });
+      withMsg.sort(function(a,b){ return String(lastMsgFor(b.id).created_at||'').localeCompare(String(lastMsgFor(a.id).created_at||'')); });
+      if(withMsg.length) MSG_ACTIVE=withMsg[0].id;
+    }
+    renderConvList();
+    renderThread();
+  }
+
+  window.selectConv=function(cid){
+    MSG_ACTIVE=cid;
+    // marque les messages entrants comme lus (visuel ; persistance reelle a brancher cote Worker)
+    DATA.notifications.forEach(function(n){ if(n.client_id===cid && fromClient(n.direction)) n.lu=true; });
+    recomputeCounts();
+    renderKpis(DATA.clients);
+    var grid=g('clients-grid'); if(grid && DATA.clients.length){ grid.innerHTML=DATA.clients.map(clientCard).join(''); }
+    renderConvList();
+    renderThread();
+  };
+
+  window.sendMessage=async function(){
+    var ta=g('msg-input'), fb=g('msg-feedback'), btn=g('msg-send');
+    if(!MSG_ACTIVE) return;
+    var txt=ta.value.trim();
+    if(!txt){ if(fb){ fb.style.color='#ff8b8b'; fb.textContent='Écrivez un message.'; } return; }
+    btn.disabled=true;
+    var res=await api('/admin/send-message',{ client_id:MSG_ACTIVE, contenu:txt });
+    if(!res.ok){ if(fb){ fb.style.color='#ff8b8b'; fb.textContent='Erreur : '+esc(res.error||''); } btn.disabled=false; return; }
+    var now=''; try{ now=new Date().toISOString(); }catch(e){}
+    DATA.notifications.push({ id:'tmp-'+(DATA.notifications.length+1), client_id:MSG_ACTIVE, contenu:txt, direction:'ceo_to_client', lu:true, created_at:now });
+    ta.value=''; btn.disabled=false;
+    renderConvList();
+    renderThread();
+    if(fb){ fb.style.color='var(--gl)'; fb.textContent=(MODE==='demo'?'Réponse ajoutée (démo)':'Réponse envoyée ✓'); }
+  };
+
+  // ===== ONGLET NOUVEAU CLIENT =====
+  var NC_SLUG_TOUCHED = false;
+  function ncVal(id){ var e=g(id); return e ? e.value.trim() : ''; }
+  function genPwd(){ var ch='abcdefghijkmnpqrstuvwxyz23456789', s=''; for(var i=0;i<10;i++){ s+=ch.charAt(Math.floor(Math.random()*ch.length)); } return s; }
+  function ncSlugify(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+
+  window.ncSlugEdit = function(){ NC_SLUG_TOUCHED = true; ncPreview(); };
+  window.ncCommerce = function(){
+    if(!NC_SLUG_TOUCHED){ var s=g('nc-slug'); if(s) s.value=ncSlugify(ncVal('nc-commerce')); }
+    ncPreview();
+  };
+  window.ncPreview = function(){
+    var pre=ncVal('nc-prenom'), nom=ncVal('nc-nom'), com=ncVal('nc-commerce'), pack=ncVal('nc-pack'), ville=ncVal('nc-ville');
+    var av=g('nc-av'); if(av) av.textContent = (com||pre) ? initials({ commerce:com, prenom:pre }) : '—';
+    var fc=g('nc-f-com'); if(fc) fc.textContent = com || 'Nouveau client';
+    var fp=g('nc-f-pre'); if(fp) fp.textContent = (pre+' '+nom).trim() || '—';
+    var meta=g('nc-f-meta'); if(meta){ var h=''; if(pack) h+='<span class="tag pack">'+esc(pack)+'</span>'; if(ville) h+='<span class="tag">'+esc(ville)+'</span>'; meta.innerHTML=h; }
+  };
+
+  function ncShowCreds(d){
+    var sub=g('nc-side-sub'); if(sub) sub.textContent='Compte créé — transmettez les identifiants au client.';
+    var fiche=g('nc-fiche'); if(fiche) fiche.style.display='none';
+    var fmeta=g('nc-f-meta'); if(fmeta) fmeta.style.display='none';
+    var box=g('nc-creds'); if(!box) return;
+    box.style.display='block';
+    box.innerHTML=
+      '<div class="nc-success"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg><span>Client créé'+(MODE==='demo'?' (démo)':'')+'.</span></div>'+
+      '<div class="nc-cred">'+
+        '<div class="nc-cred-row"><span class="lbl">Email</span><code id="cred-email">'+esc(d.email||'')+'</code><button type="button" class="nc-copy" onclick="ncCopy(\'cred-email\')">Copier</button></div>'+
+        '<div class="nc-cred-row"><span class="lbl">Mot de passe</span><code id="cred-pwd">'+esc(d.temp_password||'')+'</code><button type="button" class="nc-copy" onclick="ncCopy(\'cred-pwd\')">Copier</button></div>'+
+      '</div>'+
+      '<p class="nc-cred-note">Le client se connecte sur la page <b>Espace client</b> avec ces identifiants. Invitez-le à changer son mot de passe.</p>'+
+      '<button type="button" class="nc-again" onclick="ncReset()">Créer un autre client</button>';
+  }
+
+  window.ncCopy = function(id){
+    var el=g(id); if(!el) return;
+    try{ navigator.clipboard.writeText(el.textContent); }catch(e){}
+    var btn=el.parentNode.querySelector('.nc-copy');
+    if(btn){ var o=btn.textContent; btn.textContent='Copié ✓'; setTimeout(function(){ btn.textContent=o; },1200); }
+  };
+
+  window.ncReset = function(){
+    ['nc-prenom','nc-nom','nc-email','nc-siret','nc-commerce','nc-slug','nc-secteur','nc-ville'].forEach(function(id){ var e=g(id); if(e) e.value=''; });
+    var pk=g('nc-pack'); if(pk) pk.value='';
+    NC_SLUG_TOUCHED=false; window.ncClearConvert();
+    var box=g('nc-creds'); if(box){ box.style.display='none'; box.innerHTML=''; }
+    var fiche=g('nc-fiche'); if(fiche) fiche.style.display='flex';
+    var fmeta=g('nc-f-meta'); if(fmeta) fmeta.style.display='flex';
+    var sub=g('nc-side-sub'); if(sub) sub.textContent='Aperçu de ce qui sera créé.';
+    var msg=g('nc-msg'); if(msg) msg.textContent='';
+    ncPreview();
+  };
+
+  window.createClient = async function(){
+    var msg=g('nc-msg'); msg.style.color='#ff8b8b';
+    var prenom=ncVal('nc-prenom'), nom=ncVal('nc-nom'), email=ncVal('nc-email'), commerce=ncVal('nc-commerce');
+    var siret=ncVal('nc-siret').replace(/\s+/g,'');
+    if(!prenom || !nom || !email || !commerce){ msg.textContent='Prénom, nom, email et commerce sont requis.'; return; }
+    if(!/.+@.+\..+/.test(email)){ msg.textContent='Email invalide.'; return; }
+    if(!/^\d{14}$/.test(siret)){ msg.textContent='SIRET invalide : 14 chiffres attendus.'; return; }
+    var payload={ prenom:prenom, nom:nom, email:email, commerce:commerce, siret:siret, slug:(ncVal('nc-slug')||ncSlugify(commerce)), secteur:ncVal('nc-secteur'), ville:ncVal('nc-ville'), pack:ncVal('nc-pack'), devis_id:(CONVERT_DEVIS||null) };
+    var btn=g('nc-btn'); btn.disabled=true; var old=btn.textContent; btn.textContent='Création…';
+    msg.style.color='var(--gl)'; msg.textContent='';
+    var res=await api('/create-client', payload);
+    btn.disabled=false; btn.textContent=old;
+    if(!res.ok || !res.data){ msg.style.color='#ff8b8b'; msg.textContent='Erreur : '+esc((res && res.error) || 'création impossible'); return; }
+    if(MODE==='live'){ await loadModifications(); await loadNotifications(); await loadClients(); await loadDevis(); }
+    else { recomputeCounts(); renderKpis(DATA.clients); var grid=g('clients-grid'); if(grid) grid.innerHTML=DATA.clients.map(clientCard).join(''); }
+    renderConvList();
+    renderDevis();
+    window.ncClearConvert();
+    ncShowCreds(res.data);
+  };
+
+  // ===== ONGLET DEVIS =====
+  var PACK_PRIX = { 'Social Only':300, 'Social Pro':497, 'Essential':650, 'Premium':950, 'Sur Mesure':0 };
+  var DV_LINES = [];
+  function eur(n){ var v=Number(n)||0; return v.toLocaleString('fr-FR',{ minimumFractionDigits:0, maximumFractionDigits:2 })+' €'; }
+  function dStatutLabel(s){ return s==='envoye'?'Envoyé':(s==='accepte'?'Accepté':(s==='refuse'?'Refusé':'Brouillon')); }
+  function dStatutClass(s){ return (s==='envoye'||s==='accepte'||s==='refuse')?s:'brouillon'; }
+
+  async function loadDevis(){ var r=await api('/admin/devis', {}); DATA.devis = r.ok ? (r.data || []) : []; }
+
+  function dvTotalsCompute(){
+    var m=0, o=0;
+    DV_LINES.forEach(function(l){ var t=(Number(l.qty)||0)*(Number(l.pu)||0); if(l.type==='one-shot') o+=t; else m+=t; });
+    return { m:m, o:o };
+  }
+  function dvTotals(){
+    var t=dvTotalsCompute(), el=g('dv-totals'); if(!el) return;
+    el.innerHTML='<div class="tt"><span>Mensuel</span><b>'+eur(t.m)+(t.m?'<span style="font-size:.7rem;font-weight:500;color:var(--mut)"> /mois</span>':'')+'</b></div>'+
+      '<div class="tt"><span>Une seule fois</span><b>'+eur(t.o)+'</b></div>';
+  }
+  function dvRenderLines(){
+    var box=g('dv-lines'); if(!box) return;
+    box.innerHTML=DV_LINES.map(function(l,i){
+      return '<div class="dv-line">'+
+        '<input class="dv-l-f" data-i="'+i+'" data-k="label" value="'+esc(l.label||'')+'" placeholder="Prestation" oninput="dvEdit(this)">'+
+        '<select class="dv-l-f" data-i="'+i+'" data-k="type" onchange="dvEdit(this)"><option value="mensuel"'+(l.type!=='one-shot'?' selected':'')+'>/ mois</option><option value="one-shot"'+(l.type==='one-shot'?' selected':'')+'>une fois</option></select>'+
+        '<input class="dv-l-f" data-i="'+i+'" data-k="qty" type="number" min="1" value="'+esc(l.qty||1)+'" oninput="dvEdit(this)">'+
+        '<input class="dv-l-f" data-i="'+i+'" data-k="pu" type="number" min="0" step="any" value="'+esc(l.pu||0)+'" oninput="dvEdit(this)">'+
+        '<button type="button" class="dv-l-del" onclick="dvDelLine('+i+')" title="Retirer">×</button>'+
+      '</div>';
+    }).join('');
+  }
+  window.dvEdit=function(elm){
+    var i=+elm.getAttribute('data-i'), k=elm.getAttribute('data-k'); if(!DV_LINES[i]) return;
+    DV_LINES[i][k] = (k==='qty'||k==='pu') ? Number(elm.value) : elm.value;
+    if(k!=='label') DV_LINES[i].pack=false; // édité à la main -> n'est plus la ligne pack auto
+    dvTotals();
+  };
+  window.dvAddLine=function(){ DV_LINES.push({ label:'', type:'mensuel', qty:1, pu:0 }); dvRenderLines(); dvTotals(); };
+  window.dvDelLine=function(i){ DV_LINES.splice(i,1); dvRenderLines(); dvTotals(); };
+  window.dvPack=function(){
+    var pk=g('dv-pack').value;
+    DV_LINES=DV_LINES.filter(function(l){ return !l.pack; });
+    if(pk){ DV_LINES.unshift({ label:'Pack '+pk, type:'mensuel', qty:1, pu:(PACK_PRIX[pk]||0), pack:true }); }
+    dvRenderLines(); dvTotals();
+  };
+  function dvInitForm(){ DV_LINES=[]; dvRenderLines(); dvTotals(); }
+
+  function renderDevis(){
+    var list=g('dv-list'); if(!list) return;
+    var rows=DATA.devis.slice().sort(function(a,b){ return String(b.numero||'').localeCompare(String(a.numero||'')); });
+    if(!rows.length){ list.innerHTML='<p class="empty">Aucun devis pour l\'instant.</p>'; return; }
+    list.innerHTML=rows.map(function(d){
+      var who=d.prospect_commerce||d.prospect_nom||'Prospect';
+      var sub=(d.prospect_commerce&&d.prospect_nom?d.prospect_nom:'')+(d.prospect_tel?(d.prospect_commerce&&d.prospect_nom?' · ':'')+d.prospect_tel:'');
+      var tot=(d.total_mensuel?eur(d.total_mensuel)+' /mois':'')+((d.total_mensuel&&d.total_oneshot)?' + ':'')+(d.total_oneshot?eur(d.total_oneshot):'');
+      var st=dStatutClass(d.statut);
+      var rightAction = d.client_id
+        ? '<span class="dv-converted">✓ Client créé</span>'
+        : '<button type="button" class="dv-conv" onclick="dvConvert(\''+esc(d.id)+'\')">Convertir</button>';
+      return '<div class="dv-item"><div class="di-top"><span class="di-num">'+esc(d.numero||'')+'</span><span class="dstatut '+st+'">'+dStatutLabel(d.statut)+'</span></div>'+
+        '<div class="di-name">'+esc(who)+'</div>'+
+        '<p class="di-sub">'+esc(sub)+'</p>'+
+        '<div class="di-foot"><span class="di-tot">'+(tot||'—')+'</span><div class="di-actions"><button type="button" class="dv-open" onclick="dvOpen(\''+esc(d.id)+'\')">Voir</button>'+rightAction+'</div></div></div>';
+    }).join('');
+  }
+
+  var CONVERT_DEVIS = null;
+  window.dvConvert = function(id){
+    var d=null; for(var i=0;i<DATA.devis.length;i++){ if(DATA.devis[i].id===id){ d=DATA.devis[i]; break; } }
+    if(!d) return;
+    CONVERT_DEVIS = id;
+    var nav=document.querySelector('.snav-item[data-tab="nouveau"]');
+    window.switchTab('nouveau', nav);
+    var packs=['Social Only','Social Pro','Essential','Premium','Sur Mesure'];
+    var nmParts=String(d.prospect_nom||'').trim().split(/\s+/).filter(Boolean);
+    g('nc-prenom').value=nmParts.shift()||'';
+    g('nc-nom').value=nmParts.join(' ');
+    g('nc-siret').value='';
+    g('nc-commerce').value=d.prospect_commerce||'';
+    g('nc-email').value=d.prospect_email||'';
+    g('nc-pack').value=(d.pack && packs.indexOf(d.pack)>=0)?d.pack:'';
+    NC_SLUG_TOUCHED=false; g('nc-slug').value=ncSlugify(d.prospect_commerce||'');
+    var svc=(d.lignes||[]).map(function(l){ return l.label; }).filter(Boolean);
+    var bn=g('nc-from-devis');
+    if(bn){ bn.style.display='flex'; bn.innerHTML='<div><b>Depuis le devis '+esc(d.numero||'')+'</b><span>'+esc(svc.join(' · ')||'—')+'</span></div><button type="button" onclick="ncClearConvert()" title="Annuler">×</button>'; }
+    var box=g('nc-creds'); if(box){ box.style.display='none'; box.innerHTML=''; }
+    var fiche=g('nc-fiche'); if(fiche) fiche.style.display='flex';
+    var fmeta=g('nc-f-meta'); if(fmeta) fmeta.style.display='flex';
+    var sub2=g('nc-side-sub'); if(sub2) sub2.textContent='Aperçu de ce qui sera créé.';
+    ncPreview();
+  };
+  window.ncClearConvert = function(){ CONVERT_DEVIS=null; var bn=g('nc-from-devis'); if(bn){ bn.style.display='none'; bn.innerHTML=''; } };
+
+  window.dvOpen=function(id){
+    var d=null; for(var i=0;i<DATA.devis.length;i++){ if(DATA.devis[i].id===id){ d=DATA.devis[i]; break; } }
+    if(MODE==='demo' && d){ try{ localStorage.setItem('dwt_devis_'+id, JSON.stringify(d)); }catch(e){} }
+    window.open('devis.html?id='+encodeURIComponent(id)+(MODE==='demo'?'&demo=1':''), '_blank');
+  };
+
+  window.createDevis=async function(){
+    var msg=g('dv-msg'); msg.style.color='#ff8b8b';
+    var nom=g('dv-nom').value.trim(), com=g('dv-commerce').value.trim();
+    if(!nom && !com){ msg.textContent='Indiquez au moins le nom ou le commerce du prospect.'; return; }
+    if(!DV_LINES.length){ msg.textContent='Ajoutez au moins une ligne (ou choisissez un pack).'; return; }
+    var t=dvTotalsCompute();
+    var now=''; try{ now=new Date().toISOString(); }catch(e){}
+    var payload={
+      prospect_nom:nom, prospect_commerce:com, prospect_email:g('dv-email').value.trim(), prospect_tel:g('dv-tel').value.trim(),
+      pack:g('dv-pack').value,
+      lignes:DV_LINES.map(function(l){ return { label:l.label, type:l.type, qty:Number(l.qty)||0, prix_unitaire:Number(l.pu)||0 }; }),
+      total_mensuel:t.m, total_oneshot:t.o, notes:g('dv-notes').value.trim(), created_at:now
+    };
+    var btn=g('dv-btn'); btn.disabled=true; var old=btn.textContent; btn.textContent='Enregistrement…';
+    var res=await api('/create-devis', payload);
+    btn.disabled=false; btn.textContent=old;
+    if(!res.ok || !res.data){ msg.style.color='#ff8b8b'; msg.textContent='Erreur : '+esc((res && res.error) || 'devis non créé'); return; }
+    if(MODE==='live'){ await loadDevis(); }
+    renderDevis();
+    msg.style.color='var(--gl)'; msg.textContent='Devis '+res.data.numero+' enregistré'+(MODE==='demo'?' (démo)':'')+'. Ouvre-le via « Voir » → page partageable / PDF.';
+    ['dv-nom','dv-commerce','dv-email','dv-tel','dv-notes'].forEach(function(id){ var e=g(id); if(e) e.value=''; });
+    var pk=g('dv-pack'); if(pk) pk.value='';
+    dvInitForm();
+  };
+
+  // ===== BOOT =====
+  async function bootstrap(){
+    var pass=g('login-pass');
+    if(pass) pass.addEventListener('keydown', function(e){ if(e.key==='Enter') window.dwtLogin(); });
+    if(!sb){ var ee=g('login-err'); if(ee) ee.textContent='Connexion indisponible (réseau ou bloqueur ?). Rechargez la page.'; }
+    // auto-login si session admin existante + Worker dispo
+    try{
+      if(sb && WORKER_BASE){
+        var s=await sb.auth.getSession();
+        if(s && s.data && s.data.session){
+          JWT=s.data.session.access_token;
+          ADMIN_EMAIL=(s.data.session.user && s.data.session.user.email) || '';
+          var chk=await api('/admin-check', {});
+          if(chk.ok && chk.data && chk.data.admin){ MODE='live'; await openApp(); }
+        }
+      }
+    }catch(e){}
+  }
+
+  if (document.readyState !== 'loading') bootstrap();
+  else document.addEventListener('DOMContentLoaded', bootstrap);
+})();
+</script>
+</body></html>

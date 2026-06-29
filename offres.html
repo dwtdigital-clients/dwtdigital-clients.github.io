@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Offres et tarifs — DWT Digital, marketing IA sans engagement</title>
+<meta name="description" content="Nos offres en toute transparence — des packs sans engagement ou 12 prestations à la carte dès 60&#160;€/mois, pour les commerces et TPE/PME d'Île-de-France. Audit de visibilité offert.">
+<meta name="author" content="DWT Digital">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#0a0014">
+<link rel="canonical" href="https://dwtdigital.fr/offres.html">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DWT Digital">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:url" content="https://dwtdigital.fr/offres.html">
+<meta property="og:title" content="Des offres claires, sans frais cachés ni engagement">
+<meta property="og:description" content="Composez votre formule — packs ou prestations à la carte, prix affichés. Pour les commerces et TPE/PME d'Île-de-France.">
+<meta property="og:image" content="https://dwtdigital.fr/assets/logo3d-glass-web.jpg">
+<meta property="og:image:width" content="760">
+<meta property="og:image:height" content="760">
+<meta property="og:image:alt" content="Logo DWT Digital taillé dans le verre violet">
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Des offres claires, sans frais cachés ni engagement">
+<meta name="twitter:description" content="Composez votre formule — packs ou prestations à la carte, prix affichés. Pour les commerces et TPE/PME d'Île-de-France.">
+<meta name="twitter:image" content="https://dwtdigital.fr/assets/logo3d-glass-web.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════════════════════════════
+   DWT DIGITAL — PAGE OFFRES v2  (fusion narratif + modules v1)
+   1. Hero narratif « Avant les prix, la raison. » (zone nuit)
+   2. « Pourquoi des packs ? » — 3 cartes glass (zone nuit)
+   3. Packs détaillés (fiches riches v1) + VISUEL CARRÉ ANIMÉ par pack
+   4. Tableau comparatif 15 lignes (v1)
+   5. Composez à la carte : composeur live + comparateur + PILLS de filtres
+   6. FAQ transparence (v1)
+   7. CTA final — audit de visibilité offert
+   Fond continu sombre→clair ancré en JS (paintBg). Design system : dwt-home-v7.
+   ════════════════════════════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --v:#7B1FA2; --vd:#4F0F5C; --vdd:#2D0636;
+  --g:#63AF21; --gl:#7BC93A;
+  --ink:#F6F1FA; --ink-d:#2D0636;
+  --mut:rgba(246,241,250,.66); --mut-d:#6a5d77;
+  --border:rgba(255,255,255,.15); --border-d:rgba(79,15,92,.14);
+  --disp:'Syne',sans-serif; --body:'Poppins',sans-serif;
+  --max:1180px;
+}
+/* overflow-x:CLIP (jamais hidden → casse position:sticky des panneaux) */
+html{scroll-behavior:smooth;overflow-x:clip;}
+body{position:relative;background:#0a0016;color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;overflow-x:clip;line-height:1.62;}
+@supports not (overflow-x:clip){html,body{overflow-x:hidden;}}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;}
+
+/* ── FOND CONTINU sombre→clair (stops recalés en JS sur les sections) ── */
+.pagebg{position:absolute;inset:0;z-index:-3;pointer-events:none;
+  background:linear-gradient(180deg,#08000f 0%,#150424 26%,#1c0732 52%,#150424 76%,#0c0119 100%);}
+.scene{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;}
+.orb{position:absolute;border-radius:50%;filter:blur(120px);}
+.o1{width:820px;height:820px;top:-28%;left:-16%;background:radial-gradient(circle,rgba(79,15,92,.9),transparent 64%);animation:f1 18s ease-in-out infinite alternate;}
+.o2{width:640px;height:640px;top:2%;right:-14%;background:radial-gradient(circle,rgba(45,95,12,.6),transparent 64%);animation:f2 22s ease-in-out infinite alternate;}
+.o3{width:560px;height:560px;top:46%;left:30%;background:radial-gradient(circle,rgba(123,31,162,.5),transparent 64%);animation:f3 15s ease-in-out infinite alternate;}
+@keyframes f1{to{transform:translate(60px,40px) scale(1.08);}}
+@keyframes f2{to{transform:translate(-52px,62px) scale(.92);}}
+@keyframes f3{to{transform:translate(34px,-30px) scale(1.12);}}
+.vignette{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(130% 100% at 50% 36%,transparent 40%,rgba(7,0,13,.45) 92%);}
+.stars{position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background-image:radial-gradient(1.4px 1.4px at 20% 30%,rgba(255,255,255,.9),transparent),radial-gradient(1.2px 1.2px at 70% 22%,rgba(232,200,255,.8),transparent),radial-gradient(1.6px 1.6px at 42% 64%,rgba(255,255,255,.7),transparent),radial-gradient(1.1px 1.1px at 85% 70%,rgba(200,255,180,.6),transparent),radial-gradient(1.3px 1.3px at 12% 80%,rgba(255,255,255,.7),transparent),radial-gradient(1.2px 1.2px at 58% 42%,rgba(255,255,255,.6),transparent),radial-gradient(1.5px 1.5px at 90% 38%,rgba(232,200,255,.7),transparent),radial-gradient(1px 1px at 33% 12%,rgba(255,255,255,.6),transparent);
+  background-repeat:repeat;background-size:620px 620px;opacity:.5;animation:twinkle 7s ease-in-out infinite alternate;}
+@keyframes twinkle{from{opacity:.3;}to{opacity:.55;}}
+
+.prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--v),var(--g));z-index:70;width:0;transition:width .1s linear;}
+
+/* ── LIQUID GLASS (hérité v7, accentué) ── */
+.glass-d{background:rgba(255,255,255,.075);backdrop-filter:blur(26px) saturate(1.55);-webkit-backdrop-filter:blur(26px) saturate(1.55);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 8px 32px rgba(0,0,0,.32),0 32px 72px -34px rgba(0,0,0,.72),
+    inset 0 1px 0 rgba(255,255,255,.18),inset -1px 0 0 rgba(255,255,255,.07),inset 1px 0 0 rgba(255,255,255,.07);}
+.glass-l{background:rgba(255,255,255,.5);backdrop-filter:blur(26px) saturate(1.55);-webkit-backdrop-filter:blur(26px) saturate(1.55);
+  border:1px solid rgba(255,255,255,.85);
+  box-shadow:0 8px 32px rgba(79,15,92,.13),0 32px 72px -38px rgba(79,15,92,.5),
+    inset 0 1px 0 rgba(255,255,255,.98),inset -1px 0 0 rgba(255,255,255,.55),inset 1px 0 0 rgba(255,255,255,.55);}
+
+/* ── NAV (pilule liquid glass — bascule claire au scroll) ── */
+.nav{position:fixed;top:16px;left:0;right:0;z-index:60;display:flex;justify-content:center;padding:0 18px;}
+.nav-pill{display:flex;align-items:center;gap:8px;width:100%;max-width:var(--max);padding:9px 9px 9px 18px;border-radius:999px;
+  background:rgba(20,4,32,.5);backdrop-filter:blur(26px) saturate(1.6);-webkit-backdrop-filter:blur(26px) saturate(1.6);border:1px solid var(--border);
+  box-shadow:0 8px 32px -12px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08);transition:background .45s,border-color .45s;}
+.nav-pill.on-light{background:rgba(255,255,255,.62);border-color:rgba(79,15,92,.16);box-shadow:0 8px 32px -14px rgba(79,15,92,.35),inset 0 1px 0 rgba(255,255,255,.9);}
+.nav-logo{display:flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:800;font-size:.95rem;margin-right:6px;}
+.nav-logo img{height:27px;}
+.nav-logo span{background:linear-gradient(120deg,#d49bff,var(--gl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-pill.on-light .nav-logo span{background:linear-gradient(120deg,var(--v),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-tabs{display:flex;align-items:center;gap:2px;margin:0 auto;}
+.nav-tabs a{display:inline-flex;align-items:center;gap:5px;font-size:.85rem;font-weight:500;color:var(--mut);padding:8px 14px;border-radius:999px;transition:color .2s,background .2s;}
+.nav-pill.on-light .nav-tabs a{color:#5a4a68;}
+.nav-tabs a:hover{color:#fff;background:rgba(255,255,255,.07);}
+.nav-pill.on-light .nav-tabs a:hover{color:var(--vdd);background:rgba(79,15,92,.07);}
+.nav-tabs a.cur{color:#fff;background:rgba(255,255,255,.1);}
+.nav-pill.on-light .nav-tabs a.cur{color:var(--vdd);background:rgba(79,15,92,.09);font-weight:600;}
+.nav-cta{padding:9px 20px;border-radius:999px;background:linear-gradient(120deg,var(--v),var(--g));color:#fff;font-weight:600;font-size:.85rem;white-space:nowrap;transition:transform .18s,box-shadow .25s;}
+.nav-cta:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 14px 30px -10px rgba(123,31,162,.6),0 0 20px rgba(123,213,58,.3);}
+.nav-cta:active{transform:scale(.98);}
+@media(max-width:980px){.nav-tabs{display:none;}.nav-pill{justify-content:space-between;}}
+
+.wrap{max-width:var(--max);margin:0 auto;padding:0 28px;}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;border-radius:999px;cursor:pointer;border:none;font-family:var(--body);transition:transform .18s,box-shadow .25s,background .2s;text-decoration:none;}
+.btn-primary{background:linear-gradient(120deg,var(--v),var(--g));color:#fff;padding:15px 32px;font-size:.98rem;}
+.btn-primary:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 18px 44px -12px rgba(123,31,162,.65),0 0 24px rgba(123,213,58,.35);}
+.btn-primary:active{transform:scale(.98);}
+
+/* ════ 1. HERO NARRATIF — zone nuit ════ */
+#top{min-height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:130px 24px 40px;color:var(--ink);position:relative;}
+#top::before{content:"";position:absolute;left:50%;top:46%;width:min(1000px,100vw);height:min(720px,100vh);transform:translate(-50%,-50%);z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(196,150,235,.28) 0%,rgba(123,31,162,.14) 38%,transparent 68%);}
+.hero-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;background:rgba(123,31,162,.22);border:1px solid rgba(212,155,255,.4);border-radius:999px;padding:7px 17px;font-size:.76rem;font-weight:600;color:#e3bbff;margin-bottom:30px;
+  backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);box-shadow:0 8px 24px -10px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.22);}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gl);box-shadow:0 0 10px var(--g);animation:pulse 2.4s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.5);opacity:.55;}}
+#top h1{font-family:var(--disp);font-weight:800;font-size:clamp(2.5rem,5.6vw,4.4rem);line-height:1.04;color:#fff;text-shadow:0 3px 40px rgba(0,0,0,.45);max-width:15ch;margin-bottom:22px;}
+#top h1 .grad{background:linear-gradient(125deg,#d49bff 0%,#fff 40%,var(--gl) 82%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+#top .hero-sub{color:rgba(255,255,255,.85);max-width:560px;font-size:1.1rem;text-shadow:0 2px 24px rgba(0,0,0,.5);}
+.scrollcue{margin-top:54px;display:inline-flex;flex-direction:column;align-items:center;gap:9px;color:rgba(246,241,250,.45);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;}
+.mouse{width:22px;height:34px;border:2px solid rgba(246,241,250,.35);border-radius:12px;position:relative;}
+.mouse::after{content:"";position:absolute;left:50%;top:7px;width:4px;height:7px;border-radius:3px;background:rgba(246,241,250,.55);transform:translateX(-50%);animation:scrolld 1.8s ease-in-out infinite;}
+@keyframes scrolld{0%{opacity:0;transform:translate(-50%,0);}40%{opacity:1;}100%{opacity:0;transform:translate(-50%,12px);}}
+/* preuves chiffrées du hero : le marketing est un poste vital (sources cliquables) */
+.hero-proofs{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:34px;max-width:920px;}
+.hp{flex:1;min-width:215px;max-width:300px;display:flex;flex-direction:column;gap:5px;text-align:left;border-radius:16px;padding:15px 17px;
+  background:rgba(255,255,255,.07);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);
+  border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 18px 40px -24px rgba(0,0,0,.7);
+  transition:transform .25s,background .25s,border-color .25s;}
+.hp:hover{transform:translateY(-4px);background:rgba(255,255,255,.12);border-color:rgba(212,155,255,.4);}
+.hp-n{font-family:var(--disp);font-weight:800;font-size:1.5rem;line-height:1.1;background:linear-gradient(120deg,#d49bff,var(--gl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hp-t{font-size:.78rem;color:rgba(246,241,250,.8);line-height:1.45;}
+.hp-s{font-size:.64rem;color:rgba(246,241,250,.45);margin-top:auto;transition:color .2s;}
+.hp:hover .hp-s{color:#d49bff;}
+
+/* ── SECTIONS génériques ── */
+.section{padding:84px 0;position:relative;}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#d49bff;margin-bottom:12px;}
+.kicker::before{content:"";width:18px;height:1.5px;background:currentColor;}
+h2.sec-h{font-family:var(--disp);font-weight:800;font-size:clamp(1.9rem,3.6vw,2.7rem);line-height:1.12;color:#fff;}
+h2.sec-h .gr{background:linear-gradient(120deg,#d49bff,var(--gl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.sec-lead{color:var(--mut);max-width:600px;margin-top:14px;font-size:1.02rem;}
+
+/* ════ 2. POURQUOI DES PACKS ? — 3 cartes glass (zone nuit) ════ */
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:46px;}
+@media(max-width:820px){.why-grid{grid-template-columns:1fr;}}
+.why{position:relative;border-radius:20px;padding:30px;overflow:hidden;transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s;}
+.why::before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-32%;top:-44%;
+  background:radial-gradient(circle,rgba(123,31,162,.45),rgba(99,175,33,.18) 50%,transparent 68%);opacity:0;filter:blur(22px);transition:opacity .45s;}
+.why:hover{transform:translateY(-5px);}
+.why:hover::before{opacity:1;}
+.why .ic{position:relative;width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:16px;color:#e3bbff;
+  background:linear-gradient(145deg,rgba(123,31,162,.42),rgba(99,175,33,.26));box-shadow:inset 0 1px 0 rgba(255,255,255,.2);}
+.why .wn{position:relative;font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gl);margin-bottom:10px;}
+.why h3{position:relative;font-family:var(--disp);font-weight:800;font-size:1.22rem;line-height:1.28;color:#fff;margin-bottom:10px;}
+.why p{position:relative;color:var(--mut);font-size:.92rem;}
+
+/* ════ ZONE CLAIRE : couleurs de texte ════ */
+.lightzone{position:relative;}
+.lightzone .kicker{color:var(--v);}
+.lightzone h2.sec-h{color:var(--ink-d);}
+.lightzone h2.sec-h .gr{background:linear-gradient(120deg,var(--v),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.lightzone .sec-lead{color:var(--mut-d);}
+
+/* ════ 3. PACKS DÉTAILLÉS (fiches riches v1) + visuel animé ════ */
+.pd{display:grid;grid-template-columns:.85fr 1.15fr;gap:48px;align-items:start;padding:46px;border-radius:28px;margin-bottom:36px;}
+.pd>*{min-width:0;}/* autorise les colonnes à rétrécir → le texte passe à la ligne (cf. home .carte-grid) */
+.pd.rev{grid-template-columns:1.15fr .85fr;}
+.pd.rev .pd-side{order:2;}
+@media(max-width:880px){.pd,.pd.rev{grid-template-columns:1fr;gap:26px;padding:26px;}.pd.rev .pd-side{order:0;}.pd-name{font-size:1.45rem;}.pd-price .n{font-size:1.7rem;}}
+.pd-side{position:sticky;top:110px;}
+@media(max-width:880px){.pd-side{position:static;}}
+.pd-who{margin-top:18px;padding:18px;border-radius:16px;background:rgba(123,31,162,.06);border:1px solid rgba(123,31,162,.14);}
+.pd-who .t{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--v);margin-bottom:7px;}
+.pd-who p{font-size:.9rem;color:#4a3a58;}
+/* tête : nom à gauche, prix à droite */
+.pd-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:6px;}
+.pd-name{font-family:var(--disp);font-weight:800;font-size:1.7rem;line-height:1.2;color:var(--ink-d);}
+.pd-promise{font-size:.92rem;color:var(--v);font-weight:600;margin-top:3px;}
+.pd-price{text-align:right;flex-shrink:0;}
+.pd-price .n{font-family:var(--disp);font-weight:800;font-size:2.1rem;line-height:1.1;color:var(--ink-d);white-space:nowrap;}
+.pd-price .u{font-size:.72rem;color:var(--mut-d);}
+.pd-feats{list-style:none;display:flex;flex-direction:column;gap:13px;margin:20px 0 22px;}
+.pd-feats li{display:flex;gap:12px;align-items:flex-start;}
+.pd-feats .fi{width:26px;height:26px;border-radius:8px;flex-shrink:0;display:grid;place-items:center;background:rgba(99,175,33,.13);margin-top:2px;}
+.pd-feats b{display:block;font-size:.94rem;font-weight:600;color:var(--ink-d);line-height:1.4;}
+.pd-feats span{display:block;font-size:.84rem;color:var(--mut-d);line-height:1.55;margin-top:2px;}
+.pd-feats li.inh b{color:var(--v);}
+.pd-warn{display:flex;gap:13px;align-items:flex-start;padding:16px 18px;border-radius:15px;background:rgba(79,15,92,.05);border:1px solid rgba(123,31,162,.16);margin-bottom:22px;}
+.pd-warn svg{flex-shrink:0;margin-top:3px;}
+.pd-warn .t{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--v);margin-bottom:4px;}
+.pd-warn p{font-size:.86rem;color:#4a3a58;}
+.pd-ctas{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.pd-note{font-size:.74rem;color:var(--mut-d);}
+
+/* ── VISUEL CARRÉ ANIMÉ (remplace la photo) ── */
+.pd-anim{position:relative;height:210px;border-radius:18px;overflow:hidden;display:grid;place-items:center;
+  background:linear-gradient(135deg,rgba(79,15,92,.2),rgba(99,175,33,.13));
+  border:1px solid rgba(255,255,255,.6);box-shadow:0 24px 50px -28px rgba(79,15,92,.5),inset 0 1px 0 rgba(255,255,255,.75);}
+.pd-anim .pop{position:absolute;top:14px;right:14px;background:linear-gradient(120deg,var(--v),var(--g));color:#fff;font-size:.62rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 13px;border-radius:999px;z-index:5;}
+.pd-anim svg{stroke-linecap:round;stroke-linejoin:round;}
+/* visuel 1 — grille 3×3 de tuiles dégradées */
+.av-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;width:142px;height:142px;}
+.av-grid i{border-radius:10px;background:linear-gradient(135deg,var(--v),var(--gl));box-shadow:inset 0 1px 0 rgba(255,255,255,.3);animation:avtile 3.2s ease-in-out infinite;}
+.av-grid i:nth-child(1){animation-delay:0s}.av-grid i:nth-child(2){animation-delay:.25s}.av-grid i:nth-child(3){animation-delay:.5s}
+.av-grid i:nth-child(4){animation-delay:.75s}.av-grid i:nth-child(5){animation-delay:1s}.av-grid i:nth-child(6){animation-delay:1.25s}
+.av-grid i:nth-child(7){animation-delay:1.5s}.av-grid i:nth-child(8){animation-delay:1.75s}.av-grid i:nth-child(9){animation-delay:2s}
+@keyframes avtile{0%,100%{opacity:.34;transform:scale(.9);}50%{opacity:1;transform:scale(1);}}
+/* visuels 2 & 4 — satellites en orbite autour d'un centre */
+.av-orbit{position:relative;width:184px;height:184px;display:grid;place-items:center;}
+.av-orbit .core{position:relative;z-index:3;width:54px;height:54px;border-radius:16px;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(145deg,var(--v),var(--g));box-shadow:0 12px 28px -10px rgba(123,31,162,.6),inset 0 1px 0 rgba(255,255,255,.35);}
+.av-orbit .ring{position:absolute;inset:0;animation:avspin 17s linear infinite;}
+.av-orbit .ring.r2{animation-duration:24s;animation-direction:reverse;}
+.av-orbit .dash{position:absolute;border-radius:50%;border:1.5px dashed rgba(123,31,162,.3);}
+.av-orbit .dash.d1{inset:34px;}.av-orbit .dash.d2{inset:8px;}
+.av-orbit .sat{position:absolute;top:50%;left:50%;width:38px;height:38px;margin:-19px;border-radius:12px;display:grid;place-items:center;color:var(--v);
+  background:rgba(255,255,255,.92);box-shadow:0 10px 22px -10px rgba(79,15,92,.5),inset 0 1px 0 #fff;
+  transform:rotate(var(--a)) translateY(-70px) rotate(calc(-1 * var(--a)));}
+.av-orbit .sat .lab{display:inline-block;font-size:.6rem;font-weight:700;color:var(--v);animation:avspinrev 17s linear infinite;}
+.av-orbit .sat svg{animation:avspinrev 17s linear infinite;}
+.av-orbit .ring.r2 .sat svg{animation-duration:24s;animation-direction:normal;}
+@keyframes avspin{to{transform:rotate(360deg);}}
+@keyframes avspinrev{to{transform:rotate(-360deg);}}
+/* visuel 3 — bar chart 6 barres */
+.av-bars{display:flex;align-items:flex-end;gap:9px;height:130px;}
+.av-bars i{width:17px;border-radius:6px 6px 0 0;background:linear-gradient(to top,var(--vd),var(--gl));transform-origin:bottom;box-shadow:inset 0 1px 0 rgba(255,255,255,.25);animation:avbar 2.8s ease-in-out infinite;}
+.av-bars i:nth-child(1){height:38%;animation-delay:0s}.av-bars i:nth-child(2){height:60%;animation-delay:.2s}.av-bars i:nth-child(3){height:48%;animation-delay:.4s}
+.av-bars i:nth-child(4){height:78%;animation-delay:.6s}.av-bars i:nth-child(5){height:64%;animation-delay:.8s}.av-bars i:nth-child(6){height:92%;animation-delay:1s}
+@keyframes avbar{0%,100%{transform:scaleY(.78);opacity:.8;}50%{transform:scaleY(1);opacity:1;}}
+/* visuel 5 — sur mesure : blocs modulaires à composer */
+.av-comp{position:relative;display:grid;grid-template-columns:repeat(2,1fr);gap:11px;width:150px;height:150px;}
+.av-comp i{border-radius:12px;border:1.5px dashed rgba(123,31,162,.4);background:rgba(255,255,255,.4);animation:avcomp 3.4s ease-in-out infinite;}
+.av-comp i:nth-child(1){animation-delay:0s}.av-comp i:nth-child(2){animation-delay:.4s}.av-comp i:nth-child(3){animation-delay:.8s}.av-comp i:nth-child(4){animation-delay:1.2s}
+.av-comp .plus{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(145deg,var(--v),var(--g));box-shadow:0 12px 28px -10px rgba(123,31,162,.6),inset 0 1px 0 rgba(255,255,255,.35);}
+@keyframes avcomp{0%,100%{background:rgba(255,255,255,.32);transform:scale(.96);}50%{background:rgba(123,31,162,.16);transform:scale(1);}}
+
+/* ════ 3bis. PACKS — PARCOURS GUIDÉ (montée en gamme, scrollytelling sticky) ════ */
+#packs{padding-bottom:30px;}
+.scrolly{position:relative;height:320vh;}/* passage entre packs plus rapide (~½ écran/pack) */
+.scrolly-pin{position:sticky;top:76px;height:calc(100vh - 100px);max-width:var(--max);margin:0 auto;padding:6px 28px 0;display:flex;flex-direction:column;gap:16px;}
+/* rail "montée en gamme" */
+.gamme-rail{display:flex;align-items:center;flex-shrink:0;}
+.gamme-step{display:flex;align-items:center;gap:9px;background:none;border:none;cursor:pointer;font-family:var(--body);padding:0;flex-shrink:0;}
+.gamme-step .dot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-family:var(--disp);font-weight:800;font-size:.72rem;color:var(--mut-d);
+  background:rgba(255,255,255,.5);border:1px solid rgba(123,31,162,.18);box-shadow:inset 0 1px 0 #fff;transition:transform .4s,background .4s,color .4s,border-color .4s;}
+.gamme-step .lab{font-size:.82rem;font-weight:600;color:var(--mut-d);transition:color .3s;white-space:nowrap;}
+.gamme-step.done .dot{color:#fff;background:linear-gradient(145deg,var(--v),var(--g));border-color:transparent;}
+.gamme-step.on .dot{color:#fff;background:linear-gradient(145deg,var(--v),var(--g));border-color:transparent;transform:scale(1.14);box-shadow:0 10px 24px -8px rgba(123,31,162,.5);}
+.gamme-step.on .lab{color:var(--ink-d);}
+.gamme-line{flex:1;height:2px;margin:0 10px;border-radius:2px;background:rgba(123,31,162,.14);position:relative;overflow:hidden;min-width:14px;}
+.gamme-line::after{content:"";position:absolute;inset:0;width:0;background:linear-gradient(90deg,var(--v),var(--g));transition:width .5s cubic-bezier(.22,1,.36,1);}
+.gamme-line.fill::after{width:100%;}
+@media(max-width:760px){.gamme-step .lab{display:none;}}
+/* panneaux (un pack à la fois) */
+.gpanels{position:relative;flex:1;min-height:0;}
+.gpanel{position:absolute;inset:0;display:grid;grid-template-columns:.92fr 1.08fr;gap:42px;align-items:center;opacity:0;transform:translateY(16px) scale(.99);pointer-events:none;
+  transition:opacity .4s cubic-bezier(.22,1,.36,1),transform .4s cubic-bezier(.22,1,.36,1);}
+.gpanel.on{opacity:1;transform:none;pointer-events:auto;}
+.gpanel>*{min-width:0;}
+.gp-left{display:flex;flex-direction:column;gap:18px;}
+.gp-anim.pd-anim{height:300px;}
+.gp-meta .gp-num{font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--g);}
+.gp-name{font-family:var(--disp);font-weight:800;font-size:2rem;line-height:1.1;color:var(--ink-d);margin-top:5px;}
+.gp-promise{font-size:.95rem;color:var(--v);font-weight:600;margin-top:3px;}
+.gp-price{font-family:var(--disp);font-weight:800;font-size:1.7rem;color:var(--ink-d);margin-top:10px;}
+.gp-price small{font-family:var(--body);font-weight:400;font-size:.72rem;color:var(--mut-d);}
+.gp-right{display:flex;flex-direction:column;min-height:0;}
+.gp-base{display:flex;gap:9px;align-items:center;font-size:.84rem;color:#4a3a58;padding:11px 15px;border-radius:13px;margin-bottom:14px;flex-shrink:0;
+  background:rgba(123,31,162,.07);border:1px solid rgba(123,31,162,.16);}
+.gp-base b{color:var(--v);font-weight:700;}
+.gp-base svg{flex-shrink:0;color:var(--v);}
+.gp-base.solo{background:rgba(99,175,33,.08);border-color:rgba(99,175,33,.22);color:#3a4a2d;}
+.gp-base.solo svg{color:var(--g);}
+.gp-items{display:flex;flex-direction:column;gap:11px;overflow-y:auto;flex:1;min-height:0;padding-right:6px;
+  -webkit-mask-image:linear-gradient(180deg,#000 90%,transparent);mask-image:linear-gradient(180deg,#000 90%,transparent);}
+.gp-items::-webkit-scrollbar{width:5px;}
+.gp-items::-webkit-scrollbar-thumb{background:rgba(123,31,162,.2);border-radius:3px;}
+.gp-item{border-radius:14px;padding:13px 16px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.7);box-shadow:inset 0 1px 0 #fff,0 12px 26px -22px rgba(79,15,92,.4);
+  opacity:0;transform:translateY(12px);transition:opacity .4s cubic-bezier(.22,1,.36,1),transform .4s cubic-bezier(.22,1,.36,1);transition-delay:calc(var(--k) * .05s + .05s);}
+.gpanel.on .gp-item{opacity:1;transform:none;}
+.gp-it-head{display:flex;gap:9px;align-items:flex-start;}
+.gp-plus{width:20px;height:20px;border-radius:6px;flex-shrink:0;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--v),var(--g));margin-top:1px;}
+.gp-it-head b{font-size:.92rem;font-weight:600;color:var(--ink-d);line-height:1.35;}
+.gp-it-w{font-size:.83rem;color:var(--mut-d);line-height:1.5;margin-top:5px;}
+.gp-it-b{display:flex;gap:7px;align-items:flex-start;font-size:.83rem;color:#3c6b14;font-weight:600;line-height:1.45;margin-top:6px;}
+.gp-it-b svg{flex-shrink:0;margin-top:2px;color:var(--g);}
+.gp-cta{align-self:flex-start;margin-top:16px;flex-shrink:0;padding:13px 26px;}
+/* mobile : on déroule en cartes espacées (plus de sticky) */
+@media(max-width:860px){
+  .scrolly{height:auto;}
+  .scrolly-pin{position:static;height:auto;padding:0;display:block;}
+  .gamme-rail{display:none;}
+  .gpanels{position:static;}
+  .gpanel{position:static;opacity:1;transform:none;pointer-events:auto;grid-template-columns:1fr;gap:22px;margin-bottom:26px;padding:24px;border-radius:24px;
+    background:rgba(255,255,255,.5);backdrop-filter:blur(26px) saturate(1.55);-webkit-backdrop-filter:blur(26px) saturate(1.55);border:1px solid rgba(255,255,255,.85);
+    box-shadow:0 8px 32px rgba(79,15,92,.13),0 32px 72px -38px rgba(79,15,92,.5);}
+  .gp-items{overflow:visible;-webkit-mask-image:none;mask-image:none;flex:none;}
+  .gpanel .gp-item{opacity:1;transform:none;}
+  .gp-anim.pd-anim{height:200px;}
+}
+@media(prefers-reduced-motion:reduce){.gpanel,.gp-item{transition:none!important;}}
+
+/* ════ 4. TABLEAU COMPARATIF (v1) ════ */
+.cmp-wrap{overflow-x:auto;border-radius:22px;-webkit-overflow-scrolling:touch;}
+table.cmp{width:100%;min-width:780px;border-collapse:separate;border-spacing:0;font-size:.86rem;}
+.cmp th,.cmp td{padding:13px 16px;text-align:center;border-bottom:1px solid rgba(79,15,92,.08);}
+.cmp th:first-child,.cmp td:first-child{text-align:left;font-weight:500;color:#4a3a58;}
+.cmp thead th{font-family:var(--disp);font-weight:800;font-size:.95rem;color:var(--ink-d);padding-top:22px;}
+.cmp thead th .pp{display:block;font-size:1.15rem;margin-top:3px;background:linear-gradient(120deg,var(--v),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.cmp thead th .pp small{font-family:var(--body);font-weight:400;font-size:.62rem;-webkit-text-fill-color:var(--mut-d);}
+.cmp thead th.feat{position:relative;}
+.cmp thead th.feat::before{content:"Le plus pris";position:absolute;top:2px;left:50%;transform:translateX(-50%);font-family:var(--body);font-weight:700;font-size:.56rem;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:linear-gradient(120deg,var(--v),var(--g));padding:3px 10px;border-radius:999px;white-space:nowrap;}
+.cmp td.y svg{display:inline-block;}
+.cmp td.n{color:rgba(79,15,92,.25);}
+.cmp td .txt{font-size:.78rem;color:var(--mut-d);}
+.cmp tfoot td{border-bottom:none;padding-top:18px;}
+.cmp tfoot a{display:inline-block;padding:10px 18px;border-radius:11px;font-size:.8rem;font-weight:600;background:rgba(123,31,162,.08);color:var(--v);border:1px solid rgba(123,31,162,.2);transition:background .2s;}
+.cmp tfoot a:hover{background:rgba(123,31,162,.15);}
+.cmp tfoot td.feat a{background:linear-gradient(120deg,var(--v),var(--g));color:#fff;border-color:transparent;}
+
+/* ════ 5. COMPOSEZ À LA CARTE — zone violet sombre + panneau de détail ════ */
+.carte-stage{position:relative;border-radius:32px;padding:46px 40px;overflow:hidden;
+  background:linear-gradient(165deg,#1c0730 0%,#12031f 55%,#0c0118 100%);
+  border:1px solid rgba(255,255,255,.1);box-shadow:0 50px 120px -50px rgba(45,6,54,.85),inset 0 1px 0 rgba(255,255,255,.08);}
+@media(max-width:680px){.carte-stage{padding:30px 20px;border-radius:24px;}}
+.carte-stage .cs-orb{position:absolute;width:520px;height:520px;border-radius:50%;right:-14%;top:-30%;pointer-events:none;
+  background:radial-gradient(circle,rgba(123,31,162,.5),rgba(99,175,33,.14) 48%,transparent 70%);filter:blur(50px);}
+.cs-head{position:relative;}
+/* couleurs claires dans la zone sombre (override .lightzone) */
+.carte-stage .kicker{color:#d49bff;}
+.carte-stage h2.sec-h{color:#fff;}
+.carte-stage h2.sec-h .gr{background:linear-gradient(120deg,#d49bff,var(--gl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.carte-stage .sec-lead{color:rgba(246,241,250,.72);}
+.carte-stage .draft{display:inline-flex;align-items:center;gap:8px;font-size:.74rem;color:#ffd970;background:rgba(244,180,0,.12);border:1px solid rgba(244,180,0,.35);border-radius:999px;padding:6px 14px;margin-top:14px;}
+/* pills filtres — variante sombre */
+.pfil-wrap{position:relative;margin-top:24px;overflow-x:auto;scrollbar-width:none;padding:4px;display:flex;}
+.pfil-wrap::-webkit-scrollbar{display:none;}
+.pfil{position:relative;display:inline-flex;gap:2px;padding:5px;border-radius:999px;
+  background:rgba(255,255,255,.07);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.1);}
+.pfil .thumb{position:absolute;top:5px;bottom:5px;left:0;width:0;border-radius:999px;z-index:0;
+  background:linear-gradient(120deg,var(--v),var(--g));box-shadow:0 10px 24px -8px rgba(123,31,162,.6);
+  transition:left .38s cubic-bezier(.22,1,.36,1),width .38s cubic-bezier(.22,1,.36,1);}
+.pfil button{position:relative;z-index:1;padding:7px 15px;border-radius:999px;font-family:var(--body);font-size:.76rem;font-weight:600;cursor:pointer;
+  background:none;border:none;color:rgba(246,241,250,.6);white-space:nowrap;transition:color .25s;}
+.pfil button:hover{color:#fff;}
+.pfil button.on{color:#fff;}
+/* corps : grille de prestations + panneau de détail à côté */
+.carte-body{position:relative;display:grid;grid-template-columns:1fr .82fr;gap:24px;margin-top:28px;align-items:start;}
+@media(max-width:880px){.carte-body{grid-template-columns:1fr;}}
+.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;}
+@media(max-width:560px){.svc-grid{grid-template-columns:1fr;}}
+.svc{position:relative;border-radius:16px;padding:15px 16px;cursor:pointer;user-select:none;
+  background:rgba(255,255,255,.06);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1.5px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
+  transition:transform .22s,box-shadow .22s,border-color .22s,background .22s,opacity .3s;}
+.svc:hover{transform:translateY(-3px);background:rgba(255,255,255,.1);}
+.svc.active{border-color:rgba(212,155,255,.65);background:rgba(123,31,162,.22);box-shadow:0 0 0 2px rgba(212,155,255,.3),0 22px 44px -20px rgba(123,31,162,.6);transform:translateY(-3px);}
+.svc.sel{border-color:rgba(123,213,58,.5);}
+.svc.hide{display:none;}
+/* inspection : les autres cartes s'effacent (transparentes) */
+.svc-grid.inspecting .svc:not(.active){opacity:.32;}
+.svc .row1{display:flex;align-items:center;gap:9px;margin-bottom:5px;}
+.svc .ic{width:19px;height:19px;color:#d49bff;flex-shrink:0;}
+.svc .nm{font-size:.86rem;font-weight:600;color:#fff;line-height:1.3;flex:1;}
+.svc .pr{font-family:var(--disp);font-weight:800;font-size:.9rem;color:var(--gl);white-space:nowrap;}
+.svc .pr small{font-family:var(--body);font-weight:400;font-size:.62rem;color:rgba(246,241,250,.5);}
+.svc .ds{font-size:.75rem;color:rgba(246,241,250,.6);line-height:1.5;}
+.svc .tick{position:absolute;top:-8px;right:-8px;width:23px;height:23px;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--v),var(--g));opacity:0;transform:scale(.5);transition:opacity .22s,transform .22s;box-shadow:0 6px 14px -4px rgba(123,31,162,.6);z-index:2;}
+.svc.sel .tick{opacity:1;transform:scale(1);}
+/* panneau (détail + formule), collant à côté */
+.carte-panel{position:sticky;top:96px;border-radius:20px;padding:22px;}
+@media(max-width:880px){.carte-panel{position:static;}}
+.cp-detail{margin-bottom:4px;}
+.cp-hint{display:flex;gap:10px;align-items:flex-start;font-size:.84rem;color:rgba(246,241,250,.6);line-height:1.5;padding:4px 2px 14px;}
+.cp-hint svg{flex-shrink:0;color:#d49bff;margin-top:1px;}
+/* le détail s'ouvre en "genie" : il jaillit de la carte cliquée (FLIP en JS) */
+.cp-card{will-change:transform,opacity;}
+/* preuve chiffrée sourcée (lien externe) */
+.cp-proof{display:block;margin-top:13px;padding:13px 15px;border-radius:14px;text-decoration:none;
+  background:linear-gradient(135deg,rgba(123,31,162,.22),rgba(99,175,33,.14));border:1px solid rgba(212,155,255,.3);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);transition:transform .2s,border-color .2s,box-shadow .25s;}
+.cp-proof:hover{transform:translateY(-2px);border-color:rgba(212,155,255,.55);box-shadow:0 14px 30px -16px rgba(123,31,162,.6);}
+.cp-proof .pn{display:block;font-family:var(--disp);font-weight:800;font-size:1.55rem;line-height:1.1;background:linear-gradient(120deg,#d49bff,var(--gl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.cp-proof .pt{display:block;font-size:.8rem;color:rgba(246,241,250,.85);line-height:1.5;margin-top:3px;}
+.cp-proof .ps{display:block;font-size:.66rem;color:rgba(246,241,250,.5);margin-top:6px;transition:color .2s;}
+.cp-proof:hover .ps{color:#d49bff;}
+/* apparition "clavier qui se réveille" des prestations au scroll (tac-tac-tac) */
+.svc-grid.keys-prep .svc{opacity:0;transform:translateY(26px) scale(.9);}
+.svc-grid.keys-in .svc{animation:keywake .5s cubic-bezier(.34,1.56,.64,1) both;animation-delay:var(--kd,0s);}
+@keyframes keywake{0%{opacity:0;transform:translateY(26px) scale(.9);}70%{opacity:1;transform:translateY(-5px) scale(1.03);}100%{opacity:1;transform:none;}}
+@media(prefers-reduced-motion:reduce){
+  .svc-grid.keys-prep .svc{opacity:1;transform:none;}
+  .svc-grid.keys-in .svc{animation:none!important;}
+}
+.cp-card{position:relative;padding-bottom:18px;margin-bottom:18px;border-bottom:1px solid rgba(255,255,255,.12);}
+.cp-close{position:absolute;top:-2px;right:-2px;width:26px;height:26px;border-radius:50%;cursor:pointer;display:grid;place-items:center;
+  background:rgba(255,255,255,.08);color:rgba(246,241,250,.7);border:1px solid rgba(255,255,255,.14);transition:background .2s,color .2s;}
+.cp-close:hover{background:rgba(255,255,255,.16);color:#fff;}
+.cp-ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:#fff;margin-bottom:12px;
+  background:linear-gradient(145deg,var(--v),var(--g));box-shadow:0 12px 26px -10px rgba(123,31,162,.6),inset 0 1px 0 rgba(255,255,255,.3);}
+.cp-name{font-family:var(--disp);font-weight:800;font-size:1.25rem;color:#fff;line-height:1.2;}
+.cp-tag{font-size:.84rem;color:#d49bff;font-weight:600;margin-top:3px;}
+.cp-block{margin-top:13px;}
+.cp-block .lab{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gl);margin-bottom:4px;}
+.cp-block p{font-size:.84rem;color:rgba(246,241,250,.8);line-height:1.55;}
+.cp-priceline{display:flex;align-items:baseline;gap:10px;margin-top:14px;}
+.cp-priceline .pp{font-family:var(--disp);font-weight:800;font-size:1.5rem;color:#fff;}
+.cp-priceline .pp small{font-family:var(--body);font-weight:400;font-size:.66rem;color:rgba(246,241,250,.55);}
+.cp-add{margin-top:13px;width:100%;justify-content:center;padding:12px;font-size:.88rem;border-radius:12px;cursor:pointer;border:1px solid transparent;font-family:var(--body);font-weight:600;display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(120deg,var(--v),var(--g));color:#fff;transition:transform .18s,box-shadow .25s,background .2s;}
+.cp-add:hover{transform:translateY(-2px);box-shadow:0 16px 34px -12px rgba(123,31,162,.6);}
+.cp-add.added{background:rgba(255,255,255,.08);color:var(--gl);border-color:rgba(123,213,58,.4);}
+.cp-fhead{font-family:var(--disp);font-weight:800;font-size:1.05rem;color:#fff;margin-bottom:12px;}
+.cp-list{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;max-height:180px;overflow-y:auto;}
+.cp-list .qi{display:flex;justify-content:space-between;gap:10px;font-size:.8rem;color:rgba(246,241,250,.85);}
+.cp-list .qi b{font-weight:600;color:var(--gl);white-space:nowrap;}
+.cp-empty{font-size:.82rem;color:rgba(246,241,250,.5);font-style:italic;}
+.cp-total{display:flex;justify-content:space-between;align-items:baseline;padding-top:13px;border-top:1px solid rgba(255,255,255,.12);}
+.cp-total .l{font-size:.84rem;font-weight:600;color:#fff;}
+.cp-total .n{font-family:var(--disp);font-weight:800;font-size:1.7rem;color:#fff;}
+.cp-total .n small{font-family:var(--body);font-weight:400;font-size:.66rem;color:rgba(246,241,250,.55);}
+.cp-save{margin-top:13px;padding:13px 15px;border-radius:13px;background:rgba(99,175,33,.14);border:1px solid rgba(99,175,33,.34);display:none;}
+.cp-save .t{display:flex;gap:8px;align-items:center;font-size:.76rem;font-weight:700;color:#bdf08a;margin-bottom:5px;}
+.cp-save p{font-size:.79rem;color:rgba(246,241,250,.82);line-height:1.5;}
+.cp-save p b{color:#fff;}
+.cp-cta{display:block;text-align:center;margin-top:15px;padding:13px;border-radius:13px;font-size:.9rem;font-weight:600;background:linear-gradient(120deg,var(--v),var(--g));color:#fff;transition:transform .18s,box-shadow .25s;}
+.cp-cta:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 14px 34px -12px rgba(123,31,162,.6),0 0 22px rgba(123,213,58,.3);}
+.cp-foot{margin-top:11px;font-size:.68rem;color:rgba(246,241,250,.5);text-align:center;line-height:1.6;}
+/* one-shot — sombre */
+.oneshot{position:relative;display:flex;gap:13px;flex-wrap:wrap;margin-top:26px;}
+.os{flex:1;min-width:200px;border-radius:16px;padding:17px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.1);}
+.os b{font-size:.88rem;color:#fff;display:block;}
+.os .p{font-family:var(--disp);font-weight:800;font-size:1.12rem;color:var(--gl);margin-top:4px;}
+.os span{font-size:.74rem;color:rgba(246,241,250,.55);display:block;margin-top:3px;}
+/* ── MOCKUPS dans le détail à la carte : « ah ok, ça ressemble à ça » ── */
+.cp-mock{margin-top:13px;padding:12px;border-radius:14px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);}
+.cp-mock .mlab{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#d49bff;margin-bottom:9px;}
+.mk-posts{display:flex;gap:8px;}
+.mk-post{flex:1;min-width:0;border-radius:10px;overflow:hidden;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);}
+.mk-post .ph{height:62px;background-size:cover;background-position:center;filter:saturate(1.1);}
+.mk-post .cap{padding:6px 8px;display:flex;flex-direction:column;gap:2px;}
+.mk-post .net{font-size:.53rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#d49bff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mk-post .tx{font-size:.6rem;color:rgba(246,241,250,.65);line-height:1.35;}
+.mk-search{display:flex;align-items:center;gap:7px;padding:8px 11px;border-radius:9px;background:rgba(255,255,255,.08);font-size:.64rem;color:rgba(246,241,250,.6);margin-bottom:8px;}
+.mk-res{padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);}
+.mk-res+.mk-res{margin-top:6px;}
+.mk-res .stars{color:#f4b400;font-size:.64rem;letter-spacing:.1em;display:block;}
+.mk-res b{font-size:.7rem;color:#fff;display:block;margin-top:2px;line-height:1.35;}
+.mk-res span{font-size:.6rem;color:rgba(246,241,250,.55);display:block;margin-top:1px;}
+.mk-res .ann{color:var(--gl);font-weight:700;font-size:.56rem;letter-spacing:.06em;text-transform:uppercase;}
+.mk-res.ghost{opacity:.4;}
+.mk-mail{border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.12);}
+.mk-mail .mh{padding:8px 10px;background:linear-gradient(120deg,rgba(123,31,162,.5),rgba(99,175,33,.3));font-size:.66rem;font-weight:700;color:#fff;}
+.mk-mail .mb{padding:8px 10px;font-size:.6rem;color:rgba(246,241,250,.65);background:rgba(255,255,255,.05);line-height:1.5;}
+.mk-rows{display:flex;flex-direction:column;gap:6px;}
+.mk-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 10px;border-radius:9px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);font-size:.63rem;color:rgba(246,241,250,.75);}
+.mk-row b{color:var(--gl);font-weight:700;white-space:nowrap;}
+.mk-row.ghost{opacity:.4;}
+.mk-bub{padding:8px 11px;border-radius:11px;font-size:.63rem;line-height:1.45;}
+.mk-bub .who{display:block;font-size:.52rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#d49bff;margin-bottom:2px;}
+.mk-bub.b1{background:rgba(255,255,255,.07);color:rgba(246,241,250,.5);border:1px solid rgba(255,255,255,.1);}
+.mk-bub.b2{background:linear-gradient(120deg,rgba(123,31,162,.4),rgba(99,175,33,.25));color:#fff;border:1px solid rgba(212,155,255,.3);margin-top:6px;}
+.cp-priceline .pf{font-size:.7rem;color:rgba(246,241,250,.55);}
+/* ── SECTION SITE VITRINE (mise en avant) ── */
+.sv-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:46px;align-items:center;}
+.sv-grid>*{min-width:0;}
+@media(max-width:880px){.sv-grid{grid-template-columns:1fr;gap:30px;}}
+.sv-points{list-style:none;margin-top:20px;display:flex;flex-direction:column;gap:10px;}
+.sv-points li{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;color:rgba(246,241,250,.82);}
+.sv-points li::before{content:"";width:16px;height:16px;flex-shrink:0;margin-top:3px;border-radius:50%;
+  background:linear-gradient(135deg,var(--v),var(--g)) padding-box;
+  -webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>') center/100% no-repeat;
+  mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>') center/100% no-repeat;}
+.sv-ctas{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:24px;}
+.sv-price{font-family:var(--disp);font-weight:800;font-size:1.25rem;color:#fff;}
+.sv-price small{font-family:var(--body);font-weight:400;font-size:.72rem;color:rgba(246,241,250,.55);}
+/* mockup navigateur */
+.sv-mock{border-radius:18px;overflow:hidden;}
+.sv-bar{display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);}
+.sv-dot{width:11px;height:11px;border-radius:50%;}
+.sv-dot.r{background:#ff5f57;}.sv-dot.y{background:#febc2e;}.sv-dot.g{background:#28c840;}
+.sv-url{margin:0 auto;font-size:.7rem;color:rgba(246,241,250,.6);background:rgba(255,255,255,.06);padding:4px 18px;border-radius:7px;}
+.sv-hero{position:relative;height:170px;background-size:cover;background-position:center;display:grid;place-items:center;}
+.sv-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(160deg,rgba(123,31,162,.5),rgba(10,2,20,.78));}
+.sv-hero span{position:relative;font-family:var(--disp);font-weight:800;font-size:1.3rem;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.6);}
+.sv-rows{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px;}
+.sv-rows i{height:42px;border-radius:8px;background:rgba(255,255,255,.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);}
+.sv-foot{display:flex;gap:8px;padding:0 12px 14px;}
+.sv-foot span{flex:1;text-align:center;padding:9px;border-radius:9px;font-size:.68rem;font-weight:600;}
+.sv-foot .b1{background:rgba(255,255,255,.07);color:rgba(246,241,250,.7);border:1px solid rgba(255,255,255,.12);}
+.sv-foot .b2{background:linear-gradient(120deg,var(--v),var(--g));color:#fff;}
+
+/* ════ 6. FAQ (v1) ════ */
+.faq{display:flex;flex-direction:column;gap:12px;margin-top:34px;max-width:780px;}
+.fq{border-radius:16px;overflow:hidden;}
+.fq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:18px 22px;font-weight:600;font-size:.96rem;color:var(--ink-d);}
+.fq summary::-webkit-details-marker{display:none;}
+.fq summary .pl{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;background:rgba(123,31,162,.1);color:var(--v);font-weight:700;transition:transform .3s;}
+.fq[open] summary .pl{transform:rotate(45deg);}
+.fq p{padding:0 22px 18px;font-size:.88rem;color:var(--mut-d);}
+
+/* ════ 7. CTA FINAL ════ */
+.final-cta{text-align:center;border-radius:28px;padding:64px 30px;position:relative;overflow:hidden;}
+.final-cta::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;left:50%;top:-36%;transform:translateX(-50%);background:radial-gradient(circle,rgba(123,213,58,.2),rgba(123,31,162,.12) 50%,transparent 70%);}
+.final-cta .fic{position:relative;width:54px;height:54px;border-radius:16px;margin:0 auto 16px;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,var(--v),var(--g));box-shadow:0 16px 34px -12px rgba(123,31,162,.55);}
+.final-cta h2{font-family:var(--disp);font-weight:800;font-size:clamp(1.8rem,3.6vw,2.6rem);color:var(--ink-d);position:relative;margin-bottom:12px;}
+.final-cta h2 .gr{background:linear-gradient(120deg,var(--v),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.final-cta p{color:var(--mut-d);position:relative;max-width:500px;margin:0 auto 26px;}
+
+footer{background:#FBF9FE;border-top:1px solid var(--border-d);padding:34px 0;color:var(--mut-d);font-size:.82rem;position:relative;z-index:1;}
+.foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+.foot-links{display:flex;gap:18px;flex-wrap:wrap;}.foot-links a{white-space:nowrap}
+.foot-links a:hover{color:var(--v);}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1);}
+.reveal.in{opacity:1;transform:none;}
+.d1{transition-delay:.07s;}.d2{transition-delay:.14s;}.d3{transition-delay:.21s;}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1!important;transform:none!important;}
+  .orb,.stars,.eyebrow::before,.mouse::after,
+  .av-grid i,.av-orbit .ring,.av-orbit .sat svg,.av-orbit .sat .lab,.av-bars i,.av-comp i{animation:none!important;}
+  .av-orbit .sat svg,.av-orbit .sat .lab{transform:none!important;}
+}
+
+/* ════════ RE-THÈME SOMBRE — toute la page sur fond violet (override de l'ancienne zone claire) ════════ */
+/* nav : reste en verre sombre partout */
+.nav-pill.on-light{background:rgba(20,4,32,.5);border-color:var(--border);box-shadow:0 8px 32px -12px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08);}
+.nav-pill .nav-logo span{background:linear-gradient(120deg,#d49bff,var(--gl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-tabs a{color:var(--mut);}
+.nav-tabs a.cur{color:#fff;background:rgba(255,255,255,.1);}
+.nav-tabs a:hover{color:#fff;background:rgba(255,255,255,.07);}
+/* titres de section dans l'ex-zone claire → clairs */
+.lightzone .kicker{color:#d49bff;}
+.lightzone h2.sec-h{color:#fff;}
+.lightzone h2.sec-h .gr{background:linear-gradient(120deg,#d49bff,var(--gl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.lightzone .sec-lead{color:var(--mut);}
+/* tout panneau .glass-l de l'ex-zone claire → verre sombre */
+.lightzone .glass-l{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 8px 32px rgba(0,0,0,.4),0 32px 72px -34px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.12);}
+/* PACKS — version sombre */
+.gp-name{color:#fff;}
+.gp-promise{color:#d49bff;}
+.gp-price{color:#fff;}
+.gp-price small{color:rgba(246,241,250,.55);}
+.gp-base{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16);color:rgba(246,241,250,.82);}
+.gp-base b{color:#d49bff;}
+.gp-base.solo{background:rgba(99,175,33,.12);border-color:rgba(99,175,33,.3);color:rgba(246,241,250,.85);}
+.gp-item{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.1);}
+.gp-it-head b{color:#fff;}
+.gp-it-w{color:rgba(246,241,250,.62);}
+.gamme-step .dot{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:rgba(246,241,250,.6);}
+.gamme-step .lab{color:rgba(246,241,250,.62);}
+.gamme-step.on .lab{color:#fff;}
+.gamme-line{background:rgba(255,255,255,.16);}
+@media(max-width:860px){.gpanel{background:rgba(255,255,255,.05)!important;border-color:rgba(255,255,255,.14)!important;box-shadow:0 30px 70px -40px #000!important;}}
+/* visuel pack : photo en fond + halo, illustration au-dessus */
+.gp-anim.pd-anim{border-color:rgba(255,255,255,.14);box-shadow:0 24px 50px -28px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.12);}
+/* photo packs : duotone violet premium — n'importe quelle photo devient cohérente avec la marque */
+.gp-anim .gp-photo{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;opacity:.55;filter:grayscale(.8) brightness(.82) contrast(1.12);}
+.gp-anim::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(150deg,rgba(123,31,162,.38) 0%,rgba(20,4,36,.72) 55%,rgba(8,1,18,.88) 100%);}
+.gp-anim .av-grid,.gp-anim .av-orbit,.gp-anim .av-bars,.gp-anim .av-comp{position:relative;z-index:2;}
+.gp-anim .pop{z-index:3;}
+/* COMPARATIF — version sombre */
+.cmp th,.cmp td{border-bottom-color:rgba(255,255,255,.1);}
+.cmp th:first-child,.cmp td:first-child{color:rgba(246,241,250,.82);}
+.cmp thead th{color:#fff;}
+.cmp thead th .pp{background:linear-gradient(120deg,#d49bff,var(--gl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.cmp thead th .pp small{-webkit-text-fill-color:rgba(246,241,250,.5);}
+.cmp td.n{color:rgba(255,255,255,.22);}
+.cmp td .txt{color:rgba(246,241,250,.62);}
+.cmp tfoot a{background:rgba(255,255,255,.08);color:#d49bff;border-color:rgba(212,155,255,.3);}
+.cmp tfoot a:hover{background:rgba(255,255,255,.15);}
+#comparer .reveal a{color:#d49bff!important;}
+/* FAQ — version sombre */
+.fq summary{color:#fff;}
+.fq summary .pl{background:rgba(212,155,255,.16);color:#d49bff;}
+.fq p{color:rgba(246,241,250,.7);}
+/* CTA FINAL — version sombre */
+.final-cta h2{color:#fff;}
+.final-cta p{color:rgba(246,241,250,.72);}
+.final-cta .kicker{color:#d49bff;}
+/* FOOTER — version sombre */
+footer{background:transparent;border-top-color:rgba(255,255,255,.1);color:rgba(246,241,250,.55);}
+.foot-links a:hover{color:#d49bff;}
+</style>
+</head>
+<body>
+
+<div class="pagebg" id="pagebg"></div>
+<div class="scene" id="scene"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+<div class="vignette" id="vignette"></div>
+<div class="stars" id="stars"></div>
+<div class="prog" id="prog"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav">
+  <div class="nav-pill" id="navPill">
+    <a class="nav-logo" href="index.html"><img src="assets/logo-cutout.png" alt="DWT" onerror="this.style.display='none'"><span>DWT</span></a>
+    <div class="nav-tabs">
+      <a href="index.html">Accueil</a>
+      <a href="#top" class="cur" aria-current="page">Offres</a>
+      <a href="methode.html">Méthode</a>
+      <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <a href="contact.html" class="nav-cta">Audit de visibilité offert</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ═══ 1. HERO NARRATIF ═══ -->
+<header id="top">
+  <div class="hero-inner">
+    <div class="eyebrow reveal">Nos offres expliquées</div>
+    <h1 class="reveal d1">Avant les prix, <span class="grad">la raison.</span></h1>
+    <p class="hero-sub reveal d2">On vous emmène d'abord comprendre pourquoi nos packs existent — puis on parle chiffres. Promis, c'est plus clair qu'un devis qui tombe sans explication.</p>
+    <div class="hero-proofs reveal d2">
+      <a class="hp" href="https://www.francenum.gouv.fr/guides-et-conseils/strategie-numerique/comprendre-le-numerique/barometre-france-num-2024-perception" target="_blank" rel="noopener">
+        <span class="hp-n">79&nbsp;%</span>
+        <span class="hp-t">des dirigeants de TPE/PME voient dans le numérique un bénéfice réel pour leur entreprise</span>
+        <span class="hp-s">Baromètre France Num 2024 ↗</span>
+      </a>
+      <a class="hp" href="https://www.francenum.gouv.fr/guides-et-conseils/strategie-numerique/comprendre-le-numerique/barometre-france-num-2024-perception" target="_blank" rel="noopener">
+        <span class="hp-n">1 sur 2</span>
+        <span class="hp-t">commerces tire déjà au moins 5&nbsp;% de sa clientèle d'internet</span>
+        <span class="hp-s">France Num 2024 ↗</span>
+      </a>
+      <a class="hp" href="https://mercury.com/blog/how-much-should-a-small-business-spend-on-marketing" target="_blank" rel="noopener">
+        <span class="hp-n">7 à 8&nbsp;%</span>
+        <span class="hp-t">du chiffre d'affaires : le budget marketing conseillé pour un commerce</span>
+        <span class="hp-s">Small Business Administration ↗</span>
+      </a>
+    </div>
+    <div class="scrollcue reveal d3"><span class="mouse"></span>Scrollez</div>
+  </div>
+</header>
+
+<!-- ═══ 2. POURQUOI DES PACKS ? ═══ -->
+<section class="section" id="pourquoi" style="padding-top:40px;">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="kicker">Pourquoi des packs ?</div>
+      <h2 class="sec-h">Parce que la visibilité,<br><span class="gr">c'est un système.</span></h2>
+    </div>
+    <div class="why-grid">
+      <div class="why glass-d reveal d1">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><polygon points="16.2 7.8 13.4 13.4 7.8 16.2 10.6 10.6"/></svg></div>
+        <div class="wn">Le constat</div>
+        <h3>8 clients sur 10 vous cherchent avant de venir.</h3>
+        <p>Sans présence soignée, vous n'existez pas pour eux. Pire : vos concurrents, eux, y sont déjà.</p>
+      </div>
+      <div class="why glass-d reveal d2">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19.44 7.85c-.05.32.06.65.29.88l1.57 1.57c.47.47.7 1.08.7 1.7s-.23 1.23-.7 1.7l-1.61 1.61a.98.98 0 0 1-.84.28c-.47-.07-.8-.48-.97-.93a2.5 2.5 0 1 0-3.21 3.22c.44.16.85.5.92.97a.98.98 0 0 1-.27.84l-1.61 1.61c-.47.47-1.09.71-1.71.71s-1.23-.24-1.7-.71l-1.57-1.57a1.03 1.03 0 0 0-.88-.29c-.49.07-.84.5-1.02.97a2.5 2.5 0 1 1-3.24-3.24c.46-.18.9-.53.97-1.02a1.03 1.03 0 0 0-.29-.88L2.7 13.7A2.4 2.4 0 0 1 2 12c0-.62.24-1.23.71-1.7l1.52-1.53c.24-.24.58-.35.92-.3.51.08.88.53 1.07 1.01a2.5 2.5 0 1 0 3.26-3.26c-.48-.2-.93-.56-1.01-1.07-.05-.34.06-.68.3-.92l1.53-1.52A2.4 2.4 0 0 1 12 2c.62 0 1.23.24 1.7.71l1.57 1.57c.23.23.56.34.88.29.49-.07.84-.5 1.02-.97a2.5 2.5 0 1 1 3.24 3.24c-.47.18-.9.53-.97 1.02Z"/></svg></div>
+        <div class="wn">Le piège</div>
+        <h3>Chaque agence vous vend un bout.</h3>
+        <p>Réseaux ici, SEO là, site ailleurs. Personne ne regarde l'image d'ensemble — et c'est vous qui recollez les morceaux.</p>
+      </div>
+      <div class="why glass-d reveal d3">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8 12 14 2 8"/><polyline points="2 16 12 22 22 16"/><polyline points="2 12 12 18 22 12"/></svg></div>
+        <div class="wn">Notre réponse</div>
+        <h3>Des packs qui pensent comme un tout.</h3>
+        <p>Quatre formules — du premier post à la délégation totale — pensées pour aller ensemble. Vous montez d'un cran quand vos résultats le décident, jamais avant.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ ZONE CLAIRE (le gradient de fond fait la transition) ════════ -->
+<div class="lightzone">
+
+<!-- ═══ 3. LES PACKS — PARCOURS GUIDÉ (montée en gamme) ═══ -->
+<section class="section" id="packs" style="padding-top:50px;">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:20px;">
+      <div class="kicker">La montée en gamme</div>
+      <h2 class="sec-h">Chaque pack reprend le précédent,<br><span class="gr">et va un cran plus loin.</span></h2>
+      <p class="sec-lead">Avancez : on vous explique ce qu'il y a dans chaque pack, ce que ça vous apporte concrètement, et ce qui s'ajoute à mesure que vous montez.</p>
+    </div>
+  </div>
+  <div class="scrolly" id="packScrolly">
+    <div class="scrolly-pin">
+      <div class="gamme-rail" id="gammeRail"><!-- rail injecté en JS --></div>
+      <div class="gpanels" id="gpanels"><!-- panneaux injectés en JS --></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 4. TABLEAU COMPARATIF ═══ -->
+<section class="section" id="comparer" style="padding-top:20px;">
+  <div class="wrap">
+    <div class="reveal" style="margin-bottom:30px;">
+      <div class="kicker">Vue d'ensemble</div>
+      <h2 class="sec-h">Comparer les packs d'un coup d'œil</h2>
+    </div>
+    <div class="cmp-wrap glass-l reveal">
+      <table class="cmp" id="cmpTable"><!-- généré en JS --></table>
+    </div>
+    <p class="reveal" style="margin-top:16px;font-size:.8rem;color:var(--mut-d);">Projet e-commerce, multi-établissements ou besoin particulier ? <a href="contact.html" style="color:var(--v);font-weight:600;">Sur Mesure — devis gratuit sous 48 h →</a></p>
+  </div>
+</section>
+
+<!-- ═══ 4bis. SITE VITRINE — mis en avant ═══ -->
+<section class="section" id="siteweb" style="padding-top:30px;">
+  <div class="wrap">
+    <div class="sv-grid">
+      <div class="reveal">
+        <div class="kicker">On crée aussi votre site</div>
+        <h2 class="sec-h">Votre adresse à vous,<br><span class="gr">ouverte 24 h/24.</span></h2>
+        <p class="sec-lead">Les réseaux et la fiche Google vivent sur les plateformes des autres. Votre site vitrine, lui, vous appartient : votre histoire, votre carte, vos horaires — trouvables en un clic, aux couleurs de votre commerce.</p>
+        <ul class="sv-points">
+          <li>Conçu pour Google (SEO) et pensé mobile d'abord</li>
+          <li>Création en une fois — pas d'abonnement caché</li>
+          <li>Maintenance et mises à jour incluses dans le pack Premium</li>
+          <li>Boutique en ligne, click &amp; collect, réservation : sur devis</li>
+        </ul>
+        <div class="sv-ctas">
+          <a href="contact.html" class="btn btn-primary">Discuter de mon site →</a>
+          <span class="sv-price">dès 690&nbsp;€ <small>· paiement unique</small></span>
+        </div>
+      </div>
+      <div class="sv-mock glass-d reveal d2">
+        <div class="sv-bar"><span class="sv-dot r"></span><span class="sv-dot y"></span><span class="sv-dot g"></span><span class="sv-url">votre-commerce.fr</span></div>
+        <div class="sv-hero" style="background-image:url(assets/post-cake1.jpg)"><span>Votre commerce</span></div>
+        <div class="sv-rows"><i></i><i></i><i></i></div>
+        <div class="sv-foot"><span class="b1">Horaires</span><span class="b1">La carte</span><span class="b2">Nous trouver</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 5. COMPOSEZ À LA CARTE (zone sombre + panneau de détail) ═══ -->
+<section class="section" id="carte" style="padding-top:30px;">
+  <div class="wrap">
+    <div class="carte-stage reveal">
+      <span class="cs-orb"></span>
+      <div class="cs-head">
+        <div class="kicker">Et si rien ne colle ?</div>
+        <h2 class="sec-h">Vous n'avez pas besoin de tout.<br><span class="gr">Composez à la carte.</span></h2>
+        <p class="sec-lead">Douze prestations indépendantes, dès 60&nbsp;€/mois. Cliquez une prestation pour voir ce qu'elle apporte, puis ajoutez-la à votre formule. Si un pack revient moins cher, on vous le dit.</p>
+        <span class="draft">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          Tarifs à la carte indicatifs — en cours de finalisation
+        </span>
+        <div class="pfil-wrap">
+          <div class="pfil" id="pfil">
+            <span class="thumb" id="pfilThumb"></span>
+            <button class="on" data-f="all">Tout</button>
+            <button data-f="social">Social</button>
+            <button data-f="google">Google</button>
+            <button data-f="pub">Publicité</button>
+            <button data-f="contenu">Contenu</button>
+            <button data-f="ia">IA</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="carte-body">
+        <div class="svc-grid" id="svcGrid"><!-- prestations injectées en JS --></div>
+        <aside class="carte-panel glass-d" id="cartePanel">
+          <div class="cp-detail" id="cpDetail"><!-- détail injecté en JS --></div>
+          <div class="cp-formule">
+            <div class="cp-fhead">Ma formule</div>
+            <div class="cp-list" id="cpList"><span class="cp-empty">Aucune prestation pour l'instant — cliquez une carte pour commencer.</span></div>
+            <div class="cp-total"><span class="l">Total mensuel</span><span class="n" id="cpTotal">0&nbsp;€<small> /mois</small></span></div>
+            <div class="cp-save" id="cpSave">
+              <div class="t"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#bdf08a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Bon plan repéré</div>
+              <p id="cpSaveTxt"></p>
+            </div>
+            <a href="contact.html" class="cp-cta">Recevoir mon devis personnalisé →</a>
+            <p class="cp-foot">Devis gratuit sous 48 h · sans engagement<br>Les prestations mensuelles démarrent à 3 mois <i>(à confirmer)</i></p>
+          </div>
+        </aside>
+      </div>
+
+      <div class="oneshot">
+        <div class="os"><b>Site vitrine</b><div class="p">dès 690&nbsp;€</div><span>Création one-shot — maintenance incluse dans Premium</span></div>
+        <div class="os"><b>Audit de visibilité</b><div class="p">Offert</div><span>Via le formulaire — sinon 90&nbsp;€ en prestation seule</span></div>
+        <div class="os"><b>E-commerce</b><div class="p">Sur devis</div><span>Boutique en ligne, click &amp; collect, réservation</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 6. FAQ ═══ -->
+<section class="section" id="faq" style="padding-top:20px;">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="kicker">Questions fréquentes</div>
+      <h2 class="sec-h">Tout ce qu'on nous demande<br>avant de signer.</h2>
+    </div>
+    <div class="faq reveal">
+      <details class="fq glass-l"><summary>Y a-t-il un engagement de durée ?<span class="pl">+</span></summary><p>Les packs sont sans engagement : vous arrêtez quand vous voulez, à la fin du mois en cours. Pour les prestations à la carte, un démarrage de 3 mois est demandé — le temps que les actions produisent leurs premiers effets mesurables.</p></details>
+      <details class="fq glass-l"><summary>Y a-t-il des frais cachés ou des frais de mise en place ?<span class="pl">+</span></summary><p>Non. Le prix affiché est le prix payé. Seule exception, annoncée d'avance : le budget publicitaire des campagnes Google et Meta (pack Premium), que vous payez directement aux plateformes — nous ne prenons aucune commission dessus.</p></details>
+      <details class="fq glass-l"><summary>Comment ça démarre, concrètement ?<span class="pl">+</span></summary><p>Un échange de 20 minutes pour comprendre votre commerce, puis votre audit de visibilité offert. Vous choisissez votre formule, et vos premiers contenus arrivent pour validation sous une semaine — vous gardez le dernier mot sur tout ce qui est publié.</p></details>
+      <details class="fq glass-l"><summary>Je peux changer de pack en cours de route ?<span class="pl">+</span></summary><p>Oui, à tout moment pour le mois suivant. Beaucoup de commerces commencent avec Social Only ou Social Pro, puis montent quand les résultats arrivent.</p></details>
+      <details class="fq glass-l"><summary>Qui crée le contenu ? C'est vraiment de l'IA ?<span class="pl">+</span></summary><p>L'IA prépare (textes, visuels, planification), Tirera relit et ajuste chaque livrable, puis vous validez d'un clic depuis votre espace. Rien n'est publié sans votre accord — l'IA fait la vitesse, l'humain fait le goût.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 7. CTA FINAL ═══ -->
+<section class="section" id="go" style="padding-top:20px;padding-bottom:96px;">
+  <div class="wrap">
+    <div class="final-cta glass-l reveal">
+      <div class="fic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg></div>
+      <div class="kicker" style="justify-content:center;">Première étape</div>
+      <h2>On regarde votre cas,<br><span class="gr">on vous dit franchement.</span></h2>
+      <p>Audit de visibilité offert — 30 minutes pour comprendre où vous en êtes, et quel niveau d'accompagnement a du sens. Aucun engagement.</p>
+      <a href="contact.html" class="btn btn-primary">Demander mon audit →</a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /lightzone -->
+
+</main>
+
+<footer>
+  <div class="wrap foot-row">
+    <span>© 2026 DWT Digital — Marketing IA · Île-de-France</span>
+    <div class="foot-links"><a href="index.html">Accueil</a><a href="offres.html">Offres</a><a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Qui sommes-nous</a><a href="contact.html">Contact</a></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ── FOND CONTINU : stops ancrés sur #pourquoi (fin de nuit) et .lightzone (jour) ── */
+  var pagebg=document.getElementById("pagebg");
+  function paintBg(){
+    /* fond violet sombre constant sur toute la page (plus de bascule vers le clair) */
+    var H=document.documentElement.scrollHeight||1;
+    var pour=document.getElementById("pourquoi");
+    var anchor=pour?Math.round(pour.offsetTop+pour.offsetHeight*0.6):Math.round(H*0.4);
+    pagebg.style.background="linear-gradient(180deg,#08000f 0px,#150424 "+Math.round(H*0.22)+"px,#1c0732 "+anchor+"px,#170528 "+Math.round(H*0.7)+"px,#0c0119 "+H+"px)";
+  }
+
+  /* ── progression + fondu de la nuit + bascule nav claire ── */
+  var prog=document.getElementById("prog");
+  var scene=document.getElementById("scene");
+  var stars=document.getElementById("stars");
+  var vignette=document.getElementById("vignette");
+  var navPill=document.getElementById("navPill");
+  var lightY=2000;
+  function calcLight(){var p=document.querySelector(".lightzone");if(p)lightY=p.offsetTop-230;}
+  function onScroll(){
+    var h=document.documentElement,y=h.scrollTop;
+    prog.style.width=((y/(h.scrollHeight-h.clientHeight||1))*100)+"%";
+    /* page tout sombre : on garde les orbes/étoiles présents partout (léger fondu vers le bas) */
+    var fade=Math.max(0.5,1-(y/(innerHeight*4)));
+    scene.style.opacity=fade;
+    stars.style.opacity=(fade*0.5).toFixed(2);
+    if(vignette) vignette.style.opacity=Math.max(0.55,fade);
+    navPill.classList.remove("on-light");
+  }
+
+  /* ── reveals ── */
+  function setupReveals(){
+    var els=document.querySelectorAll(".reveal");
+    if("IntersectionObserver" in window){
+      var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:.08,rootMargin:"0px 0px -5% 0px"});
+      els.forEach(function(e){io.observe(e);});
+    } else { els.forEach(function(e){e.classList.add("in");}); }
+  }
+
+  /* ── icônes ── */
+  var ICOCHECK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#63AF21" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  var ICOWARN='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7B1FA2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
+
+  /* ── VISUELS CARRÉS ANIMÉS (par pack) ── */
+  var SAT='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+  function buildAnim(kind){
+    if(kind==="grid"){
+      var t="";for(var i=0;i<9;i++)t+="<i></i>";
+      return '<div class="av-grid">'+t+'</div>';
+    }
+    if(kind==="orbit"){
+      return '<div class="av-orbit">'+
+        '<span class="dash d1"></span>'+
+        '<div class="core">'+SAT+'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>'+
+        '<div class="ring">'+
+          '<span class="sat" style="--a:0deg">'+SAT+'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg></span>'+
+          '<span class="sat" style="--a:90deg">'+SAT+'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg></span>'+
+          '<span class="sat" style="--a:180deg">'+SAT+'<polygon points="12 2 15 9 22 9.3 16.5 14 18 21 12 17.5 6 21 7.5 14 2 9.3 9 9 12 2"/></svg></span>'+
+          '<span class="sat" style="--a:270deg">'+SAT+'<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></span>'+
+        '</div></div>';
+    }
+    if(kind==="bars"){
+      return '<div class="av-bars"><i></i><i></i><i></i><i></i><i></i><i></i></div>';
+    }
+    if(kind==="layers"){
+      return '<div class="av-orbit">'+
+        '<span class="dash d1"></span><span class="dash d2"></span>'+
+        '<div class="core">'+SAT+'<path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l1.5 1.5M16.5 16.5L18 18M18 6l-1.5 1.5M7.5 16.5L6 18"/><circle cx="12" cy="12" r="3"/></svg></div>'+
+        '<div class="ring">'+
+          '<span class="sat" style="--a:0deg"><span class="lab">Site</span></span>'+
+          '<span class="sat" style="--a:120deg"><span class="lab">Ads</span></span>'+
+          '<span class="sat" style="--a:240deg"><span class="lab">IA</span></span>'+
+        '</div></div>';
+    }
+    if(kind==="compose"){
+      return '<div class="av-comp"><i></i><i></i><i></i><i></i>'+
+        '<span class="plus">'+SAT+'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></div>';
+    }
+    return "";
+  }
+
+  /* ── DONNÉES PACKS enrichies (montée en gamme : base + nouveautés expliquées + bénéfice) ── */
+  var G_PLUS='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+  var G_ARROW='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="18" y2="12"/><polyline points="12 6 18 12 12 18"/></svg>';
+  var G_STACK='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8 12 14 2 8"/><polyline points="2 16 12 22 22 16"/></svg>';
+  var G_SPARK='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>';
+
+  var GAMME=[
+    {id:"only",num:"01",n:"Social Only",promise:"Votre présence sociale, gérée pour vous",price:"300 €",unit:"/mois · sans engagement",anim:"grid",pop:false,base:null,
+     intro:"Le point de départ : on prend en main un réseau et on le fait vivre, sans que vous ayez à y penser.",
+     items:[
+       {t:"1 réseau au choix — Instagram ou Facebook",w:"On gère un réseau de bout en bout : celui où vos clients sont déjà.",b:"Toute la force au bon endroit, plutôt que partout à moitié."},
+       {t:"8 publications par mois, visuels premium",w:"Environ deux posts par semaine, créés et programmés pour vous.",b:"L'algorithme — et vos abonnés — ne vous oublient jamais."},
+       {t:"Calendrier éditorial mensuel",w:"Vous voyez à l'avance ce qui sera publié, et quand.",b:"Zéro surprise : vous validez tout d'un coup d'œil."},
+       {t:"Réponses aux commentaires et messages",w:"On répond à votre place, dans votre ton.",b:"Plus aucun client laissé sans réponse — donc aucun parti chez le voisin."},
+       {t:"Rapport mensuel simple",w:"Portée, abonnés, meilleurs posts, en clair.",b:"Vous savez ce que ça donne sans déchiffrer un tableur."}
+     ]},
+    {id:"pro",num:"02",n:"Social Pro",promise:"Réseaux sociaux + visibilité Google",price:"497 €",unit:"/mois · sans engagement",anim:"orbit",pop:true,base:"Social Only",
+     intro:"",
+     items:[
+       {t:"2 réseaux, 12 publications + stories",w:"Une présence élargie, avec les formats courts qui font découvrir un commerce.",b:"Vous touchez plus de monde, sur plus de canaux."},
+       {t:"Fiche Google Business optimisée",w:"Horaires, photos, posts Google : la première chose qu'un client local voit de vous.",b:"Vous inspirez confiance avant même qu'on vous appelle."},
+       {t:"Gestion des avis clients",w:"On sollicite vos bons clients et on répond à chaque avis.",b:"Votre bouche-à-oreille devient visible — et il rassure."},
+       {t:"SEO local de base",w:"On travaille votre présence pour les recherches du quartier.",b:"Quand on cherche votre métier près de chez vous, c'est vous qui sortez."}
+     ]},
+    {id:"ess",num:"03",n:"Essential",promise:"Présence complète, sans site à gérer",price:"650 €",unit:"/mois · sans engagement",anim:"bars",pop:false,base:"Social Pro",
+     intro:"",
+     items:[
+       {t:"Email marketing — 1 newsletter par mois",w:"Un message direct à vos clients fidèles, qui ne dépend d'aucun algorithme.",b:"Le canal le plus rentable : ils reviennent plus souvent."},
+       {t:"Radar Tendances locales",w:"Une veille hebdomadaire de ce qui monte près de chez vous.",b:"Vous surfez la tendance avant vos concurrents."},
+       {t:"Audit de visibilité trimestriel",w:"Tous les 3 mois : où vous en êtes, ce qui progresse, la suite.",b:"Vous gardez le cap, sans naviguer à l'aveugle."},
+       {t:"Rapport de performance détaillé",w:"Chaque euro investi relié à un résultat visible.",b:"Vous pilotez en connaissance de cause."}
+     ]},
+    {id:"prem",num:"04",n:"Premium",promise:"Tout délégué : site + réseaux + publicité",price:"950 €",unit:"/mois · sans engagement",anim:"layers",pop:false,base:"Essential",
+     intro:"",
+     items:[
+       {t:"Site vitrine inclus — création & maintenance",w:"Votre adresse à vous, ouverte 24 h/24.",b:"Vous ne dépendez plus de la plateforme des autres."},
+       {t:"Campagnes Google Ads + Meta Ads",w:"La publicité bien réglée ; budget média payé directement aux plateformes, zéro commission.",b:"Des clients dès la première semaine, pas dans six mois."},
+       {t:"Sosie de Marque IA",w:"Une IA entraînée sur votre ton et votre style.",b:"Tout ce qui sort vous ressemble vraiment — pas un robot."},
+       {t:"Blog SEO — articles réguliers",w:"Chaque article est une porte d'entrée Google de plus.",b:"Du trafic qui travaille pour vous pendant des années."},
+       {t:"Accompagnement prioritaire",w:"Réponse rapide, point mensuel, un interlocuteur unique : Tirera.",b:"Vous êtes suivi comme un grand compte."}
+     ]},
+    {id:"mes",num:"05",n:"Sur Mesure",promise:"Votre projet spécifique",price:"Devis",unit:"gratuit · réponse sous 48 h",anim:"compose",pop:false,base:null,
+     intro:"Votre besoin ne rentre pas dans une case ? On sort des packs et on construit la formule avec vous.",
+     items:[
+       {t:"Audit complet de votre situation",w:"On commence par comprendre : marché, canaux, marges de progression.",b:"Une stratégie fondée sur vos vrais chiffres, pas sur des suppositions."},
+       {t:"Stratégie entièrement personnalisée",w:"Un plan d'action chiffré, étape par étape, à votre budget.",b:"Vous avancez à votre rythme, sans payer l'inutile."},
+       {t:"E-commerce et intégrations",w:"Boutique en ligne, click & collect, réservation, caisse connectée.",b:"On chiffre précisément ce dont vous avez besoin."},
+       {t:"Accompagnement dédié",w:"Un interlocuteur unique, du devis à la mise en ligne — et après.",b:"Un seul contact qui connaît votre dossier par cœur."}
+     ]}
+  ];
+  var NG=GAMME.length;
+
+  var GIMG={only:"assets/pack-social.jpg",pro:"assets/pack-pro.jpg",ess:"assets/pack-essential.jpg",prem:"assets/pack-premium.jpg",mes:"assets/pack-mesure.jpg"};
+  var gpanels=document.getElementById("gpanels");
+  if(gpanels){
+    gpanels.innerHTML=GAMME.map(function(g,i){
+      var items=g.items.map(function(it,k){
+        return '<div class="gp-item" style="--k:'+k+'">'+
+          '<div class="gp-it-head"><span class="gp-plus">'+G_PLUS+'</span><b>'+it.t+'</b></div>'+
+          '<div class="gp-it-w">'+it.w+'</div>'+
+          '<div class="gp-it-b">'+G_ARROW+'<span>'+it.b+'</span></div>'+
+        '</div>';
+      }).join("");
+      var base=g.base
+        ? '<div class="gp-base">'+G_STACK+'<span>Tout <b>'+g.base+'</b> inclus, et on ajoute&nbsp;:</span></div>'
+        : '<div class="gp-base solo">'+G_SPARK+'<span>'+g.intro+'</span></div>';
+      return '<div class="gpanel'+(i===0?" on":"")+'" data-i="'+i+'">'+
+        '<div class="gp-left">'+
+          '<div class="pd-anim gp-anim">'+(GIMG[g.id]?'<div class="gp-photo" style="background-image:url('+GIMG[g.id]+')"></div>':'')+(g.pop?'<span class="pop">Le plus pris</span>':'')+buildAnim(g.anim)+'</div>'+
+          '<div class="gp-meta"><span class="gp-num">'+g.num+' / 0'+NG+'</span>'+
+            '<div class="gp-name">'+g.n+'</div><div class="gp-promise">'+g.promise+'</div>'+
+            '<div class="gp-price">'+g.price+'<small> '+g.unit+'</small></div></div>'+
+        '</div>'+
+        '<div class="gp-right">'+base+
+          '<div class="gp-items">'+items+'</div>'+
+          '<a href="contact.html" class="btn btn-primary gp-cta">'+(g.price==="Devis"?"Demander un devis":"Choisir "+g.n)+' →</a>'+
+        '</div>'+
+      '</div>';
+    }).join("");
+  }
+  var gammeRail=document.getElementById("gammeRail");
+  if(gammeRail){
+    gammeRail.innerHTML=GAMME.map(function(g,i){
+      return (i>0?'<span class="gamme-line" data-l="'+i+'"></span>':"")+
+        '<button class="gamme-step'+(i===0?" on":"")+'" data-i="'+i+'"><span class="dot">'+g.num+'</span><span class="lab">'+g.n+'</span></button>';
+    }).join("");
+  }
+
+  /* pilote du parcours : la scène se fige, la progression du scroll choisit le pack */
+  var gPanelEls=gpanels?[].slice.call(gpanels.querySelectorAll(".gpanel")):[];
+  var gStepEls=gammeRail?[].slice.call(gammeRail.querySelectorAll(".gamme-step")):[];
+  var gLineEls=gammeRail?[].slice.call(gammeRail.querySelectorAll(".gamme-line")):[];
+  var packScrolly=document.getElementById("packScrolly");
+  var deskMQ=matchMedia("(min-width:861px)");
+  var gcur=-1;
+  function ggo(i){
+    if(i===gcur) return;
+    gcur=i;
+    gPanelEls.forEach(function(p,k){p.classList.toggle("on",k===i);});
+    gStepEls.forEach(function(s,k){s.classList.toggle("on",k===i);s.classList.toggle("done",k<i);});
+    gLineEls.forEach(function(l){l.classList.toggle("fill",parseInt(l.getAttribute("data-l"),10)<=i);});
+  }
+  function updateGamme(){
+    if(!packScrolly||!deskMQ.matches) return;
+    var r=packScrolly.getBoundingClientRect();
+    var total=Math.max(1,r.height-innerHeight);
+    var p=Math.min(1,Math.max(0,-r.top/total));
+    ggo(Math.min(NG-1,Math.floor(p*NG)));
+  }
+  if(gammeRail){
+    gammeRail.addEventListener("click",function(e){
+      var b=e.target.closest(".gamme-step"); if(!b||!packScrolly||!deskMQ.matches) return;
+      var i=parseInt(b.getAttribute("data-i"),10);
+      var r=packScrolly.getBoundingClientRect();
+      var span=Math.max(1,packScrolly.offsetHeight-innerHeight);
+      window.scrollTo({top:Math.round(window.scrollY+r.top+(i+0.3)/NG*span),behavior:"smooth"});
+    });
+  }
+  ggo(0);
+
+  /* ── TABLEAU COMPARATIF ── */
+  var Y='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#63AF21" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  var ROWS=[
+    ["Réseaux sociaux gérés",["1 réseau","2 réseaux","2 réseaux","2 réseaux"]],
+    ["Publications par mois",["8","12 + stories","12 + stories","12 + stories"]],
+    ["Visuels premium inclus",[1,1,1,1]],
+    ["Réponses commentaires & messages",[1,1,1,1]],
+    ["Fiche Google Business optimisée",[0,1,1,1]],
+    ["Gestion des avis clients",[0,1,1,1]],
+    ["SEO local",[0,"base",1,1]],
+    ["Newsletter mensuelle",[0,0,1,1]],
+    ["Radar Tendances locales",[0,0,1,1]],
+    ["Audit de visibilité",[0,0,"trimestriel","trimestriel"]],
+    ["Site vitrine (création + maintenance)",[0,0,0,1]],
+    ["Campagnes Google Ads + Meta Ads",[0,0,0,1]],
+    ["Sosie de Marque IA",[0,0,0,1]],
+    ["Blog SEO",[0,0,0,1]],
+    ["Rapport",["simple","mensuel","détaillé","détaillé"]]
+  ];
+  var CMPPACKS=[["Social Only","300 €"],["Social Pro","497 €",true],["Essential","650 €"],["Premium","950 €"]];
+  var tbl=document.getElementById("cmpTable");
+  if(tbl){
+    var thead='<thead><tr><th></th>'+CMPPACKS.map(function(p){
+      return '<th'+(p[2]?' class="feat"':'')+'>'+p[0]+'<span class="pp">'+p[1]+'<small> /mois</small></span></th>';
+    }).join("")+'</tr></thead>';
+    var tbody='<tbody>'+ROWS.map(function(r){
+      return '<tr><td>'+r[0]+'</td>'+r[1].map(function(v){
+        if(v===1) return '<td class="y">'+Y+'</td>';
+        if(v===0) return '<td class="n">—</td>';
+        return '<td><span class="txt">'+v+'</span></td>';
+      }).join("")+'</tr>';
+    }).join("")+'</tbody>';
+    var tfoot='<tfoot><tr><td></td>'+CMPPACKS.map(function(p){
+      return '<td'+(p[2]?' class="feat"':'')+'><a href="contact.html">Choisir →</a></td>';
+    }).join("")+'</tr></tfoot>';
+    tbl.innerHTML=thead+tbody+tfoot;
+  }
+  (function(){
+    if(!tbl||!(window.matchMedia&&matchMedia("(max-width:860px)").matches))return;
+    var cmpWrap=tbl.closest(".cmp-wrap")||tbl.parentNode;
+    var mob=document.createElement("div");mob.className="cmp-mob";
+    mob.innerHTML='<div class="cmp-sel">'+CMPPACKS.map(function(p,i){return '<button type="button" class="cmp-pk" data-i="'+i+'">'+p[0]+'</button>';}).join("")+'</div><div class="cmp-mob-head"></div><div class="cmp-mob-list"></div>';
+    cmpWrap.parentNode.insertBefore(mob,cmpWrap.nextSibling);
+    var CK='<span class="ck"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>';
+    function renderCmp(i){
+      mob.querySelector(".cmp-mob-head").innerHTML='<span class="cn">'+CMPPACKS[i][0]+'</span><span class="cp">'+CMPPACKS[i][1]+'<small> /mois</small></span>';
+      mob.querySelector(".cmp-mob-list").innerHTML=ROWS.map(function(r){
+        var v=r[1][i];var val=v===1?CK:(v===0?'<span class="no">—</span>':'<span class="vv">'+v+'</span>');
+        return '<div class="cmp-row"><span class="cf">'+r[0]+'</span>'+val+'</div>';
+      }).join("")+'<a href="contact.html" class="cmp-choose">Choisir '+CMPPACKS[i][0]+' →</a>';
+      Array.prototype.forEach.call(mob.querySelectorAll(".cmp-pk"),function(b,bi){b.classList.toggle("on",bi===i);});
+    }
+    mob.querySelector(".cmp-sel").addEventListener("click",function(e){var b=e.target.closest(".cmp-pk");if(!b)return;renderCmp(parseInt(b.getAttribute("data-i"),10));});
+    renderCmp(1);
+  })();
+
+  /* ── COMPOSITEUR À LA CARTE (prix BROUILLON — à valider) + filtres ── */
+  var SVCICO={
+    share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/>',
+    insta:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/>',
+    image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>',
+    pin:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',
+    star:'<polygon points="12 2 15 9 22 9.3 16.5 14 18 21 12 17.5 6 21 7.5 14 2 9.3 9 9 12 2"/>',
+    search:'<circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/>',
+    mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',
+    doc:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/>',
+    target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+    mega:'<path d="M3 11v2a1 1 0 0 0 1 1h2l4 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M14 8a4 4 0 0 1 0 8"/>',
+    radar:'<polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/>',
+    spark:'<path d="M12 3v3M12 18v3M3 12h3M18 12h3M6 6l1.5 1.5M16.5 16.5L18 18M18 6l-1.5 1.5M7.5 16.5L6 18"/><circle cx="12" cy="12" r="3"/>'
+  };
+  /* Données enrichies : w = c'est quoi concrètement · why = pourquoi vous en avez besoin
+     · b = ce que ça change · proof = chiffre RÉEL sourcé (veille juin 2026, liens vérifiables) */
+  var SVCS=[
+    {id:"social1",n:"Réseaux sociaux",d:"Un feed vivant, sans y penser.",p:180,cat:"social",ic:"share",packs:["only","pro","ess","prem"],
+     w:"On gère votre réseau de A à Z : création des posts, visuels, programmation, réponses aux commentaires et aux messages. Vous validez, on publie.",
+     why:"Vos clients jugent votre sérieux à votre dernier post. Un feed actif rassure ; un feed à l'abandon fait fuir — vers le concurrent d'à côté.",
+     b:"Vous restez présent chaque semaine, sans y passer une minute.",
+     proof:{n:"74&nbsp;%",t:"des consommateurs consultent les réseaux sociaux d'une marque avant de se déplacer",s:"Sprout Social",u:"https://sproutsocial.com/insights/social-media-statistics/"}},
+    {id:"social2",n:"Réseau en +",d:"Ajoutez un canal sans tout doubler.",p:90,cat:"social",ic:"insta",packs:["pro","ess","prem"],
+     w:"On décline votre contenu sur un deuxième réseau, adapté à ses codes : formats, horaires, légendes, hashtags.",
+     why:"Vos clients ne sont pas tous au même endroit : certains vous cherchent sur Facebook, d'autres sur Instagram. Être sur un seul canal, c'est rater l'autre moitié.",
+     b:"Vous touchez une nouvelle audience sans refaire le travail.",
+     proof:{n:"49&nbsp;%",t:"se renseignent sur un commerce local via Facebook — et 33&nbsp;% via Instagram",s:"BrightLocal / Marketing Charts",u:"https://www.marketingcharts.com/cross-media-and-traditional/local-and-small-biz-232363"}},
+    {id:"visuels",n:"Visuels premium",d:"Des images qui arrêtent le scroll.",p:120,cat:"contenu",ic:"image",packs:["only","pro","ess","prem"],
+     w:"Chaque mois, un lot de visuels et de stories aux couleurs de votre marque, prêts à publier : photos retravaillées, modèles, carrousels.",
+     why:"Sur les réseaux, l'image décide en une seconde : un visuel amateur banalise votre travail, un visuel soigné le vend.",
+     b:"Votre image fait pro — et on s'arrête sur vos posts.",
+     proof:{n:"N°1",t:"les carrousels visuels sont le format le plus engageant sur Instagram",s:"Statista, 2024",u:"https://www.statista.com/statistics/1353273/instagram-post-interaction-by-format/"}},
+    {id:"google",n:"Fiche Google",d:"Trouvable. Crédible. Cliquée.",p:90,cat:"google",ic:"pin",packs:["pro","ess","prem"],
+     w:"Optimisation complète de votre fiche Google Business : photos, horaires, description, catégories, posts Google réguliers.",
+     why:"C'est la première chose qu'un client voit en vous cherchant — avant même votre site. Une fiche incomplète, c'est un client qui passe au suivant.",
+     b:"Vous apparaissez au bon moment, avec une vitrine qui donne envie.",
+     proof:{n:"7×",t:"plus de clics pour une fiche Google complète que pour une fiche laissée vide",s:"Google / Search Endurance",u:"https://searchendurance.com/google-business-profile-statistics/"}},
+    {id:"avis",n:"Avis clients",d:"Faites parler ceux qui vous aiment.",p:70,cat:"google",ic:"star",packs:["pro","ess","prem"],
+     w:"On sollicite vos clients satisfaits au bon moment, et on répond à chaque avis — positif ou négatif — dans votre ton.",
+     why:"Les avis sont votre bouche-à-oreille numérique : c'est la première preuve sociale qu'un nouveau client regarde, avant même vos prix.",
+     b:"Vos avis deviennent votre meilleur argument de vente.",
+     proof:{n:"+41&nbsp;%",t:"de chances qu'un consommateur choisisse un commerce qui répond à tous ses avis",s:"BrightLocal, enquête 2024",u:"https://www.brightlocal.com/research/local-consumer-review-survey-2024/"}},
+    {id:"seo",n:"SEO local",d:"Premier sur Google près de chez vous.",p:150,cat:"google",ic:"search",packs:["pro","ess","prem"],
+     w:"Optimisation de votre présence pour les recherches du quartier : mots-clés locaux, cohérence des annuaires, contenu géolocalisé.",
+     why:"Quand on tape « votre métier + votre ville », il faut sortir dans le trio de tête. Sinon, c'est le concurrent qui prend l'appel.",
+     b:"Quand on cherche votre métier près de chez vous, c'est vous qu'on trouve.",
+     proof:{n:"76&nbsp;%",t:"des recherches locales sur mobile aboutissent à une visite en boutique sous 24&nbsp;h",s:"Think with Google",u:"https://backlinko.com/local-seo-stats"}},
+    {id:"email",n:"Email marketing",d:"Une newsletter qui ne finit pas en spam.",p:90,cat:"contenu",ic:"mail",packs:["ess","prem"],
+     w:"Une newsletter par mois : rédaction, mise en page aux couleurs de votre marque, envoi et suivi des ouvertures.",
+     why:"C'est le seul canal qui ne dépend d'aucun algorithme : votre liste de clients vous appartient, pour toujours.",
+     b:"Vos clients fidèles reviennent plus souvent.",
+     proof:{n:"36&nbsp;€",t:"générés en moyenne pour chaque euro investi en email marketing",s:"Litmus",u:"https://www.litmus.com/resources/email-marketing-roi"}},
+    {id:"blog",n:"Blog SEO",d:"Du contenu qui ramène du trafic, longtemps.",p:160,cat:"contenu",ic:"doc",packs:["prem"],
+     w:"Deux articles par mois optimisés pour Google, pensés pour répondre aux questions que vos clients tapent déjà dans la barre de recherche.",
+     why:"Chaque article est une porte d'entrée Google de plus vers votre commerce — et elle reste ouverte des années, sans budget pub.",
+     b:"Du trafic qui travaille pour vous pendant des années.",
+     proof:{n:"+67&nbsp;%",t:"de prospects par mois pour les entreprises qui tiennent un blog",s:"HubSpot",u:"https://www.hubspot.com/marketing-statistics"}},
+    {id:"gads",n:"Google Ads",d:"Apparaître quand on vous cherche.",p:150,cat:"pub",ic:"target",packs:["prem"],
+     w:"Création, réglage et pilotage de vos campagnes Google Ads. Budget publicitaire payé directement à Google — zéro commission.",
+     why:"La publicité Google vous place tout en haut, pile au moment où quelqu'un cherche ce que vous vendez.",
+     b:"Des clients dès la première semaine, pas dans six mois.",
+     proof:{n:"2&nbsp;€",t:"de retour en moyenne pour chaque euro investi sur Google Ads",s:"Google Economic Impact",u:"https://economicimpact.google/methodology/"}},
+    {id:"mads",n:"Meta Ads",d:"Toucher les bonnes personnes sur Insta & FB.",p:150,cat:"pub",ic:"mega",packs:["prem"],
+     w:"Campagnes Instagram et Facebook ciblées sur votre zone et votre clientèle. Budget payé aux plateformes — zéro commission.",
+     why:"Vos futurs clients passent leurs soirées sur Instagram et Facebook : c'est là qu'on va les chercher, au bon endroit, au bon moment.",
+     b:"Vous touchez vos futurs clients là où ils passent du temps.",
+     proof:{n:"67&nbsp;%",t:"des utilisateurs se renseignent sur les réseaux sociaux avant un achat",s:"eMarketer / IZEA, 2024",u:"https://www.emarketer.com/content/social-media-users-research-on-social-before-purchasing"}},
+    {id:"radar",n:"Radar tendances",d:"Une longueur d'avance, chaque semaine.",p:60,cat:"ia",ic:"radar",packs:["ess","prem"],
+     w:"Chaque semaine, une veille de ce qui monte près de chez vous — recherches locales, saisons, événements — transformée en idées de contenu.",
+     why:"Publier au bon moment vaut mieux que publier beaucoup : on attrape la vague avant les autres.",
+     b:"Vous surfez la tendance avant vos concurrents.",
+     proof:{n:"+900&nbsp;%",t:"de croissance des recherches « près de moi » en deux ans",s:"Think with Google",u:"https://www.loopexdigital.com/blog/local-seo-statistics"}},
+    {id:"sosie",n:"Sosie de Marque IA",d:"Votre voix, clonée, prête à écrire.",p:80,cat:"ia",ic:"spark",packs:["prem"],
+     w:"On entraîne une IA sur votre ton, vos expressions, vos valeurs. Elle pré-rédige posts, réponses et newsletters — toujours dans votre style, toujours relus par Tirera.",
+     why:"Vos clients doivent vous reconnaître partout : un ton qui change à chaque post brouille votre image et casse la confiance.",
+     b:"Tout ce qui sort sonne comme vous — pas comme un robot.",
+     proof:{n:"+33&nbsp;%",t:"de chiffre d'affaires possible grâce à une image de marque cohérente sur tous les canaux",s:"Marq (Lucidpress)",u:"https://www.marq.com/blog/brand-consistency-competitive-advantage/"}}
+  ];
+  var PACKINFO={only:["Social Only",300],pro:["Social Pro",497],ess:["Essential",650],prem:["Premium",950]};
+  var TICK='<span class="tick"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>';
+
+  var grid=document.getElementById("svcGrid");
+  var cartePanel=document.getElementById("cartePanel");
+  var cpDetail=document.getElementById("cpDetail");
+  var sel={}, activeId=null;
+  var CP_PLUS='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>';
+  var CP_CHECK='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  var CP_X='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>';
+  var CP_HINT='<div class="cp-hint"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10V6a2 2 0 0 1 4 0v4"/><path d="M11 10V5a2 2 0 0 1 4 0v5"/><path d="M15 10a2 2 0 0 1 4 0v4a7 7 0 0 1-7 7 7 7 0 0 1-6.2-3.7L4 14c-.4-.9.5-1.8 1.4-1.4L7 13.5V10"/></svg><span>Cliquez une prestation à gauche pour découvrir ce qu\'elle apporte — et l\'ajouter à votre formule.</span></div>';
+  function svcById(id){for(var i=0;i<SVCS.length;i++){if(SVCS[i].id===id)return SVCS[i];}return null;}
+  /* cadence : « ça coûte tant, pour tant de contenu » (chiffres = doc offres v1) */
+  var FREQ={social1:"8 publications/mois",social2:"+1 réseau, même soin",visuels:"8 visuels ou stories/mois",
+    google:"optimisation + 4 posts Google/mois",avis:"suivi continu des avis",seo:"travail de fond, en continu",
+    email:"1 newsletter/mois",blog:"2 articles/mois",gads:"pilotage continu",mads:"pilotage continu",
+    radar:"1 veille/semaine",sosie:"appliqué à tous vos contenus"};
+  /* mockups « à quoi ça ressemble » — exemples illustratifs dans le détail */
+  function MOCK(id){
+    var I1="assets/post-cake1.jpg",I2="assets/post-meat1.jpg",I3="assets/post-bread1.jpg";
+    function post(net,img,tx){return '<div class="mk-post"><div class="ph" style="background-image:url('+img+')"></div><div class="cap"><span class="net">'+net+'</span><span class="tx">'+tx+'</span></div></div>';}
+    var LOUPE='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(246,241,250,.5)" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.7" y2="16.7"/></svg>';
+    switch(id){
+      case "social1": case "social2":
+        return '<div class="mk-posts">'+post("Instagram",I1,"♥ 124 · 12 com.")+post("Facebook",I3,"♥ 86 · 9 partages")+post("TikTok",I2,"▶ 2 304 vues")+'</div>';
+      case "visuels":
+        return '<div class="mk-posts">'+post("Post",I1,"aux couleurs de votre marque")+post("Story",I2,"format vertical prêt à poster")+post("Carrousel",I3,"3 à 5 visuels qui défilent")+'</div>';
+      case "google":
+        return '<div class="mk-search">'+LOUPE+'pâtisserie près de chez moi</div>'+
+          '<div class="mk-res"><span class="stars">★★★★★</span><b>Votre commerce — 4,9 (128 avis)</b><span>Ouvert · Itinéraire · Site</span></div>';
+      case "avis":
+        return '<div class="mk-res"><span class="stars">★★★★★</span><b>« Accueil au top, gâteaux incroyables ! »</b><span>Marie L. · il y a 2 jours</span></div>'+
+          '<div class="mk-res"><b style="color:#d49bff;">Votre réponse</b><span>« Merci Marie, à samedi pour la nouvelle fournée ! »</span></div>';
+      case "seo":
+        return '<div class="mk-search">'+LOUPE+'boulangerie + votre ville</div><div class="mk-rows">'+
+          '<div class="mk-row"><span>1. Votre commerce</span><b>★ 4,9</b></div>'+
+          '<div class="mk-row ghost"><span>2. Concurrent A</span><span>★ 3,8</span></div>'+
+          '<div class="mk-row ghost"><span>3. Concurrent B</span><span>★ 3,5</span></div></div>';
+      case "email":
+        return '<div class="mk-mail"><div class="mh">Les nouveautés de juin — Votre commerce</div><div class="mb">312 ouvertures · 41 clics vers votre carte · 9 réservations</div></div>';
+      case "blog":
+        return '<div class="mk-res"><span class="ann">Article de blog</span><b>« Quel gâteau pour 30 invités ? Le guide »</b><span>Une question que vos clients tapent déjà sur Google</span></div>';
+      case "gads":
+        return '<div class="mk-search">'+LOUPE+'gâteau anniversaire + votre ville</div>'+
+          '<div class="mk-res"><span class="ann">Annonce</span><b>Votre commerce — Pâtisserie artisanale</b><span>votre-commerce.fr · Commande en 2 clics</span></div>';
+      case "mads":
+        return '<div class="mk-posts">'+post("Instagram · Sponsorisé",I1,"En savoir plus →")+post("Facebook · Sponsorisé",I2,"Commander →")+'</div>';
+      case "radar":
+        return '<div class="mk-rows">'+
+          '<div class="mk-row"><span>« fraisier »</span><b>↗ en forte hausse</b></div>'+
+          '<div class="mk-row"><span>« glace artisanale »</span><b>↗ ça monte</b></div>'+
+          '<div class="mk-row ghost"><span>« bûche de Noël »</span><span>↘ hors saison</span></div></div>';
+      case "sosie":
+        return '<div class="mk-bub b1"><span class="who">IA générique</span>« Découvrez nos délicieux produits de qualité. »</div>'+
+          '<div class="mk-bub b2"><span class="who">Votre Sosie IA</span>« La brioche du samedi sort du four à 8 h. Premier arrivé, premier servi. »</div>';
+    }
+    return "";
+  }
+
+  if(grid){
+    grid.innerHTML=SVCS.map(function(s){
+      return '<div class="svc" data-id="'+s.id+'" data-cat="'+s.cat+'" role="button" tabindex="0" aria-pressed="false">'+TICK+
+        '<div class="row1"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+SVCICO[s.ic]+'</svg>'+
+        '<span class="nm">'+s.n+'</span><span class="pr">'+s.p+'&nbsp;€<small> /mois</small></span></div>'+
+        '<div class="ds">'+s.d+'</div></div>';
+    }).join("");
+    grid.addEventListener("click",function(e){var c=e.target.closest(".svc");if(!c)return;var id=c.getAttribute("data-id");if(window.matchMedia&&matchMedia("(max-width:860px)").matches){if(e.target.closest(".svc-add")){toggleSel(id);var b=c.querySelector(".svc-add");if(b)b.textContent=sel[id]?"Retirer de ma formule":"Ajouter à ma formule";}else{var op=c.classList.toggle("open");if(op&&!c.querySelector(".svc-detail")){var s=svcById(id);if(s){var d=document.createElement("div");d.className="svc-detail";d.innerHTML='<p class="sd-w">'+(s.w||"")+'</p>'+(s.why?'<p class="sd-why"><b>Pourquoi&nbsp;:</b> '+s.why+'</p>':"")+(s.b?'<p class="sd-b">'+s.b+'</p>':"");var ab=c.querySelector(".svc-add");if(ab){c.insertBefore(d,ab);}else{c.appendChild(d);}}}}}else{inspect(id);}});
+    grid.addEventListener("keydown",function(e){
+      if(e.key!==" "&&e.key!=="Enter")return;
+      var c=e.target.closest(".svc");if(!c)return;e.preventDefault();var id=c.getAttribute("data-id");
+      if(window.matchMedia&&matchMedia("(max-width:860px)").matches){c.classList.toggle("open");}else{inspect(id);}
+    });
+    /* réveil "clavier" au scroll : vague tac-tac-tac, puis on rend la main aux transitions hover */
+    Array.prototype.forEach.call(grid.querySelectorAll(".svc"),function(c,i){
+      c.style.setProperty("--kd",((i%2)*0.07+Math.floor(i/2)*0.09).toFixed(2)+"s");
+      c.addEventListener("animationend",function(){c.style.animation="none";});
+    });
+    if("IntersectionObserver" in window && !reduce){
+      grid.classList.add("keys-prep");
+      var ioK=new IntersectionObserver(function(es){es.forEach(function(e){
+        if(e.isIntersecting){grid.classList.add("keys-in");grid.classList.remove("keys-prep");ioK.unobserve(e.target);}
+      });},{threshold:.15});
+      ioK.observe(grid);
+    }
+  }
+  function inspect(id){
+    if(activeId===id){closeInspect();return;}
+    var s=svcById(id); if(!s||!grid) return;
+    activeId=id;
+    grid.classList.add("inspecting");
+    Array.prototype.forEach.call(grid.querySelectorAll(".svc"),function(c){c.classList.toggle("active",c.getAttribute("data-id")===id);});
+    cpDetail.innerHTML='<div class="cp-card">'+
+      '<button class="cp-close" aria-label="Fermer le détail">'+CP_X+'</button>'+
+      '<div class="cp-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+SVCICO[s.ic]+'</svg></div>'+
+      '<div class="cp-name">'+s.n+'</div><div class="cp-tag">'+s.d+'</div>'+
+      (MOCK(s.id)?'<div class="cp-mock"><div class="mlab">À quoi ça ressemble</div>'+MOCK(s.id)+'</div>':'')+
+      '<div class="cp-block"><div class="lab">C\'est quoi, concrètement ?</div><p>'+s.w+'</p></div>'+
+      '<div class="cp-block"><div class="lab">Pourquoi vous en avez besoin</div><p>'+s.why+'</p></div>'+
+      '<div class="cp-block"><div class="lab">Ce que ça change pour vous</div><p>'+s.b+'</p></div>'+
+      (s.proof?'<a class="cp-proof" href="'+s.proof.u+'" target="_blank" rel="noopener"><span class="pn">'+s.proof.n+'</span><span class="pt">'+s.proof.t+'</span><span class="ps">Source : '+s.proof.s+' ↗</span></a>':'')+
+      '<div class="cp-priceline"><span class="pp">'+s.p+'&nbsp;€<small> /mois</small></span>'+(FREQ[s.id]?'<span class="pf">· '+FREQ[s.id]+'</span>':'')+'</div>'+
+      '<button class="cp-add'+(sel[id]?" added":"")+'" data-add="'+id+'">'+(sel[id]?CP_CHECK+" Dans votre formule — retirer":CP_PLUS+" Ajouter à ma formule")+'</button>'+
+    '</div>';
+    /* effet "genie" : le panneau jaillit depuis la carte cliquée (FLIP) */
+    var pc=cpDetail.querySelector(".cp-card");
+    var srcCard=grid.querySelector('.svc[data-id="'+id+'"]');
+    if(pc&&srcCard&&!reduce){
+      var cr=srcCard.getBoundingClientRect(), pr=pc.getBoundingClientRect();
+      var dx=(cr.left+cr.width/2)-(pr.left+pr.width/2);
+      var dy=(cr.top+cr.height/2)-(pr.top+pr.height/2);
+      var sx=Math.max(.15,cr.width/Math.max(1,pr.width));
+      var sy=Math.max(.1,cr.height/Math.max(1,pr.height));
+      pc.style.transition="none";
+      pc.style.transform="translate("+Math.round(dx)+"px,"+Math.round(dy)+"px) scale("+sx.toFixed(3)+","+sy.toFixed(3)+")";
+      pc.style.opacity="0.25";
+      requestAnimationFrame(function(){requestAnimationFrame(function(){
+        pc.style.transition="transform .55s cubic-bezier(.22,1,.36,1),opacity .4s ease";
+        pc.style.transform="";pc.style.opacity="";
+      });});
+    }
+    if(!deskMQ.matches && cartePanel){cartePanel.scrollIntoView({behavior:"smooth",block:"start"});}
+  }
+  function closeInspect(){
+    activeId=null;
+    if(grid){grid.classList.remove("inspecting");Array.prototype.forEach.call(grid.querySelectorAll(".svc"),function(c){c.classList.remove("active");});}
+    if(cpDetail){cpDetail.classList.remove("anim");cpDetail.innerHTML=CP_HINT;}
+  }
+  if(cpDetail){
+    cpDetail.addEventListener("click",function(e){
+      if(e.target.closest(".cp-close")){closeInspect();return;}
+      var add=e.target.closest("[data-add]");
+      if(add){toggleSel(add.getAttribute("data-add"));}
+    });
+    cpDetail.innerHTML=CP_HINT;
+  }
+  function toggleSel(id){
+    sel[id]=!sel[id];
+    var card=grid?grid.querySelector('.svc[data-id="'+id+'"]'):null;
+    if(card){card.classList.toggle("sel",sel[id]);card.setAttribute("aria-pressed",sel[id]?"true":"false");}
+    if(activeId===id){
+      var btn=cpDetail.querySelector(".cp-add");
+      if(btn){btn.classList.toggle("added",sel[id]);btn.innerHTML=sel[id]?CP_CHECK+" Dans votre formule — retirer":CP_PLUS+" Ajouter à ma formule";}
+    }
+    updateFormule();
+  }
+  var stickyBar=document.createElement("div");
+  stickyBar.id="cpStickyBar";
+  stickyBar.innerHTML='<div class="csb-info"><span class="csb-c"></span><span class="csb-t"></span></div><a href="contact.html" class="csb-cta">Mon devis →</a>';
+  document.body.appendChild(stickyBar);
+  function setSticky(n,t){
+    if(n>0){
+      stickyBar.querySelector(".csb-c").textContent=n+" prestation"+(n>1?"s":"")+" sélectionnée"+(n>1?"s":"");
+      stickyBar.querySelector(".csb-t").innerHTML=t.toLocaleString("fr-FR")+"&nbsp;€<small> /mois</small>";
+      stickyBar.classList.add("show");
+    } else { stickyBar.classList.remove("show"); }
+  }
+  function updateFormule(){
+    var list=document.getElementById("cpList");
+    var totalEl=document.getElementById("cpTotal");
+    var save=document.getElementById("cpSave");
+    var saveTxt=document.getElementById("cpSaveTxt");
+    if(!list) return;
+    var chosen=SVCS.filter(function(s){return sel[s.id];});
+    if(!chosen.length){
+      list.innerHTML='<span class="cp-empty">Aucune prestation pour l\'instant — cliquez une carte pour commencer.</span>';
+      totalEl.innerHTML='0&nbsp;€<small> /mois</small>';
+      save.style.display="none";setSticky(0,0);return;
+    }
+    list.innerHTML=chosen.map(function(s){return '<div class="qi"><span>'+s.n+'</span><b>'+s.p+'&nbsp;€</b></div>';}).join("");
+    var total=chosen.reduce(function(a,s){return a+s.p;},0);
+    totalEl.innerHTML=total.toLocaleString("fr-FR")+'&nbsp;€<small> /mois</small>';
+    setSticky(chosen.length,total);
+    var packIds=["only","pro","ess","prem"];
+    var covering=packIds.filter(function(pk){return chosen.every(function(s){return s.packs.indexOf(pk)!==-1;});});
+    if(covering.length){
+      var best=covering.reduce(function(a,b){return PACKINFO[a][1]<=PACKINFO[b][1]?a:b;});
+      var bp=PACKINFO[best];
+      save.style.display="block";
+      if(total>bp[1]){
+        saveTxt.innerHTML='Le pack <b>'+bp[0]+'</b> comprend toute votre sélection (et plus) pour <b>'+bp[1]+'&nbsp;€/mois</b> — soit <b>'+(total-bp[1]).toLocaleString("fr-FR")+'&nbsp;€ d\'économie</b> chaque mois.';
+      } else {
+        saveTxt.innerHTML='À '+(bp[1]-total).toLocaleString("fr-FR")+'&nbsp;€ près, le pack <b>'+bp[0]+'</b> ('+bp[1]+'&nbsp;€/mois) couvre votre sélection — et ajoute le reste du pack avec.';
+      }
+    } else { save.style.display="none"; }
+  }
+  updateFormule();
+  /* filtres : pastille glissante + masquage hors catégorie (ferme l'inspection) */
+  var pfil=document.getElementById("pfil");
+  var pfilThumb=document.getElementById("pfilThumb");
+  function moveThumb(){
+    if(!pfil||!pfilThumb)return;
+    var b=pfil.querySelector("button.on");if(!b)return;
+    pfilThumb.style.left=b.offsetLeft+"px";
+    pfilThumb.style.width=b.offsetWidth+"px";
+  }
+  function filterSvc(f){
+    if(!grid)return;
+    Array.prototype.forEach.call(grid.querySelectorAll(".svc"),function(c){
+      c.classList.toggle("hide",!(f==="all"||c.getAttribute("data-cat")===f));
+    });
+  }
+  if(pfil){
+    pfil.addEventListener("click",function(e){
+      var b=e.target.closest("button");if(!b)return;
+      Array.prototype.forEach.call(pfil.querySelectorAll("button"),function(x){x.classList.toggle("on",x===b);});
+      moveThumb();
+      filterSvc(b.getAttribute("data-f"));
+      closeInspect();
+    });
+    addEventListener("resize",moveThumb,{passive:true});
+    addEventListener("load",moveThumb);
+    moveThumb();
+  }
+
+  /* ── boot ── */
+  function boot(){paintBg();calcLight();onScroll();moveThumb();updateGamme();}
+  setupReveals();
+  addEventListener("scroll",function(){onScroll();updateGamme();},{passive:true});
+  addEventListener("resize",function(){paintBg();calcLight();onScroll();updateGamme();},{passive:true});
+  addEventListener("load",boot);
+  boot();
+})();
+</script>
+<!-- ════ CORRECTIFS RESPONSIVE MOBILE (offres : filtres + barre total) ════ -->
+<style>
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media(max-width:860px){
+  /* filtres à la carte : UNE seule ligne qui défile + flèche qui invite à faire défiler */
+  #pfil{flex-wrap:nowrap!important;overflow-x:auto;justify-content:flex-start;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-right:34px}
+  #pfil::-webkit-scrollbar{display:none}
+  #pfil button{flex:0 0 auto}
+  .pfil-wrap{position:relative}
+  .pfil-wrap::after{content:"\203A";position:absolute;top:50%;right:9px;transform:translateY(-50%);z-index:4;width:27px;height:27px;display:flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(135deg,var(--v),var(--g));border:1px solid rgba(255,255,255,.25);border-radius:50%;font-family:var(--disp);font-weight:800;font-size:15px;line-height:1;pointer-events:none;box-shadow:0 4px 12px -4px rgba(0,0,0,.6)}
+  #carte{padding-bottom:90px}
+  /* services à la carte : petites cases « clavier » 2 colonnes, clic = ouvre le détail */
+  .svc-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px}
+  .svc{padding:13px 12px!important;border-radius:13px;border-width:1px!important;min-width:0}
+  .svc:hover{transform:none}
+  .svc .row1{flex-wrap:wrap;align-items:center;gap:5px 7px;margin-bottom:0}
+  .svc .ic{width:18px;height:18px}
+  .svc .nm{flex:1 1 auto;min-width:0;font-size:.82rem;line-height:1.25;white-space:normal}
+  .svc .pr{flex:1 0 100%;order:3;margin-top:7px;font-size:.9rem}
+  .svc .ds{display:none}
+  .svc.open{grid-column:1/-1}
+  .svc.open .ds{display:block;margin-top:9px}
+  .svc.open .svc-add{display:flex}
+}
+.svc-add{display:none;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:11px;padding:11px;border-radius:11px;border:1px solid transparent;font-family:var(--body);font-weight:600;font-size:.84rem;cursor:pointer;background:linear-gradient(120deg,var(--v),var(--g));color:#fff}
+.svc.sel .svc-add{background:rgba(255,255,255,.08);color:var(--gl);border-color:rgba(123,213,58,.4)}
+/* COMPARATIF : sélecteur de pack → liste verticale (mobile, fini le tableau qui scrolle dans tous les sens) */
+.cmp-mob{display:none}
+@media(max-width:860px){
+  #comparer .cmp-wrap{display:none!important}
+  .cmp-mob{display:block;margin-top:22px}
+  .cmp-sel{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+  .cmp-sel::-webkit-scrollbar{display:none}
+  .cmp-pk{flex:0 0 auto;padding:8px 15px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:transparent;color:rgba(246,241,250,.66);font-weight:600;font-size:.84rem;font-family:var(--body);cursor:pointer;white-space:nowrap}
+  .cmp-pk.on{background:linear-gradient(120deg,var(--v),var(--g));color:#fff;border-color:transparent}
+  .cmp-mob-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:18px 2px 4px}
+  .cmp-mob-head .cn{font-family:var(--disp);font-weight:800;font-size:1.25rem;color:#fff}
+  .cmp-mob-head .cp{font-family:var(--disp);font-weight:800;font-size:1.1rem;color:var(--gl);white-space:nowrap}
+  .cmp-mob-head .cp small{font-family:var(--body);font-weight:400;font-size:.6rem;color:rgba(246,241,250,.5)}
+  .cmp-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 2px;border-top:1px solid rgba(255,255,255,.1);font-size:.9rem}
+  .cmp-row .cf{color:rgba(246,241,250,.82);min-width:0}
+  .cmp-row .ck{color:var(--gl);flex-shrink:0;display:inline-flex}
+  .cmp-row .no{color:rgba(246,241,250,.28);flex-shrink:0}
+  .cmp-row .vv{color:#fff;font-weight:600;text-align:right;flex-shrink:0}
+  .cmp-choose{display:block;text-align:center;margin-top:18px;padding:13px;border-radius:12px;background:linear-gradient(120deg,var(--v),var(--g));color:#fff;font-weight:700;font-size:.92rem}
+}
+/* — ajustements finaux Offres mobile — */
+.svc-detail{display:none}
+@media(max-width:860px){
+  /* pack ouvert : pleine largeur (donc plus court), prestations en 2 colonnes */
+  .mpack.open{flex:0 0 calc(100vw - 40px);background:#0b0118}
+  .mpack.open .mpack-bg,.mpack.open .mpack-ov{display:none}
+  .mpack.open .mpack-in{height:auto;min-height:0;padding:18px}
+  .mpack.open .mpack-detail .gp-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  /* comparatif : 4 packs en 2×2 (fini « Premium » coupé) */
+  .cmp-sel{display:grid!important;grid-template-columns:1fr 1fr;gap:8px;overflow:visible!important;padding-bottom:0}
+  .cmp-pk{text-align:center}
+  /* filtres : fondu qui masque le mot coupé derrière la flèche */
+  .pfil-wrap::before{content:"";position:absolute;top:0;bottom:0;right:0;width:62px;border-radius:0 999px 999px 0;background:linear-gradient(90deg,transparent,rgba(13,3,24,.97) 66%);pointer-events:none;z-index:3}
+  /* services à la carte : descriptif complet au clic */
+  .svc.open .svc-detail{display:block;margin-top:9px}
+  .svc-detail p{font-size:.8rem;line-height:1.5;margin-top:7px;color:rgba(246,241,250,.72)}
+  .svc-detail .sd-why{color:rgba(246,241,250,.6)}
+  .svc-detail .sd-why b{color:#d49bff}
+  .svc-detail .sd-b{color:#bdf08a;font-weight:600}
+}
+/* barre de total collante (à la carte, mobile uniquement) */
+#cpStickyBar{position:fixed;left:12px;right:12px;bottom:12px;z-index:58;display:none;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px 11px 18px;border-radius:18px;background:rgba(20,4,32,.93);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border:1px solid rgba(212,155,255,.32);box-shadow:0 18px 44px -16px rgba(0,0,0,.7)}
+#cpStickyBar.show{display:flex}
+#cpStickyBar .csb-info{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+#cpStickyBar .csb-c{font-size:.64rem;color:#d49bff;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+#cpStickyBar .csb-t{font-family:var(--disp);font-weight:800;font-size:1.3rem;color:#fff}
+#cpStickyBar .csb-t small{font-family:var(--body);font-weight:400;font-size:.58rem;color:rgba(246,241,250,.6)}
+#cpStickyBar .csb-cta{flex-shrink:0;padding:11px 18px;border-radius:999px;background:linear-gradient(120deg,var(--v),var(--g));color:#fff;font-weight:700;font-size:.86rem;white-space:nowrap}
+@media(min-width:861px){#cpStickyBar{display:none!important}}
+/* PACKS : carrousel de cartes (fond image + prix gros + « En savoir plus » qui déroule) */
+@media(max-width:860px){#packScrolly{display:none!important}}
+.mpack-wrap{display:none}
+@media(max-width:860px){
+  .mpack-wrap{display:block}
+  .mpack-rail{display:flex;gap:14px;overflow-x:auto;padding:6px 18px 14px 28px;scroll-snap-type:x mandatory;scroll-padding-left:28px;align-items:flex-start;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .mpack-rail::-webkit-scrollbar{display:none}
+  .mpack{flex:0 0 236px;border-radius:24px;position:relative;overflow:hidden;scroll-snap-align:start;background:#0a0014;border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 60px -28px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.16)}
+  .mpack.pop{border:1.5px solid rgba(123,213,58,.75)}
+  .mpack-bg{position:absolute;left:0;right:0;top:0;height:372px;background-size:cover;background-position:center}
+  .mpack-ov{position:absolute;left:0;right:0;top:0;height:372px;background:linear-gradient(180deg,rgba(14,3,24,.4) 0%,rgba(12,2,22,.62) 40%,rgba(8,1,18,.97) 100%)}
+  .mpack-badge{position:absolute;top:14px;right:14px;z-index:3;font-size:.6rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#0a0014;background:linear-gradient(120deg,var(--gl),#a6e86a);padding:4px 10px;border-radius:999px}
+  .mpack-in{position:relative;z-index:2;height:372px;display:flex;flex-direction:column;justify-content:space-between;padding:20px}
+  .mpack-name{font-family:var(--disp);font-weight:800;font-size:1.42rem;line-height:1.08;color:#fff}
+  .mpack-promise{font-size:.86rem;color:rgba(255,255,255,.72);margin-top:8px;line-height:1.45}
+  .mpack-foot{display:flex;flex-direction:column-reverse;gap:12px;align-items:stretch}
+  .mpack-price{font-family:var(--disp);font-weight:800;font-size:2.05rem;line-height:1;color:#fff;white-space:nowrap;text-shadow:0 2px 16px rgba(0,0,0,.65)}
+  .mpack-price small{font-family:var(--body);font-weight:400;font-size:.64rem;color:rgba(255,255,255,.62)}
+  .mpack-more{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;font-size:.82rem;font-weight:600;color:#fff;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.26);padding:11px 14px;border-radius:13px;font-family:var(--body);cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .mpack-more .chev{transition:transform .3s var(--eo)}
+  .mpack.open .mpack-more .chev{transform:rotate(180deg)}
+  .mpack-detail{position:relative;z-index:2;max-height:0;overflow:hidden;transition:max-height .55s var(--eo);background:#0b0118}
+  .mpack.open .mpack-detail{max-height:3000px}
+  .mpack-detail-in{padding:4px 18px 20px}
+  .mpack-detail .gp-base{margin-bottom:12px}
+  .mpack-detail .gp-items{overflow:visible!important;max-height:none!important;flex:none!important;display:flex;flex-direction:column;gap:10px}
+  .mpack-detail .gp-item{opacity:1!important;transform:none!important}
+  .mpack-detail .gp-cta{display:block;margin-top:14px;text-align:center}
+}
+</style>
+<script>
+/* Packs mobile : carrousel de cartes reconstruit depuis les données déjà rendues */
+(function(){
+  "use strict";
+  if(!window.matchMedia || !matchMedia("(max-width:860px)").matches) return;
+  var scrolly=document.getElementById("packScrolly");
+  if(!scrolly) return;
+  var panels=scrolly.querySelectorAll(".gpanel");
+  if(!panels.length) return;
+  var wrap=document.createElement("div"); wrap.className="mpack-wrap";
+  var rail=document.createElement("div"); rail.className="mpack-rail";
+  Array.prototype.forEach.call(panels,function(p){
+    var name=(p.querySelector(".gp-name")||{}).textContent||"";
+    var promise=(p.querySelector(".gp-promise")||{}).textContent||"";
+    var priceEl=p.querySelector(".gp-price");
+    var pnum=priceEl&&priceEl.childNodes[0]?priceEl.childNodes[0].textContent.trim():"";
+    var unitEl=priceEl?priceEl.querySelector("small"):null;
+    var price=pnum+(unitEl&&/mois/i.test(unitEl.textContent)?'<small> /mois</small>':'');
+    var photo=p.querySelector(".gp-photo");
+    var img=photo?photo.style.backgroundImage:"none";
+    var pop=!!p.querySelector(".pop");
+    var base=p.querySelector(".gp-base");
+    var items=p.querySelector(".gp-items");
+    var cta=p.querySelector(".gp-cta");
+    var detail=(base?base.outerHTML:"")+(items?items.outerHTML:"")+(cta?cta.outerHTML:"");
+    var card=document.createElement("div");
+    card.className="mpack"+(pop?" pop":"");
+    card.innerHTML=
+      '<div class="mpack-bg"></div>'+
+      '<div class="mpack-ov"></div>'+
+      (pop?'<span class="mpack-badge">Le plus pris</span>':'')+
+      '<div class="mpack-in">'+
+        '<div><div class="mpack-name">'+name+'</div><div class="mpack-promise">'+promise+'</div></div>'+
+        '<div class="mpack-foot">'+
+          '<button class="mpack-more" type="button" aria-expanded="false"><span class="lbl">En savoir plus</span><svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>'+
+          '<span class="mpack-price">'+price+'</span>'+
+        '</div>'+
+      '</div>'+
+      '<div class="mpack-detail"><div class="mpack-detail-in">'+detail+'</div></div>';
+    var bgEl=card.querySelector(".mpack-bg"); if(bgEl) bgEl.style.backgroundImage=img;
+    var btn=card.querySelector(".mpack-more");
+    btn.addEventListener("click",function(){
+      var open=card.classList.toggle("open");
+      btn.setAttribute("aria-expanded",open?"true":"false");
+      btn.querySelector(".lbl").textContent=open?"Réduire":"En savoir plus";
+    });
+    rail.appendChild(card);
+  });
+  wrap.appendChild(rail);
+  scrolly.parentNode.insertBefore(wrap,scrolly);
+  Array.prototype.forEach.call(document.querySelectorAll("#svcGrid .svc"),function(c){
+    if(c.querySelector(".svc-add"))return;
+    var b=document.createElement("button");b.type="button";b.className="svc-add";b.textContent="Ajouter à ma formule";
+    c.appendChild(b);
+  });
+})();
+</script>
+
+<!-- ════ MENU BURGER MOBILE (auto-construit, uniforme sur les 5 pages) ════ -->
+<style>
+.nav-burger{display:none;flex-direction:column;gap:5px;width:44px;height:44px;align-items:center;justify-content:center;border:none;background:rgba(255,255,255,.08);border-radius:12px;cursor:pointer;flex-shrink:0;margin-left:auto;padding:0}
+.nav-burger span{display:block;width:20px;height:2px;background:#fff;border-radius:2px;transition:transform .25s,opacity .2s}
+.nav-burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.nav-burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-pill.on-light .nav-burger{background:rgba(79,15,92,.08)}
+.nav-pill.on-light .nav-burger span{background:var(--vdd,#2D0636)}
+.dwt-mmenu{position:fixed;top:82px;left:18px;right:18px;z-index:59;display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:20px;background:rgba(20,4,32,.95);backdrop-filter:blur(24px) saturate(1.6);-webkit-backdrop-filter:blur(24px) saturate(1.6);border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 60px -20px rgba(0,0,0,.75);opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .25s,transform .25s}
+.dwt-mmenu.open{opacity:1;transform:none;pointer-events:auto}
+.dwt-mmenu a{padding:14px 16px;border-radius:12px;color:#fff;font-weight:500;font-size:1.02rem;text-decoration:none}
+.dwt-mmenu a:hover,.dwt-mmenu a.cur{background:rgba(255,255,255,.09)}
+.dwt-mmenu .cta{margin-top:6px;text-align:center;background:linear-gradient(120deg,#7B1FA2,#63AF21);font-weight:600}
+@media(max-width:980px){.nav-tabs{display:none!important}.nav-cta{display:none!important}.nav-burger{display:flex}}
+@media(min-width:981px){.dwt-mmenu{display:none}}
+</style>
+<script>
+(function(){
+  "use strict";
+  var pill=document.querySelector('.nav-pill'); if(!pill) return;
+  var here=(location.pathname.split('/').pop()||'index.html'); if(here==='') here='index.html';
+  var links=[['index.html','Accueil'],['offres.html','Offres'],['methode.html','Méthode'],['qui-sommes-nous.html','Qui sommes-nous'],['contact.html','Contact']];
+  var btn=document.createElement('button');
+  btn.className='nav-burger'; btn.type='button';
+  btn.setAttribute('aria-label','Ouvrir le menu'); btn.setAttribute('aria-expanded','false'); btn.setAttribute('aria-controls','dwtMobileMenu');
+  btn.innerHTML='<span></span><span></span><span></span>';
+  pill.appendChild(btn);
+  var menu=document.createElement('nav');
+  menu.className='dwt-mmenu'; menu.id='dwtMobileMenu'; menu.setAttribute('aria-label','Menu mobile');
+  var html='';
+  links.forEach(function(l){var cur=(l[0]===here)?' class="cur" aria-current="page"':'';html+='<a href="'+l[0]+'"'+cur+'>'+l[1]+'</a>';});
+  html+='<a href="contact.html" class="cta">Audit de visibilité offert</a>';
+  menu.innerHTML=html;
+  document.body.appendChild(menu);
+  function close(){btn.setAttribute('aria-expanded','false');menu.classList.remove('open');}
+  btn.addEventListener('click',function(e){e.stopPropagation();var o=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!o));menu.classList.toggle('open',!o);});
+  menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});
+  document.addEventListener('click',function(e){if(menu.classList.contains('open')&&!menu.contains(e.target)&&!btn.contains(e.target))close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+  window.addEventListener('resize',function(){if(window.innerWidth>980)close();});
+})();
+</script>
+
+<!-- ════ BANNIÈRE COOKIES + CONSENTEMENT (CNIL, uniforme sur les 5 pages) ════ -->
+<style>
+.ck-banner{position:fixed;left:16px;right:16px;bottom:16px;z-index:9000;display:flex;align-items:center;gap:20px;max-width:980px;margin:0 auto;padding:18px 20px;border-radius:22px;background:rgba(20,4,32,.82);-webkit-backdrop-filter:blur(26px) saturate(1.7);backdrop-filter:blur(26px) saturate(1.7);border:1px solid var(--border,rgba(255,255,255,.15));box-shadow:0 30px 70px -22px rgba(0,0,0,.8);overflow:hidden;transform:translateY(160%);transition:transform .5s cubic-bezier(.22,1,.36,1)}
+.ck-banner.ck-show{transform:translateY(0)}
+.ck-banner::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(140deg,rgba(255,255,255,.18),transparent 38%,rgba(123,31,162,.12));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px;opacity:.8}
+.ck-head{display:flex;gap:13px;align-items:flex-start;flex:1;min-width:0}
+.ck-ico{flex-shrink:0;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(123,31,162,.55),rgba(99,175,33,.30));font-size:1.25rem}
+.ck-txt{flex:1;min-width:0}
+.ck-txt h3{margin:0 0 3px;font-family:var(--disp,'Syne',sans-serif);font-weight:800;font-size:1rem;color:var(--ink,#F6F1FA)}
+.ck-txt p{margin:0;font-size:.86rem;color:var(--mut,rgba(246,241,250,.66));line-height:1.55;overflow-wrap:break-word}
+.ck-txt a{color:#d49bff;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
+.ck-acts{flex-shrink:0;display:flex;gap:10px}
+.ck-btn{font-family:var(--body,'Poppins',sans-serif);font-weight:600;font-size:.9rem;padding:12px 22px;border-radius:999px;cursor:pointer;white-space:nowrap;background:rgba(255,255,255,.08);color:var(--ink,#F6F1FA);border:1px solid var(--border,rgba(255,255,255,.15));transition:transform .18s,background .18s,border-color .18s}
+.ck-btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.28)}
+.foot-cookies{cursor:pointer}
+@media(max-width:760px){.ck-banner{flex-direction:column;align-items:flex-start;gap:14px;padding:18px;left:12px;right:12px;bottom:12px;border-radius:20px}.ck-acts{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}.ck-btn{padding:13px 14px;width:100%}}
+</style>
+<script>
+(function(){
+  "use strict";
+  var KEY="dwt-consent";
+  window.dwtConsent=localStorage.getItem(KEY)||null;
+  var fl=document.querySelector(".foot-links");
+  if(fl){
+    [["confidentialite.html","Confidentialité"],["mentions-legales.html","Mentions légales"]].forEach(function(p){
+      if(!fl.querySelector('a[href="'+p[0]+'"]')){var a=document.createElement("a");a.href=p[0];a.textContent=p[1];fl.appendChild(a);}
+    });
+    if(!fl.querySelector(".foot-cookies")){
+      var c=document.createElement("a");c.href="#";c.className="foot-cookies";c.textContent="Cookies";
+      c.addEventListener("click",function(e){e.preventDefault();openBanner();});
+      fl.appendChild(c);
+    }
+  }
+  var banner=null;
+  function setConsent(v){localStorage.setItem(KEY,v);window.dwtConsent=v;hide();}
+  function build(){
+    banner=document.createElement("div");
+    banner.className="ck-banner";
+    banner.setAttribute("role","dialog");
+    banner.setAttribute("aria-label","Préférences cookies");
+    banner.innerHTML='<div class="ck-head"><div class="ck-ico" aria-hidden="true">🍪</div><div class="ck-txt"><h3>Cookies &amp; confidentialité</h3><p>Ce site ne dépose aucun cookie publicitaire ni traceur. Avec votre accord, nous activerons une mesure d\'audience anonyme pour l\'améliorer. <a href="confidentialite.html">Politique de confidentialité</a></p></div></div><div class="ck-acts"><button class="ck-btn" type="button" data-v="essential">Refuser</button><button class="ck-btn" type="button" data-v="all">Tout accepter</button></div>';
+    document.body.appendChild(banner);
+    var btns=banner.querySelectorAll(".ck-btn");
+    for(var i=0;i<btns.length;i++){
+      (function(b){b.addEventListener("click",function(){setConsent(b.getAttribute("data-v"));});})(btns[i]);
+    }
+  }
+  function show(){if(!banner)build();void banner.offsetWidth;banner.classList.add("ck-show");}
+  function hide(){if(banner)banner.classList.remove("ck-show");}
+  function openBanner(){show();}
+  window.dwtOpenCookies=openBanner;
+  if(!window.dwtConsent){
+    if(document.readyState!=="loading")show();
+    else document.addEventListener("DOMContentLoaded",show);
+  }
+})();
+</script>
+</body>
+</html>

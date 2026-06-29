@@ -1,0 +1,652 @@
+<!doctype html><html lang="fr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Espace client — DWT Digital</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --v:#7B1FA2; --vd:#4F0F5C; --vdd:#2D0636;
+  --g:#63AF21; --gl:#7BC93A;
+  --ink:#F6F1FA; --mut:rgba(246,241,250,.66); --acc:#d49bff;
+  --border:rgba(255,255,255,.15);
+  --disp:'Syne',sans-serif; --body:'Poppins',sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:clip}
+body{margin:0;background:#0a0014;color:var(--ink);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip}
+.pagebg{position:fixed;inset:0;z-index:-1;background-image:radial-gradient(1100px 760px at 82% -8%,rgba(123,31,162,.40),transparent 60%),radial-gradient(820px 620px at -8% 108%,rgba(99,175,33,.12),transparent 55%)}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--body);cursor:pointer}
+.gr{background:linear-gradient(120deg,var(--acc),var(--gl));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ===== LOGIN ===== */
+#dwt-login{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:22px;
+  background:radial-gradient(circle at 50% 0%,rgba(99,175,33,.12),transparent 60%),#0a0014}
+.login-card{position:relative;width:100%;max-width:400px;padding:34px 30px;border-radius:26px;overflow:hidden;
+  background:rgba(20,4,32,.6);-webkit-backdrop-filter:blur(26px) saturate(1.6);backdrop-filter:blur(26px) saturate(1.6);
+  border:1px solid var(--border);box-shadow:0 40px 90px -30px rgba(0,0,0,.85)}
+.login-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(140deg,rgba(255,255,255,.16),transparent 42%,rgba(123,31,162,.12));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px;opacity:.75}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.login-logo img{height:30px}
+.login-logo b{font-family:var(--disp);font-weight:800;font-size:1.05rem}
+.login-card h1{font-family:var(--disp);font-weight:800;font-size:1.5rem;margin:0 0 4px}
+.login-card .sub{color:var(--mut);font-size:.9rem;margin:0 0 24px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.78rem;font-weight:600;color:var(--mut);margin-bottom:6px;letter-spacing:.02em}
+.field input{width:100%;padding:13px 15px;border-radius:13px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font-size:.95rem;font-family:var(--body);transition:border-color .2s,background .2s}
+.field input:focus{outline:none;border-color:var(--acc);background:rgba(255,255,255,.08)}
+.btn-primary{width:100%;margin-top:8px;padding:14px;border-radius:999px;border:none;font-weight:600;font-size:.95rem;color:#fff;background:linear-gradient(120deg,var(--v),var(--g));box-shadow:0 14px 30px -12px rgba(123,31,162,.7);transition:transform .18s,opacity .2s}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.6;cursor:default;transform:none}
+.login-err{min-height:18px;margin-top:12px;font-size:.82rem;color:#ff8b8b;text-align:center}
+.login-foot{margin-top:18px;text-align:center;font-size:.78rem;color:var(--mut)}
+.login-foot a{color:var(--acc)}
+
+/* ===== APP SHELL ===== */
+#dwt-app{display:none;min-height:100vh}
+#dwt-app.on{display:grid;grid-template-columns:248px 1fr}
+.snav{position:sticky;top:0;align-self:start;height:100vh;display:flex;flex-direction:column;gap:6px;padding:22px 16px;
+  background:rgba(15,3,24,.7);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border-right:1px solid var(--border)}
+.snav-brand{display:flex;align-items:center;gap:9px;padding:6px 10px 18px}
+.snav-brand img{height:26px}
+.snav-brand b{font-family:var(--disp);font-weight:800;font-size:1rem}
+.snav-item{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:13px;color:var(--mut);font-size:.92rem;font-weight:500;cursor:pointer;transition:background .18s,color .18s;position:relative}
+.snav-item svg{width:20px;height:20px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.snav-item:hover{color:var(--ink);background:rgba(255,255,255,.05)}
+.snav-item.on{color:#fff;background:linear-gradient(120deg,rgba(123,31,162,.55),rgba(99,175,33,.28));box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.snav-badge{margin-left:auto;background:var(--g);color:#0a0014;font-size:.68rem;font-weight:700;border-radius:999px;padding:1px 7px}
+.snav-logout{margin-top:auto;display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:13px;color:var(--mut);font-size:.88rem;border:1px solid var(--border);background:rgba(255,255,255,.04)}
+.snav-logout:hover{color:var(--ink);background:rgba(255,255,255,.08)}
+
+.main{padding:34px 38px 60px;min-width:0}
+.main-head{margin-bottom:26px}
+.main-head .hi{font-family:var(--disp);font-weight:800;font-size:1.9rem;line-height:1.1;margin:0}
+.main-head .meta{margin-top:7px;color:var(--mut);font-size:.95rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:.78rem;font-weight:600;background:rgba(123,31,162,.25);border:1px solid rgba(212,155,255,.3);color:var(--acc)}
+
+.tab-panel{display:none}
+.tab-panel.on{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.card{position:relative;padding:22px;border-radius:20px;overflow:hidden;background:rgba(20,4,32,.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border:1px solid var(--border)}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(140deg,rgba(255,255,255,.12),transparent 42%,rgba(123,31,162,.10));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px;opacity:.65}
+.card h3{font-family:var(--disp);font-weight:700;font-size:1.05rem;margin:0 0 8px}
+.card p{color:var(--mut);font-size:.9rem;margin:0}
+.soon{display:inline-block;margin-top:10px;font-size:.74rem;font-weight:600;color:var(--gl);background:rgba(99,175,33,.14);border:1px solid rgba(99,175,33,.3);border-radius:999px;padding:2px 10px}
+
+/* ===== MOBILE ===== */
+@media(max-width:880px){
+  #dwt-app.on{grid-template-columns:1fr}
+  .snav{position:fixed;top:0;left:0;right:0;height:auto;flex-direction:row;align-items:center;gap:4px;overflow-x:auto;padding:12px;border-right:none;border-bottom:1px solid var(--border);z-index:50}
+  .snav-brand{padding:0 8px 0 4px;flex-shrink:0}
+  .snav-brand b{display:none}
+  .snav-item{flex-direction:column;gap:4px;padding:7px 11px;font-size:.66rem;flex-shrink:0}
+  .snav-item span:not(.snav-badge){white-space:nowrap}
+  .snav-badge{position:absolute;top:2px;right:4px;margin:0}
+  .snav-logout{margin-top:0;flex-shrink:0;padding:9px 12px}
+  .snav-logout span{display:none}
+  .main{padding:90px 18px 80px}
+  .main-head .hi{font-size:1.5rem}
+}
+
+/* ===== ONGLET IDENTITÉ ===== */
+.card-sub{color:var(--mut);font-size:.88rem;margin:0 0 16px}
+.iv-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.iv-banner{display:flex;align-items:center;gap:9px;background:rgba(99,175,33,.12);border:1px solid rgba(99,175,33,.32);border-radius:13px;padding:11px 14px;margin-bottom:16px;font-size:.85rem;color:var(--gl)}
+.iv-colors{display:flex;flex-direction:column;gap:11px;margin-bottom:18px}
+.iv-color{display:flex;align-items:center;gap:13px;padding:10px 13px;border-radius:13px;border:1px solid var(--border);background:rgba(255,255,255,.04);cursor:pointer}
+.iv-color input[type=color]{width:40px;height:40px;border:none;border-radius:10px;background:none;cursor:pointer;padding:0;flex-shrink:0}
+.iv-color span{display:flex;flex-direction:column;gap:1px}
+.iv-color b{font-size:.9rem;font-weight:600}
+.iv-color code{font-size:.76rem;color:var(--mut);font-family:monospace}
+.iv-msg{min-height:18px;margin-top:10px;font-size:.82rem;text-align:center;color:var(--gl)}
+.iv-preview{border-radius:14px;overflow:hidden;border:1px solid var(--border);transition:background .25s}
+.ivp-nav{display:flex;align-items:center;justify-content:space-between;padding:11px 14px}
+.ivp-nav b{font-size:.88rem;font-family:var(--disp);font-weight:800}
+.ivp-cta{font-size:.68rem;font-weight:700;padding:5px 11px;border-radius:7px;color:#fff;transition:background .25s}
+.ivp-hero{padding:26px 16px 28px}
+.ivp-eyebrow{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;transition:color .25s}
+.ivp-title{font-family:var(--disp);font-weight:800;font-size:1.55rem;line-height:1.1;margin:7px 0 14px;transition:color .25s}
+.ivp-btn{display:inline-block;font-size:.7rem;font-weight:700;padding:9px 18px;border-radius:7px;color:#fff;transition:background .25s}
+.iv-swatches{display:flex;gap:18px;margin-top:15px;font-size:.74rem;color:var(--mut)}
+.iv-swatches div{display:flex;align-items:center;gap:7px}
+.iv-swatches .sw{width:22px;height:22px;border-radius:7px;border:1px solid rgba(255,255,255,.16);display:inline-block}
+.iv-auto{background:linear-gradient(135deg,rgba(123,31,162,.14),rgba(99,175,33,.07));border:1px solid rgba(99,175,33,.22);border-radius:14px;padding:15px;margin-bottom:14px}
+.iv-auto-head{display:flex;align-items:center;gap:7px;font-weight:800;font-size:.92rem;font-family:var(--disp);color:var(--gl)}
+.iv-auto-sub{color:var(--mut);font-size:.82rem;margin:5px 0 12px}
+.iv-fields{display:flex;flex-direction:column;gap:8px;margin-bottom:11px}
+.iv-fields input{width:100%;padding:10px 12px;border-radius:11px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font-size:.86rem;font-family:var(--body)}
+.iv-fields input:focus{outline:none;border-color:var(--acc);background:rgba(255,255,255,.08)}
+.btn-ghost-wide{width:100%;padding:11px;border-radius:999px;border:1px solid rgba(212,155,255,.4);background:rgba(123,31,162,.18);color:var(--acc);font-weight:600;font-size:.88rem;cursor:pointer;transition:background .18s}
+.btn-ghost-wide:hover{background:rgba(123,31,162,.28)}
+.btn-ghost-wide:disabled{opacity:.6;cursor:default}
+.iv-suggestions{display:flex;flex-direction:column;gap:8px;margin-top:11px}
+.iv-sugg{display:flex;align-items:center;gap:8px;padding:9px 11px;border-radius:11px;border:1px solid var(--border);background:rgba(255,255,255,.04);cursor:pointer;width:100%;text-align:left}
+.iv-sugg:hover{border-color:var(--acc);background:rgba(255,255,255,.07)}
+.iv-sugg-sw{width:24px;height:24px;border-radius:6px;flex-shrink:0;border:1px solid rgba(255,255,255,.15)}
+.iv-sugg-name{margin-left:6px;font-size:.82rem;color:var(--ink)}
+.iv-err{font-size:.8rem;color:#ff8b8b;margin-top:8px}
+.iv-divider{display:flex;align-items:center;gap:10px;margin:2px 0 15px}
+.iv-divider::before,.iv-divider::after{content:"";flex:1;height:1px;background:var(--border)}
+.iv-divider span{font-size:.66rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+@media(max-width:880px){.iv-grid{grid-template-columns:1fr}}
+
+/* ===== ONGLET MON SITE (demandes de modif) ===== */
+.site-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.field select,.field textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font-size:.92rem;font-family:var(--body);resize:vertical}
+.field select:focus,.field textarea:focus{outline:none;border-color:var(--acc);background:rgba(255,255,255,.08)}
+.field select option{background:#1a0b22;color:var(--ink)}
+.modif-list{display:flex;flex-direction:column;gap:10px}
+.modif-empty{color:var(--mut);font-size:.88rem;margin:0}
+.modif-item{padding:12px 14px;border-radius:13px;border:1px solid var(--border);background:rgba(255,255,255,.04)}
+.modif-item .mh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px}
+.modif-item .ms{font-weight:600;font-size:.88rem}
+.modif-item .mt{color:var(--mut);font-size:.85rem;margin:0;overflow-wrap:break-word}
+.mstatut{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.mstatut.en_attente{background:rgba(232,163,61,.18);color:#e8a33d;border:1px solid rgba(232,163,61,.35)}
+.mstatut.en_cours{background:rgba(63,169,255,.16);color:#3fa9ff;border:1px solid rgba(63,169,255,.32)}
+.mstatut.termine{background:rgba(99,175,33,.16);color:var(--gl);border:1px solid rgba(99,175,33,.32)}
+@media(max-width:880px){.site-grid{grid-template-columns:1fr}}
+
+/* ===== UPLOAD FICHIERS ===== */
+.iv-upload-card{margin-top:18px}
+.upzone{border:2px dashed var(--border);border-radius:14px;padding:26px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:12px}
+.upzone:hover,.upzone.drag{border-color:var(--acc);background:rgba(123,31,162,.08)}
+.upzone svg{margin:0 auto 8px;display:block;stroke:var(--acc)}
+.upzone .uptitle{font-size:.9rem;font-weight:600;color:var(--ink)}
+.upsub{font-size:.78rem;color:var(--mut);margin-top:3px}
+.uplist{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.uplist:empty{margin:0}
+.upitem{display:flex;align-items:center;gap:9px;padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.04);font-size:.82rem}
+.upitem svg{flex-shrink:0}
+.upitem .upname{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.upitem .upsize{color:var(--mut);margin-left:auto;flex-shrink:0}
+
+/* ===== ONGLET SUIVI (messages + suivi) ===== */
+.suivi-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.msg-thread{display:flex;flex-direction:column;gap:9px;max-height:300px;overflow-y:auto;margin-bottom:12px;padding-right:4px}
+.msg-bubble{max-width:85%;padding:9px 13px;border-radius:14px;font-size:.85rem;line-height:1.45}
+.msg-bubble .who{font-size:.66rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.7;margin-bottom:3px}
+.msg-bubble p{margin:0;color:var(--ink);overflow-wrap:break-word}
+.msg-dwt{align-self:flex-start;background:linear-gradient(135deg,rgba(123,31,162,.32),rgba(99,175,33,.16));border:1px solid rgba(212,155,255,.25);border-bottom-left-radius:4px}
+.msg-client{align-self:flex-end;background:rgba(255,255,255,.07);border:1px solid var(--border);border-bottom-right-radius:4px}
+.msg-compose{display:flex;gap:9px;align-items:flex-end}
+.msg-compose textarea{flex:1;padding:11px 13px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font-size:.88rem;font-family:var(--body);resize:vertical}
+.msg-compose textarea:focus{outline:none;border-color:var(--acc);background:rgba(255,255,255,.08)}
+.msg-compose .btn-primary{width:auto;margin-top:0;padding:11px 18px;white-space:nowrap}
+.suivi-list{margin:0 0 14px;padding-left:18px;color:var(--mut);font-size:.9rem}
+.suivi-list li{margin:5px 0}
+@media(max-width:880px){.suivi-grid{grid-template-columns:1fr}}
+</style></head>
+<body>
+<div class="pagebg" aria-hidden="true"></div>
+
+<!-- ===== ÉCRAN DE CONNEXION ===== -->
+<div id="dwt-login">
+  <div class="login-card">
+    <div class="login-logo"><img src="assets/logo-cutout.png" alt="DWT" onerror="this.style.display='none'"><b>DWT</b></div>
+    <h1>Espace <span class="gr">client</span></h1>
+    <p class="sub">Connectez-vous pour gérer votre présence en ligne.</p>
+    <div class="field"><label for="login-email">Email</label><input type="email" id="login-email" autocomplete="email" placeholder="votre@email.fr"></div>
+    <div class="field"><label for="login-pass">Mot de passe</label><input type="password" id="login-pass" autocomplete="current-password" placeholder="••••••••"></div>
+    <button class="btn-primary" id="login-btn" type="button" onclick="dwtLogin()">Se connecter</button>
+    <div class="login-err" id="login-err" aria-live="polite"></div>
+    <p class="login-foot">Pas encore d'accès&nbsp;? <a href="contact.html">Contactez DWT</a></p>
+  </div>
+</div>
+
+<!-- ===== APPLICATION ===== -->
+<div id="dwt-app">
+  <aside class="snav">
+    <div class="snav-brand"><img src="assets/logo-cutout.png" alt="DWT" onerror="this.style.display='none'"><b>DWT</b></div>
+    <a class="snav-item on" data-tab="dashboard" onclick="switchTab('dashboard',this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Tableau de bord</span></a>
+    <a class="snav-item" data-tab="posts" onclick="switchTab('posts',this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2.5"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg><span>Publications</span></a>
+    <a class="snav-item" data-tab="site" onclick="switchTab('site',this)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg><span>Mon site</span></a>
+    <a class="snav-item" data-tab="identity" onclick="switchTab('identity',this)"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 5 5.6.8-4 4 1 5.6L12 20l-5 2.4 1-5.6-4-4 5.6-.8z"/></svg><span>Identité</span></a>
+    <a class="snav-item" data-tab="connect" onclick="switchTab('connect',this)"><svg viewBox="0 0 24 24"><circle cx="6" cy="7" r="2.5"/><circle cx="18" cy="7" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7.5 8.5l3 8M16.5 8.5l-3 8"/></svg><span>Réseaux</span></a>
+    <a class="snav-item" data-tab="suivi" onclick="switchTab('suivi',this)"><svg viewBox="0 0 24 24"><path d="M3 18l5-6 4 3 5-7 4 5"/><path d="M3 21h18"/></svg><span>Suivi</span></a>
+    <button class="snav-logout" type="button" onclick="dwtLogout()"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Déconnexion</span></button>
+  </aside>
+
+  <main class="main">
+    <div class="main-head">
+      <h1 class="hi">Bonjour <span class="gr" id="cl-name">—</span></h1>
+      <div class="meta"><span id="cl-commerce">—</span><span class="pill" id="cl-pack">—</span></div>
+    </div>
+
+    <section class="tab-panel on" data-panel="dashboard">
+      <div class="grid">
+        <div class="card"><h3>Vos publications</h3><p>Vos prochains posts programmés apparaîtront ici.</p><span class="soon">Bientôt</span></div>
+        <div class="card"><h3>Votre site</h3><p>Aperçu et demandes de modification de votre site.</p><span class="soon">Bientôt</span></div>
+        <div class="card"><h3>Suivi mensuel</h3><p>Vos résultats, dès que les premières données arrivent.</p><span class="soon">Bientôt</span></div>
+      </div>
+    </section>
+    <section class="tab-panel" data-panel="posts"><div class="card"><h3>Publications</h3><p>Section en préparation.</p><span class="soon">Bientôt</span></div></section>
+    <section class="tab-panel" data-panel="site">
+      <div class="site-grid">
+        <div class="card">
+          <h3>Demander une modification</h3>
+          <p class="card-sub">Décrivez ce que vous voulez changer — DWT s'en occupe.</p>
+          <div class="field"><label for="modif-sujet">Type de modification</label>
+            <select id="modif-sujet">
+              <option>Textes</option>
+              <option>Photos &amp; visuels</option>
+              <option>Horaires &amp; infos pratiques</option>
+              <option>Produits / menu</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <div class="field"><label for="modif-msg">Votre demande</label>
+            <textarea id="modif-msg" rows="5" placeholder="Ex. : remplacer la photo d'accueil, corriger les horaires du dimanche..."></textarea>
+          </div>
+          <button class="btn-primary" type="button" id="modif-btn" onclick="siteSubmitModif()">Envoyer ma demande</button>
+          <div class="iv-msg" id="modif-feedback" aria-live="polite"></div>
+        </div>
+        <div class="card">
+          <h3>Vos demandes</h3>
+          <div class="modif-list" id="modif-list"><p class="modif-empty">Aucune demande pour l'instant.</p></div>
+        </div>
+      </div>
+    </section>
+    <section class="tab-panel" data-panel="identity">
+      <div class="iv-grid">
+        <div class="card">
+          <h3>Votre palette de marque</h3>
+          <p class="card-sub">Vos 3 couleurs — elles servent à vos publications et à votre site.</p>
+          <div class="iv-banner" id="iv-validated" style="display:none">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+            <span>Palette validée — DWT l'applique à vos contenus.</span>
+          </div>
+          <div class="iv-auto">
+            <div class="iv-auto-head"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 5 5.6.8-4 4 1 5.6L12 20l-5 2.4 1-5.6-4-4 5.6-.8z"/></svg>Génération automatique</div>
+            <p class="iv-auto-sub">Donnez le contexte, l'IA vous propose des palettes sur mesure.</p>
+            <div class="iv-fields">
+              <input id="iv-secteur" placeholder="Secteur (ex. pâtisserie, coiffure, restaurant...)">
+              <input id="iv-ambiance" placeholder="Ambiance souhaitée (ex. chaleureux, premium, naturel...)">
+              <input id="iv-pref" placeholder="Couleur préférée (optionnel)">
+            </div>
+            <button class="btn-ghost-wide" type="button" id="iv-gen-btn" onclick="ivGenerate()">Proposer des palettes</button>
+            <div class="iv-suggestions" id="iv-suggestions"></div>
+          </div>
+          <div class="iv-divider"><span>ou choisissez manuellement</span></div>
+          <div class="iv-colors">
+            <label class="iv-color"><input type="color" id="cp-primary" value="#7B1FA2" oninput="ivUpdate('primary',this.value)"><span><b>Principale</b><code id="hex-primary">#7B1FA2</code></span></label>
+            <label class="iv-color"><input type="color" id="cp-secondary" value="#63AF21" oninput="ivUpdate('secondary',this.value)"><span><b>Secondaire</b><code id="hex-secondary">#63AF21</code></span></label>
+            <label class="iv-color"><input type="color" id="cp-bg" value="#141019" oninput="ivUpdate('bg',this.value)"><span><b>Fond</b><code id="hex-bg">#141019</code></span></label>
+          </div>
+          <button class="btn-primary" type="button" id="iv-save-btn" onclick="ivSave()">Valider ma palette</button>
+          <div class="iv-msg" id="iv-msg" aria-live="polite"></div>
+        </div>
+        <div class="card">
+          <h3>Aperçu en direct</h3>
+          <div class="iv-preview" id="iv-preview">
+            <div class="ivp-nav"><b id="ivp-brand">Votre commerce</b><span class="ivp-cta" id="ivp-cta">Commander</span></div>
+            <div class="ivp-hero">
+              <span class="ivp-eyebrow" id="ivp-eyebrow">Votre univers</span>
+              <div class="ivp-title" id="ivp-title">Votre commerce</div>
+              <span class="ivp-btn" id="ivp-btn">Découvrir</span>
+            </div>
+          </div>
+          <div class="iv-swatches">
+            <div><span class="sw" id="sw-primary"></span>Principale</div>
+            <div><span class="sw" id="sw-secondary"></span>Secondaire</div>
+            <div><span class="sw" id="sw-bg"></span>Fond</div>
+          </div>
+        </div>
+      </div>
+      <div class="card iv-upload-card">
+        <h3>Logo &amp; visuels</h3>
+        <p class="card-sub">Déposez votre logo, charte ou photos — PNG, JPG, PDF (max 2 Mo).</p>
+        <div class="upzone" id="upzone" onclick="document.getElementById('upinput').click()" ondragover="upDragOver(event)" ondragleave="upDragLeave()" ondrop="upDrop(event)">
+          <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div class="uptitle">Cliquer ou glisser un fichier</div>
+          <div class="upsub">PNG, JPG, PDF · max 2 Mo</div>
+        </div>
+        <input type="file" id="upinput" accept=".png,.jpg,.jpeg,.pdf" multiple style="display:none" onchange="upSelect(this.files)">
+        <div class="uplist" id="uplist"></div>
+        <button class="btn-primary" id="upbtn" type="button" style="display:none" onclick="upSend()">Envoyer mes fichiers</button>
+        <div class="iv-msg" id="upmsg" aria-live="polite"></div>
+      </div>
+    </section>
+    <section class="tab-panel" data-panel="connect"><div class="card"><h3>Réseaux</h3><p>Connexion de vos comptes — section en préparation.</p><span class="soon">Bientôt</span></div></section>
+    <section class="tab-panel" data-panel="suivi">
+      <div class="suivi-grid">
+        <div class="card">
+          <h3>Messages avec DWT</h3>
+          <p class="card-sub">Une question, une remarque&nbsp;? Écrivez-nous ici.</p>
+          <div class="msg-thread" id="msg-thread"><p class="modif-empty">Aucun message pour l'instant.</p></div>
+          <div class="msg-compose">
+            <textarea id="msg-input" rows="2" placeholder="Votre message à DWT..."></textarea>
+            <button class="btn-primary" type="button" id="msg-btn" onclick="suiviSendMsg()">Envoyer</button>
+          </div>
+          <div class="iv-msg" id="msg-feedback" aria-live="polite"></div>
+        </div>
+        <div class="card">
+          <h3>Suivi mensuel</h3>
+          <p class="card-sub">Vos résultats apparaîtront ici dès les premières données — jamais de chiffres inventés.</p>
+          <ul class="suivi-list">
+            <li>Visites de votre site</li>
+            <li>Demandes reçues (appels, messages, devis)</li>
+            <li>Avis clients et e-réputation</li>
+            <li>Performance de vos publications</li>
+          </ul>
+          <span class="soon">Dès vos premières données</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var SUPABASE_URL = 'https://hamhhnulwmqpixazffoc.supabase.co';
+  var SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhhbWhobnVsd21xcGl4YXpmZm9jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNzEzOTgsImV4cCI6MjA5NTY0NzM5OH0.bJfSJccRR6TXg-uDjf9Jo_vc9pdWX6NGWQwSCESkpHY';
+  var sb = (typeof supabase !== 'undefined' && supabase.createClient) ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON) : null;
+
+  var CLIENT = { id:null, name:'', email:'', commerce:'', slug:'', pack:'' };
+
+  function g(id){ return document.getElementById(id); }
+
+  window.switchTab = function(id, el){
+    var items = document.querySelectorAll('.snav-item');
+    for (var i=0;i<items.length;i++){ items[i].classList.toggle('on', items[i].getAttribute('data-tab')===id); }
+    var panels = document.querySelectorAll('.tab-panel');
+    for (var j=0;j<panels.length;j++){ panels[j].classList.toggle('on', panels[j].getAttribute('data-panel')===id); }
+  };
+
+  window.dwtLogin = async function(){
+    var email = g('login-email').value.trim();
+    var pass = g('login-pass').value;
+    var err = g('login-err');
+    var btn = g('login-btn');
+    err.textContent = '';
+    if (!email || !pass){ err.textContent = 'Email et mot de passe requis.'; return; }
+    if (!sb){ err.textContent = 'Connexion indisponible (réseau ou bloqueur ?). Rechargez la page.'; return; }
+    btn.disabled = true; btn.textContent = 'Connexion...';
+    try {
+      var res = await sb.auth.signInWithPassword({ email: email, password: pass });
+      if (res.error){ err.textContent = 'Email ou mot de passe incorrect.'; btn.disabled = false; btn.textContent = 'Se connecter'; return; }
+      await onAuthenticated();
+    } catch(e){
+      err.textContent = 'Erreur : ' + (e && e.message ? e.message : e);
+      btn.disabled = false; btn.textContent = 'Se connecter';
+    }
+  };
+
+  window.dwtLogout = async function(){
+    try { await sb.auth.signOut(); } catch(e){}
+    location.reload();
+  };
+
+  async function loadClient(){
+    var u = await sb.auth.getUser();
+    var uid = (u && u.data && u.data.user) ? u.data.user.id : null;
+    if (!uid) return false;
+    var r = await sb.from('clients').select('*').eq('user_id', uid);
+    if (r.error){ var ee = g('login-err'); if (ee) ee.textContent = 'Erreur base : ' + r.error.message; return false; }
+    if (!r.data || r.data.length === 0){ var e2 = g('login-err'); if (e2) e2.textContent = 'Aucun espace associé à ce compte.'; return false; }
+    var row = r.data[0];
+    CLIENT.id = row.id;
+    CLIENT.name = row.prenom || row.nom || '';
+    CLIENT.email = row.email || '';
+    CLIENT.commerce = row.commerce || '';
+    CLIENT.slug = row.slug || '';
+    CLIENT.pack = row.pack || '';
+    return true;
+  }
+
+  function render(){
+    g('cl-name').textContent = CLIENT.name || 'vous';
+    g('cl-commerce').textContent = CLIENT.commerce || '';
+    var packEl = g('cl-pack');
+    if (CLIENT.pack){ packEl.textContent = 'Pack ' + CLIENT.pack; packEl.style.display=''; }
+    else { packEl.style.display = 'none'; }
+  }
+
+  async function onAuthenticated(){
+    var ok = await loadClient();
+    if (!ok){
+      var b = g('login-btn'); if (b){ b.disabled = false; b.textContent = 'Se connecter'; }
+      try { await sb.auth.signOut(); } catch(e){}
+      return;
+    }
+    render();
+    g('dwt-login').style.display = 'none';
+    g('dwt-app').classList.add('on');
+    await loadIdentity();
+    loadModifs();
+    loadNotifs();
+  }
+
+  // ===== ONGLET IDENTITÉ (palette) =====
+  var S = { palette:{ primary:'#7B1FA2', secondary:'#63AF21', bg:'#141019' }, identity:false };
+
+  function isDark(hex){
+    var c = String(hex||'').replace('#',''); if(c.length===3) c=c[0]+c[0]+c[1]+c[1]+c[2]+c[2];
+    var r=parseInt(c.substr(0,2),16), gg=parseInt(c.substr(2,2),16), b=parseInt(c.substr(4,2),16);
+    if(isNaN(r)) return true;
+    return (0.299*r + 0.587*gg + 0.114*b) < 140;
+  }
+  function txtOn(hex){ return isDark(hex) ? '#F6F1FA' : '#15121a'; }
+
+  function ivApply(){
+    var p = S.palette, txt = txtOn(p.bg);
+    ['primary','secondary','bg'].forEach(function(k){
+      var i=g('cp-'+k); if(i) i.value=p[k];
+      var h=g('hex-'+k); if(h) h.textContent=p[k];
+      var s=g('sw-'+k); if(s) s.style.background=p[k];
+    });
+    var prev=g('iv-preview'); if(prev) prev.style.background=p.bg;
+    var name = CLIENT.commerce || 'Votre commerce';
+    var brand=g('ivp-brand'); if(brand){ brand.textContent=name; brand.style.color=txt; }
+    var cta=g('ivp-cta'); if(cta) cta.style.background=p.primary;
+    var eb=g('ivp-eyebrow'); if(eb) eb.style.color=p.secondary;
+    var tt=g('ivp-title'); if(tt){ tt.textContent=name; tt.style.color=txt; }
+    var bt=g('ivp-btn'); if(bt) bt.style.background=p.primary;
+  }
+
+  window.ivUpdate = function(which, val){ S.palette[which]=val; ivApply(); };
+
+  function setValidated(v){
+    S.identity=v;
+    var ban=g('iv-validated'); if(ban) ban.style.display = v ? 'flex' : 'none';
+    var btn=g('iv-save-btn'); if(btn) btn.textContent = v ? 'Mettre à jour ma palette' : 'Valider ma palette';
+  }
+
+  async function loadIdentity(){
+    if(!CLIENT.id) return;
+    try{
+      var r = await sb.from('identite_visuelle').select('*').eq('client_id', CLIENT.id).limit(1);
+      if(r.data && r.data[0] && r.data[0].couleur_principale){
+        var d=r.data[0];
+        S.palette = { primary:d.couleur_principale, secondary:d.couleur_secondaire||S.palette.secondary, bg:d.couleur_accent||S.palette.bg };
+        setValidated(!!d.questionnaire_complete);
+      }
+    }catch(e){}
+    ivApply();
+  }
+
+  window.ivSave = async function(){
+    var msg=g('iv-msg'); msg.style.color='var(--gl)'; msg.textContent='Enregistrement...';
+    if(!CLIENT.id){ msg.style.color='#ff8b8b'; msg.textContent='Profil non chargé.'; return; }
+    var payload={ couleur_principale:S.palette.primary, couleur_secondaire:S.palette.secondary, couleur_accent:S.palette.bg, questionnaire_complete:true };
+    try{
+      var sel=await sb.from('identite_visuelle').select('id').eq('client_id',CLIENT.id).limit(1);
+      if(sel.error) throw sel.error;
+      if(sel.data && sel.data[0]){ var up=await sb.from('identite_visuelle').update(payload).eq('id',sel.data[0].id); if(up.error) throw up.error; }
+      else { payload.client_id=CLIENT.id; var ins=await sb.from('identite_visuelle').insert(payload); if(ins.error) throw ins.error; }
+      try{ await sb.from('notifications').insert({ client_id:CLIENT.id, type:'identite', titre:'Palette validée', contenu:(CLIENT.commerce||'Le client')+' a validé sa palette de marque.', direction:'client_to_ceo' }); }catch(e){}
+      setValidated(true); msg.style.color='var(--gl)'; msg.textContent='Palette enregistrée ✓';
+    }catch(e){ msg.style.color='#ff8b8b'; msg.textContent='Erreur : '+(e&&e.message?e.message:e); }
+  };
+
+  function pick(o){ for(var i=1;i<arguments.length;i++){ var k=arguments[i]; if(o && o[k]) return o[k]; } return null; }
+
+  function ivRenderSuggestions(pals){
+    var sug=g('iv-suggestions'); sug.innerHTML='';
+    pals.slice(0,3).forEach(function(p,i){
+      var prim=pick(p,'primary','principale','couleur_principale')||'#7B1FA2';
+      var sec=pick(p,'secondary','secondaire','couleur_secondaire')||'#63AF21';
+      var bg=pick(p,'bg','fond','accent','couleur_accent','couleur_fond')||'#141019';
+      var nm=pick(p,'name','nom')||('Proposition '+(i+1));
+      var el=document.createElement('button'); el.type='button'; el.className='iv-sugg';
+      el.innerHTML='<span class="iv-sugg-sw" style="background:'+bg+'"></span><span class="iv-sugg-sw" style="background:'+prim+'"></span><span class="iv-sugg-sw" style="background:'+sec+'"></span><span class="iv-sugg-name">'+nm+'</span>';
+      el.addEventListener('click',function(){ window.ivUpdate('primary',prim); window.ivUpdate('secondary',sec); window.ivUpdate('bg',bg); var m=g('iv-msg'); if(m){ m.style.color='var(--gl)'; m.textContent='Palette appliquée — ajustez puis validez.'; } });
+      sug.appendChild(el);
+    });
+  }
+
+  window.ivGenerate = async function(){
+    var btn=g('iv-gen-btn'); var sug=g('iv-suggestions');
+    var secteur=g('iv-secteur').value.trim();
+    var ambiance=g('iv-ambiance').value.trim();
+    var pref=g('iv-pref').value.trim();
+    sug.innerHTML='';
+    btn.disabled=true; var old=btn.textContent; btn.textContent='Génération...';
+    var brief='Ambiance: '+(ambiance||'distinctif, premium, mémorable')+'. Contrainte: éviter tout rendu générique, identité affirmée et accessible (bon contraste fond/texte).';
+    var payload={ commerce: CLIENT.commerce||'', secteur: secteur||CLIENT.commerce||'', ambiance: brief, mots: ambiance, couleur_pref: pref };
+    try{
+      var r=await fetch('https://dwt-palette.darellwilliampro1.workers.dev',{ method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+      var text=await r.text();
+      if(!text || !text.trim()) throw new Error('le générateur ne répond pas pour le moment');
+      var clean=text.replace(/```json|```/g,'').trim();
+      var mm=clean.match(/\{[\s\S]*\}/); if(mm) clean=mm[0];
+      var data=JSON.parse(clean);
+      var pals=(data && data.palettes) ? data.palettes : (Array.isArray(data)?data:null);
+      if(!pals || !pals.length) throw new Error('aucune palette reçue');
+      ivRenderSuggestions(pals);
+    }catch(e){
+      sug.innerHTML='<div class="iv-err">Génération indisponible : '+(e&&e.message?e.message:e)+'. Vous pouvez choisir manuellement ci-dessous.</div>';
+    }
+    btn.disabled=false; btn.textContent=old;
+  };
+
+  // ===== ONGLET MON SITE (demandes de modification) =====
+  function mStatutLabel(s){ return s==='termine' ? 'Terminé' : (s==='en_cours' ? 'En cours' : 'En attente'); }
+  function mStatutClass(s){ return (s==='termine'||s==='en_cours') ? s : 'en_attente'; }
+  function esc(t){ var d=document.createElement('div'); d.textContent = (t==null?'':String(t)); return d.innerHTML; }
+
+  async function loadModifs(){
+    if(!CLIENT.id) return;
+    var list=g('modif-list'); if(!list) return;
+    try{
+      var r=await sb.from('modifications').select('*').eq('client_id', CLIENT.id);
+      if(r.error) throw r.error;
+      var rows=(r.data||[]).slice();
+      rows.sort(function(a,b){ return String(b.created_at||b.created||b.id||'').localeCompare(String(a.created_at||a.created||a.id||'')); });
+      if(!rows.length){ list.innerHTML='<p class="modif-empty">Aucune demande pour l\'instant.</p>'; return; }
+      list.innerHTML = rows.map(function(m){
+        var st=mStatutClass(m.statut);
+        return '<div class="modif-item"><div class="mh"><span class="ms">'+esc(m.sujet||'Demande')+'</span><span class="mstatut '+st+'">'+mStatutLabel(m.statut)+'</span></div><p class="mt">'+esc(m.message_client||'')+'</p></div>';
+      }).join('');
+    }catch(e){ list.innerHTML='<p class="modif-empty">Impossible de charger vos demandes.</p>'; }
+  }
+
+  window.siteSubmitModif = async function(){
+    var fb=g('modif-feedback'); fb.style.color='var(--gl)'; fb.textContent='Envoi...';
+    if(!CLIENT.id){ fb.style.color='#ff8b8b'; fb.textContent='Profil non chargé.'; return; }
+    var sujet=g('modif-sujet').value;
+    var msg=g('modif-msg').value.trim();
+    if(!msg){ fb.style.color='#ff8b8b'; fb.textContent='Décrivez votre demande.'; return; }
+    var cible = CLIENT.slug ? (CLIENT.slug+'/index.html') : 'index.html';
+    var btn=g('modif-btn'); btn.disabled=true;
+    try{
+      var ins=await sb.from('modifications').insert({ client_id:CLIENT.id, sujet:sujet, message_client:msg, statut:'en_attente', fichier_cible:cible });
+      if(ins.error) throw ins.error;
+      try{ await sb.from('notifications').insert({ client_id:CLIENT.id, type:'modification', titre:'Demande de modification', contenu:(CLIENT.commerce||'Le client')+' — '+sujet+' : '+msg.slice(0,140), direction:'client_to_ceo' }); }catch(e){}
+      g('modif-msg').value=''; fb.style.color='var(--gl)'; fb.textContent='Demande envoyée ✓';
+      loadModifs();
+    }catch(e){ fb.style.color='#ff8b8b'; fb.textContent='Erreur : '+(e&&e.message?e.message:e); }
+    btn.disabled=false;
+  };
+
+  // ===== UPLOAD FICHIERS (Storage documents + fichiers_clients) =====
+  var upList = [];
+  window.upDragOver = function(e){ e.preventDefault(); var z=g('upzone'); if(z) z.classList.add('drag'); };
+  window.upDragLeave = function(){ var z=g('upzone'); if(z) z.classList.remove('drag'); };
+  window.upDrop = function(e){ e.preventDefault(); var z=g('upzone'); if(z) z.classList.remove('drag'); window.upSelect(e.dataTransfer.files); };
+  window.upSelect = function(files){
+    var listEl=g('uplist'), msg=g('upmsg');
+    Array.prototype.forEach.call(files, function(f){
+      if(f.size > 2*1024*1024){ if(msg){ msg.style.color='#ff8b8b'; msg.textContent=f.name+' : trop lourd (max 2 Mo).'; } return; }
+      upList.push(f);
+      var el=document.createElement('div'); el.className='upitem';
+      el.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--gl)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="upname">'+esc(f.name)+'</span><span class="upsize">'+Math.round(f.size/1024)+' Ko</span>';
+      listEl.appendChild(el);
+    });
+    if(upList.length){ var b=g('upbtn'); if(b) b.style.display='block'; }
+  };
+  window.upSend = async function(){
+    if(!upList.length) return;
+    var btn=g('upbtn'), msg=g('upmsg'); btn.disabled=true; var old=btn.textContent; btn.textContent='Envoi...'; msg.style.color='var(--gl)'; msg.textContent='';
+    var u=await sb.auth.getUser(); var uid=(u&&u.data&&u.data.user)?u.data.user.id:null;
+    if(!uid){ msg.style.color='#ff8b8b'; msg.textContent='Session expirée, reconnectez-vous.'; btn.disabled=false; btn.textContent=old; return; }
+    var okAll=true;
+    for(var i=0;i<upList.length;i++){
+      var file=upList[i];
+      var safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+      var path=uid+'/'+Date.now()+'-'+safe;
+      try{
+        var up=await sb.storage.from('documents').upload(path, file, { upsert:true });
+        if(up.error){ okAll=false; continue; }
+        if(CLIENT.id){ try{ await sb.from('fichiers_clients').insert({ client_id:CLIENT.id, type:'document', nom_fichier:file.name, storage_path:path, taille_bytes:file.size }); }catch(e){} }
+      }catch(e){ okAll=false; }
+    }
+    upList=[]; g('uplist').innerHTML=''; btn.style.display='none'; btn.disabled=false; btn.textContent=old;
+    msg.style.color = okAll ? 'var(--gl)' : '#ff8b8b';
+    msg.textContent = okAll ? 'Fichiers envoyés ✓' : 'Certains fichiers n\'ont pas pu être envoyés.';
+  };
+
+  // ===== ONGLET SUIVI (messages avec DWT) =====
+  function msgFromClient(dir){ return String(dir||'').toLowerCase().indexOf('client')===0; }
+
+  async function loadNotifs(){
+    if(!CLIENT.id) return;
+    var thread=g('msg-thread'); if(!thread) return;
+    try{
+      var r=await sb.from('notifications').select('*').eq('client_id', CLIENT.id);
+      if(r.error) throw r.error;
+      var rows=(r.data||[]).slice();
+      rows.sort(function(a,b){ return String(a.created_at||a.created||a.id||'').localeCompare(String(b.created_at||b.created||b.id||'')); });
+      if(!rows.length){ thread.innerHTML='<p class="modif-empty">Aucun message pour l\'instant.</p>'; return; }
+      thread.innerHTML = rows.map(function(n){
+        var fromCl=msgFromClient(n.direction);
+        return '<div class="msg-bubble '+(fromCl?'msg-client':'msg-dwt')+'"><div class="who">'+(fromCl?'Vous':'DWT Digital')+'</div><p>'+esc(n.contenu||n.titre||'')+'</p></div>';
+      }).join('');
+      thread.scrollTop=thread.scrollHeight;
+    }catch(e){ thread.innerHTML='<p class="modif-empty">Impossible de charger les messages.</p>'; }
+  }
+
+  window.suiviSendMsg = async function(){
+    var fb=g('msg-feedback'), inp=g('msg-input'); var txt=inp.value.trim();
+    fb.style.color='var(--gl)'; fb.textContent='';
+    if(!CLIENT.id){ fb.style.color='#ff8b8b'; fb.textContent='Profil non chargé.'; return; }
+    if(!txt){ fb.style.color='#ff8b8b'; fb.textContent='Écrivez un message.'; return; }
+    var btn=g('msg-btn'); btn.disabled=true;
+    try{
+      var ins=await sb.from('notifications').insert({ client_id:CLIENT.id, type:'message', titre:'Message client', contenu:txt, direction:'client_to_ceo' });
+      if(ins.error) throw ins.error;
+      inp.value=''; fb.style.color='var(--gl)'; fb.textContent='Message envoyé ✓';
+      loadNotifs();
+    }catch(e){ fb.style.color='#ff8b8b'; fb.textContent='Erreur : '+(e&&e.message?e.message:e); }
+    btn.disabled=false;
+  };
+
+  async function bootstrap(){
+    var pass = g('login-pass');
+    if (pass) pass.addEventListener('keydown', function(e){ if (e.key === 'Enter') window.dwtLogin(); });
+    if (!sb){ var ee = g('login-err'); if (ee) ee.textContent = 'Connexion indisponible (réseau ou bloqueur ?). Rechargez la page.'; return; }
+    try {
+      var s = await sb.auth.getSession();
+      if (s && s.data && s.data.session){ await onAuthenticated(); }
+    } catch(e){}
+  }
+
+  if (document.readyState !== 'loading') bootstrap();
+  else document.addEventListener('DOMContentLoaded', bootstrap);
+})();
+</script>
+</body></html>

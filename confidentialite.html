@@ -1,0 +1,241 @@
+<!doctype html><html lang="fr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Politique de confidentialité — DWT Digital</title>
+<meta name="description" content="Politique de confidentialité de DWT Digital : données collectées, finalités, cookies, durée de conservation et vos droits.">
+<meta name="robots" content="all">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --v:#7B1FA2; --vd:#4F0F5C; --vdd:#2D0636;
+  --g:#63AF21; --gl:#7BC93A;
+  --ink:#F6F1FA; --mut:rgba(246,241,250,.66);
+  --border:rgba(255,255,255,.15);
+  --disp:'Syne',sans-serif; --body:'Poppins',sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:clip;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@supports not (overflow-x:clip){html,body{overflow-x:hidden}}
+body{margin:0;background:#0a0014;color:var(--ink);font-family:var(--body);line-height:1.62;overflow-x:clip;-webkit-font-smoothing:antialiased}
+.pagebg{position:fixed;inset:0;z-index:-1;background-image:radial-gradient(1200px 800px at 80% -10%,rgba(123,31,162,.40),transparent 60%),radial-gradient(900px 700px at -10% 110%,rgba(99,175,33,.12),transparent 55%)}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+.wrap{max-width:860px;margin:0 auto;padding:0 22px}
+
+/* NAV */
+.nav{position:fixed;top:14px;left:0;right:0;z-index:60;display:flex;justify-content:center;padding:0 16px}
+.nav-pill{display:flex;align-items:center;gap:18px;width:100%;max-width:1180px;padding:12px 16px;border-radius:999px;background:rgba(20,4,32,.55);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border:1px solid var(--border);box-shadow:0 18px 44px -22px rgba(0,0,0,.7)}
+.nav-logo{display:flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:800;font-size:.95rem;margin-right:8px}
+.nav-logo img{height:27px}
+.nav-logo span{background:linear-gradient(120deg,#d49bff,var(--gl));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-tabs{display:flex;gap:20px;align-items:center}
+.nav-tabs a{font-size:.92rem;color:var(--mut);transition:color .2s}
+.nav-tabs a:hover,.nav-tabs a.cur{color:var(--ink)}
+.nav-cta{margin-left:auto;padding:10px 18px;border-radius:999px;font-size:.86rem;font-weight:600;background:linear-gradient(120deg,var(--v),var(--g));color:#fff;white-space:nowrap}
+
+/* CONTENU */
+main{padding-top:140px;padding-bottom:30px}
+.kicker{font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#d49bff;margin-bottom:10px}
+h1.page-title{font-family:var(--disp);font-weight:800;font-size:clamp(2rem,6vw,3.1rem);line-height:1.05;margin:0 0 12px}
+.lead{color:var(--mut);font-size:1.02rem;margin:0 0 34px;max-width:60ch}
+.legal-card{position:relative;padding:34px 30px;border-radius:24px;background:rgba(20,4,32,.5);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid var(--border);overflow:hidden}
+.legal-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(140deg,rgba(255,255,255,.14),transparent 40%,rgba(123,31,162,.10));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px;opacity:.7}
+.legal-card h2{font-family:var(--disp);font-weight:700;font-size:1.22rem;margin:30px 0 10px;color:var(--ink)}
+.legal-card h2:first-of-type{margin-top:0}
+.legal-card p,.legal-card li{color:var(--mut);font-size:.96rem;line-height:1.72}
+.legal-card ul{margin:6px 0 10px;padding-left:20px}
+.legal-card li{margin:4px 0}
+.legal-card strong{color:var(--ink);font-weight:600}
+.legal-card a.inline{color:#d49bff;text-decoration:underline;text-underline-offset:2px}
+.upd{margin-top:26px;font-size:.84rem;color:rgba(246,241,250,.5)}
+
+/* FOOTER */
+footer{border-top:1px solid rgba(255,255,255,.08);padding:40px 0 60px;margin-top:46px}
+.foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+.foot-row>span{color:var(--mut);font-size:.9rem}
+.foot-links{display:flex;gap:18px;flex-wrap:wrap}.foot-links a{white-space:nowrap;color:var(--mut);font-size:.9rem;transition:color .2s}
+.foot-links a:hover{color:#d49bff}
+.foot-nap{display:flex;flex-direction:column;gap:4px;margin-top:18px;font-style:normal;color:var(--mut);font-size:.88rem}
+.foot-nap a:hover{color:#d49bff}
+@media(max-width:680px){main{padding-top:108px}.legal-card{padding:26px 20px}}
+</style></head>
+<body>
+<div class="pagebg" aria-hidden="true"></div>
+
+<nav class="nav"><div class="nav-pill">
+  <a class="nav-logo" href="index.html"><img src="assets/logo-cutout.png" alt="DWT" onerror="this.style.display='none'"><span>DWT</span></a>
+  <div class="nav-tabs">
+    <a href="index.html">Accueil</a>
+    <a href="offres.html">Offres</a>
+    <a href="methode.html">Méthode</a>
+    <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <a href="contact.html" class="nav-cta">Audit de visibilité offert</a>
+</div></nav>
+
+<main id="contenu" tabindex="-1"><div class="wrap">
+  <div class="kicker">Confidentialité</div>
+  <h1 class="page-title">Politique de confidentialité</h1>
+  <p class="lead">Comment DWT Digital collecte, utilise et protège vos données personnelles — en clair, sans jargon.</p>
+
+  <div class="legal-card">
+    <h2>1. Responsable du traitement</h2>
+    <p><strong>DWT Digital</strong>, agence de marketing boosté à l'intelligence artificielle pour les commerces de proximité et TPE/PME d'Île-de-France. Contact&nbsp;: <a class="inline" href="mailto:dwtdigital92@gmail.com">dwtdigital92@gmail.com</a> · 07&nbsp;51&nbsp;58&nbsp;63&nbsp;89.</p>
+
+    <h2>2. Données que nous collectons</h2>
+    <p>Nous ne collectons que les données que vous nous transmettez volontairement via le <strong>formulaire de contact</strong>&nbsp;:</p>
+    <ul>
+      <li>votre nom&nbsp;;</li>
+      <li>le nom de votre commerce&nbsp;;</li>
+      <li>votre adresse e-mail&nbsp;;</li>
+      <li>le contenu de votre message.</li>
+    </ul>
+    <p>Aucun compte n'est requis pour naviguer, et nous ne créons aucun profil publicitaire à partir de votre navigation.</p>
+
+    <h2>3. Finalités et base légale</h2>
+    <p>Ces données servent uniquement à <strong>vous recontacter</strong> et à <strong>établir un devis</strong> en réponse à votre demande. La base légale est votre <strong>consentement</strong> (case à cocher du formulaire) et l'exécution de mesures précontractuelles prises à votre demande.</p>
+
+    <h2>4. Destinataires et sous-traitants</h2>
+    <p>Vos données sont destinées à DWT Digital <strong>uniquement</strong> et ne sont <strong>jamais revendues ni cédées</strong> à des tiers à des fins commerciales. Pour faire fonctionner le site, nous faisons appel à&nbsp;:</p>
+    <ul>
+      <li><strong>GitHub Pages</strong> (hébergement du site)&nbsp;;</li>
+      <li><strong>Make</strong> et la messagerie e-mail (acheminement des messages du formulaire)&nbsp;;</li>
+      <li><strong>Google Fonts</strong> (affichage des polices) et le CDN <strong>jsDelivr</strong> (librairie d'animation sur certaines pages)&nbsp;: à cette occasion, votre adresse IP est transmise à ces services, <strong>sans dépôt de cookie</strong>.</li>
+    </ul>
+
+    <h2>5. Cookies et traceurs</h2>
+    <p>Ce site <strong>ne dépose aucun cookie publicitaire ni traceur de mesure d'audience</strong>. Seul votre choix de consentement est conservé localement dans votre navigateur (<em>localStorage</em>) pour ne pas réafficher la bannière à chaque visite&nbsp;; ce n'est pas un cookie et il n'est partagé avec personne. Si nous activons un jour une mesure d'audience anonyme, elle ne se déclenchera <strong>qu'avec votre accord</strong>, et vous pourrez revenir sur ce choix à tout moment via le lien <strong>«&nbsp;Cookies&nbsp;»</strong> en bas de page.</p>
+
+    <h2>6. Durée de conservation</h2>
+    <p>Les données issues du formulaire sont conservées le temps de traiter votre demande, puis au maximum <strong>3&nbsp;ans</strong> à compter de notre dernier contact, à des fins de suivi commercial. Passé ce délai, elles sont supprimées.</p>
+
+    <h2>7. Vos droits</h2>
+    <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement, d'opposition et de portabilité de vos données. Pour les exercer, écrivez à <a class="inline" href="mailto:dwtdigital92@gmail.com">dwtdigital92@gmail.com</a> — nous répondons dans les meilleurs délais. Vous pouvez aussi introduire une réclamation auprès de la <a class="inline" href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL</a>.</p>
+
+    <h2>8. Sécurité</h2>
+    <p>Nous mettons en œuvre des mesures raisonnables pour protéger vos données contre tout accès, perte ou divulgation non autorisés. Aucun secret ni identifiant n'est exposé côté navigateur.</p>
+
+    <p class="upd">Dernière mise à jour&nbsp;: juin 2026.</p>
+  </div>
+</div></main>
+
+<footer><div class="wrap">
+  <div class="foot-row">
+    <span>© 2026 DWT Digital — Marketing IA · Île-de-France</span>
+    <div class="foot-links">
+      <a href="index.html">Accueil</a>
+      <a href="offres.html">Offres</a>
+      <a href="methode.html">Méthode</a>
+      <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <address class="foot-nap">
+    <span>DWT Digital · Chaville (92370), Île-de-France</span>
+    <a href="tel:+33751586389">07&nbsp;51&nbsp;58&nbsp;63&nbsp;89</a>
+    <a href="mailto:dwtdigital92@gmail.com">dwtdigital92@gmail.com</a>
+  </address>
+</div></footer>
+
+<!-- ════ MENU BURGER MOBILE (auto-construit, uniforme sur les 5 pages) ════ -->
+<style>
+.nav-burger{display:none;flex-direction:column;gap:5px;width:44px;height:44px;align-items:center;justify-content:center;border:none;background:rgba(255,255,255,.08);border-radius:12px;cursor:pointer;flex-shrink:0;margin-left:auto;padding:0}
+.nav-burger span{display:block;width:20px;height:2px;background:#fff;border-radius:2px;transition:transform .25s,opacity .2s}
+.nav-burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.nav-burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.dwt-mmenu{position:fixed;top:82px;left:18px;right:18px;z-index:59;display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:20px;background:rgba(20,4,32,.95);backdrop-filter:blur(24px) saturate(1.6);-webkit-backdrop-filter:blur(24px) saturate(1.6);border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 60px -20px rgba(0,0,0,.75);opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .25s,transform .25s}
+.dwt-mmenu.open{opacity:1;transform:none;pointer-events:auto}
+.dwt-mmenu a{padding:14px 16px;border-radius:12px;color:#fff;font-weight:500;font-size:1.02rem;text-decoration:none}
+.dwt-mmenu a:hover,.dwt-mmenu a.cur{background:rgba(255,255,255,.09)}
+.dwt-mmenu .cta{margin-top:6px;text-align:center;background:linear-gradient(120deg,#7B1FA2,#63AF21);font-weight:600}
+@media(max-width:980px){.nav-tabs{display:none!important}.nav-cta{display:none!important}.nav-burger{display:flex}}
+@media(min-width:981px){.dwt-mmenu{display:none}}
+</style>
+<script>
+(function(){
+  "use strict";
+  var pill=document.querySelector('.nav-pill'); if(!pill) return;
+  var here=(location.pathname.split('/').pop()||'index.html'); if(here==='') here='index.html';
+  var links=[['index.html','Accueil'],['offres.html','Offres'],['methode.html','Méthode'],['qui-sommes-nous.html','Qui sommes-nous'],['contact.html','Contact']];
+  var btn=document.createElement('button');
+  btn.className='nav-burger'; btn.type='button';
+  btn.setAttribute('aria-label','Ouvrir le menu'); btn.setAttribute('aria-expanded','false'); btn.setAttribute('aria-controls','dwtMobileMenu');
+  btn.innerHTML='<span></span><span></span><span></span>';
+  pill.appendChild(btn);
+  var menu=document.createElement('nav');
+  menu.className='dwt-mmenu'; menu.id='dwtMobileMenu'; menu.setAttribute('aria-label','Menu mobile');
+  var html='';
+  links.forEach(function(l){var cur=(l[0]===here)?' class="cur" aria-current="page"':'';html+='<a href="'+l[0]+'"'+cur+'>'+l[1]+'</a>';});
+  html+='<a href="contact.html" class="cta">Audit de visibilité offert</a>';
+  menu.innerHTML=html;
+  document.body.appendChild(menu);
+  function close(){btn.setAttribute('aria-expanded','false');menu.classList.remove('open');}
+  btn.addEventListener('click',function(e){e.stopPropagation();var o=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!o));menu.classList.toggle('open',!o);});
+  menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});
+  document.addEventListener('click',function(e){if(menu.classList.contains('open')&&!menu.contains(e.target)&&!btn.contains(e.target))close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+  window.addEventListener('resize',function(){if(window.innerWidth>980)close();});
+})();
+</script>
+
+<!-- ════ BANNIÈRE COOKIES + CONSENTEMENT (CNIL, uniforme sur les 5 pages) ════ -->
+<style>
+.ck-banner{position:fixed;left:16px;right:16px;bottom:16px;z-index:9000;display:flex;align-items:center;gap:20px;max-width:980px;margin:0 auto;padding:18px 20px;border-radius:22px;background:rgba(20,4,32,.82);-webkit-backdrop-filter:blur(26px) saturate(1.7);backdrop-filter:blur(26px) saturate(1.7);border:1px solid var(--border,rgba(255,255,255,.15));box-shadow:0 30px 70px -22px rgba(0,0,0,.8);overflow:hidden;transform:translateY(160%);transition:transform .5s cubic-bezier(.22,1,.36,1)}
+.ck-banner.ck-show{transform:translateY(0)}
+.ck-banner::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(140deg,rgba(255,255,255,.18),transparent 38%,rgba(123,31,162,.12));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px;opacity:.8}
+.ck-head{display:flex;gap:13px;align-items:flex-start;flex:1;min-width:0}
+.ck-ico{flex-shrink:0;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(123,31,162,.55),rgba(99,175,33,.30));font-size:1.25rem}
+.ck-txt{flex:1;min-width:0}
+.ck-txt h3{margin:0 0 3px;font-family:var(--disp,'Syne',sans-serif);font-weight:800;font-size:1rem;color:var(--ink,#F6F1FA)}
+.ck-txt p{margin:0;font-size:.86rem;color:var(--mut,rgba(246,241,250,.66));line-height:1.55;overflow-wrap:break-word}
+.ck-txt a{color:#d49bff;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
+.ck-acts{flex-shrink:0;display:flex;gap:10px}
+.ck-btn{font-family:var(--body,'Poppins',sans-serif);font-weight:600;font-size:.9rem;padding:12px 22px;border-radius:999px;cursor:pointer;white-space:nowrap;background:rgba(255,255,255,.08);color:var(--ink,#F6F1FA);border:1px solid var(--border,rgba(255,255,255,.15));transition:transform .18s,background .18s,border-color .18s}
+.ck-btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.28)}
+.foot-cookies{cursor:pointer}
+@media(max-width:760px){.ck-banner{flex-direction:column;align-items:flex-start;gap:14px;padding:18px;left:12px;right:12px;bottom:12px;border-radius:20px}.ck-acts{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}.ck-btn{padding:13px 14px;width:100%}}
+</style>
+<script>
+(function(){
+  "use strict";
+  var KEY="dwt-consent";
+  window.dwtConsent=localStorage.getItem(KEY)||null;
+  var fl=document.querySelector(".foot-links");
+  if(fl){
+    [["confidentialite.html","Confidentialité"],["mentions-legales.html","Mentions légales"]].forEach(function(p){
+      if(!fl.querySelector('a[href="'+p[0]+'"]')){var a=document.createElement("a");a.href=p[0];a.textContent=p[1];fl.appendChild(a);}
+    });
+    if(!fl.querySelector(".foot-cookies")){
+      var c=document.createElement("a");c.href="#";c.className="foot-cookies";c.textContent="Cookies";
+      c.addEventListener("click",function(e){e.preventDefault();openBanner();});
+      fl.appendChild(c);
+    }
+  }
+  var banner=null;
+  function setConsent(v){localStorage.setItem(KEY,v);window.dwtConsent=v;hide();}
+  function build(){
+    banner=document.createElement("div");
+    banner.className="ck-banner";
+    banner.setAttribute("role","dialog");
+    banner.setAttribute("aria-label","Préférences cookies");
+    banner.innerHTML='<div class="ck-head"><div class="ck-ico" aria-hidden="true">🍪</div><div class="ck-txt"><h3>Cookies &amp; confidentialité</h3><p>Ce site ne dépose aucun cookie publicitaire ni traceur. Avec votre accord, nous activerons une mesure d\'audience anonyme pour l\'améliorer. <a href="confidentialite.html">Politique de confidentialité</a></p></div></div><div class="ck-acts"><button class="ck-btn" type="button" data-v="essential">Refuser</button><button class="ck-btn" type="button" data-v="all">Tout accepter</button></div>';
+    document.body.appendChild(banner);
+    var btns=banner.querySelectorAll(".ck-btn");
+    for(var i=0;i<btns.length;i++){
+      (function(b){b.addEventListener("click",function(){setConsent(b.getAttribute("data-v"));});})(btns[i]);
+    }
+  }
+  function show(){if(!banner)build();void banner.offsetWidth;banner.classList.add("ck-show");}
+  function hide(){if(banner)banner.classList.remove("ck-show");}
+  function openBanner(){show();}
+  window.dwtOpenCookies=openBanner;
+  if(!window.dwtConsent){
+    if(document.readyState!=="loading")show();
+    else document.addEventListener("DOMContentLoaded",show);
+  }
+})();
+</script>
+</body></html>

@@ -1,0 +1,350 @@
+<!doctype html><html lang="fr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Devis — DWT Digital</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --v:#7B1FA2; --vd:#4F0F5C; --vdd:#2D0636;
+  --g:#63AF21; --gl:#7BC93A;
+  --ink:#F6F1FA; --mut:rgba(246,241,250,.66); --acc:#d49bff;
+  --border:rgba(255,255,255,.15);
+  --disp:'Syne',sans-serif; --body:'Poppins',sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:clip}
+body{margin:0;background:#0a0014;color:var(--ink);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip;min-height:100vh}
+.pagebg{position:fixed;inset:0;z-index:-1;background-image:radial-gradient(1100px 760px at 82% -8%,rgba(123,31,162,.40),transparent 60%),radial-gradient(820px 620px at -8% 108%,rgba(99,175,33,.12),transparent 55%)}
+.wrap{max-width:800px;margin:0 auto;padding:36px 20px 70px}
+
+.doc{position:relative;border-radius:22px;overflow:hidden;padding:34px 36px;
+  background:rgba(20,4,32,.55);-webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5);
+  border:1px solid var(--border);box-shadow:0 40px 90px -30px rgba(0,0,0,.8)}
+.doc::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(140deg,rgba(255,255,255,.12),transparent 42%,rgba(123,31,162,.10));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px;opacity:.6}
+
+.dh{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap;margin-bottom:26px}
+.dh-brand{display:flex;align-items:center;gap:11px}
+.dh-brand img{height:40px;width:auto}
+.dh-brand b{font-family:var(--disp);font-weight:800;font-size:1.15rem}
+.dh-brand span{display:block;font-size:.72rem;color:var(--mut);font-weight:500}
+.dh-meta{text-align:right;font-size:.84rem}
+.dh-meta .lbl{font-family:var(--disp);font-weight:800;font-size:1.5rem;letter-spacing:.04em}
+.dh-meta .num{font-family:monospace;color:var(--acc);margin-top:2px}
+.dh-meta .dt{color:var(--mut);font-size:.8rem;margin-top:5px}
+
+.dstatut{display:inline-block;font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:999px;margin-top:7px}
+.dstatut.brouillon{background:rgba(246,241,250,.1);color:var(--mut);border:1px solid var(--border)}
+.dstatut.envoye{background:rgba(63,169,255,.16);color:#3fa9ff;border:1px solid rgba(63,169,255,.32)}
+.dstatut.accepte{background:rgba(99,175,33,.16);color:var(--gl);border:1px solid rgba(99,175,33,.3)}
+.dstatut.refuse{background:rgba(255,139,139,.14);color:#ff8b8b;border:1px solid rgba(255,139,139,.32)}
+
+.dfor{margin-bottom:24px;padding:15px 17px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.04)}
+.dfor .k{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:5px}
+.dfor .who{font-family:var(--disp);font-weight:700;font-size:1.05rem}
+.dfor .sub{font-size:.86rem;color:var(--mut);margin-top:2px}
+
+.lines-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:22px}
+table.lines{width:100%;border-collapse:collapse;font-size:.9rem}
+.li-type-inline{display:none;color:var(--mut);font-size:.78rem}
+@media(max-width:560px){
+  table.lines{font-size:.84rem;min-width:0}
+  table.lines th,table.lines td{padding-left:6px;padding-right:6px}
+  table.lines th:nth-child(2),table.lines td.li-type{display:none}
+  .li-type-inline{display:inline}
+  .permo{display:none}
+}
+table.lines th{text-align:left;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);padding:0 10px 9px;border-bottom:1px solid var(--border)}
+table.lines th.r,table.lines td.r{text-align:right}
+table.lines td{padding:11px 10px;border-bottom:1px solid rgba(255,255,255,.07);vertical-align:top}
+table.lines .li-lbl{font-weight:500}
+table.lines .li-type{font-size:.78rem;color:var(--mut)}
+table.lines .li-tot{font-weight:600;white-space:nowrap}
+
+.dtot{display:flex;flex-direction:column;gap:8px;margin-left:auto;max-width:300px;margin-bottom:20px}
+.dtot-row{display:flex;justify-content:space-between;gap:18px;padding:9px 14px;border-radius:11px}
+.dtot-row span{color:var(--mut);font-size:.86rem}
+.dtot-row b{font-family:var(--disp);font-weight:800}
+.dtot-row.m{background:linear-gradient(120deg,rgba(123,31,162,.3),rgba(99,175,33,.16));border:1px solid rgba(212,155,255,.25)}
+.dtot-row.o{background:rgba(255,255,255,.04);border:1px solid var(--border)}
+
+.dnotes{font-size:.86rem;color:var(--mut);border-top:1px solid var(--border);padding-top:16px;margin-bottom:4px}
+.dnotes b{color:var(--ink);font-weight:600;display:block;margin-bottom:4px;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase}
+.dfoot{margin-top:22px;padding-top:16px;border-top:1px solid var(--border);font-size:.78rem;color:var(--mut);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.dfoot a{color:var(--acc)}
+
+.actions{display:flex;gap:11px;flex-wrap:wrap;justify-content:center;margin-top:26px}
+.btn{padding:13px 22px;border-radius:999px;border:none;font-weight:600;font-size:.92rem;font-family:var(--body);cursor:pointer;transition:transform .18s,opacity .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn-dl{color:var(--ink);background:rgba(255,255,255,.07);border:1px solid var(--border)}
+.btn-ok{color:#fff;background:linear-gradient(120deg,var(--v),var(--g));box-shadow:0 14px 30px -12px rgba(123,31,162,.7)}
+.btn:disabled{opacity:.55;cursor:default;transform:none}
+.accept-done{display:none;align-items:center;justify-content:center;gap:9px;margin-top:20px;padding:13px 18px;border-radius:14px;background:rgba(99,175,33,.13);border:1px solid rgba(99,175,33,.34);color:var(--gl);font-size:.9rem;font-weight:500}
+.accept-done.on{display:flex}
+
+.state{text-align:center;color:var(--mut);padding:60px 20px;font-size:.95rem}
+
+/* signature */
+.sign-panel{display:none;max-width:560px;margin:22px auto 0;padding:22px 22px 18px;border-radius:18px;background:rgba(20,4,32,.6);border:1px solid var(--border);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5)}
+.sign-panel.on{display:block}
+.sign-h{font-family:var(--disp);font-weight:800;font-size:1.1rem;margin:0 0 4px}
+.sign-sub{color:var(--mut);font-size:.85rem;margin:0 0 16px}
+.sign-field label,.sign-padlabel{display:block;font-size:.76rem;font-weight:600;color:var(--mut);margin-bottom:7px}
+.sign-field input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font-size:.95rem;font-family:var(--body);margin-bottom:15px}
+.sign-field input:focus{outline:none;border-color:var(--acc);background:rgba(255,255,255,.08)}
+.sign-pad-wrap{position:relative;margin-bottom:14px}
+.sign-pad{width:100%;height:150px;border-radius:12px;background:#fff;border:1px solid var(--border);touch-action:none;cursor:crosshair;display:block}
+.sign-clear{position:absolute;top:8px;right:8px;font-size:.72rem;font-weight:600;padding:5px 11px;border-radius:8px;border:1px solid #d9d2e0;background:rgba(255,255,255,.88);color:#5b5566;cursor:pointer}
+.sign-check{display:flex;align-items:flex-start;gap:9px;font-size:.86rem;color:var(--ink);margin-bottom:16px;cursor:pointer}
+.sign-check input{margin-top:3px;width:16px;height:16px;flex-shrink:0;accent-color:var(--g)}
+.sign-actions{display:flex;gap:11px;justify-content:flex-end}
+.sign-actions .btn{padding:11px 18px;font-size:.88rem}
+.sign-err{min-height:16px;margin-top:10px;font-size:.82rem;color:#ff8b8b;text-align:right}
+.sign-thanks{display:none;align-items:center;justify-content:center;gap:9px;margin-top:20px;padding:13px 18px;border-radius:14px;background:rgba(99,175,33,.13);border:1px solid rgba(99,175,33,.34);color:var(--gl);font-size:.9rem;font-weight:500}
+.sign-thanks.on{display:flex}
+.signed-block{margin-top:22px;padding-top:16px;border-top:1px solid var(--border)}
+.sb-k{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:10px}
+.sb-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.sb-row img{width:180px;height:78px;object-fit:contain;background:#fff;border-radius:8px;border:1px solid var(--border);padding:4px}
+.sb-meta b{display:block;font-size:.95rem}
+.sb-meta span{font-size:.8rem;color:var(--mut)}
+
+/* ===== IMPRESSION = PDF (feuille A4 blanche, pro) ===== */
+@media print{
+  @page{margin:14mm}
+  html,body{background:#fff!important;color:#15121a!important}
+  .pagebg,.actions,.sign-panel,.sign-thanks{display:none!important}
+  .signed-block{border-top:1px solid #e2dde8!important}
+  .sb-k{color:#5b5566!important}
+  .sb-row img{border:1px solid #e2dde8!important}
+  .sb-meta b{color:#15121a!important}.sb-meta span{color:#5b5566!important}
+  .wrap{max-width:none;margin:0;padding:0}
+  .lines-wrap{overflow:visible!important}
+  .doc{box-shadow:none!important;border:none!important;border-radius:0;padding:0;background:#fff!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .doc::after{display:none!important}
+  .dh-brand b,.dh-meta .lbl,.dfor .who{color:#15121a!important}
+  .dh-brand span,.dh-meta .dt,.dfor .k,.dfor .sub,.dnotes,.dfoot,table.lines th,table.lines .li-type{color:#5b5566!important}
+  .dh-meta .num{color:#7B1FA2!important}
+  .dfor,.dtot-row.o{background:#f6f4f8!important;border:1px solid #e2dde8!important}
+  .dtot-row.m{background:#f0e9f6!important;border:1px solid #e2dde8!important}
+  .dtot-row.m b,.li-tot,table.lines td{color:#15121a!important}
+  table.lines th{border-bottom:1px solid #cfc7d8!important}
+  table.lines td{border-bottom:1px solid #ece8f0!important}
+  .dnotes,.dfoot{border-top:1px solid #e2dde8!important}
+  .dstatut{border:1px solid #cfc7d8!important}
+  .dfoot a{color:#7B1FA2!important}
+}
+</style></head>
+<body>
+<div class="pagebg" aria-hidden="true"></div>
+<div class="wrap">
+  <div id="dv-loading" class="state">Chargement du devis…</div>
+  <div id="dv-error" class="state" style="display:none"></div>
+
+  <div class="doc" id="dv-doc" style="display:none">
+    <div class="dh">
+      <div class="dh-brand">
+        <img src="https://dwtdigital-clients.github.io/logo-200.png" alt="DWT Digital" onerror="this.style.display='none'">
+        <div><b>DWT Digital</b><span>Marketing IA · Île-de-France</span></div>
+      </div>
+      <div class="dh-meta">
+        <div class="lbl">DEVIS</div>
+        <div class="num" id="dv-num">—</div>
+        <div class="dt" id="dv-dates"></div>
+        <div><span class="dstatut" id="dv-statut"></span></div>
+      </div>
+    </div>
+
+    <div class="dfor">
+      <div class="k">Établi pour</div>
+      <div class="who" id="dv-who">—</div>
+      <div class="sub" id="dv-whosub"></div>
+    </div>
+
+    <div class="lines-wrap">
+      <table class="lines">
+        <thead><tr><th>Prestation</th><th>Type</th><th class="r">Qté</th><th class="r">P.U.</th><th class="r">Total</th></tr></thead>
+        <tbody id="dv-rows"></tbody>
+      </table>
+    </div>
+
+    <div class="dtot" id="dv-totals"></div>
+
+    <div class="dnotes" id="dv-notes-wrap" style="display:none"><b>Notes</b><span id="dv-notes"></span></div>
+
+    <div class="signed-block" id="signed-block" style="display:none">
+      <div class="sb-k">Signé électroniquement</div>
+      <div class="sb-row"><img id="sb-img" alt="Signature"><div class="sb-meta"><b id="sb-name"></b><span id="sb-date"></span></div></div>
+    </div>
+
+    <div class="dfoot">
+      <span>DWT Digital — <a href="mailto:contact@dwtdigital.fr">contact@dwtdigital.fr</a></span>
+      <span id="dv-valid"></span>
+    </div>
+  </div>
+
+  <div class="actions" id="dv-actions" style="display:none">
+    <button class="btn btn-dl" type="button" onclick="window.print()">Télécharger en PDF</button>
+    <button class="btn btn-ok" type="button" id="dv-sign-open" onclick="openSign()">Accepter et signer</button>
+  </div>
+
+  <div class="sign-panel" id="sign-panel">
+    <h3 class="sign-h">Signer le devis</h3>
+    <p class="sign-sub">Signature électronique valant acceptation. Renseignez votre nom, dessinez votre signature, puis validez.</p>
+    <div class="sign-field"><label for="sign-name">Vos nom et prénom</label><input id="sign-name" placeholder="Prénom Nom"></div>
+    <span class="sign-padlabel">Votre signature</span>
+    <div class="sign-pad-wrap"><canvas id="sign-pad" class="sign-pad"></canvas><button type="button" class="sign-clear" onclick="signClear()">Effacer</button></div>
+    <label class="sign-check"><input type="checkbox" id="sign-accord"><span>Bon pour accord — j'accepte ce devis.</span></label>
+    <div class="sign-actions">
+      <button class="btn btn-dl" type="button" onclick="closeSign()">Annuler</button>
+      <button class="btn btn-ok" type="button" id="sign-submit" onclick="submitSign()">Signer le devis</button>
+    </div>
+    <div class="sign-err" id="sign-err" aria-live="polite"></div>
+  </div>
+
+  <div class="sign-thanks" id="sign-thanks">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+    <span>Devis signé — merci ! DWT vous recontacte pour la suite.</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var WORKER_BASE = 'https://dwt-admin.darellwilliampro1.workers.dev'; // identique au dashboard ; vide -> mode démo (lecture localStorage)
+
+  function g(id){ return document.getElementById(id); }
+  function esc(t){ var d=document.createElement('div'); d.textContent=(t==null?'':String(t)); return d.innerHTML; }
+  function eur(n){ var v=Number(n)||0; return v.toLocaleString('fr-FR',{ minimumFractionDigits:0, maximumFractionDigits:2 })+' €'; }
+  function param(k){ try{ return new URLSearchParams(location.search).get(k); }catch(e){ return null; } }
+  function fmtDate(iso){ if(!iso) return ''; try{ return new Date(iso).toLocaleDateString('fr-FR',{ day:'numeric', month:'long', year:'numeric' }); }catch(e){ return ''; } }
+  function statutLabel(s){ return s==='envoye'?'Envoyé':(s==='accepte'?'Accepté':(s==='refuse'?'Refusé':'Brouillon')); }
+  function statutClass(s){ return (s==='envoye'||s==='accepte'||s==='refuse')?s:'brouillon'; }
+
+  var DEVIS = null;
+  var DEMO = false;
+
+  function showError(m){ g('dv-loading').style.display='none'; var e=g('dv-error'); e.style.display='block'; e.textContent=m; }
+
+  function render(d){
+    DEVIS=d;
+    g('dv-loading').style.display='none';
+    g('dv-doc').style.display='block';
+    g('dv-actions').style.display='flex';
+
+    g('dv-num').textContent=d.numero||'';
+    g('dv-dates').textContent=d.created_at?('Établi le '+fmtDate(d.created_at)):'';
+    var st=g('dv-statut'); st.textContent=statutLabel(d.statut); st.className='dstatut '+statutClass(d.statut);
+
+    g('dv-who').textContent=d.prospect_commerce||d.prospect_nom||'Prospect';
+    var sub=[];
+    if(d.prospect_commerce && d.prospect_nom) sub.push(d.prospect_nom);
+    if(d.prospect_email) sub.push(d.prospect_email);
+    if(d.prospect_tel) sub.push(d.prospect_tel);
+    g('dv-whosub').textContent=sub.join(' · ');
+
+    var lignes=d.lignes||[];
+    g('dv-rows').innerHTML=lignes.map(function(l){
+      var pu=Number(l.prix_unitaire)||0, qty=Number(l.qty)||0, tot=pu*qty;
+      var mensuel=l.type!=='one-shot';
+      return '<tr><td class="li-lbl">'+esc(l.label||'Prestation')+'<span class="li-type-inline"> · '+(mensuel?'Mensuel':'Une fois')+'</span></td>'+
+        '<td class="li-type">'+(mensuel?'Mensuel':'Une fois')+'</td>'+
+        '<td class="r">'+qty+'</td>'+
+        '<td class="r">'+eur(pu)+(mensuel?'<span class="permo">/mois</span>':'')+'</td>'+
+        '<td class="r li-tot">'+eur(tot)+(mensuel?'<span class="permo">/mois</span>':'')+'</td></tr>';
+    }).join('');
+
+    var tm=Number(d.total_mensuel)||0, to=Number(d.total_oneshot)||0;
+    var html='';
+    if(tm) html+='<div class="dtot-row m"><span>Total mensuel</span><b>'+eur(tm)+' /mois</b></div>';
+    if(to) html+='<div class="dtot-row o"><span>Une seule fois</span><b>'+eur(to)+'</b></div>';
+    if(!tm && !to) html='<div class="dtot-row o"><span>Total</span><b>'+eur(0)+'</b></div>';
+    g('dv-totals').innerHTML=html;
+
+    if(d.notes){ g('dv-notes-wrap').style.display='block'; g('dv-notes').textContent=d.notes; }
+    g('dv-valid').textContent=d.valid_until?('Valable jusqu\'au '+fmtDate(d.valid_until)):'';
+
+    if(d.signature_data){ showSigned(d); }
+  }
+
+  function fmtDateTime(iso){ try{ var d=new Date(iso); return d.toLocaleDateString('fr-FR',{ day:'numeric', month:'long', year:'numeric' })+' à '+d.toLocaleTimeString('fr-FR',{ hour:'2-digit', minute:'2-digit' }); }catch(e){ return ''; } }
+
+  var PAD_CTX=null, PAD_DRAWING=false, PAD_HASDRAWN=false;
+  window.openSign=function(){ g('dv-actions').style.display='none'; g('sign-panel').classList.add('on'); initPad(); try{ g('sign-panel').scrollIntoView({ block:'center' }); }catch(e){} };
+  window.closeSign=function(){ g('sign-panel').classList.remove('on'); g('dv-actions').style.display='flex'; };
+  function initPad(){
+    var c=g('sign-pad'); if(!c) return;
+    var r=c.getBoundingClientRect(); c.width=Math.round(r.width)||480; c.height=Math.round(r.height)||150;
+    PAD_CTX=c.getContext('2d');
+    PAD_CTX.fillStyle='#fff'; PAD_CTX.fillRect(0,0,c.width,c.height);
+    PAD_CTX.lineWidth=2.4; PAD_CTX.lineCap='round'; PAD_CTX.lineJoin='round'; PAD_CTX.strokeStyle='#15121a';
+    PAD_HASDRAWN=false;
+    function pos(e){ var rr=c.getBoundingClientRect(); var t=(e.touches&&e.touches[0])?e.touches[0]:e; return { x:t.clientX-rr.left, y:t.clientY-rr.top }; }
+    function start(e){ e.preventDefault(); PAD_DRAWING=true; var p=pos(e); PAD_CTX.beginPath(); PAD_CTX.moveTo(p.x,p.y); }
+    function move(e){ if(!PAD_DRAWING) return; e.preventDefault(); var p=pos(e); PAD_CTX.lineTo(p.x,p.y); PAD_CTX.stroke(); PAD_HASDRAWN=true; }
+    function end(){ PAD_DRAWING=false; }
+    c.onmousedown=start; c.onmousemove=move; document.addEventListener('mouseup',end);
+    c.ontouchstart=start; c.ontouchmove=move; c.ontouchend=end;
+  }
+  window.signClear=function(){ var c=g('sign-pad'); if(PAD_CTX&&c){ PAD_CTX.fillStyle='#fff'; PAD_CTX.fillRect(0,0,c.width,c.height); PAD_HASDRAWN=false; } };
+
+  function showSigned(sig){
+    if(sig.signature_data){ var im=g('sb-img'); if(im) im.src=sig.signature_data; }
+    g('sb-name').textContent='Signé par '+(sig.signataire||'');
+    g('sb-date').textContent=sig.signed_at?('le '+fmtDateTime(sig.signed_at)):'';
+    g('signed-block').style.display='block';
+    var st=g('dv-statut'); if(st){ st.textContent='Accepté'; st.className='dstatut accepte'; }
+    var so=g('dv-sign-open'); if(so) so.style.display='none';
+  }
+
+  window.submitSign=async function(){
+    var err=g('sign-err'); err.textContent='';
+    var name=g('sign-name').value.trim();
+    if(!name){ err.textContent='Indiquez vos nom et prénom.'; return; }
+    if(!PAD_HASDRAWN){ err.textContent='Dessinez votre signature.'; return; }
+    if(!g('sign-accord').checked){ err.textContent='Cochez « Bon pour accord ».'; return; }
+    var id=param('id');
+    var dataURL=g('sign-pad').toDataURL('image/png');
+    var signed_at=''; try{ signed_at=new Date().toISOString(); }catch(e){}
+    var btn=g('sign-submit'); btn.disabled=true;
+    if(!DEMO && WORKER_BASE){
+      try{
+        var rr=await fetch(WORKER_BASE+'/devis-sign?id='+encodeURIComponent(id),{ method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify({ signataire:name, signature_data:dataURL, signed_at:signed_at }) });
+        if(!rr.ok){ err.textContent='Erreur lors de la signature.'; btn.disabled=false; return; }
+      }catch(e){ err.textContent='Connexion impossible.'; btn.disabled=false; return; }
+    } else {
+      try{ if(DEVIS){ DEVIS.signataire=name; DEVIS.signature_data=dataURL; DEVIS.signed_at=signed_at; DEVIS.statut='accepte'; localStorage.setItem('dwt_devis_'+id, JSON.stringify(DEVIS)); } }catch(e){}
+    }
+    g('sign-panel').classList.remove('on');
+    g('sign-thanks').classList.add('on');
+    showSigned({ signataire:name, signature_data:dataURL, signed_at:signed_at });
+  };
+
+  async function boot(){
+    var id=param('id');
+    DEMO = (param('demo')==='1') || !WORKER_BASE;
+    if(!id){ showError('Devis introuvable (lien incomplet).'); return; }
+
+    if(DEMO){
+      var raw=null; try{ raw=localStorage.getItem('dwt_devis_'+id); }catch(e){}
+      if(!raw){ showError('Aperçu démo : ouvrez ce devis depuis le dashboard (bouton « Voir »).'); return; }
+      try{ render(JSON.parse(raw)); }catch(e){ showError('Devis illisible.'); }
+      return;
+    }
+
+    try{
+      var r=await fetch(WORKER_BASE+'/devis-public?id='+encodeURIComponent(id));
+      var txt=await r.text();
+      var j=txt?JSON.parse(txt):null;
+      var d=j && (j.data!==undefined?j.data:j);
+      if(!r.ok || !d){ showError('Ce devis n\'est pas disponible.'); return; }
+      render(d);
+    }catch(e){ showError('Impossible de charger le devis.'); }
+  }
+
+  if(document.readyState!=='loading') boot();
+  else document.addEventListener('DOMContentLoaded', boot);
+})();
+</script>
+</body></html>
