@@ -832,7 +832,7 @@ footer{background:transparent;border-top-color:rgba(255,255,255,.1);color:rgba(2
 <footer>
   <div class="wrap foot-row">
     <span>© 2026 DWT Digital — Marketing IA · Île-de-France</span>
-    <div class="foot-links"><a href="index.html">Accueil</a><a href="offres.html">Offres</a><a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Qui sommes-nous</a><a href="contact.html">Contact</a></div>
+    <div class="foot-links"><a href="index.html">Accueil</a><a href="offres.html">Offres</a><a href="methode.html">Méthode</a><a href="qui-sommes-nous.html">Qui sommes-nous</a><a href="contact.html">Contact</a><a href="espace.html">Espace client</a></div>
   </div>
 </footer>
 
@@ -1584,7 +1584,8 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   "use strict";
   var pill=document.querySelector('.nav-pill'); if(!pill) return;
   var here=(location.pathname.split('/').pop()||'index.html'); if(here==='') here='index.html';
-  var links=[['index.html','Accueil'],['offres.html','Offres'],['methode.html','Méthode'],['qui-sommes-nous.html','Qui sommes-nous'],['contact.html','Contact']];
+  var links=[['index.html','Accueil'],['offres.html','Offres'],['methode.html','Méthode'],['qui-sommes-nous.html','Qui sommes-nous'],['contact.html','Contact'],['espace.html','Espace client']];
+  (function(){var t=pill.querySelector('.nav-tabs');if(t){var a=document.createElement('a');a.href='espace.html';a.textContent='Espace client';if(here==='espace.html'){a.className='cur';a.setAttribute('aria-current','page');}t.appendChild(a);}})();
   var btn=document.createElement('button');
   btn.className='nav-burger'; btn.type='button';
   btn.setAttribute('aria-label','Ouvrir le menu'); btn.setAttribute('aria-expanded','false'); btn.setAttribute('aria-controls','dwtMobileMenu');
