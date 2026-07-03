@@ -270,6 +270,14 @@ button{font-family:var(--body);cursor:pointer}
     <div class="field"><label for="login-pass">Mot de passe</label><input type="password" id="login-pass" autocomplete="current-password" placeholder="••••••••"></div>
     <button class="btn-primary" id="login-btn" type="button" onclick="dwtLogin()">Se connecter</button>
     <div class="login-err" id="login-err" aria-live="polite"></div>
+    <div id="mfa-step" style="display:none;margin-top:6px">
+      <div id="mfa-qr" style="display:none;text-align:center;margin-bottom:12px">
+        <p class="sub" style="margin:0 0 8px">Sécurisez votre compte : scannez ce QR avec <b>Google Authenticator</b>, puis entrez le code.</p>
+        <div id="mfa-qr-img" style="background:#fff;padding:10px;border-radius:12px;display:inline-block;line-height:0"></div>
+      </div>
+      <div class="field"><label for="mfa-code">Code à 6 chiffres</label><input type="text" id="mfa-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456"></div>
+      <button class="btn-primary" id="mfa-btn" type="button" onclick="mfaSubmit()">Valider le code</button>
+    </div>
     <div class="login-demo"><button type="button" onclick="enterDemo()">Aperçu démo (sans connexion)</button></div>
   </div>
 </div>
@@ -551,27 +559,93 @@ button{font-family:var(--body);cursor:pointer}
     try{
       var res = await sb.auth.signInWithPassword({ email:email, password:pass });
       if (res.error){ err.textContent='Email ou mot de passe incorrect.'; btn.disabled=false; btn.textContent='Se connecter'; return; }
-      var sess = await sb.auth.getSession();
-      JWT = sess && sess.data && sess.data.session ? sess.data.session.access_token : null;
       ADMIN_EMAIL = email;
-      if (!WORKER_BASE){
-        err.textContent='Worker admin pas encore déployé. Utilise l\'aperçu démo en attendant.';
-        try{ await sb.auth.signOut(); }catch(e){}
-        btn.disabled=false; btn.textContent='Se connecter'; return;
-      }
-      var chk = await api('/admin-check', {});
-      if (!chk.ok || !chk.data || !chk.data.admin){
-        err.textContent='Ce compte n\'est pas administrateur.';
-        try{ await sb.auth.signOut(); }catch(e){}
-        btn.disabled=false; btn.textContent='Se connecter'; return;
-      }
-      MODE='live';
-      await openApp();
+      // ===== 2e facteur (MFA) — obligatoire pour l'admin =====
+      var state = await mfaBegin();
+      if (state === 'pending'){ btn.disabled=false; btn.textContent='Se connecter'; return; } // attend le code -> mfaSubmit()
+      if (state === 'error'){ err.textContent='Souci d\'authentification à deux facteurs. Recharge la page et réessaie.'; try{ await sb.auth.signOut(); }catch(e){} btn.disabled=false; btn.textContent='Se connecter'; return; }
+      await afterAuth(); // state === 'ok' (déjà en aal2)
     }catch(e){
       err.textContent='Erreur : '+((e && e.message)?e.message:e);
       btn.disabled=false; btn.textContent='Se connecter';
     }
   };
+
+  // Prépare le 2e facteur : enrôlement (1re fois) OU défi (ensuite). Renvoie 'ok' | 'pending' | 'error'.
+  var _mfa = { factorId:null, challengeId:null, mode:null };
+  async function mfaBegin(){
+    try{
+      var aalRes = await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+      var cur = aalRes.data ? aalRes.data.currentLevel : null;
+      var next = aalRes.data ? aalRes.data.nextLevel : null;
+      if (cur === 'aal2') return 'ok';
+      if (next === 'aal2'){
+        // un facteur vérifié existe déjà -> défi (code à saisir)
+        var fl = await sb.auth.mfa.listFactors();
+        var totp = fl.data && fl.data.totp && fl.data.totp[0];
+        if (!totp) return 'error';
+        _mfa.factorId = totp.id; _mfa.mode='challenge';
+        var ch = await sb.auth.mfa.challenge({ factorId: totp.id });
+        if (ch.error) return 'error';
+        _mfa.challengeId = ch.data.id;
+        showMfaStep(false);
+        return 'pending';
+      }
+      // aucun facteur -> enrôlement (QR à scanner) puis code
+      var en = await sb.auth.mfa.enroll({ factorType:'totp', friendlyName:'DWT-'+Date.now() });
+      if (en.error) return 'error';
+      _mfa.factorId = en.data.id; _mfa.mode='enroll';
+      var ch2 = await sb.auth.mfa.challenge({ factorId: en.data.id });
+      if (ch2.error) return 'error';
+      _mfa.challengeId = ch2.data.id;
+      g('mfa-qr-img').innerHTML = en.data.totp.qr_code; // SVG du QR
+      showMfaStep(true);
+      return 'pending';
+    }catch(e){ return 'error'; }
+  }
+
+  function showMfaStep(withQr){
+    try{ g('login-email').closest('.field').style.display='none'; }catch(e){}
+    try{ g('login-pass').closest('.field').style.display='none'; }catch(e){}
+    g('login-btn').style.display='none';
+    g('mfa-qr').style.display = withQr ? 'block' : 'none';
+    g('mfa-step').style.display='block';
+    var mc=g('mfa-code'); if(mc){ mc.value=''; mc.focus(); }
+  }
+
+  window.mfaSubmit = async function(){
+    var code = (g('mfa-code').value||'').trim();
+    var err = g('login-err'); err.textContent='';
+    if (!/^\d{6}$/.test(code)){ err.textContent='Code à 6 chiffres requis.'; return; }
+    var btn = g('mfa-btn'); btn.disabled=true; btn.textContent='Vérification...';
+    try{
+      var v = await sb.auth.mfa.verify({ factorId:_mfa.factorId, challengeId:_mfa.challengeId, code:code });
+      if (v.error){
+        err.textContent='Code invalide, réessaie.'; btn.disabled=false; btn.textContent='Valider le code';
+        try{ var ch=await sb.auth.mfa.challenge({ factorId:_mfa.factorId }); _mfa.challengeId=ch.data.id; }catch(e){}
+        return;
+      }
+      await afterAuth(); // session élevée en aal2
+    }catch(e){ err.textContent='Erreur : '+((e&&e.message)?e.message:e); btn.disabled=false; btn.textContent='Valider le code'; }
+  };
+
+  // Auth complète (mot de passe + MFA validés) : récupère le JWT aal2, contrôle admin, ouvre l'app.
+  async function afterAuth(){
+    var err = g('login-err');
+    var sess = await sb.auth.getSession();
+    JWT = sess && sess.data && sess.data.session ? sess.data.session.access_token : null;
+    if (!WORKER_BASE){
+      err.textContent='Worker admin pas encore déployé. Utilise l\'aperçu démo en attendant.';
+      try{ await sb.auth.signOut(); }catch(e){} return;
+    }
+    var chk = await api('/admin-check', {});
+    if (!chk.ok || !chk.data || !chk.data.admin){
+      err.textContent='Ce compte n\'est pas administrateur.';
+      try{ await sb.auth.signOut(); }catch(e){} return;
+    }
+    MODE='live';
+    await openApp();
+  }
 
   window.enterDemo = async function(){
     MODE='demo'; ADMIN_EMAIL='Aperçu démo'; DATA = mockData();
