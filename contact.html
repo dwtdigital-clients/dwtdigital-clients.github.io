@@ -251,6 +251,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     <!-- Colonne formulaire -->
     <div class="form-card glass reveal">
       <form id="contactForm" novalidate>
+        <!-- honeypot anti-spam : invisible pour un humain, rempli par les bots (F6) -->
+        <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" tabindex="-1">
+          <label>Ne pas remplir<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
         <div class="form-grid">
           <div class="row2">
             <div class="field">
@@ -400,7 +404,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       telephone: form.elements.telephone.value.trim(),
       type: form.elements.type.value,
       message: form.elements.message.value.trim(),
-      consentement: consent.checked
+      consentement: consent.checked,
+      website: form.elements.website ? form.elements.website.value : '' // honeypot (F6)
     };
     var label = btn.textContent;
     btn.disabled = true;
