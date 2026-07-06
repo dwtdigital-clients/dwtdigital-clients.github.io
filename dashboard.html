@@ -588,6 +588,7 @@ button{font-family:var(--body);cursor:pointer}
         { id:'a3', type:'audit', commerce:'Garage Test', email:'garage@test.fr', created_at:'2026-07-06T10:30:00Z', message:'Ville : Créteil\n\n⚠️ Génération échouée (code 529). Utilise « Relancer » côté dashboard.' }
       ] };
       if (path === '/admin/regenerate-audit'){ for(var ai=0; ai<0; ai++){} return { ok:true, data:{ audit:'(démo) audit régénéré ✅' } }; }
+      if (path === '/admin/delete-contact') return { ok:true, data:{ deleted:true } };
       if (path === '/create-devis'){
         var dn = DATA.devis.length + 1;
         var dnum = 'DWT-2026-' + String(dn).padStart(3,'0');
@@ -1194,9 +1195,11 @@ button{font-family:var(--body);cursor:pointer}
       var badge = st==='wait' ? '<span style="background:rgba(232,163,61,.18);color:#e8a33d;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:20px">⏳ En cours</span>'
                 : st==='err'  ? '<span style="background:rgba(220,80,80,.18);color:#e06666;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:20px">⚠️ Erreur</span>'
                 :               '<span style="background:rgba(99,175,33,.18);color:#7BC93A;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:20px">✅ Prêt</span>';
-      var actions = (st==='ok')
-        ? '<button type="button" class="btn-primary ac-copy" onclick="copyAudit('+i+')">Copier l\'audit</button>'
-        : '<button type="button" class="btn-primary ac-copy" onclick="regenAudit(\''+esc(c.id)+'\',this)">↻ Relancer la génération</button>';
+      var main = (st==='ok')
+        ? '<button type="button" class="btn-primary ac-copy" style="flex:1" onclick="copyAudit('+i+')">Copier l\'audit</button>'
+        : '<button type="button" class="btn-primary ac-copy" style="flex:1" onclick="regenAudit(\''+esc(c.id)+'\',this)">↻ Relancer la génération</button>';
+      var actions = '<div style="display:flex;gap:10px">'+main+
+        '<button type="button" class="dv-addline" title="Supprimer la fiche" onclick="delAudit(\''+esc(c.id)+'\',this)">🗑</button></div>';
       return '<div class="card" style="margin-bottom:14px">'+
         '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b>'+esc(c.commerce||'—')+'</b>'+badge+'</div>'+
         '<p style="margin:4px 0 10px;font-size:.85rem;color:#9a93a5">✉ '+esc(c.email||'—')+' · '+esc(fmtDate(c.created_at))+'</p>'+
@@ -1207,6 +1210,13 @@ button{font-family:var(--body);cursor:pointer}
     if(AUDIT_POLL){ clearTimeout(AUDIT_POLL); AUDIT_POLL = null; }
     if(pending){ AUDIT_POLL = setTimeout(function(){ loadAudits(); }, 8000); }
   }
+  window.delAudit = async function(id, btn){
+    if(!confirm('Supprimer définitivement cette fiche ? (irréversible)')) return;
+    if(btn) btn.disabled = true;
+    var r = await api('/admin/delete-contact', { id:id });
+    if(r.ok){ loadAudits(); }
+    else { if(btn) btn.disabled = false; alert('Échec de la suppression : ' + (r.error || '')); }
+  };
   window.copyAudit = function(i){
     var el = g('ac-'+i); if(!el) return;
     var txt = el.textContent;
