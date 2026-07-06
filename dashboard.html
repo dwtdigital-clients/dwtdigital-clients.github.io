@@ -582,7 +582,12 @@ button{font-family:var(--body);cursor:pointer}
         return { ok:true, data:{ client_id:nid, email:body.email, temp_password:pwd } };
       }
       if (path === '/admin/devis') return { ok:true, data: DATA.devis };
-      if (path === '/admin/contacts') return { ok:true, data: [ { id:'a1', type:'audit', commerce:'Le Pain de Camille', email:'contact@paincamille.fr', created_at:'2026-07-06T09:00:00Z', message:'Ville : Chaville\n\n# 🥖 Audit de visibilité (exemple démo)\n\n1) Résumé : potentiel local sous-exploité.\n7) 3 actions : fiche Google Business, avis clients, posts réguliers.' } ] };
+      if (path === '/admin/contacts') return { ok:true, data: [
+        { id:'a1', type:'audit', commerce:'Le Pain de Camille', email:'contact@paincamille.fr', created_at:'2026-07-06T09:00:00Z', message:'Ville : Chaville\n\n# 🥖 Audit de visibilité (exemple démo)\n\n1) Résumé : potentiel local sous-exploité.\n7) 3 actions : fiche Google Business, avis clients, posts réguliers.' },
+        { id:'a2', type:'audit', commerce:'Fleuriste Été', email:'flo@ete.fr', created_at:'2026-07-06T10:15:00Z', message:'Ville : Nantes\n\n⏳ Audit en cours de génération…' },
+        { id:'a3', type:'audit', commerce:'Garage Test', email:'garage@test.fr', created_at:'2026-07-06T10:30:00Z', message:'Ville : Créteil\n\n⚠️ Génération échouée (code 529). Utilise « Relancer » côté dashboard.' }
+      ] };
+      if (path === '/admin/regenerate-audit'){ for(var ai=0; ai<0; ai++){} return { ok:true, data:{ audit:'(démo) audit régénéré ✅' } }; }
       if (path === '/create-devis'){
         var dn = DATA.devis.length + 1;
         var dnum = 'DWT-2026-' + String(dn).padStart(3,'0');
@@ -615,6 +620,8 @@ button{font-family:var(--body);cursor:pointer}
     for (var j=0;j<panels.length;j++){ panels[j].classList.toggle('on', panels[j].getAttribute('data-panel')===id); }
     // ouvrir Messagerie = marquer la conversation active comme lue
     if (id==='messagerie' && MSG_ACTIVE && typeof window.selectConv==='function'){ window.selectConv(MSG_ACTIVE); }
+    // ouvrir Audits = recharger (voir les nouveaux + statuts à jour)
+    if (id==='audits' && typeof loadAudits==='function'){ loadAudits(); }
   };
 
   // ===== CONNEXION =====
@@ -1157,23 +1164,44 @@ button{font-family:var(--body);cursor:pointer}
   async function loadDevis(){ var r=await api('/admin/devis', {}); DATA.devis = r.ok ? (r.data || []) : []; }
 
   // ── ONGLET AUDITS : demandes d'audit reçues du site (contacts type='audit') ──
+  var AUDIT_POLL = null;
   async function loadAudits(){
     var r = await api('/admin/contacts', {});
     DATA.audits = r.ok ? (r.data || []).filter(function(c){ return (c.type||'') === 'audit'; }) : [];
     renderAudits();
   }
+  function auditStatus(msg){
+    msg = String(msg||'');
+    if(msg.indexOf('en cours de génération') >= 0 || msg.indexOf('⏳') >= 0) return 'wait';
+    if(msg.indexOf('Génération échouée') >= 0 || msg.indexOf('⚠️') >= 0) return 'err';
+    return 'ok';
+  }
   function renderAudits(){
     var el = g('audits-list'); if(!el) return;
     var rows = (DATA.audits||[]).slice().sort(function(a,b){ return String(b.created_at||'').localeCompare(String(a.created_at||'')); });
     var nb = g('nav-audits-n'); if(nb){ nb.textContent = rows.length; nb.style.display = rows.length ? '' : 'none'; }
-    if(!rows.length){ el.innerHTML = '<p class="empty">Aucun audit reçu pour l\'instant. Ils apparaîtront ici dès qu\'un prospect remplit le formulaire du site.</p>'; return; }
-    el.innerHTML = rows.map(function(c,i){
+    var pending = rows.filter(function(c){ return auditStatus(c.message)==='wait'; }).length;
+    var head = '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px">'+
+      '<span style="font-size:.85rem;color:#9a93a5">'+rows.length+' audit'+(rows.length>1?'s':'')+(pending?' · <b style="color:#e8a33d">'+pending+' en cours</b>':'')+'</span>'+
+      '<button type="button" class="dv-addline" onclick="loadAudits()">↻ Rafraîchir</button></div>';
+    if(!rows.length){ el.innerHTML = head + '<p class="empty">Aucun audit reçu pour l\'instant. Ils apparaîtront ici dès qu\'un prospect remplit le formulaire du site.</p>'; return; }
+    el.innerHTML = head + rows.map(function(c,i){
+      var st = auditStatus(c.message);
+      var badge = st==='wait' ? '<span style="background:rgba(232,163,61,.18);color:#e8a33d;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:20px">⏳ En cours</span>'
+                : st==='err'  ? '<span style="background:rgba(220,80,80,.18);color:#e06666;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:20px">⚠️ Erreur</span>'
+                :               '<span style="background:rgba(99,175,33,.18);color:#7BC93A;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:20px">✅ Prêt</span>';
+      var actions = (st==='ok')
+        ? '<button type="button" class="btn-primary ac-copy" onclick="copyAudit('+i+')">Copier l\'audit</button>'
+        : '<button type="button" class="btn-primary ac-copy" onclick="regenAudit(\''+esc(c.id)+'\',this)">↻ Relancer la génération</button>';
       return '<div class="card" style="margin-bottom:14px">'+
-        '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px"><b>'+esc(c.commerce||'—')+'</b><span style="font-size:.8rem;color:#9a93a5">'+esc(fmtDate(c.created_at))+'</span></div>'+
-        '<p style="margin:4px 0 10px;font-size:.85rem;color:#9a93a5">✉ '+esc(c.email||'—')+'</p>'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b>'+esc(c.commerce||'—')+'</b>'+badge+'</div>'+
+        '<p style="margin:4px 0 10px;font-size:.85rem;color:#9a93a5">✉ '+esc(c.email||'—')+' · '+esc(fmtDate(c.created_at))+'</p>'+
         '<pre id="ac-'+i+'" style="white-space:pre-wrap;font-family:inherit;font-size:.86rem;line-height:1.5;background:rgba(255,255,255,.05);border-radius:10px;padding:14px;margin:0 0 12px;max-height:360px;overflow:auto">'+esc(c.message||'')+'</pre>'+
-        '<button type="button" class="btn-primary ac-copy" onclick="copyAudit('+i+')">Copier l\'audit</button></div>';
+        actions+'</div>';
     }).join('');
+    // rafraîchissement AUTO tant qu'un audit est « en cours » (le prospect vient de le demander)
+    if(AUDIT_POLL){ clearTimeout(AUDIT_POLL); AUDIT_POLL = null; }
+    if(pending){ AUDIT_POLL = setTimeout(function(){ loadAudits(); }, 8000); }
   }
   window.copyAudit = function(i){
     var el = g('ac-'+i); if(!el) return;
@@ -1181,6 +1209,12 @@ button{font-family:var(--body);cursor:pointer}
     var btn = el.parentNode.querySelector('.ac-copy');
     function done(){ if(btn){ var t=btn.textContent; btn.textContent='Copié ✓'; setTimeout(function(){ btn.textContent=t; },1500); } }
     if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done, done); } else { done(); }
+  };
+  window.regenAudit = async function(id, btn){
+    if(btn){ btn.disabled = true; btn.textContent = 'Relance en cours… (~15 s)'; }
+    var r = await api('/admin/regenerate-audit', { id:id });
+    if(r.ok){ await loadAudits(); }
+    else { if(btn){ btn.disabled=false; btn.textContent='↻ Réessayer'; } alert('Échec de la relance : ' + (r.error || '')); }
   };
 
   function dvTotalsCompute(){
