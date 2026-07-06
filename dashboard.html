@@ -583,7 +583,7 @@ button{font-family:var(--body);cursor:pointer}
       }
       if (path === '/admin/devis') return { ok:true, data: DATA.devis };
       if (path === '/admin/contacts') return { ok:true, data: [
-        { id:'a1', type:'audit', commerce:'Le Pain de Camille', email:'contact@paincamille.fr', created_at:'2026-07-06T09:00:00Z', message:'Ville : Chaville\n\n# 🥖 Audit de visibilité (exemple démo)\n\n1) Résumé : potentiel local sous-exploité.\n7) 3 actions : fiche Google Business, avis clients, posts réguliers.' },
+        { id:'a1', type:'audit', commerce:'Le Pain de Camille', email:'contact@paincamille.fr', created_at:'2026-07-06T09:00:00Z', message:'Ville : Chaville\n\n# 🥖 Audit de visibilité (exemple démo)\n\n1) Résumé : potentiel local sous-exploité.\n2) Présence en ligne : ⚠️ fiche Google incomplète · ⏳ site en construction.\n7) 3 actions : fiche Google Business, avis clients, posts réguliers.' },
         { id:'a2', type:'audit', commerce:'Fleuriste Été', email:'flo@ete.fr', created_at:'2026-07-06T10:15:00Z', message:'Ville : Nantes\n\n⏳ Audit en cours de génération…' },
         { id:'a3', type:'audit', commerce:'Garage Test', email:'garage@test.fr', created_at:'2026-07-06T10:30:00Z', message:'Ville : Créteil\n\n⚠️ Génération échouée (code 529). Utilise « Relancer » côté dashboard.' }
       ] };
@@ -1171,9 +1171,13 @@ button{font-family:var(--body);cursor:pointer}
     renderAudits();
   }
   function auditStatus(msg){
+    // Statut = la 1re ligne APRÈS « Ville : … » (sentinelles écrites par le Worker).
+    // On ne lit JAMAIS le reste : l'audit généré contient lui-même des ⏳/⚠️ (emojis).
     msg = String(msg||'');
-    if(msg.indexOf('en cours de génération') >= 0 || msg.indexOf('⏳') >= 0) return 'wait';
-    if(msg.indexOf('Génération échouée') >= 0 || msg.indexOf('⚠️') >= 0) return 'err';
+    var i = msg.indexOf('\n\n');
+    var head = (i >= 0 ? msg.slice(i+2) : msg).replace(/^\s+/,'');
+    if(head.indexOf('⏳ Audit en cours de génération') === 0) return 'wait';
+    if(head.indexOf('⚠️ Génération échouée') === 0) return 'err';
     return 'ok';
   }
   function renderAudits(){
