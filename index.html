@@ -110,10 +110,6 @@ img{max-width:100%;}
   background-repeat:repeat;background-size:620px 620px;opacity:.5;animation:twinkle 7s ease-in-out infinite alternate;}
 @keyframes twinkle{from{opacity:.3;}to{opacity:.55;}}
 
-/* image d'ambiance du hero : FIXE plein écran, s'éclaircit puis s'efface au scroll (JS) */
-.hero-img{position:fixed;top:50%;left:50%;width:min(940px,100vw);transform:translate(-50%,-52%);z-index:-1;pointer-events:none;
-  opacity:.42;mix-blend-mode:screen;filter:saturate(1.15) hue-rotate(-10deg) blur(1px);will-change:opacity,filter;
-  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 22%,transparent 60%);mask-image:radial-gradient(circle at 50% 50%,#000 22%,transparent 60%);}
 
 .prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--v),var(--g));z-index:70;width:0;transition:width .1s linear;}
 
@@ -556,7 +552,6 @@ footer{background:#FBF9FE;border-top:1px solid var(--border-d);padding:34px 0;co
 <div class="scene" id="scene"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
 <div class="vignette" id="vignette"></div>
 <div class="stars" id="stars"></div>
-<img class="hero-img" id="heroImg" src="img-candidates/FUTURISTE-A_objets-flottants-violet.jpg" alt="" onerror="this.style.display='none'">
 <div class="prog" id="prog"></div>
 
 <!-- ═══ NAV liquid glass (bascule claire en zone jour) ═══ -->
@@ -1239,9 +1234,12 @@ footer{background:#FBF9FE;border-top:1px solid var(--border-d);padding:34px 0;co
           Array.prototype.forEach.call(aForm.children,function(c){ if(c!==aOk) c.style.display="none"; });
           aOk.style.display="block";
         })
-        .catch(function(){
+        .catch(function(st){
           aBtn.disabled=false;aBtn.innerHTML="Recevoir mon audit de visibilité →";
-          aErr.textContent="Erreur d'envoi. Écrivez-nous : contact@dwtdigital.fr";aErr.style.display="block";
+          aErr.textContent=(st===429)
+            ? "Trop de demandes envoyées en peu de temps. Réessayez dans quelques minutes."
+            : "Erreur d'envoi. Écrivez-nous : contact@dwtdigital.fr";
+          aErr.style.display="block";
         });
     });
   }
