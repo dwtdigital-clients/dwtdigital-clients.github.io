@@ -179,6 +179,26 @@ button{font-family:var(--body);cursor:pointer}
 .suivi-list{margin:0 0 14px;padding-left:18px;color:var(--mut);font-size:.9rem}
 .suivi-list li{margin:5px 0}
 @media(max-width:880px){.suivi-grid{grid-template-columns:1fr}}
+.pub-head h3{margin:0 0 4px;font-size:1.15rem}
+.pub-sub{color:var(--mut);font-size:.88rem;margin:0 0 18px}
+.pub-card{max-width:420px;margin:0 auto 26px}
+.pub-mock-wrap{display:flex;justify-content:center}
+.pub-state{text-align:center;font-size:.9rem;font-weight:600;margin:12px 0 2px}
+.pub-state.ok{color:var(--gl)}
+.pub-state.warn{color:#e8a33d}
+.pub-actions{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:14px;padding:15px;margin-top:12px}
+.pub-lab{display:block;font-size:.82rem;color:var(--mut);margin-bottom:12px}
+.pub-lab input[type=date]{margin-top:6px;width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font-size:.9rem;font-family:var(--body)}
+.pub-comm{width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font-size:.9rem;font-family:var(--body);resize:vertical;min-height:62px;margin-bottom:12px}
+.pub-comm:focus,.pub-lab input:focus{outline:none;border-color:var(--acc)}
+.pub-btns{display:flex;gap:10px;flex-wrap:wrap}
+.pub-ok,.pub-mod{flex:1;min-width:135px;padding:12px 14px;border-radius:12px;font-size:.9rem;font-weight:700;font-family:var(--body);cursor:pointer;border:1px solid transparent;transition:filter .15s,background .15s}
+.pub-ok{background:linear-gradient(120deg,var(--g),var(--gl));color:#0a0014}
+.pub-ok:hover{filter:brightness(1.07)}
+.pub-mod{background:rgba(255,255,255,.06);border-color:var(--border);color:var(--ink)}
+.pub-mod:hover{background:rgba(255,255,255,.1)}
+.pub-fb{font-size:.82rem;margin-top:10px;min-height:1em}
+.pub-empty{color:var(--mut);text-align:center;padding:34px 12px}
 </style></head>
 <body>
 <div class="pagebg" aria-hidden="true"></div>
@@ -223,7 +243,10 @@ button{font-family:var(--body);cursor:pointer}
         <div class="card"><h3>Suivi mensuel</h3><p>Vos résultats, dès que les premières données arrivent.</p><span class="soon">Bientôt</span></div>
       </div>
     </section>
-    <section class="tab-panel" data-panel="posts"><div class="card"><h3>Publications</h3><p>Section en préparation.</p><span class="soon">Bientôt</span></div></section>
+    <section class="tab-panel" data-panel="posts">
+      <div class="pub-head"><h3>Vos publications</h3><p class="pub-sub">DWT prépare vos posts. Validez-les ou demandez une modification, et proposez une autre date si besoin.</p></div>
+      <div id="pubs-list-client"><p class="pub-empty">Chargement…</p></div>
+    </section>
     <section class="tab-panel" data-panel="site">
       <div class="site-grid">
         <div class="card">
@@ -419,6 +442,7 @@ button{font-family:var(--body);cursor:pointer}
     await loadIdentity();
     loadModifs();
     loadNotifs();
+    loadPubsClient();
   }
 
   // ===== ONGLET IDENTITÉ (palette) =====
@@ -561,6 +585,89 @@ button{font-family:var(--body);cursor:pointer}
       loadModifs();
     }catch(e){ fb.style.color='#ff8b8b'; fb.textContent='Erreur : '+(e&&e.message?e.message:e); }
     btn.disabled=false;
+  };
+
+  // ===== ONGLET PUBLICATIONS (valider les posts créés par DWT) =====
+  var PUBS_CLIENT = [];
+  function pubReseauLabel(r){ return r==='facebook'?'Facebook':(r==='linkedin'?'LinkedIn':'Instagram'); }
+  function pubInitiale(n){ n=(n||'').trim(); return n?n.charAt(0).toUpperCase():'•'; }
+  function fmtDateFR(d){ if(!d) return ''; try{ var dt=new Date(d); if(isNaN(dt.getTime())) return String(d); return dt.toLocaleDateString('fr-FR',{day:'numeric',month:'short'}); }catch(e){ return String(d); } }
+  // Mockup « façon post » — identique au dashboard (le client voit le rendu réel).
+  function postMockup(o){
+    var reseau=o.reseau||'instagram';
+    var avaBg = reseau==='facebook' ? 'linear-gradient(135deg,#1877f2,#0a56c2)'
+              : reseau==='linkedin' ? 'linear-gradient(135deg,#0a66c2,#004182)'
+              : 'linear-gradient(45deg,#f09433,#e6683c 28%,#dc2743 55%,#cc2366 75%,#bc1888)';
+    var img = o.imageUrl
+      ? '<div style="position:relative;width:100%;padding-bottom:100%;background:#f0f0f0"><img src="'+esc(o.imageUrl)+'" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>'
+      : '<div style="width:100%;padding-bottom:75%;background:#eceef1;position:relative"><span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#9aa0a6;font-size:13px">Visuel à venir</span></div>';
+    var ic='fill:none;stroke:#262626;stroke-width:1.8';
+    var heart='<svg width="23" height="23" viewBox="0 0 24 24" style="'+ic+'"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>';
+    var chat='<svg width="23" height="23" viewBox="0 0 24 24" style="'+ic+'"><path d="M21 11.5a8.5 8.5 0 0 1-11.8 7.8L3 21l1.7-6.2A8.5 8.5 0 1 1 21 11.5z"/></svg>';
+    var share='<svg width="23" height="23" viewBox="0 0 24 24" style="'+ic+'"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>';
+    var handle=(o.commerce||'moncommerce').toLowerCase().replace(/[^a-z0-9]+/g,'')||'moncommerce';
+    var legende = o.legende ? '<div style="padding:2px 14px 10px;font-size:13px;line-height:1.45;color:#16181c;word-break:break-word;white-space:pre-wrap"><b>'+esc(handle)+'</b> '+esc(o.legende)+'</div>' : '';
+    var dateline = o.date ? '<div style="padding:0 14px 12px;font-size:11px;color:#8e8e8e">Publication prévue : '+esc(fmtDateFR(o.date))+'</div>' : '';
+    return '<div style="max-width:338px;margin:0 auto;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 8px 26px rgba(0,0,0,.30);font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif">'+
+      '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px">'+
+        '<div style="width:34px;height:34px;border-radius:50%;background:'+avaBg+';display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0">'+esc(pubInitiale(o.commerce))+'</div>'+
+        '<div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px;color:#16181c;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(o.commerce||'Mon commerce')+'</div>'+
+        '<div style="font-size:11px;color:#8e8e8e">'+esc(pubReseauLabel(reseau))+' · Sponsorisé</div></div>'+
+        '<div style="color:#262626;font-weight:800;letter-spacing:1px">⋯</div></div>'+
+      img+
+      '<div style="display:flex;align-items:center;gap:15px;padding:9px 14px 5px">'+heart+chat+share+'</div>'+
+      legende+dateline+
+    '</div>';
+  }
+  async function loadPubsClient(){
+    if(!CLIENT.id) return;
+    var list=g('pubs-list-client'); if(!list) return;
+    try{
+      var r=await sb.from('publications').select('*').eq('client_id', CLIENT.id).order('created_at',{ ascending:false });
+      if(r.error) throw r.error;
+      PUBS_CLIENT=r.data||[];
+      renderPubsClient();
+    }catch(e){ list.innerHTML='<p class="pub-empty">Impossible de charger vos publications pour le moment.</p>'; }
+  }
+  function renderPubsClient(){
+    var list=g('pubs-list-client'); if(!list) return;
+    var rows=PUBS_CLIENT||[];
+    if(!rows.length){ list.innerHTML='<p class="pub-empty">Aucune publication pour l\'instant.<br>DWT vous préviendra dès qu\'un post est prêt à valider.</p>'; return; }
+    list.innerHTML=rows.map(function(c,i){
+      var published=c.statut==='publie';
+      var mock=postMockup({ commerce:CLIENT.commerce, reseau:c.reseau, imageUrl:c.image_url, legende:c.legende, date:(c.date_client||c.date_proposee) });
+      var banner='';
+      if(published) banner='<div class="pub-state ok">🎉 Publié</div>';
+      else if(c.reponse_client==='valide') banner='<div class="pub-state ok">✅ Vous avez validé'+(c.date_client?' · vous proposez le '+esc(fmtDateFR(c.date_client)):'')+'</div>';
+      else if(c.reponse_client==='a_modifier') banner='<div class="pub-state warn">✍️ Modification demandée — DWT revient vers vous</div>';
+      var actions='';
+      if(!published){
+        var dp=c.date_client||c.date_proposee||'';
+        actions='<div class="pub-actions">'+
+          '<label class="pub-lab">Une autre date vous conviendrait mieux ?<input type="date" id="pubdate-'+i+'" value="'+esc(dp)+'"></label>'+
+          '<textarea class="pub-comm" id="pubcomm-'+i+'" placeholder="Un commentaire ou une demande de modification (optionnel)…">'+esc(c.commentaire_client||'')+'</textarea>'+
+          '<div class="pub-btns"><button type="button" class="pub-ok" onclick="pubClientRespond(\''+esc(c.id)+'\','+i+',\'valide\')">✅ Je valide</button>'+
+          '<button type="button" class="pub-mod" onclick="pubClientRespond(\''+esc(c.id)+'\','+i+',\'a_modifier\')">✍️ Demander une modif</button></div>'+
+          '<div class="pub-fb" id="pubfb-'+i+'"></div></div>';
+      }
+      return '<div class="pub-card"><div class="pub-mock-wrap">'+mock+'</div>'+banner+actions+'</div>';
+    }).join('');
+  }
+  window.pubClientRespond = async function(id, i, reponse){
+    var fb=g('pubfb-'+i), dateEl=g('pubdate-'+i), commEl=g('pubcomm-'+i);
+    var comm=commEl?commEl.value.trim():'';
+    if(reponse==='a_modifier' && !comm){ if(fb){ fb.style.color='#ff8b8b'; fb.textContent='Dites-nous ce qu\'il faut changer.'; } return; }
+    var patch={ reponse_client:reponse, commentaire_client:(comm||null) };
+    if(dateEl && dateEl.value) patch.date_client=dateEl.value;
+    if(fb){ fb.style.color='var(--gl)'; fb.textContent='Envoi…'; }
+    try{
+      var up=await sb.from('publications').update(patch).eq('id', id);
+      if(up.error) throw up.error;
+      var titre=reponse==='valide'?'Publication validée':'Modification demandée';
+      var contenu=(CLIENT.commerce||'Le client')+' — '+(reponse==='valide'?'a validé un post.':('demande une modif : '+comm.slice(0,140)));
+      try{ await sb.from('notifications').insert({ client_id:CLIENT.id, type:'publication', titre:titre, contenu:contenu, direction:'client_to_ceo' }); }catch(e){}
+      loadPubsClient();
+    }catch(e){ if(fb){ fb.style.color='#ff8b8b'; fb.textContent='Erreur : '+(e&&e.message?e.message:e); } }
   };
 
   // ===== UPLOAD FICHIERS (Storage documents + fichiers_clients) =====
