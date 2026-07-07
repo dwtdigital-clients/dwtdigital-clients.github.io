@@ -319,6 +319,7 @@ button{font-family:var(--body);cursor:pointer}
     <a class="snav-item" data-tab="messagerie" onclick="switchTab('messagerie',this)"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-11.7 7.7L3 21l1.8-6.3A8.4 8.4 0 1 1 21 11.5z"/></svg><span>Messagerie</span><span class="snav-badge" id="nav-messagerie-n" style="display:none"></span></a>
     <a class="snav-item" data-tab="devis" onclick="switchTab('devis',this)"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h8M8 17h5"/></svg><span>Devis</span></a>
     <a class="snav-item" data-tab="audits" onclick="switchTab('audits',this)"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span>Audits</span><span class="snav-badge" id="nav-audits-n" style="display:none"></span></a>
+    <a class="snav-item" data-tab="publications" onclick="switchTab('publications',this)"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18M8 3v3M16 3v3"/></svg><span>Publications</span><span class="snav-badge" id="nav-pubs-n" style="display:none"></span></a>
     <a class="snav-item" data-tab="nouveau" onclick="switchTab('nouveau',this)"><svg viewBox="0 0 24 24"><circle cx="11" cy="8" r="3.4"/><path d="M4.5 20a6.5 6.5 0 0 1 13 0"/><path d="M19 7v6M22 10h-6"/></svg><span>Nouveau client</span></a>
     <button class="snav-logout" type="button" onclick="dwtLogout()"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Déconnexion</span></button>
   </aside>
@@ -409,6 +410,27 @@ button{font-family:var(--body);cursor:pointer}
     <section class="tab-panel" data-panel="audits">
       <div class="sec-head"><h2>Audits reçus</h2><p class="card-sub">Les demandes d'audit du site. Copie l'audit et envoie-le au prospect (Zoho).</p></div>
       <div class="dv-list" id="audits-list"><p class="empty">Chargement…</p></div>
+    </section>
+
+    <!-- ONGLET PUBLICATIONS -->
+    <section class="tab-panel" data-panel="publications">
+      <div class="sec-head"><h2>Publications</h2><p class="card-sub">Crée les posts, le client les valide et cale les dates dans son espace. Une fois validé, tu publies via Meta Business Suite.</p></div>
+      <div class="card" style="margin-bottom:18px">
+        <h3>Nouvelle publication</h3>
+        <div class="nc-row">
+          <div class="field"><label for="pub-client">Client *</label><select id="pub-client" onchange="pubRenderPreview()"><option value="">— choisir un client —</option></select></div>
+          <div class="field"><label for="pub-reseau">Réseau</label><select id="pub-reseau" onchange="pubRenderPreview()"><option value="instagram">Instagram</option><option value="facebook">Facebook</option><option value="linkedin">LinkedIn</option></select></div>
+        </div>
+        <div class="nc-row">
+          <div class="field"><label for="pub-date">Date proposée</label><input id="pub-date" type="date" onchange="pubRenderPreview()"></div>
+          <div class="field"><label for="pub-file">Visuel (image)</label><input id="pub-file" type="file" accept="image/*" onchange="pubPickImage(this)"></div>
+        </div>
+        <div class="field"><label for="pub-legende">Légende</label><textarea id="pub-legende" rows="4" placeholder="Le texte du post…" oninput="pubRenderPreview()"></textarea></div>
+        <div id="pub-preview"></div>
+        <button class="btn-primary" id="pub-create-btn" type="button" onclick="createPublication()" style="margin-top:12px">Envoyer dans l'espace du client</button>
+        <div id="pub-fb" style="margin-top:10px;font-size:.86rem"></div>
+      </div>
+      <div class="dv-list" id="pubs-list"><p class="empty">Chargement…</p></div>
     </section>
 
     <!-- ONGLET NOUVEAU CLIENT -->
@@ -514,6 +536,7 @@ button{font-family:var(--body);cursor:pointer}
   var JWT = null;             // token Supabase de l'admin (mode live)
   var ADMIN_EMAIL = '';
   var DATA = { clients: [], modifications: [], notifications: [], devis: [] };
+  var DEMO_PUBS = null; // état des publications en mode démo (aperçu sans compte)
 
   function g(id){ return document.getElementById(id); }
   function esc(t){ var d=document.createElement('div'); d.textContent=(t==null?'':String(t)); return d.innerHTML; }
@@ -590,6 +613,13 @@ button{font-family:var(--body);cursor:pointer}
       if (path === '/admin/regenerate-audit'){ for(var ai=0; ai<0; ai++){} return { ok:true, data:{ audit:'(démo) audit régénéré ✅' } }; }
       if (path === '/admin/delete-contact') return { ok:true, data:{ deleted:true } };
       if (path === '/admin/send-audit') return { ok:true, data:{ sent:true } };
+      if (path === '/admin/publications') return { ok:true, data: (DEMO_PUBS || (DEMO_PUBS = [
+        { id:'p1', client_id:(DATA.clients[0]&&DATA.clients[0].id)||'demo-1', reseau:'instagram', legende:'Nouvelle carte de printemps 🌸 Venez découvrir nos desserts de saison, faits maison chaque matin.', image_url:'', date_proposee:'2026-07-12', statut:'a_valider', reponse_client:null, commentaire_client:null, date_client:null, created_at:'2026-07-07T09:00:00Z' },
+        { id:'p2', client_id:(DATA.clients[0]&&DATA.clients[0].id)||'demo-1', reseau:'facebook', legende:'Ouverture exceptionnelle ce dimanche de 9 h à 13 h !', image_url:'', date_proposee:'2026-07-09', statut:'a_valider', reponse_client:'valide', commentaire_client:'Parfait ! Juste décaler à dimanche prochain si possible.', date_client:'2026-07-13', created_at:'2026-07-07T08:00:00Z' }
+      ])) };
+      if (path === '/admin/create-publication'){ if(!DEMO_PUBS) DEMO_PUBS=[]; var np={ id:'p'+Date.now(), client_id:body.client_id, reseau:body.reseau||'instagram', legende:body.legende||'', image_url:body.image||'', date_proposee:body.date_proposee||null, statut:'a_valider', reponse_client:null, commentaire_client:null, date_client:null, created_at:new Date().toISOString() }; DEMO_PUBS.unshift(np); return { ok:true, data:np }; }
+      if (path === '/admin/update-publication'){ if(DEMO_PUBS){ for(var pi=0;pi<DEMO_PUBS.length;pi++){ if(DEMO_PUBS[pi].id===body.id){ for(var kk in body){ if(kk!=='id') DEMO_PUBS[pi][kk]=body[kk]; } } } } return { ok:true, data:{ updated:true } }; }
+      if (path === '/admin/delete-publication'){ if(DEMO_PUBS){ DEMO_PUBS=DEMO_PUBS.filter(function(x){ return x.id!==body.id; }); } return { ok:true, data:{ deleted:true } }; }
       if (path === '/create-devis'){
         var dn = DATA.devis.length + 1;
         var dnum = 'DWT-2026-' + String(dn).padStart(3,'0');
@@ -624,6 +654,7 @@ button{font-family:var(--body);cursor:pointer}
     if (id==='messagerie' && MSG_ACTIVE && typeof window.selectConv==='function'){ window.selectConv(MSG_ACTIVE); }
     // ouvrir Audits = recharger (voir les nouveaux + statuts à jour)
     if (id==='audits' && typeof loadAudits==='function'){ loadAudits(); }
+    if (id==='publications' && typeof loadPublications==='function'){ loadPublications(); }
   };
 
   // ===== CONNEXION =====
@@ -1258,6 +1289,112 @@ button{font-family:var(--body);cursor:pointer}
     el.innerHTML='<div class="tt"><span>Mensuel</span><b>'+eur(t.m)+(t.m?'<span style="font-size:.7rem;font-weight:500;color:var(--mut)"> /mois</span>':'')+'</b></div>'+
       '<div class="tt"><span>Une seule fois</span><b>'+eur(t.o)+'</b></div>';
   }
+  // ===== PUBLICATIONS (posts à faire valider par le client) =====
+  var PUBS = [];
+  var PUB_IMG = null;
+  function pubReseauLabel(r){ return r==='facebook'?'Facebook':(r==='linkedin'?'LinkedIn':'Instagram'); }
+  function pubInitiale(nom){ nom=(nom||'').trim(); return nom ? nom.charAt(0).toUpperCase() : '•'; }
+  // Aperçu « façon post » (mockup) — partagé dashboard + espace client.
+  function postMockup(o){
+    var reseau=o.reseau||'instagram';
+    var avaBg = reseau==='facebook' ? 'linear-gradient(135deg,#1877f2,#0a56c2)'
+              : reseau==='linkedin' ? 'linear-gradient(135deg,#0a66c2,#004182)'
+              : 'linear-gradient(45deg,#f09433,#e6683c 28%,#dc2743 55%,#cc2366 75%,#bc1888)';
+    var img = o.imageUrl
+      ? '<div style="position:relative;width:100%;padding-bottom:100%;background:#f0f0f0"><img src="'+esc(o.imageUrl)+'" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>'
+      : '<div style="width:100%;padding-bottom:75%;background:#eceef1;position:relative"><span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#9aa0a6;font-size:13px">Visuel à venir</span></div>';
+    var ic='fill:none;stroke:#262626;stroke-width:1.8';
+    var heart='<svg width="23" height="23" viewBox="0 0 24 24" style="'+ic+'"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>';
+    var chat='<svg width="23" height="23" viewBox="0 0 24 24" style="'+ic+'"><path d="M21 11.5a8.5 8.5 0 0 1-11.8 7.8L3 21l1.7-6.2A8.5 8.5 0 1 1 21 11.5z"/></svg>';
+    var share='<svg width="23" height="23" viewBox="0 0 24 24" style="'+ic+'"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>';
+    var handle=(o.commerce||'moncommerce').toLowerCase().replace(/[^a-z0-9]+/g,'')||'moncommerce';
+    var legende = o.legende ? '<div style="padding:2px 14px 10px;font-size:13px;line-height:1.45;color:#16181c;word-break:break-word;white-space:pre-wrap"><b>'+esc(handle)+'</b> '+esc(o.legende)+'</div>' : '';
+    var dateline = o.date ? '<div style="padding:0 14px 12px;font-size:11px;color:#8e8e8e">Publication prévue : '+esc(fmtDate(o.date))+'</div>' : '';
+    return '<div style="max-width:338px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 8px 26px rgba(0,0,0,.30);font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif">'+
+      '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px">'+
+        '<div style="width:34px;height:34px;border-radius:50%;background:'+avaBg+';display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0">'+esc(pubInitiale(o.commerce))+'</div>'+
+        '<div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px;color:#16181c;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(o.commerce||'Mon commerce')+'</div>'+
+        '<div style="font-size:11px;color:#8e8e8e">'+esc(pubReseauLabel(reseau))+' · Sponsorisé</div></div>'+
+        '<div style="color:#262626;font-weight:800;letter-spacing:1px">⋯</div></div>'+
+      img+
+      '<div style="display:flex;align-items:center;gap:15px;padding:9px 14px 5px">'+heart+chat+share+'</div>'+
+      legende+dateline+
+    '</div>';
+  }
+  window.pubRenderPreview = function(){
+    var cid=g('pub-client')?g('pub-client').value:''; var cl=clientById(cid);
+    var o={ commerce: cl?(cl.commerce||((cl.prenom||'')+' '+(cl.nom||''))):'Mon commerce', reseau:g('pub-reseau')?g('pub-reseau').value:'instagram', imageUrl:PUB_IMG, legende:g('pub-legende')?g('pub-legende').value:'', date:g('pub-date')?g('pub-date').value:'' };
+    var pv=g('pub-preview'); if(pv) pv.innerHTML='<div style="font-size:.78rem;color:#9a93a5;margin:10px 0 8px">Aperçu — ce que verra le client :</div>'+postMockup(o);
+  };
+  window.pubPickImage = function(input){
+    var f = input.files && input.files[0];
+    if(!f){ PUB_IMG=null; pubRenderPreview(); return; }
+    if(f.size > 2500000){ alert('Visuel trop lourd (max ~2,5 Mo). Compresse l\'image et réessaie.'); input.value=''; PUB_IMG=null; pubRenderPreview(); return; }
+    var rd = new FileReader();
+    rd.onload = function(){ PUB_IMG = rd.result; pubRenderPreview(); };
+    rd.readAsDataURL(f);
+  };
+  async function loadPublications(){
+    var sel = g('pub-client');
+    if(sel){ var cur=sel.value; sel.innerHTML = '<option value="">— choisir un client —</option>' + DATA.clients.map(function(c){ return '<option value="'+esc(c.id)+'">'+esc(c.commerce||((c.prenom||'')+' '+(c.nom||'')))+'</option>'; }).join(''); if(cur) sel.value=cur; }
+    var r = await api('/admin/publications', {});
+    PUBS = r.ok ? (r.data||[]) : [];
+    renderPublications();
+  }
+  window.createPublication = async function(){
+    var client_id = g('pub-client').value, reseau = g('pub-reseau').value;
+    var date_proposee = g('pub-date').value || null, legende = g('pub-legende').value.trim();
+    var fb = g('pub-fb'); fb.textContent='';
+    if(!client_id){ fb.style.color='#ff8b8b'; fb.textContent='Choisis un client.'; return; }
+    if(!legende && !PUB_IMG){ fb.style.color='#ff8b8b'; fb.textContent='Ajoute au moins un visuel ou une légende.'; return; }
+    var btn = g('pub-create-btn'); btn.disabled=true; var t=btn.textContent; btn.textContent='Création…';
+    var r = await api('/admin/create-publication', { client_id:client_id, reseau:reseau, date_proposee:date_proposee, legende:legende, image:PUB_IMG });
+    btn.disabled=false; btn.textContent=t;
+    if(!r.ok){ fb.style.color='#ff8b8b'; fb.textContent='Erreur : '+(r.error||''); return; }
+    g('pub-legende').value=''; g('pub-date').value=''; g('pub-file').value=''; PUB_IMG=null; var pv=g('pub-preview'); if(pv) pv.innerHTML='';
+    fb.style.color='#7BC93A'; fb.textContent='Publication envoyée dans l\'espace du client ✅';
+    loadPublications();
+  };
+  function pubStatusView(c){
+    if(c.statut==='publie') return { txt:'🎉 Publié', bg:'rgba(63,169,255,.16)', col:'#3fa9ff' };
+    if(c.reponse_client==='valide') return { txt:'✅ Client a validé', bg:'rgba(99,175,33,.18)', col:'#7BC93A' };
+    if(c.reponse_client==='a_modifier') return { txt:'✍️ Modif demandée', bg:'rgba(232,163,61,.18)', col:'#e8a33d' };
+    return { txt:'⏳ En attente du client', bg:'rgba(154,147,165,.16)', col:'#b9b1c6' };
+  }
+  function renderPublications(){
+    var el = g('pubs-list'); if(!el) return;
+    var rows = (PUBS||[]).slice();
+    var nb = g('nav-pubs-n'); var waiting = rows.filter(function(c){ return c.reponse_client && c.statut!=='publie'; }).length;
+    if(nb){ nb.textContent = waiting; nb.style.display = waiting ? '' : 'none'; }
+    if(!rows.length){ el.innerHTML = '<p class="empty">Aucune publication. Crée le premier post ci-dessus — il apparaîtra dans l\'espace du client.</p>'; return; }
+    el.innerHTML = rows.map(function(c){
+      var cl = clientById(c.client_id); var nom = cl ? (cl.commerce||((cl.prenom||'')+' '+(cl.nom||''))) : '—';
+      var sv = pubStatusView(c);
+      var comm = c.commentaire_client ? '<div style="margin-top:10px;font-size:.85rem;color:#e8a33d">💬 '+esc(c.commentaire_client)+'</div>' : '';
+      var dnote = c.date_client ? '<div style="margin-top:6px;font-size:.83rem;color:#e8a33d">📅 Le client propose plutôt le '+esc(fmtDate(c.date_client))+'</div>' : '';
+      var actPub = (c.reponse_client==='valide' && c.statut!=='publie') ? '<button type="button" class="btn-primary" style="flex:1" onclick="pubMarkPublished(\''+esc(c.id)+'\',this)">Marquer publié</button>' : '';
+      return '<div class="card" style="margin-bottom:14px">'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px"><b style="font-size:.9rem">'+esc(nom)+'</b>'+
+          '<span style="background:'+sv.bg+';color:'+sv.col+';font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:20px">'+sv.txt+'</span></div>'+
+        postMockup({ commerce:nom, reseau:c.reseau, imageUrl:c.image_url, legende:c.legende, date:c.date_proposee })+
+        comm+dnote+
+        '<div style="display:flex;gap:10px;margin-top:14px">'+actPub+
+          '<button type="button" class="dv-addline" title="Supprimer la publication" onclick="pubDelete(\''+esc(c.id)+'\',this)">🗑</button></div>'+
+        '</div>';
+    }).join('');
+  }
+  window.pubMarkPublished = async function(id, btn){
+    if(btn){ btn.disabled=true; btn.textContent='…'; }
+    var r = await api('/admin/update-publication', { id:id, statut:'publie' });
+    if(r.ok){ loadPublications(); } else { if(btn){ btn.disabled=false; btn.textContent='Marquer publié'; } alert('Erreur : '+(r.error||'')); }
+  };
+  window.pubDelete = async function(id, btn){
+    if(!confirm('Supprimer cette publication ? (irréversible)')) return;
+    if(btn) btn.disabled=true;
+    var r = await api('/admin/delete-publication', { id:id });
+    if(r.ok){ loadPublications(); } else { if(btn) btn.disabled=false; alert('Erreur : '+(r.error||'')); }
+  };
+
   function dvRenderLines(){
     var box=g('dv-lines'); if(!box) return;
     box.innerHTML=DV_LINES.map(function(l,i){
