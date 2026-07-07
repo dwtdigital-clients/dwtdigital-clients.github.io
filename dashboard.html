@@ -1319,7 +1319,14 @@ button{font-family:var(--body);cursor:pointer}
   }
   // ===== PUBLICATIONS (posts à faire valider par le client) =====
   var PUBS = [];
+  var PUB_POLL = null;
   var PUB_IMG = null;
+  window.loadPublications = function(){ return loadPublications(); }; // exposé pour le bouton Rafraîchir (script en IIFE)
+  function schedulePubPoll(){
+    if(PUB_POLL){ clearTimeout(PUB_POLL); PUB_POLL=null; }
+    var panel=document.querySelector('.tab-panel[data-panel="publications"]');
+    if(panel && panel.classList.contains('on')){ PUB_POLL=setTimeout(function(){ loadPublications(); }, 10000); }
+  }
   function pubReseauLabel(r){ return r==='facebook'?'Facebook':(r==='linkedin'?'LinkedIn':'Instagram'); }
   function pubInitiale(nom){ nom=(nom||'').trim(); return nom ? nom.charAt(0).toUpperCase() : '•'; }
   // Aperçu « façon post » (mockup) — partagé dashboard + espace client.
@@ -1394,8 +1401,9 @@ button{font-family:var(--body);cursor:pointer}
     var rows = (PUBS||[]).slice();
     var nb = g('nav-pubs-n'); var waiting = rows.filter(function(c){ return c.reponse_client && c.statut!=='publie'; }).length;
     if(nb){ nb.textContent = waiting; nb.style.display = waiting ? '' : 'none'; }
-    if(!rows.length){ el.innerHTML = '<p class="empty">Aucune publication. Crée le premier post ci-dessus — il apparaîtra dans l\'espace du client.</p>'; return; }
-    el.innerHTML = rows.map(function(c){
+    var head='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><span style="font-size:.85rem;color:#9a93a5">'+rows.length+' publication'+(rows.length>1?'s':'')+(waiting?' · <b style="color:#7BC93A">'+waiting+' à traiter</b>':'')+'</span><button type="button" class="dv-addline" onclick="loadPublications()">↻ Rafraîchir</button></div>';
+    if(!rows.length){ el.innerHTML = head+'<p class="empty">Aucune publication. Crée le premier post ci-dessus — il apparaîtra dans l\'espace du client.</p>'; schedulePubPoll(); return; }
+    el.innerHTML = head + rows.map(function(c){
       var cl = clientById(c.client_id); var nom = cl ? (cl.commerce||((cl.prenom||'')+' '+(cl.nom||''))) : '—';
       var sv = pubStatusView(c);
       var comm = c.commentaire_client ? '<div style="margin-top:10px;font-size:.85rem;color:#e8a33d">💬 '+esc(c.commentaire_client)+'</div>' : '';
@@ -1410,6 +1418,7 @@ button{font-family:var(--body);cursor:pointer}
           '<button type="button" class="dv-addline" title="Supprimer la publication" onclick="pubDelete(\''+esc(c.id)+'\',this)">🗑</button></div>'+
         '</div>';
     }).join('');
+    schedulePubPoll();
   }
   window.pubMarkPublished = async function(id, btn){
     if(btn){ btn.disabled=true; btn.textContent='…'; }
