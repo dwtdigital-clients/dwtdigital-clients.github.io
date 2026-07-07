@@ -576,6 +576,9 @@ button{font-family:var(--body);cursor:pointer}
   // ===== APPEL API ADMIN (Worker) — abstrait demo/live =====
   // En live: POST WORKER_BASE+path avec Bearer JWT. En demo: renvoie les mocks.
   async function api(path, body){
+    // Jeton TOUJOURS frais : supabase-js rafraîchit un token expiré. Évite les « non autorisé »
+    // après un moment d'inactivité (le JWT figé au login finissait par expirer).
+    if (sb) { try{ var _fs = await sb.auth.getSession(); if (_fs && _fs.data && _fs.data.session && _fs.data.session.access_token) JWT = _fs.data.session.access_token; }catch(e){} }
     if (path === '/admin-check'){
       // Toujours un vrai appel réseau : c'est CE check qui décide si on passe en mode live.
       if (!WORKER_BASE) return { ok:false, error:'WORKER_BASE non défini' };
@@ -613,6 +616,7 @@ button{font-family:var(--body);cursor:pointer}
       if (path === '/admin/regenerate-audit'){ for(var ai=0; ai<0; ai++){} return { ok:true, data:{ audit:'(démo) audit régénéré ✅' } }; }
       if (path === '/admin/delete-contact') return { ok:true, data:{ deleted:true } };
       if (path === '/admin/send-audit') return { ok:true, data:{ sent:true } };
+      if (path === '/admin/reset-client-password'){ var rc=clientById(body.client_id)||{}; return { ok:true, data:{ email:rc.email||'client@demo.fr', temp_password:genPwd() } }; }
       if (path === '/admin/publications') return { ok:true, data: (DEMO_PUBS || (DEMO_PUBS = [
         { id:'p1', client_id:(DATA.clients[0]&&DATA.clients[0].id)||'demo-1', reseau:'instagram', legende:'Nouvelle carte de printemps 🌸 Venez découvrir nos desserts de saison, faits maison chaque matin.', image_url:'', date_proposee:'2026-07-12', statut:'a_valider', reponse_client:null, commentaire_client:null, date_client:null, created_at:'2026-07-07T09:00:00Z' },
         { id:'p2', client_id:(DATA.clients[0]&&DATA.clients[0].id)||'demo-1', reseau:'facebook', legende:'Ouverture exceptionnelle ce dimanche de 9 h à 13 h !', image_url:'', date_proposee:'2026-07-09', statut:'a_valider', reponse_client:'valide', commentaire_client:'Parfait ! Juste décaler à dimanche prochain si possible.', date_client:'2026-07-13', created_at:'2026-07-07T08:00:00Z' }
@@ -844,7 +848,31 @@ button{font-family:var(--body);cursor:pointer}
       '<div class="cc-top"><div class="cc-ava">'+esc(initials(c))+'</div>'+
       '<div class="cc-id"><b>'+esc(c.commerce||'Sans nom')+'</b><span>'+esc(c.prenom||'')+'</span></div></div>'+
       '<div class="cc-meta">'+meta+'</div>'+
-      '<div class="cc-foot">'+pal+pendHtml+'</div></div>';
+      '<div class="cc-foot">'+pal+pendHtml+'</div>'+
+      '<div style="margin-top:10px;display:flex;justify-content:flex-end"><button type="button" onclick="event.stopPropagation();resetClientAccess(\''+esc(c.id)+'\')" title="Régénérer le mot de passe d\'accès du client" style="font-size:.74rem;font-weight:600;color:#d49bff;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:5px 10px;cursor:pointer">🔑 Réinitialiser l\'accès</button></div>'+
+      '</div>';
+  }
+  window.resetClientAccess = async function(id){
+    var c = clientById(id);
+    if(!confirm('Générer un NOUVEAU mot de passe d\'accès pour '+((c&&c.commerce)||'ce client')+' ?\nL\'ancien ne fonctionnera plus.')) return;
+    var r = await api('/admin/reset-client-password', { client_id:id });
+    if(!r.ok){ alert('Échec : '+(r.error||'')); return; }
+    showCredsOverlay((r.data&&r.data.email)||'', (r.data&&r.data.temp_password)||'');
+  };
+  function showCredsOverlay(email, pwd){
+    var ov=document.createElement('div');
+    ov.style.cssText='position:fixed;inset:0;background:rgba(6,3,12,.74);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px';
+    ov.innerHTML='<div class="card" style="max-width:440px;width:100%">'+
+      '<h3 style="margin:0 0 6px">Nouvel accès client</h3>'+
+      '<p class="card-sub" style="margin:0 0 16px">Transmets ces identifiants au client. Le mot de passe ne sera plus affiché ensuite.</p>'+
+      '<div class="nc-cred">'+
+        '<div class="nc-cred-row"><span class="lbl">Email</span><code id="rc-email">'+esc(email)+'</code><button type="button" class="nc-copy" onclick="ncCopy(\'rc-email\')">Copier</button></div>'+
+        '<div class="nc-cred-row"><span class="lbl">Mot de passe</span><code id="rc-pwd">'+esc(pwd)+'</code><button type="button" class="nc-copy" onclick="ncCopy(\'rc-pwd\')">Copier</button></div>'+
+      '</div>'+
+      '<button type="button" class="btn-primary" style="margin-top:16px;width:100%">Fermer</button></div>';
+    ov.addEventListener('click',function(e){ if(e.target===ov && ov.parentNode) document.body.removeChild(ov); });
+    document.body.appendChild(ov);
+    var cb=ov.querySelector('.btn-primary'); if(cb) cb.onclick=function(){ if(ov.parentNode) document.body.removeChild(ov); };
   }
 
   async function loadClients(){
