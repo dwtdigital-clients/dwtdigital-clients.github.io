@@ -589,6 +589,7 @@ button{font-family:var(--body);cursor:pointer}
       ] };
       if (path === '/admin/regenerate-audit'){ for(var ai=0; ai<0; ai++){} return { ok:true, data:{ audit:'(démo) audit régénéré ✅' } }; }
       if (path === '/admin/delete-contact') return { ok:true, data:{ deleted:true } };
+      if (path === '/admin/send-audit') return { ok:true, data:{ sent:true } };
       if (path === '/create-devis'){
         var dn = DATA.devis.length + 1;
         var dnum = 'DWT-2026-' + String(dn).padStart(3,'0');
@@ -1192,13 +1193,21 @@ button{font-family:var(--body);cursor:pointer}
     if(!rows.length){ el.innerHTML = head + '<p class="empty">Aucun audit reçu pour l\'instant. Ils apparaîtront ici dès qu\'un prospect remplit le formulaire du site.</p>'; return; }
     el.innerHTML = head + rows.map(function(c,i){
       var st = auditStatus(c.message);
+      var sent = (c.statut === 'envoye');
       var badge = st==='wait' ? '<span style="background:rgba(232,163,61,.18);color:#e8a33d;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:20px">⏳ En cours</span>'
                 : st==='err'  ? '<span style="background:rgba(220,80,80,.18);color:#e06666;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:20px">⚠️ Erreur</span>'
                 :               '<span style="background:rgba(99,175,33,.18);color:#7BC93A;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:20px">✅ Prêt</span>';
-      var main = (st==='ok')
-        ? '<button type="button" class="btn-primary ac-copy" style="flex:1" onclick="copyAudit('+i+')">Copier l\'audit</button>'
-        : '<button type="button" class="btn-primary ac-copy" style="flex:1" onclick="regenAudit(\''+esc(c.id)+'\',this)">↻ Relancer la génération</button>';
-      var actions = '<div style="display:flex;gap:10px">'+main+
+      if(sent) badge += ' <span style="background:rgba(63,169,255,.16);color:#3fa9ff;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:20px">✉ Envoyé</span>';
+      var noMail = !c.email;
+      var main;
+      if(st==='ok'){
+        var lbl = sent ? '↻ Renvoyer au prospect' : '✉ Envoyer au prospect';
+        main = '<button type="button" class="btn-primary" style="flex:1"'+(noMail?' disabled title="Pas d\'email"':'')+' onclick="sendAudit(\''+esc(c.id)+'\',this)">'+lbl+'</button>'+
+               '<button type="button" class="dv-addline" title="Copier l\'audit" onclick="copyAudit('+i+')">Copier</button>';
+      } else {
+        main = '<button type="button" class="btn-primary ac-copy" style="flex:1" onclick="regenAudit(\''+esc(c.id)+'\',this)">↻ Relancer la génération</button>';
+      }
+      var actions = '<div style="display:flex;gap:10px;flex-wrap:wrap">'+main+
         '<button type="button" class="dv-addline" title="Supprimer la fiche" onclick="delAudit(\''+esc(c.id)+'\',this)">🗑</button></div>';
       return '<div class="card" style="margin-bottom:14px">'+
         '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b>'+esc(c.commerce||'—')+'</b>'+badge+'</div>'+
@@ -1210,6 +1219,14 @@ button{font-family:var(--body);cursor:pointer}
     if(AUDIT_POLL){ clearTimeout(AUDIT_POLL); AUDIT_POLL = null; }
     if(pending){ AUDIT_POLL = setTimeout(function(){ loadAudits(); }, 8000); }
   }
+  window.sendAudit = async function(id, btn){
+    if(!confirm('Envoyer cet audit de visibilité par email au prospect ?\n(Tu en reçois une copie.)')) return;
+    var t = btn ? btn.textContent : '';
+    if(btn){ btn.disabled = true; btn.textContent = 'Envoi en cours…'; }
+    var r = await api('/admin/send-audit', { id:id });
+    if(r.ok){ loadAudits(); }
+    else { if(btn){ btn.disabled = false; btn.textContent = t; } alert('Échec de l\'envoi : ' + (r.error || '')); }
+  };
   window.delAudit = async function(id, btn){
     if(!confirm('Supprimer définitivement cette fiche ? (irréversible)')) return;
     if(btn) btn.disabled = true;
