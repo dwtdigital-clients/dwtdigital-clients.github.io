@@ -378,6 +378,7 @@ button{font-family:var(--body);cursor:pointer}
     for (var i=0;i<items.length;i++){ items[i].classList.toggle('on', items[i].getAttribute('data-tab')===id); }
     var panels = document.querySelectorAll('.tab-panel');
     for (var j=0;j<panels.length;j++){ panels[j].classList.toggle('on', panels[j].getAttribute('data-panel')===id); }
+    if(id==='posts' && typeof loadPubsClient==='function'){ loadPubsClient(); } // recharge les publications à l'ouverture
   };
 
   window.dwtLogin = async function(){
@@ -589,6 +590,7 @@ button{font-family:var(--body);cursor:pointer}
 
   // ===== ONGLET PUBLICATIONS (valider les posts créés par DWT) =====
   var PUBS_CLIENT = [];
+  window.reloadPubsClient = function(){ loadPubsClient(); }; // bouton Rafraîchir (script en IIFE)
   function pubReseauLabel(r){ return r==='facebook'?'Facebook':(r==='linkedin'?'LinkedIn':'Instagram'); }
   function pubInitiale(n){ n=(n||'').trim(); return n?n.charAt(0).toUpperCase():'•'; }
   function fmtDateFR(d){ if(!d) return ''; try{ var dt=new Date(d); if(isNaN(dt.getTime())) return String(d); return dt.toLocaleDateString('fr-FR',{day:'numeric',month:'short'}); }catch(e){ return String(d); } }
@@ -632,8 +634,9 @@ button{font-family:var(--body);cursor:pointer}
   function renderPubsClient(){
     var list=g('pubs-list-client'); if(!list) return;
     var rows=PUBS_CLIENT||[];
-    if(!rows.length){ list.innerHTML='<p class="pub-empty">Aucune publication pour l\'instant.<br>DWT vous préviendra dès qu\'un post est prêt à valider.</p>'; return; }
-    list.innerHTML=rows.map(function(c,i){
+    var head='<div style="display:flex;justify-content:flex-end;margin-bottom:14px"><button type="button" onclick="reloadPubsClient()" style="font-size:.8rem;font-weight:600;color:var(--acc);background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:10px;padding:7px 12px;cursor:pointer">↻ Rafraîchir</button></div>';
+    if(!rows.length){ list.innerHTML=head+'<p class="pub-empty">Aucune publication pour l\'instant.<br>DWT vous préviendra dès qu\'un post est prêt à valider.</p>'; return; }
+    list.innerHTML=head+rows.map(function(c,i){
       var published=c.statut==='publie';
       var mock=postMockup({ commerce:CLIENT.commerce, reseau:c.reseau, imageUrl:c.image_url, legende:c.legende, date:(c.date_client||c.date_proposee) });
       var banner='';
