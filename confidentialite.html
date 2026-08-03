@@ -25,9 +25,13 @@ img{max-width:100%}
 
 /* NAV */
 .nav{position:fixed;top:14px;left:0;right:0;z-index:60;display:flex;justify-content:center;padding:0 16px}
+/* scrim : masque le contenu qui defile derriere/au-dessus du pill */
+.nav::before{content:"";position:fixed;top:0;left:0;right:0;height:98px;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,#07000d 0%,rgba(7,0,13,.88) 42%,rgba(7,0,13,0) 100%);transition:background .45s;}
+.nav:has(.nav-pill.on-light)::before{background:linear-gradient(180deg,#FBF9FE 0%,rgba(251,249,254,.86) 42%,rgba(251,249,254,0) 100%);}
 .nav-pill{display:flex;align-items:center;gap:18px;width:100%;max-width:1180px;padding:12px 16px;border-radius:999px;background:rgba(20,4,32,.55);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border:1px solid var(--border);box-shadow:0 18px 44px -22px rgba(0,0,0,.7)}
 .nav-logo{display:flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:800;font-size:.95rem;margin-right:8px}
-.nav-logo img{height:27px}
+.nav-logo img{height:27px;width:auto;}
 .nav-logo span{background:linear-gradient(120deg,#d49bff,var(--gl));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .nav-tabs{display:flex;gap:20px;align-items:center}
 .nav-tabs a{font-size:.92rem;color:var(--mut);transition:color .2s}
