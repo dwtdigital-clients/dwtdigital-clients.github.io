@@ -88,12 +88,16 @@ img{max-width:100%;}
 
 /* ── NAV (pilule liquid glass — bascule claire au scroll) ── */
 .nav{position:fixed;top:16px;left:0;right:0;z-index:60;display:flex;justify-content:center;padding:0 18px;}
+/* scrim : masque le contenu qui defile derriere/au-dessus du pill */
+.nav::before{content:"";position:fixed;top:0;left:0;right:0;height:98px;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,#07000d 0%,rgba(7,0,13,.88) 42%,rgba(7,0,13,0) 100%);transition:background .45s;}
+.nav:has(.nav-pill.on-light)::before{background:linear-gradient(180deg,#FBF9FE 0%,rgba(251,249,254,.86) 42%,rgba(251,249,254,0) 100%);}
 .nav-pill{display:flex;align-items:center;gap:8px;width:100%;max-width:var(--max);padding:9px 9px 9px 18px;border-radius:999px;
   background:rgba(20,4,32,.5);backdrop-filter:blur(26px) saturate(1.6);-webkit-backdrop-filter:blur(26px) saturate(1.6);border:1px solid var(--border);
   box-shadow:0 8px 32px -12px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08);transition:background .45s,border-color .45s;}
 .nav-pill.on-light{background:rgba(255,255,255,.62);border-color:rgba(79,15,92,.16);box-shadow:0 8px 32px -14px rgba(79,15,92,.35),inset 0 1px 0 rgba(255,255,255,.9);}
 .nav-logo{display:flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:800;font-size:.95rem;margin-right:6px;}
-.nav-logo img{height:27px;}
+.nav-logo img{height:27px;width:auto;}
 .nav-logo span{background:linear-gradient(120deg,#d49bff,var(--gl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .nav-pill.on-light .nav-logo span{background:linear-gradient(120deg,var(--v),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .nav-tabs{display:flex;align-items:center;gap:2px;margin:0 auto;}
