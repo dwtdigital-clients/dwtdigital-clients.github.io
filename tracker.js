@@ -35,7 +35,17 @@
     } catch (e) { return "desktop"; }
   }
 
+  // Respecte le bandeau de consentement : on ne mesure QUE si le visiteur a cliqué « Tout accepter ».
+  // Refus ("essential") ou choix non fait (null) => aucune mesure.
+  function consentOK() {
+    try {
+      var c = (typeof window !== "undefined" && window.dwtConsent) ? window.dwtConsent : (localStorage.getItem("dwt-consent") || "");
+      return c === "all";
+    } catch (e) { return false; }
+  }
+
   function send(event) {
+    if (!consentOK()) return;
     try {
       var payload = JSON.stringify({
         event: event || "pageview",
@@ -50,6 +60,14 @@
       fetch(ENDPOINT, { method: "POST", body: payload, keepalive: true, headers: { "Content-Type": "text/plain" } }).catch(function () {});
     } catch (e) {}
   }
+
+  // Retrait / gestion du consentement (droit RGPD) : efface le choix et réaffiche la bannière.
+  // Appelable depuis un lien « Gérer mes cookies ». Dispo sur toutes les pages (tracker.js global).
+  window.dwtManageCookies = function () {
+    try { localStorage.removeItem("dwt-consent"); } catch (e) {}
+    try { window.dwtConsent = null; } catch (e) {}
+    location.reload();
+  };
 
   // 1) vue de page
   send("pageview");
