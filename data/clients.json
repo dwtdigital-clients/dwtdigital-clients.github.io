@@ -2,7 +2,6 @@
   "clients": [
     {
       "email": "lisevernet@yahoo.com",
-      "password": "CakeDelice2025",
       "slug": "lise",
       "espace": "/espace-lise.html",
       "site": "/Lise/",
@@ -15,7 +14,6 @@
     },
     {
       "email": "zimblobot@gmail.com",
-      "password": "BoucherieZimblo2025",
       "slug": "zimblo",
       "espace": "/espace-zimblo.html",
       "site": "/Zimblo/",
@@ -28,7 +26,6 @@
     },
     {
       "email": "binkszimblo@gmail.com",
-      "password": "Lefourni2025!",
       "slug": "sophie-le-fournil-de-soph",
       "espace": "/espace-sophie-le-fournil-de-soph.html",
       "site": "/Sophie-le-fournil-de-soph/",
