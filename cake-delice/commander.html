@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commander — Cake Délice, Valence</title>
+<meta name="description" content="Commandez votre layer cake, bento cake ou gâteau sur-mesure chez Cake Délice, à Valence. Lise vous recontacte sous 48 h pour confirmer.">
+<link rel="canonical" href="https://dwtdigital.fr/cake-delice/commander.html">
+<meta name="theme-color" content="#FBF6EF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Jost:wght@400;500;600;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/cake.css">
+<style>
+.cmd{padding:clamp(32px,5vw,60px) 0;}
+.cmd__grid{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:start;}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:clamp(22px,3.4vw,34px);}
+.fset{border:0;margin:0 0 26px;padding:0;}
+.fset legend{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;margin-bottom:16px;padding:0;}
+.fset legend .n{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;display:inline-flex;align-items:center;justify-content:center;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.field label{font-weight:600;font-size:13.5px;}
+.field label .req{color:var(--accent);}
+.field input,.field select,.field textarea{width:100%;font-family:var(--font);font-size:15px;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:13px 15px;transition:border-color .2s,background .2s;}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);background:#fff;}
+.field textarea{min-height:110px;resize:vertical;}
+.field .aide{font-size:12.5px;color:var(--text-muted);}
+.field .aide.warn{color:var(--accent);font-weight:600;}
+.choix{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.choix label{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;cursor:pointer;transition:border-color .2s,background .2s;}
+.choix input{accent-color:var(--accent);margin-top:3px;width:18px;height:18px;flex-shrink:0;}
+.choix label:has(input:checked){border-color:var(--accent);background:var(--rose-soft);}
+.choix b{display:block;font-size:15px;}
+.choix span{font-size:13px;color:var(--text-muted);}
+.consent{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;color:var(--text-muted);margin:6px 0 20px;}
+.consent input{accent-color:var(--accent);width:20px;height:20px;flex-shrink:0;margin-top:1px;}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+.submit{width:100%;min-height:56px;font-size:15px;}
+.submit:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.statut{margin-top:16px;border-radius:14px;font-size:14.5px;line-height:1.55;}
+.statut.err{padding:14px 16px;background:#FDECEC;border:1px solid #F3C1C1;color:#8E2C2C;}
+.merci{display:none;text-align:center;padding:clamp(20px,4vw,40px) 10px;}
+.merci.on{display:block;}
+.merci__ico{width:72px;height:72px;border-radius:50%;background:var(--rose-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
+.merci h2{font-weight:700;font-size:clamp(24px,3vw,32px);margin:0 0 10px;}
+.merci p{color:var(--text-muted);max-width:420px;margin:0 auto 22px;}
+/* Colonne récap */
+.side{position:sticky;top:96px;display:flex;flex-direction:column;gap:16px;}
+.estim{background:linear-gradient(150deg,var(--p),var(--accent));color:#fff;border-radius:var(--r);padding:24px;}
+.estim__lbl{font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85;font-weight:600;}
+.estim__prix{font-weight:700;font-size:40px;line-height:1.1;margin:6px 0 4px;}
+.estim__sub{font-size:13.5px;opacity:.9;}
+.estim__livr{margin-top:12px;display:none;align-items:center;gap:8px;background:rgba(255,255,255,.16);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;width:max-content;max-width:100%;}
+.estim__livr.on{display:inline-flex;}
+.tarifs h3,.cond h3{margin:0 0 12px;font-size:17px;font-weight:700;}
+.tarifs table{width:100%;border-collapse:collapse;font-size:14px;}
+.tarifs td{padding:7px 0;border-bottom:1px dashed var(--line);}
+.tarifs td:last-child{text-align:right;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums;}
+.tarifs tr:last-child td{border-bottom:0;}
+.tarifs .note{font-size:12.5px;color:var(--text-muted);margin:10px 0 0;}
+.cond ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:var(--text-muted);}
+.cond li{display:flex;gap:10px;}
+.cond li svg{flex-shrink:0;color:var(--accent);margin-top:2px;}
+@media(max-width:920px){.cmd__grid{grid-template-columns:1fr;}.side{position:static;}}
+@media(max-width:560px){.row2,.choix{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar__in">
+    <a class="marque" href="index.html">Cake Délice</a>
+    <nav class="appbar__nav" aria-label="Navigation principale">
+      <a href="creations.html">Nos créations</a>
+      <a href="histoire.html">Notre histoire</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="appbar__right">
+      <a class="btn btn--plein" href="commander.html" style="min-height:44px;padding:0 22px;">Commander</a>
+      <button class="burger" id="burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu-mobile"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<nav class="menu-mobile" id="menu-mobile" aria-label="Menu mobile">
+  <a href="creations.html">Nos créations</a>
+  <a href="histoire.html">Notre histoire</a>
+  <a href="contact.html">Contact</a>
+  <a class="cmd" href="commander.html">Commander</a>
+</nav>
+
+<main>
+  <section class="page-head">
+    <div class="wrap"><span class="eyebrow">Commander</span><h1>Votre gâteau, <em>en quelques clics</em></h1>
+    <p>Remplissez le formulaire : Lise vous recontacte sous 48 h pour confirmer le prix, la date et l'acompte. Rien n'est payé en ligne.</p></div>
+  </section>
+
+  <section class="cmd"><div class="wrap">
+    <div class="cmd__grid">
+
+      <div class="card">
+        <form id="form" novalidate>
+          <div class="hp" aria-hidden="true"><label>Ne pas remplir<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+          <fieldset class="fset">
+            <legend><span class="n">1</span>Votre gâteau</legend>
+            <div class="row2">
+              <div class="field">
+                <label for="type">Type de gâteau <span class="req">*</span></label>
+                <select id="type" name="type" required>
+                  <option value="">Choisir…</option>
+                  <option value="layer">Layer cake</option>
+                  <option value="bento">Bento cake</option>
+                  <option value="surmesure">Gâteau sur-mesure</option>
+                  <option value="cookies">Cookies</option>
+                  <option value="autre">Autre pâtisserie</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="parts">Nombre de parts <span class="req">*</span></label>
+                <select id="parts" name="parts" required>
+                  <option value="">Choisir…</option>
+                  <option value="bento">1 à 2 parts (bento)</option>
+                  <option value="2-4">2 à 4 parts</option>
+                  <option value="4-6">4 à 6 parts</option>
+                  <option value="6-8">6 à 8 parts</option>
+                  <option value="10-12">10 à 12 parts</option>
+                  <option value="14-16">14 à 16 parts</option>
+                  <option value="16-18">16 à 18 parts</option>
+                  <option value="18-20">18 à 20 parts</option>
+                  <option value="30">30 parts</option>
+                  <option value="40">40 parts</option>
+                  <option value="nsp">Je ne sais pas encore</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="date">Date souhaitée <span class="req">*</span></label>
+              <input type="date" id="date" name="date" required>
+              <span class="aide" id="aide-date">Prévoyez au moins 2 jours (bento, cookies) et 5 jours pour un layer cake.</span>
+            </div>
+            <div class="field">
+              <label for="theme">Thème, couleurs, saveurs</label>
+              <input type="text" id="theme" name="theme" placeholder="Ex. anniversaire 30 ans, rose et doré, vanille-framboise">
+            </div>
+            <div class="field">
+              <label for="message">Vos idées, inscription sur le gâteau…</label>
+              <textarea id="message" name="message" placeholder="Décrivez votre envie, ajoutez un lien Instagram ou Pinterest d'inspiration…"></textarea>
+            </div>
+            <div class="field">
+              <label for="allergies">Allergies à signaler</label>
+              <input type="text" id="allergies" name="allergies" placeholder="Ex. sans fruits à coque">
+            </div>
+          </fieldset>
+
+          <fieldset class="fset">
+            <legend><span class="n">2</span>Livraison ou retrait</legend>
+            <div class="choix">
+              <label><input type="radio" name="mode" value="livraison" checked><span><b>Livraison</b><span>Valence et alentours (35 km). Offerte dès 30 € sur Valence.</span></span></label>
+              <label><input type="radio" name="mode" value="retrait"><span><b>Retrait</b><span>Sur rendez-vous, à convenir avec Lise.</span></span></label>
+            </div>
+            <div class="field" id="champ-adresse" style="margin-top:14px;">
+              <label for="adresse">Ville / adresse de livraison <span class="req">*</span></label>
+              <input type="text" id="adresse" name="adresse" placeholder="Ex. Valence, quartier Châteauvert" autocomplete="street-address">
+            </div>
+          </fieldset>
+
+          <fieldset class="fset">
+            <legend><span class="n">3</span>Vos coordonnées</legend>
+            <div class="field">
+              <label for="nom">Prénom et nom <span class="req">*</span></label>
+              <input type="text" id="nom" name="nom" required autocomplete="name">
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label for="tel">Téléphone <span class="req">*</span></label>
+                <input type="tel" id="tel" name="tel" required autocomplete="tel" placeholder="06 12 34 56 78">
+              </div>
+              <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" autocomplete="email">
+              </div>
+            </div>
+          </fieldset>
+
+          <label class="consent"><input type="checkbox" id="consent" name="consent" required><span>J'accepte que mes informations soient utilisées pour traiter ma demande de commande et être recontacté(e). Elles ne sont jamais revendues.</span></label>
+
+          <button type="submit" class="btn btn--plein submit" id="envoyer">Envoyer ma demande de commande</button>
+          <div class="statut" id="statut" role="status" aria-live="polite"></div>
+        </form>
+
+        <div class="merci" id="merci">
+          <div class="merci__ico"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <h2>Merci, c'est bien reçu !</h2>
+          <p>Lise vous recontacte sous 48 h pour confirmer votre gâteau, le prix et l'acompte.</p>
+          <a class="btn btn--contour" href="creations.html">Revoir les créations</a>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="estim" aria-live="polite">
+          <div class="estim__lbl">Prix de base indicatif</div>
+          <div class="estim__prix" id="estim-prix">—</div>
+          <div class="estim__sub" id="estim-sub">Choisissez le nombre de parts pour voir le tarif de base.</div>
+          <div class="estim__livr" id="estim-livr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Livraison offerte sur Valence</div>
+        </div>
+        <div class="card tarifs">
+          <h3>Tarifs layer cakes</h3>
+          <table>
+            <tr><td>2 à 4 parts</td><td>20 €</td></tr>
+            <tr><td>4 à 6 parts</td><td>30 €</td></tr>
+            <tr><td>6 à 8 parts</td><td>40 €</td></tr>
+            <tr><td>10 à 12 parts</td><td>60 €</td></tr>
+            <tr><td>14 à 16 parts</td><td>70 €</td></tr>
+            <tr><td>16 à 18 parts</td><td>80 €</td></tr>
+            <tr><td>18 à 20 parts</td><td>90 €</td></tr>
+            <tr><td>30 parts</td><td>120 €</td></tr>
+            <tr><td>40 parts</td><td>150 €</td></tr>
+            <tr><td>Bento cake (1 à 2 parts)</td><td>15 €</td></tr>
+          </table>
+          <p class="note">Tarifs de base sans devis : le prix peut varier selon le modèle, les saveurs et la décoration.</p>
+        </div>
+        <div class="card cond">
+          <h3>Bon à savoir</h3>
+          <ul>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Acompte 5 jours avant pour les layer cakes (dès 4 parts), 2 jours avant pour les bento cakes et autres pâtisseries.</span></li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg><span>Allergènes principaux : œufs, gluten, lait.</span></li>
+            <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>Une question ? <a href="tel:+33782929694" style="color:var(--accent);font-weight:600">07 82 92 96 94</a></span></li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+  </div></section>
+</main>
+
+<footer><div class="wrap">
+  <div class="foot">
+    <div><div class="marque">Cake Délice</div><p style="margin:12px 0 0;max-width:280px">Pâtisserie artisanale à Valence. Layer cakes, bento cakes et gâteaux sur-mesure faits main.</p></div>
+    <div><h4>Navigation</h4><a href="creations.html">Nos créations</a><a href="histoire.html">Notre histoire</a><a href="commander.html">Commander</a><a href="contact.html">Contact</a></div>
+    <div><h4>Contact</h4><a href="tel:+33782929694">07 82 92 96 94</a><a href="mailto:cakedelice26000@gmail.com">cakedelice26000@gmail.com</a><a href="https://www.instagram.com/cakedelice26" target="_blank" rel="noopener">Instagram @cakedelice26</a><span style="display:block;margin-top:6px">Valence &amp; alentours (35 km)</span></div>
+  </div>
+  <div class="foot__bas"><span>© 2026 Cake Délice — Pâtisserie artisanale, Valence</span><span>Site créé par <a href="https://dwtdigital.fr" target="_blank" rel="noopener">DWT Digital</a></span></div>
+</div></footer>
+
+<script src="assets/cake.js"></script>
+<script>
+(function () {
+  "use strict";
+  /* Envoi vers le Worker DWT : la commande est enregistrée dans Supabase (table contacts) + email de notification. */
+  var WORKER = "https://dwt-admin.darellwilliampro1.workers.dev";
+  var PRIX = { "bento": 15, "2-4": 20, "4-6": 30, "6-8": 40, "10-12": 60, "14-16": 70, "16-18": 80, "18-20": 90, "30": 120, "40": 150 };
+  var LIB_TYPE = { layer: "Layer cake", bento: "Bento cake", surmesure: "Gâteau sur-mesure", cookies: "Cookies", autre: "Autre pâtisserie" };
+  var LIB_PARTS = { "bento": "1 à 2 parts (bento)", "2-4": "2 à 4 parts", "4-6": "4 à 6 parts", "6-8": "6 à 8 parts", "10-12": "10 à 12 parts", "14-16": "14 à 16 parts", "16-18": "16 à 18 parts", "18-20": "18 à 20 parts", "30": "30 parts", "40": "40 parts", "nsp": "Je ne sais pas encore" };
+
+  var form = document.getElementById("form");
+  var $ = function (id) { return document.getElementById(id); };
+  var type = $("type"), parts = $("parts"), date = $("date"), aide = $("aide-date");
+  var adresseBox = $("champ-adresse"), adresse = $("adresse");
+
+  function isoDans(jours) {
+    var d = new Date(); d.setDate(d.getDate() + jours);
+    var m = String(d.getMonth() + 1).padStart(2, "0"), j = String(d.getDate()).padStart(2, "0");
+    return d.getFullYear() + "-" + m + "-" + j;
+  }
+  function delaiMin() { return (type.value === "layer" || type.value === "surmesure") ? 5 : 2; }
+  function majDate() {
+    var min = isoDans(delaiMin());
+    date.min = min;
+    if (date.value && date.value < min) {
+      aide.textContent = "Pour ce type de gâteau, choisissez une date à partir du " + min.split("-").reverse().join("/") + ".";
+      aide.classList.add("warn");
+    } else {
+      aide.textContent = "Prévoyez au moins 2 jours (bento, cookies) et 5 jours pour un layer cake.";
+      aide.classList.remove("warn");
+    }
+  }
+  function mode() { var r = form.querySelector("input[name=mode]:checked"); return r ? r.value : "livraison"; }
+  function majMode() { var l = mode() === "livraison"; adresseBox.style.display = l ? "" : "none"; adresse.required = l; majEstim(); }
+  function majEstim() {
+    var p = PRIX[parts.value];
+    $("estim-prix").textContent = p ? p + " €" : "—";
+    $("estim-sub").textContent = p ? "Tarif de base pour " + LIB_PARTS[parts.value] + ". Le prix final dépend du modèle, des saveurs et de la décoration." : (parts.value === "nsp" ? "Lise vous conseillera la bonne taille selon le nombre d'invités." : "Choisissez le nombre de parts pour voir le tarif de base.");
+    $("estim-livr").classList.toggle("on", !!p && p >= 30 && mode() === "livraison");
+  }
+
+  /* Pré-remplissage depuis la page Créations : commander.html?produit=...&type=... */
+  try {
+    var q = new URLSearchParams(location.search);
+    if (q.get("type") && LIB_TYPE[q.get("type")]) type.value = q.get("type");
+    if (q.get("type") === "bento") parts.value = "bento";
+    if (q.get("produit")) $("message").value = "Création qui m'inspire : " + q.get("produit") + "\n";
+  } catch (e) {}
+
+  type.addEventListener("change", function () { if (type.value === "bento") parts.value = "bento"; majDate(); majEstim(); });
+  parts.addEventListener("change", majEstim);
+  date.addEventListener("change", majDate);
+  form.querySelectorAll("input[name=mode]").forEach(function (r) { r.addEventListener("change", majMode); });
+  majDate(); majMode();
+
+  function erreur(msg) { var s = $("statut"); s.className = "statut err"; s.innerHTML = msg; }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var s = $("statut"); s.className = "statut"; s.textContent = "";
+    var nom = $("nom").value.trim(), tel = $("tel").value.trim(), email = $("email").value.trim();
+    if (!type.value || !parts.value || !date.value || !nom || !tel || (mode() === "livraison" && !adresse.value.trim())) {
+      erreur("Merci de remplir les champs marqués d'une étoile (*)."); return;
+    }
+    if (date.value < date.min) { erreur("La date choisie est trop proche : " + aide.textContent); return; }
+    if (!$("consent").checked) { erreur("Merci de cocher la case d'accord pour que Lise puisse vous recontacter."); return; }
+
+    var p = PRIX[parts.value];
+    var lignes = [
+      "COMMANDE CAKE DÉLICE",
+      "Type : " + LIB_TYPE[type.value],
+      "Parts : " + LIB_PARTS[parts.value] + (p ? " (prix de base " + p + " €)" : ""),
+      "Date souhaitée : " + date.value.split("-").reverse().join("/"),
+      "Mode : " + (mode() === "livraison" ? "Livraison — " + adresse.value.trim() : "Retrait sur rendez-vous"),
+      "Thème / saveurs : " + ($("theme").value.trim() || "—"),
+      "Allergies : " + ($("allergies").value.trim() || "aucune signalée"),
+      "Message : " + ($("message").value.trim() || "—")
+    ];
+    var payload = {
+      nom: nom,
+      commerce: "Cake Délice (commande)",
+      email: email,
+      telephone: tel,
+      type: "commande-cake-delice",
+      message: lignes.join("\n"),
+      consentement: true,
+      website: form.elements.website ? form.elements.website.value : ""
+    };
+
+    var btn = $("envoyer"), label = btn.textContent;
+    btn.disabled = true; btn.textContent = "Envoi en cours…";
+    fetch(WORKER + "/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+      .then(function (r) { if (!r.ok) throw new Error("http " + r.status); return r.json().catch(function () { return {}; }); })
+      .then(function () {
+        form.style.display = "none";
+        $("merci").classList.add("on");
+        window.scrollTo({ top: document.querySelector(".cmd").offsetTop - 80, behavior: "smooth" });
+      })
+      .catch(function () {
+        erreur("L'envoi n'a pas abouti. Réessayez, ou contactez Lise directement : <a href=\"tel:+33782929694\" style=\"color:inherit;font-weight:700\">07 82 92 96 94</a> ou <a href=\"https://www.instagram.com/cakedelice26\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;font-weight:700\">Instagram</a>.");
+      })
+      .then(function () { btn.disabled = false; btn.textContent = label; });
+  });
+})();
+</script>
+</body>
+</html>
