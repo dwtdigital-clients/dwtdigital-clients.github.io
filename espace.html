@@ -93,6 +93,14 @@ button{font-family:var(--body);cursor:pointer}
 
 /* ===== ONGLET IDENTITÉ ===== */
 .card-sub{color:var(--mut);font-size:.88rem;margin:0 0 16px}
+.site-etat{margin-bottom:18px}
+.site-etat .etape{display:inline-block;margin-bottom:10px;font-size:.74rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);background:rgba(212,155,255,.12);border:1px solid rgba(212,155,255,.3);border-radius:999px;padding:3px 12px}
+.site-frame{display:block;width:100%;height:min(70vh,620px);border:0;border-radius:14px;background:#fff;margin:6px 0 16px}
+.site-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.site-actions .btn-primary{width:auto;margin-top:0;padding:12px 22px}
+.btn-sec{display:inline-flex;align-items:center;justify-content:center;padding:12px 20px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--ink);font-weight:600;font-size:.9rem;cursor:pointer;text-decoration:none;font-family:inherit}
+.btn-sec:hover{background:rgba(255,255,255,.06)}
+.btn-sm{padding:8px 16px;font-size:.82rem;margin-top:12px}
 .iv-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .iv-banner{display:flex;align-items:center;gap:9px;background:rgba(99,175,33,.12);border:1px solid rgba(99,175,33,.32);border-radius:13px;padding:11px 14px;margin-bottom:16px;font-size:.85rem;color:var(--gl)}
 .iv-colors{display:flex;flex-direction:column;gap:11px;margin-bottom:18px}
@@ -239,7 +247,7 @@ button{font-family:var(--body);cursor:pointer}
     <section class="tab-panel on" data-panel="dashboard">
       <div class="grid">
         <div class="card"><h3>Vos publications</h3><p>Vos prochains posts programmés apparaîtront ici.</p><span class="soon">Bientôt</span></div>
-        <div class="card"><h3>Votre site</h3><p>Aperçu et demandes de modification de votre site.</p><span class="soon">Bientôt</span></div>
+        <div class="card" id="home-site-card"><h3>Votre site</h3><p id="home-site-txt">Aperçu et demandes de modification de votre site.</p><div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px"><span class="soon" id="home-site-badge">Bientôt</span><button type="button" class="btn-sec btn-sm" id="home-site-go" style="display:none" onclick="switchTab('site',document.querySelector('[data-tab=site]'))">Voir mon site</button></div></div>
         <div class="card"><h3>Suivi mensuel</h3><p>Vos résultats, dès que les premières données arrivent.</p><span class="soon">Bientôt</span></div>
       </div>
     </section>
@@ -248,6 +256,7 @@ button{font-family:var(--body);cursor:pointer}
       <div id="pubs-list-client"><p class="pub-empty">Chargement…</p></div>
     </section>
     <section class="tab-panel" data-panel="site">
+      <div class="card site-etat" id="site-etat" style="display:none"></div>
       <div class="site-grid">
         <div class="card">
           <h3>Demander une modification</h3>
@@ -419,6 +428,7 @@ button{font-family:var(--body);cursor:pointer}
     CLIENT.commerce = row.commerce || '';
     CLIENT.slug = row.slug || '';
     CLIENT.pack = row.pack || '';
+    CLIENT.site = ('site_etape' in row) ? { etape: row.site_etape, apercu: row.site_apercu_url, url: row.site_url, valide: row.site_valide_le } : null;
     return true;
   }
 
@@ -438,6 +448,7 @@ button{font-family:var(--body);cursor:pointer}
       return;
     }
     render();
+    renderSite();
     g('dwt-login').style.display = 'none';
     g('dwt-app').classList.add('on');
     await loadIdentity();
@@ -547,6 +558,68 @@ button{font-family:var(--body);cursor:pointer}
       sug.innerHTML='<div class="iv-err">Génération indisponible : '+(e&&e.message?e.message:e)+'. Vous pouvez choisir manuellement ci-dessous.</div>';
     }
     btn.disabled=false; btn.textContent=old;
+  };
+
+  // ===== ÉTAPE DU SITE (aperçu → validation → mise en ligne) =====
+  function siteUrlSure(u){ try{ var x=new URL(u, location.href); return (x.protocol==="https:"||x.protocol==="http:") ? x.href : ""; }catch(e){ return ""; } }
+  function siteJour(iso){ try{ return new Date(iso).toLocaleDateString("fr-FR",{ day:"numeric", month:"long" }); }catch(e){ return ""; } }
+  function siteAccueil(txt, badge, bouton){
+    var t=g("home-site-txt"), b=g("home-site-badge"), go=g("home-site-go");
+    if(t) t.textContent=txt; if(b) b.textContent=badge; if(go) go.style.display = bouton ? "" : "none";
+  }
+  function renderSite(){
+    var box=g("site-etat"); if(!box) return;
+    var s=CLIENT.site;
+    if(!s){ box.style.display="none"; return; }
+    var ap=siteUrlSure(s.apercu), url=siteUrlSure(s.url), h="";
+    if(s.etape==="apercu" && ap){
+      h='<span class="etape">Aperçu à valider</span><h3>Votre nouveau site est prêt à être découvert</h3>'+
+        '<p class="card-sub">Parcourez-le ci-dessous. S\'il vous plaît, validez-le ; sinon, dites-nous simplement ce que vous souhaitez changer.</p>'+
+        '<iframe class="site-frame" src="'+esc(ap)+'" title="Aperçu de votre site" loading="lazy"></iframe>'+
+        '<div class="site-actions"><button type="button" class="btn-primary" id="site-valider" onclick="siteValider()">Je valide mon site</button>'+
+        '<button type="button" class="btn-sec" onclick="siteDemanderModif()">Je demande une modification</button>'+
+        '<a class="btn-sec" href="'+esc(ap)+'" target="_blank" rel="noopener">Ouvrir en grand</a></div>'+
+        '<div class="iv-msg" id="site-feedback" aria-live="polite"></div>';
+      siteAccueil("L'aperçu de votre nouveau site est prêt : découvrez-le et validez-le.", "Aperçu à valider", true);
+    } else if(s.etape==="valide" || s.etape==="a_publier"){
+      h='<span class="etape">Validé</span><h3>Merci, vous avez validé votre site'+(s.valide?' le '+esc(siteJour(s.valide)):'')+'</h3>'+
+        '<p class="card-sub">DWT Digital s\'occupe de la mise en ligne. Vous serez prévenue ici dès que votre site sera visible par tous.</p>'+
+        (ap?'<div class="site-actions"><a class="btn-sec" href="'+esc(ap)+'" target="_blank" rel="noopener">Revoir l\'aperçu</a></div>':'');
+      siteAccueil("Vous avez validé votre site : mise en ligne en cours.", "Validé", true);
+    } else if(s.etape==="en_ligne" && url){
+      h='<span class="etape">En ligne</span><h3>Votre site est en ligne</h3>'+
+        '<p class="card-sub">Il est visible par tous. Partagez-le sur Instagram et auprès de vos clientes !</p>'+
+        '<div class="site-actions"><a class="btn-primary" href="'+esc(url)+'" target="_blank" rel="noopener">Voir mon site</a></div>';
+      siteAccueil("Votre site est en ligne.", "En ligne", true);
+    } else {
+      h='<span class="etape">En préparation</span><h3>Votre site est en cours de création</h3>'+
+        '<p class="card-sub">Vous serez prévenue ici dès que l\'aperçu sera prêt à être découvert.</p>';
+      siteAccueil("Votre site est en cours de création par DWT Digital.", "En préparation", false);
+    }
+    box.innerHTML=h; box.style.display="";
+  }
+  window.siteValider = async function(){
+    var b=g("site-valider"), fb=g("site-feedback"); if(!b) return;
+    if(b.getAttribute("data-arme")!=="1"){
+      b.setAttribute("data-arme","1"); b.textContent="Confirmer : je valide mon site";
+      setTimeout(function(){ if(b.getAttribute("data-arme")==="1" && !b.disabled){ b.removeAttribute("data-arme"); b.textContent="Je valide mon site"; } }, 6000);
+      return;
+    }
+    b.disabled=true; b.textContent="Validation…";
+    var r; try{ r=await sb.rpc("client_valider_site"); }catch(e){ r={ error:e }; }
+    if(r && r.error){
+      b.disabled=false; b.removeAttribute("data-arme"); b.textContent="Je valide mon site";
+      if(fb){ fb.style.color="#ff8b8b"; fb.textContent="La validation n'a pas pu être enregistrée. Réessayez, ou écrivez-nous depuis l'onglet Suivi."; }
+      return;
+    }
+    CLIENT.site.etape="valide"; CLIENT.site.valide=new Date().toISOString();
+    renderSite();
+    try{ loadNotifs(); }catch(e){}
+  };
+  window.siteDemanderModif = function(){
+    var s=g("modif-sujet"), m=g("modif-msg");
+    if(s) s.value="Autre";
+    if(m){ if(!m.value) m.value="Sur l'aperçu de mon site, j'aimerais modifier : "; m.focus(); try{ m.scrollIntoView({ behavior:"smooth", block:"center" }); }catch(e){} }
   };
 
   // ===== ONGLET MON SITE (demandes de modification) =====
