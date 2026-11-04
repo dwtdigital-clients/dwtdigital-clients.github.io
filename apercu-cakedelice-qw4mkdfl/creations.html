@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Nos créations — Cake Délice, Valence</title>
+<meta name="description" content="Découvrez les créations Cake Délice : layer cakes, bento cakes, cookies et gâteaux sur-mesure faits main à Valence. Filtrez par type et commandez.">
+<link rel="canonical" href="https://dwtdigital.fr/cake-delice/creations.html">
+<meta name="theme-color" content="#FBF6EF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Jost:wght@400;500;600;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/cake.css">
+<style>
+.filters{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:0 0 34px;}
+.chip{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:999px;padding:10px 20px;font-family:var(--font);font-weight:600;font-size:13px;cursor:pointer;transition:all .2s var(--ease);}
+.chip:hover{border-color:var(--accent);color:var(--accent);}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.item{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:transform .25s var(--ease),box-shadow .25s,opacity .3s;}
+.item:hover{transform:translateY(-4px);box-shadow:0 24px 44px -30px rgba(43,30,31,.55);}
+.item__img{aspect-ratio:1;overflow:hidden;}
+.item__img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease);}
+.item:hover .item__img img{transform:scale(1.06);}
+.item__body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:4px;flex:1;}
+.item__cat{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--p);}
+.item__nom{font-weight:600;font-size:17px;}
+.item__bas{display:flex;align-items:center;justify-content:space-between;margin-top:12px;}
+.item__prix{font-weight:700;color:var(--accent);}
+.item__cmd{min-height:40px;padding:0 16px;border-radius:999px;background:var(--rose-soft);color:var(--accent);font-weight:600;font-size:13px;display:inline-flex;align-items:center;}
+.item:hover .item__cmd{background:var(--accent);color:#fff;}
+.item.hide{display:none;}
+@media(max-width:920px){.grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar__in">
+    <a class="marque" href="index.html">Cake Délice</a>
+    <nav class="appbar__nav" aria-label="Navigation principale">
+      <a href="creations.html" class="actif">Nos créations</a>
+      <a href="histoire.html">Notre histoire</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="appbar__right">
+      <a class="btn btn--plein" href="commander.html" style="min-height:44px;padding:0 22px;">Commander</a>
+      <button class="burger" id="burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu-mobile"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<nav class="menu-mobile" id="menu-mobile" aria-label="Menu mobile">
+  <a href="creations.html">Nos créations</a>
+  <a href="histoire.html">Notre histoire</a>
+  <a href="contact.html">Contact</a>
+  <a class="cmd" href="commander.html">Commander</a>
+</nav>
+
+<main>
+  <section class="page-head">
+    <div class="wrap"><span class="eyebrow">La carte</span><h1>Nos <em>créations</em></h1>
+    <p>Layer cakes, bento cakes, cookies et gâteaux sur-mesure — chaque pièce est faite main et personnalisée selon votre occasion. Les prix de base varient selon la taille, les saveurs et la décoration.</p></div>
+  </section>
+
+  <section style="padding:clamp(34px,5vw,54px) 0;">
+    <div class="wrap">
+      <div class="filters" role="tablist" aria-label="Filtrer les créations">
+        <button class="chip on" type="button" data-filter="tout" aria-pressed="true">Tout</button>
+        <button class="chip" type="button" data-filter="layer" aria-pressed="false">Layer cakes</button>
+        <button class="chip" type="button" data-filter="bento" aria-pressed="false">Bento cakes</button>
+        <button class="chip" type="button" data-filter="cookies" aria-pressed="false">Cookies</button>
+        <button class="chip" type="button" data-filter="surmesure" aria-pressed="false">Sur-mesure</button>
+      </div>
+      <div class="grid" id="grid">
+        <article class="item" data-cat="layer"><div class="item__img"><img src="assets/photos/jardin-roses.jpg" alt="Layer cake jardin de roses" loading="lazy"></div><div class="item__body"><span class="item__cat">Layer cake</span><span class="item__nom">Jardin de roses</span><div class="item__bas"><span class="item__prix">dès 20 €</span><a class="item__cmd" href="commander.html">Commander</a></div></div></article>
+        <article class="item" data-cat="layer"><div class="item__img"><img src="assets/photos/couronne-doree.jpg" alt="Layer cake couronne dorée" loading="lazy"></div><div class="item__body"><span class="item__cat">Layer cake</span><span class="item__nom">Couronne dorée</span><div class="item__bas"><span class="item__prix">dès 20 €</span><a class="item__cmd" href="commander.html">Commander</a></div></div></article>
+        <article class="item" data-cat="surmesure"><div class="item__img"><img src="assets/photos/coeur-rouge.jpg" alt="Gâteau cœur personnalisé" loading="lazy"></div><div class="item__body"><span class="item__cat">Sur-mesure</span><span class="item__nom">Cœur personnalisé</span><div class="item__bas"><span class="item__prix">dès 20 €</span><a class="item__cmd" href="commander.html">Commander</a></div></div></article>
+        <article class="item" data-cat="bento"><div class="item__img"><img src="assets/photos/bento-cerisier.jpg" alt="Bento cake fleur de cerisier" loading="lazy"></div><div class="item__body"><span class="item__cat">Bento cake</span><span class="item__nom">Fleur de cerisier</span><div class="item__bas"><span class="item__prix">15 €</span><a class="item__cmd" href="commander.html">Commander</a></div></div></article>
+        <article class="item" data-cat="bento"><div class="item__img"><img src="assets/photos/bento-panda.jpg" alt="Bento cake panda" loading="lazy"></div><div class="item__body"><span class="item__cat">Bento cake</span><span class="item__nom">Panda gourmand</span><div class="item__bas"><span class="item__prix">15 €</span><a class="item__cmd" href="commander.html">Commander</a></div></div></article>
+        <article class="item" data-cat="bento"><div class="item__img"><img src="assets/photos/bento-bye-hello.jpg" alt="Bento cake anniversaire" loading="lazy"></div><div class="item__body"><span class="item__cat">Bento cake</span><span class="item__nom">Anniversaire</span><div class="item__bas"><span class="item__prix">15 €</span><a class="item__cmd" href="commander.html">Commander</a></div></div></article>
+        <article class="item" data-cat="surmesure"><div class="item__img"><img src="assets/photos/bento-tunisie.jpg" alt="Gâteau thème personnalisé" loading="lazy"></div><div class="item__body"><span class="item__cat">Sur-mesure</span><span class="item__nom">Thème personnalisé</span><div class="item__bas"><span class="item__prix">dès 20 €</span><a class="item__cmd" href="commander.html">Commander</a></div></div></article>
+        <article class="item" data-cat="layer"><div class="item__img"><img src="assets/photos/vintage-blanc.jpg" alt="Layer cake vintage crème" loading="lazy"></div><div class="item__body"><span class="item__cat">Layer cake</span><span class="item__nom">Vintage crème</span><div class="item__bas"><span class="item__prix">dès 20 €</span><a class="item__cmd" href="commander.html">Commander</a></div></div></article>
+        <article class="item" data-cat="layer"><div class="item__img"><img src="assets/photos/vintage-marbre.jpg" alt="Layer cake vintage marbré" loading="lazy"></div><div class="item__body"><span class="item__cat">Layer cake</span><span class="item__nom">Vintage marbré</span><div class="item__bas"><span class="item__prix">dès 20 €</span><a class="item__cmd" href="commander.html">Commander</a></div></div></article>
+        <article class="item" data-cat="cookies"><div class="item__img"><img src="assets/photos/cookies-chocolat.jpg" alt="Cookies chocolat" loading="lazy"></div><div class="item__body"><span class="item__cat">Cookies</span><span class="item__nom">Cookies chocolat</span><div class="item__bas"><span class="item__prix">sur commande</span><a class="item__cmd" href="commander.html">Commander</a></div></div></article>
+        <article class="item" data-cat="cookies"><div class="item__img"><img src="assets/photos/cookies-biscoff.jpg" alt="Cookies Biscoff" loading="lazy"></div><div class="item__body"><span class="item__cat">Cookies</span><span class="item__nom">Cookies Biscoff</span><div class="item__bas"><span class="item__prix">sur commande</span><a class="item__cmd" href="commander.html">Commander</a></div></div></article>
+        <article class="item" data-cat="cookies"><div class="item__img"><img src="assets/photos/cookies-framboise.jpg" alt="Cookies framboise et chocolat blanc" loading="lazy"></div><div class="item__body"><span class="item__cat">Cookies</span><span class="item__nom">Framboise &amp; chocolat blanc</span><div class="item__bas"><span class="item__prix">sur commande</span><a class="item__cmd" href="commander.html">Commander</a></div></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta"><div class="wrap"><div class="cta__box">
+    <h2>Une idée en tête ?</h2>
+    <p>Dites-moi votre occasion, le nombre de parts et vos envies — je crée la pièce qui vous ressemble.</p>
+    <a class="btn btn--clair" href="commander.html">Commander mon gâteau</a>
+  </div></div></section>
+</main>
+
+<footer><div class="wrap">
+  <div class="foot">
+    <div><div class="marque">Cake Délice</div><p style="margin:12px 0 0;max-width:280px">Pâtisserie artisanale à Valence. Layer cakes, bento cakes et gâteaux sur-mesure faits main.</p></div>
+    <div><h4>Navigation</h4><a href="creations.html">Nos créations</a><a href="histoire.html">Notre histoire</a><a href="commander.html">Commander</a><a href="contact.html">Contact</a></div>
+    <div><h4>Contact</h4><a href="tel:+33782929694">07 82 92 96 94</a><a href="mailto:cakedelice26000@gmail.com">cakedelice26000@gmail.com</a><a href="https://www.instagram.com/cakedelice26" target="_blank" rel="noopener">Instagram @cakedelice26</a><span style="display:block;margin-top:6px">Valence &amp; alentours (35 km)</span></div>
+  </div>
+  <div class="foot__bas"><span>© 2026 Cake Délice — Pâtisserie artisanale, Valence</span><span>Site créé par <a href="https://dwtdigital.fr" target="_blank" rel="noopener">DWT Digital</a></span></div>
+</div></footer>
+
+<script src="assets/cake.js"></script>
+<script>
+(function(){
+  "use strict";
+  var chips=document.querySelectorAll('.chip');
+  var items=document.querySelectorAll('#grid .item');
+  /* Le bouton Commander pré-remplit le formulaire avec la création choisie */
+  items.forEach(function(it){
+    var nom=it.querySelector('.item__nom'), cmd=it.querySelector('.item__cmd');
+    if(nom && cmd){ cmd.href='commander.html?produit='+encodeURIComponent(nom.textContent)+'&type='+encodeURIComponent(it.getAttribute('data-cat')); }
+  });
+  chips.forEach(function(c){
+    c.addEventListener('click',function(){
+      chips.forEach(function(x){ x.classList.remove('on'); x.setAttribute('aria-pressed','false'); });
+      c.classList.add('on'); c.setAttribute('aria-pressed','true');
+      var f=c.getAttribute('data-filter');
+      items.forEach(function(it){
+        var show = (f==='tout' || it.getAttribute('data-cat')===f);
+        it.classList.toggle('hide',!show);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
