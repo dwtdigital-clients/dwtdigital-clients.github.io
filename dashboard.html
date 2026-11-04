@@ -283,6 +283,23 @@ button{font-family:var(--body);cursor:pointer}
 .pubm-status{font-size:.86rem;color:rgba(255,255,255,.75)}
 .pubm-status a{color:var(--gl,#7BC93A)}
 @media(max-width:560px){ .pubm-row{grid-template-columns:1fr} }
+.cc-site{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);display:none;cursor:default}
+.cc-site.on{display:block}
+.cs-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.cs-lbl{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.cs-etape{font-size:.74rem;font-weight:600;border-radius:999px;padding:3px 10px;background:rgba(212,155,255,.14);color:var(--acc);border:1px solid rgba(212,155,255,.3)}
+.cs-etape.ok{background:rgba(99,175,33,.16);color:var(--gl);border-color:rgba(99,175,33,.35)}
+.cs-etape.wait{background:rgba(243,194,122,.14);color:#f3c27a;border-color:rgba(243,194,122,.35)}
+.cs-txt{font-size:.82rem;color:var(--mut);margin:0 0 8px;line-height:1.45}
+.cs-txt a{color:var(--acc)}
+.cs-in{width:100%;box-sizing:border-box;padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font:inherit;font-size:.8rem;margin-bottom:8px}
+.cs-btns{display:flex;flex-wrap:wrap;gap:8px}
+.cs-btn{padding:8px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--ink);font:inherit;font-size:.8rem;font-weight:600;cursor:pointer}
+.cs-btn.main{background:linear-gradient(120deg,var(--v),var(--g));border-color:transparent;color:#fff}
+.cs-btn[data-arme="1"]{background:#f3c27a;color:#1a0d14;border-color:transparent}
+.cs-btn:disabled{opacity:.6;cursor:wait}
+.cs-st{font-size:.78rem;color:var(--mut);margin-top:6px;min-height:1em}
+.cs-st.err{color:#ff8b8b}
 </style></head>
 <body>
 <div class="pagebg" aria-hidden="true"></div>
@@ -845,11 +862,12 @@ button{font-family:var(--body);cursor:pointer}
     if(c.pack) meta+='<span class="tag pack">'+esc(c.pack)+'</span>';
     if(c.ville) meta+='<span class="tag">'+esc(c.ville)+'</span>';
     if(c.slug) meta+='<span class="tag">/'+esc(c.slug)+'</span>';
-    return '<div class="client-card" data-id="'+esc(c.id)+'" onclick="openClient(\''+esc(c.id)+'\')">'+
+    return '<div class="client-card" data-id="'+esc(c.id)+'"'+(ENGINE ? ' onclick="openClient(\''+esc(c.id)+'\')"' : '')+'>'+
       '<div class="cc-top"><div class="cc-ava">'+esc(initials(c))+'</div>'+
       '<div class="cc-id"><b>'+esc(c.commerce||'Sans nom')+'</b><span>'+esc(c.prenom||'')+'</span></div></div>'+
       '<div class="cc-meta">'+meta+'</div>'+
       '<div class="cc-foot">'+pal+pendHtml+'</div>'+
+      '<div class="cc-site" data-site="'+esc(c.id)+'" onclick="event.stopPropagation()"></div>'+
       '<div style="margin-top:10px;display:flex;justify-content:flex-end"><button type="button" onclick="event.stopPropagation();resetClientAccess(\''+esc(c.id)+'\')" title="Régénérer le mot de passe d\'accès du client" style="font-size:.74rem;font-weight:600;color:#d49bff;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:5px 10px;cursor:pointer">🔑 Réinitialiser l\'accès</button></div>'+
       '</div>';
   }
@@ -887,6 +905,7 @@ button{font-family:var(--body);cursor:pointer}
     renderKpis(rows);
     if(!rows.length){ grid.innerHTML='<p class="empty">Aucun client pour l\'instant.</p>'; return; }
     grid.innerHTML = rows.map(clientCard).join('');
+    loadSites();
   }
 
   // ===== PUBLIER LE SITE (panneau) =====
@@ -901,6 +920,89 @@ button{font-family:var(--body);cursor:pointer}
   };
   var PUB = { client:null, tplCache:{} };
   var ENGINE = (typeof DWT_SITE_ENGINE !== 'undefined') ? DWT_SITE_ENGINE : null;
+  // ===== SITE DU CLIENT : aperçu → validation → mise en ligne (2 étapes) =====
+  var SITES = {};
+  function siteUrlOk(u){ try{ var x=new URL(String(u||'')); return (x.protocol==='https:'||x.protocol==='http:') ? x.href : ''; }catch(e){ return ''; } }
+  function siteBox(id){
+    var all=document.querySelectorAll('.cc-site[data-site]');
+    for(var i=0;i<all.length;i++){ if(all[i].getAttribute('data-site')===String(id)) return all[i]; }
+    return null;
+  }
+  async function loadSites(){
+    if(MODE!=='live' || !sb) return;
+    var r; try{ r=await sb.rpc('admin_sites'); }catch(e){ r={ error:e }; }
+    if(!r || r.error || !Array.isArray(r.data)) return; // script Supabase pas encore passé : on n'affiche rien
+    SITES={};
+    r.data.forEach(function(x){ SITES[String(x.id)]=x; });
+    Object.keys(SITES).forEach(renderSiteBlock);
+  }
+  function siteBtn(id, etape, label, opts){
+    opts=opts||{};
+    return '<button type="button" class="cs-btn'+(opts.main?' main':'')+'" data-id="'+esc(id)+'" data-etape="'+etape+'"'+
+      (opts.confirm?' data-confirm="'+esc(opts.confirm)+'"':'')+' onclick="siteAction(this)">'+esc(label)+'</button>';
+  }
+  function renderSiteBlock(id){
+    var box=siteBox(id), s=SITES[String(id)];
+    if(!box || !s) return;
+    var ap=siteUrlOk(s.site_apercu_url), pub=siteUrlOk(s.site_url), h='', c=clientById(id), nom=(c&&c.commerce)||'ce client';
+    var head=function(lbl,cls){ return '<div class="cs-head"><span class="cs-lbl">Site</span><span class="cs-etape '+(cls||'')+'">'+lbl+'</span></div>'; };
+    var lien=function(u,t){ return u ? '<a href="'+esc(u)+'" target="_blank" rel="noopener">'+t+'</a>' : ''; };
+    switch(s.site_etape){
+      case 'apercu':
+        h=head('Aperçu envoyé','wait')+
+          '<p class="cs-txt">'+esc(nom)+' peut le voir dans son espace. En attente de sa validation. '+lien(ap,'Voir l\'aperçu')+'</p>'+
+          '<div class="cs-btns">'+siteBtn(id,'valide','Validé de vive voix',{confirm:'Confirmer : validé ?'})+
+          siteBtn(id,'preparation','Retirer l\'aperçu',{confirm:'Confirmer le retrait ?'})+'</div>';
+        break;
+      case 'valide':
+        h=head('Validé par le client','ok')+
+          '<p class="cs-txt">'+(s.site_valide_le?'Validé le '+esc(new Date(s.site_valide_le).toLocaleDateString('fr-FR',{day:'numeric',month:'long'}))+'. ':'')+lien(ap,'Revoir l\'aperçu')+'</p>'+
+          '<div class="cs-btns">'+siteBtn(id,'a_publier','Mettre en ligne',{main:true,confirm:'Confirmer la mise en ligne ?'})+'</div>';
+        break;
+      case 'a_publier':
+        h=head('Mise en ligne demandée','wait')+
+          '<p class="cs-txt">Dis à Claude Code : « publie le site de '+esc(nom)+' ». Une fois en ligne, confirme l\'adresse publique ci-dessous.</p>'+
+          '<input class="cs-in" name="public" type="url" value="'+esc(pub)+'" placeholder="https://dwtdigital.fr/…" aria-label="Adresse publique du site">'+
+          '<div class="cs-btns">'+siteBtn(id,'en_ligne','Marquer comme en ligne',{main:true,confirm:'Confirmer : site en ligne ?'})+'</div>';
+        break;
+      case 'en_ligne':
+        h=head('En ligne','ok')+
+          '<p class="cs-txt">'+(pub?lien(pub,pub.replace(/^https?:\/\//,'')):'Adresse non renseignée')+'</p>'+
+          '<div class="cs-btns">'+siteBtn(id,'preparation','Préparer une nouvelle version',{confirm:'Confirmer ?'})+'</div>';
+        break;
+      default:
+        h=head('En préparation')+
+          '<input class="cs-in" name="apercu" type="url" value="'+esc(ap)+'" placeholder="Adresse de l\'aperçu (https://…)" aria-label="Adresse de l\'aperçu">'+
+          '<div class="cs-btns">'+siteBtn(id,'apercu','Montrer l\'aperçu au client',{main:true})+'</div>';
+    }
+    box.innerHTML=h+'<div class="cs-st" aria-live="polite"></div>';
+    box.classList.add('on');
+  }
+  window.siteAction = async function(btn){
+    var id=btn.getAttribute('data-id'), etape=btn.getAttribute('data-etape'), conf=btn.getAttribute('data-confirm');
+    var box=siteBox(id); if(!box) return;
+    var st=box.querySelector('.cs-st'); st.className='cs-st'; st.textContent='';
+    if(conf && btn.getAttribute('data-arme')!=='1'){
+      var label=btn.textContent; btn.setAttribute('data-arme','1'); btn.textContent=conf;
+      setTimeout(function(){ if(btn.getAttribute('data-arme')==='1' && !btn.disabled){ btn.removeAttribute('data-arme'); btn.textContent=label; } }, 5000);
+      return;
+    }
+    var inAp=box.querySelector('[name=apercu]'), inPub=box.querySelector('[name=public]');
+    var ap=inAp ? inAp.value.trim() : '', pub=inPub ? inPub.value.trim() : '';
+    if(etape==='apercu' && !siteUrlOk(ap)){ st.className='cs-st err'; st.textContent='Adresse d\'aperçu invalide : elle doit commencer par https://'; return; }
+    if(etape==='en_ligne' && !siteUrlOk(pub)){ st.className='cs-st err'; st.textContent='Adresse publique invalide : elle doit commencer par https://'; return; }
+    btn.disabled=true; st.textContent='Enregistrement…';
+    var r; try{ r=await sb.rpc('admin_maj_site',{ p_client:String(id), p_etape:etape, p_apercu_url:ap||null, p_site_url:pub||null }); }catch(e){ r={ error:e }; }
+    if(r && r.error){ btn.disabled=false; btn.removeAttribute('data-arme'); st.className='cs-st err'; st.textContent='Échec : '+((r.error&&r.error.message)||'erreur inconnue'); return; }
+    await loadSites();
+    var b2=siteBox(id), st2=b2 && b2.querySelector('.cs-st');
+    if(st2){
+      st2.textContent = etape==='apercu' ? 'Aperçu envoyé : le client a reçu un message dans son espace.'
+        : etape==='a_publier' ? 'Demande de mise en ligne enregistrée.'
+        : etape==='en_ligne' ? 'Site marqué en ligne : le client a été prévenu.' : 'Enregistré.';
+    }
+  };
+
 
   window.openClient = function(id){
     var c = clientById(id); if(!c) return;
