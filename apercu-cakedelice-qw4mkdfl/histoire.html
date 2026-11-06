@@ -32,9 +32,9 @@
 @media(max-width:920px){.story__grid{grid-template-columns:1fr;}.story__photo{max-width:440px;margin:0 auto;}.valeurs__grid{grid-template-columns:1fr;}.mini-gal{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
-<body>
+<body data-page="Notre histoire">
 
-<header class="appbar">
+<header class="appbar" data-repere="En-tête (logo et menu)">
   <div class="appbar__in">
     <a class="marque" href="index.html">Cake Délice</a>
     <nav class="appbar__nav" aria-label="Navigation principale">
@@ -48,7 +48,7 @@
     </div>
   </div>
 </header>
-<nav class="menu-mobile" id="menu-mobile" aria-label="Menu mobile">
+<nav class="menu-mobile" id="menu-mobile" aria-label="Menu mobile" data-repere="Menu mobile">
   <a href="creations.html">Nos créations</a>
   <a href="histoire.html">Notre histoire</a>
   <a href="contact.html">Contact</a>
@@ -56,11 +56,11 @@
 </nav>
 
 <main>
-  <section class="page-head">
+  <section class="page-head" data-repere="Titre de la page">
     <div class="wrap"><span class="eyebrow">Notre histoire</span><h1>Une passion née d'un <em>nouveau départ</em></h1></div>
   </section>
 
-  <section class="story"><div class="wrap">
+  <section class="story" data-repere="Mon histoire"><div class="wrap">
     <div class="story__grid">
       <div class="story__photo reveal">
         <img src="assets/photos/couronne-doree.jpg" alt="Layer cake Couronne dorée, création de Lise">
@@ -70,19 +70,19 @@
         <p>Je suis une jeune maman de 24 ans, et j'ai toujours évolué dans le milieu de la restauration.</p>
         <p>Mon métier en cuisine était peu compatible avec la vie de maman. J'ai donc décidé de laisser la cuisine pour me consacrer à la pâtisserie — et ce qui n'était qu'un changement de cap est très vite devenu une vraie passion.</p>
         <p>Aujourd'hui, depuis Valence, je prépare chaque gâteau à la main, sur commande, en l'adaptant à votre occasion, à vos couleurs et à vos envies.</p>
-        <div class="story__quote">« Chaque commande est une nouvelle occasion de créer une pièce unique, pensée pour vous. »</div>
+        <div class="story__quote" data-repere="Citation">« Chaque commande est une nouvelle occasion de créer une pièce unique, pensée pour vous. »</div>
       </div>
     </div>
   </div></section>
 
-  <section class="valeurs"><div class="wrap">
+  <section class="valeurs" data-repere="Mes valeurs"><div class="wrap">
     <div style="text-align:center"><span class="eyebrow">Ce qui compte pour moi</span><h2 class="h-sec">Fait main, fait pour vous</h2></div>
     <div class="valeurs__grid">
-      <div class="val reveal"><div class="val__ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div><h3>100 % fait maison</h3><p>Chaque gâteau est préparé à la main, sur commande, jamais à l'avance.</p></div>
-      <div class="val reveal"><div class="val__ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.9L19 9l-4.1 1.1L12 15l-1.9-4.9L6 9l4.1-1.1z"/></svg></div><h3>Sur-mesure</h3><p>Thème, couleurs, saveurs, message : votre gâteau vous ressemble.</p></div>
-      <div class="val reveal"><div class="val__ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><h3>À Valence</h3><p>Livraison sur Valence et alentours (35 km), ou retrait sur rendez-vous.</p></div>
+      <div class="val reveal" data-repere="Valeur « 100 % fait maison »"><div class="val__ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div><h3>100 % fait maison</h3><p>Chaque gâteau est préparé à la main, sur commande, jamais à l'avance.</p></div>
+      <div class="val reveal" data-repere="Valeur « Sur-mesure »"><div class="val__ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.9L19 9l-4.1 1.1L12 15l-1.9-4.9L6 9l4.1-1.1z"/></svg></div><h3>Sur-mesure</h3><p>Thème, couleurs, saveurs, message : votre gâteau vous ressemble.</p></div>
+      <div class="val reveal" data-repere="Valeur « À Valence »"><div class="val__ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><h3>À Valence</h3><p>Livraison sur Valence et alentours (35 km), ou retrait sur rendez-vous.</p></div>
     </div>
-    <div class="mini-gal">
+    <div class="mini-gal" data-repere="Petite galerie photos">
       <img src="assets/photos/jardin-roses.jpg" alt="Layer cake jardin de roses" loading="lazy">
       <img src="assets/photos/bento-cerisier.jpg" alt="Bento cake fleur de cerisier" loading="lazy">
       <img src="assets/photos/coeur-rouge.jpg" alt="Gâteau cœur personnalisé" loading="lazy">
@@ -90,14 +90,14 @@
     </div>
   </div></section>
 
-  <section class="cta"><div class="wrap"><div class="cta__box">
+  <section class="cta" data-repere="Encadré « On crée le vôtre ? »"><div class="wrap"><div class="cta__box">
     <h2>On crée le vôtre ?</h2>
     <p>Racontez-moi votre occasion : je vous prépare un gâteau unique, fait main à Valence.</p>
     <a class="btn btn--clair" href="commander.html">Commander mon gâteau</a>
   </div></div></section>
 </main>
 
-<footer><div class="wrap">
+<footer data-repere="Pied de page"><div class="wrap">
   <div class="foot">
     <div><div class="marque">Cake Délice</div><p style="margin:12px 0 0;max-width:280px">Pâtisserie artisanale à Valence. Layer cakes, bento cakes et gâteaux sur-mesure faits main.</p></div>
     <div><h4>Navigation</h4><a href="creations.html">Nos créations</a><a href="histoire.html">Notre histoire</a><a href="commander.html">Commander</a><a href="contact.html">Contact</a></div>
