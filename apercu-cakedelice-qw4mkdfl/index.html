@@ -159,9 +159,9 @@ footer{background:#160A12;color:rgba(246,220,218,.7);padding:clamp(36px,5vw,56px
 @media(prefers-reduced-motion:reduce){ .reveal,.menu-mobile,.tile__img img,.pcard__img img{transition:none;opacity:1;transform:none;} }
 </style>
 </head>
-<body>
+<body data-page="Accueil">
 
-<header class="appbar">
+<header class="appbar" data-repere="En-tête (logo et menu)">
   <div class="appbar__in">
     <a class="marque" href="index.html">Cake Délice</a>
     <nav class="appbar__nav" aria-label="Navigation principale">
@@ -175,7 +175,7 @@ footer{background:#160A12;color:rgba(246,220,218,.7);padding:clamp(36px,5vw,56px
     </div>
   </div>
 </header>
-<nav class="menu-mobile" id="menu-mobile" aria-label="Menu mobile">
+<nav class="menu-mobile" id="menu-mobile" aria-label="Menu mobile" data-repere="Menu mobile">
   <a href="creations.html">Nos créations</a>
   <a href="histoire.html">Notre histoire</a>
   <a href="contact.html">Contact</a>
@@ -184,7 +184,7 @@ footer{background:#160A12;color:rgba(246,220,218,.7);padding:clamp(36px,5vw,56px
 
 <main>
   <!-- HERO CARD -->
-  <section class="hero"><div class="wrap">
+  <section class="hero" data-repere="Grande photo d&#x27;accueil"><div class="wrap">
     <div class="hero__card">
       <img src="assets/photos/jardin-roses.jpg" alt="Layer cake sur-mesure décoré d'un jardin de roses" fetchpriority="high">
       <div class="hero__txt">
@@ -197,7 +197,7 @@ footer{background:#160A12;color:rgba(246,220,218,.7);padding:clamp(36px,5vw,56px
   </div></section>
 
   <!-- UNE ENVIE + RECHERCHE -->
-  <section class="envie"><div class="wrap">
+  <section class="envie" data-repere="Une envie sucrée ?"><div class="wrap">
     <div class="envie__row">
       <h2 class="h-sec">Une envie sucrée ?</h2>
       <span class="pill-info"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> Livraison &amp; retrait sur rendez-vous</span>
@@ -210,68 +210,68 @@ footer{background:#160A12;color:rgba(246,220,218,.7);padding:clamp(36px,5vw,56px
   </div></section>
 
   <!-- LA CARTE -->
-  <section class="carte"><div class="wrap">
+  <section class="carte" data-repere="Que souhaitez-vous ?"><div class="wrap">
     <div class="carte__head"><span class="eyebrow">La carte</span><h2 class="h-sec">Que souhaitez-vous ?</h2></div>
     <div class="tiles">
-      <a class="tile" href="commander.html"><span class="tile__img"><img src="assets/photos/couronne-doree.jpg" alt="Layer cakes"></span><span class="tile__nom">Layer cakes</span></a>
-      <a class="tile" href="commander.html"><span class="tile__img"><img src="assets/photos/bento-cerisier.jpg" alt="Bento cakes"></span><span class="tile__nom">Bento cakes</span></a>
-      <a class="tile" href="commander.html"><span class="tile__img"><img src="assets/photos/cookies-chocolat.jpg" alt="Cookies"></span><span class="tile__nom">Cookies</span></a>
-      <a class="tile" href="commander.html"><span class="tile__img"><img src="assets/photos/coeur-rouge.jpg" alt="Gâteaux sur-mesure"></span><span class="tile__nom">Sur-mesure</span></a>
-      <a class="tile" href="commander.html"><span class="tile__img"><img src="assets/photos/cookies-framboise.jpg" alt="Pâtisseries"></span><span class="tile__nom">Pâtisseries</span></a>
+      <a class="tile" href="commander.html" data-repere="Vignette « Layer cakes »"><span class="tile__img"><img src="assets/photos/couronne-doree.jpg" alt="Layer cakes"></span><span class="tile__nom">Layer cakes</span></a>
+      <a class="tile" href="commander.html" data-repere="Vignette « Bento cakes »"><span class="tile__img"><img src="assets/photos/bento-cerisier.jpg" alt="Bento cakes"></span><span class="tile__nom">Bento cakes</span></a>
+      <a class="tile" href="commander.html" data-repere="Vignette « Cookies »"><span class="tile__img"><img src="assets/photos/cookies-chocolat.jpg" alt="Cookies"></span><span class="tile__nom">Cookies</span></a>
+      <a class="tile" href="commander.html" data-repere="Vignette « Sur-mesure »"><span class="tile__img"><img src="assets/photos/coeur-rouge.jpg" alt="Gâteaux sur-mesure"></span><span class="tile__nom">Sur-mesure</span></a>
+      <a class="tile" href="commander.html" data-repere="Vignette « Pâtisseries »"><span class="tile__img"><img src="assets/photos/cookies-framboise.jpg" alt="Pâtisseries"></span><span class="tile__nom">Pâtisseries</span></a>
     </div>
   </div></section>
 
   <!-- NOS PRODUITS -->
-  <section class="produits"><div class="wrap">
+  <section class="produits" data-repere="Les plus demandés"><div class="wrap">
     <span class="eyebrow">Nos créations</span><h2 class="h-sec">Les plus demandés</h2>
     <div class="pg">
-      <article class="pcard reveal"><a href="commander.html"><div class="pcard__img"><img src="assets/photos/jardin-roses.jpg" alt="Jardin de roses"></div></a>
+      <article class="pcard reveal" data-repere="Carte « Jardin de roses »"><a href="commander.html"><div class="pcard__img"><img src="assets/photos/jardin-roses.jpg" alt="Jardin de roses"></div></a>
         <div class="pcard__body"><span class="pcard__cat">Layer cake</span><span class="pcard__nom">Jardin de roses</span>
           <div class="pcard__bas"><span class="pcard__prix">dès 20 €</span><a class="pcard__cmd" href="commander.html">Commander</a></div></div></article>
-      <article class="pcard reveal"><a href="commander.html"><div class="pcard__img"><img src="assets/photos/couronne-doree.jpg" alt="Couronne dorée"></div></a>
+      <article class="pcard reveal" data-repere="Carte « Couronne dorée »"><a href="commander.html"><div class="pcard__img"><img src="assets/photos/couronne-doree.jpg" alt="Couronne dorée"></div></a>
         <div class="pcard__body"><span class="pcard__cat">Layer cake</span><span class="pcard__nom">Couronne dorée</span>
           <div class="pcard__bas"><span class="pcard__prix">dès 20 €</span><a class="pcard__cmd" href="commander.html">Commander</a></div></div></article>
-      <article class="pcard reveal"><a href="commander.html"><div class="pcard__img"><img src="assets/photos/bento-cerisier.jpg" alt="Bento fleur de cerisier"></div></a>
+      <article class="pcard reveal" data-repere="Carte « Fleur de cerisier »"><a href="commander.html"><div class="pcard__img"><img src="assets/photos/bento-cerisier.jpg" alt="Bento fleur de cerisier"></div></a>
         <div class="pcard__body"><span class="pcard__cat">Bento cake</span><span class="pcard__nom">Fleur de cerisier</span>
           <div class="pcard__bas"><span class="pcard__prix">15 €</span><a class="pcard__cmd" href="commander.html">Commander</a></div></div></article>
-      <article class="pcard reveal"><a href="commander.html"><div class="pcard__img"><img src="assets/photos/coeur-rouge.jpg" alt="Cœur passion"></div></a>
+      <article class="pcard reveal" data-repere="Carte « Cœur passion »"><a href="commander.html"><div class="pcard__img"><img src="assets/photos/coeur-rouge.jpg" alt="Cœur passion"></div></a>
         <div class="pcard__body"><span class="pcard__cat">Sur-mesure</span><span class="pcard__nom">Cœur passion</span>
           <div class="pcard__bas"><span class="pcard__prix">dès 20 €</span><a class="pcard__cmd" href="commander.html">Commander</a></div></div></article>
-      <article class="pcard reveal"><a href="commander.html"><div class="pcard__img"><img src="assets/photos/vintage-marbre.jpg" alt="Italian cake"></div></a>
+      <article class="pcard reveal" data-repere="Carte « Italian cake »"><a href="commander.html"><div class="pcard__img"><img src="assets/photos/vintage-marbre.jpg" alt="Italian cake"></div></a>
         <div class="pcard__body"><span class="pcard__cat">Layer cake</span><span class="pcard__nom">Italian cake</span>
           <div class="pcard__bas"><span class="pcard__prix">dès 20 €</span><a class="pcard__cmd" href="commander.html">Commander</a></div></div></article>
-      <article class="pcard reveal"><a href="commander.html"><div class="pcard__img"><img src="assets/photos/cookies-framboise.jpg" alt="Cookies framboise et chocolat blanc"></div></a>
+      <article class="pcard reveal" data-repere="Carte « Framboise &amp; chocolat blanc »"><a href="commander.html"><div class="pcard__img"><img src="assets/photos/cookies-framboise.jpg" alt="Cookies framboise et chocolat blanc"></div></a>
         <div class="pcard__body"><span class="pcard__cat">Cookies</span><span class="pcard__nom">Framboise &amp; chocolat blanc</span>
           <div class="pcard__bas"><span class="pcard__prix">sur commande</span><a class="pcard__cmd" href="commander.html">Commander</a></div></div></article>
     </div>
   </div></section>
 
   <!-- INFOS -->
-  <section class="infos"><div class="wrap"><div class="infos__grid">
-    <div class="info"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect width="7" height="9" x="14" y="8" rx="1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg><div><b>Livraison dans tout Valence et alentours (35 km max)</b><span>Livraison offerte dès 30&nbsp;€, uniquement sur&nbsp;Valence</span></div></div>
-    <div class="info"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><div><b>100 % fait maison</b><span>Chaque gâteau est unique et personnalisé</span></div></div>
-    <div class="info"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Commandez à l'avance</b><span>Acompte 5 j avant (layer cakes), 2 j (bento)</span></div></div>
+  <section class="infos" data-repere="Bandeau infos"><div class="wrap"><div class="infos__grid">
+    <div class="info" data-repere="Encadré « Livraison dans tout Valence et alentours (35 km max) »"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/><rect width="7" height="9" x="14" y="8" rx="1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg><div><b>Livraison dans tout Valence et alentours (35 km max)</b><span>Livraison offerte dès 30&nbsp;€, uniquement sur&nbsp;Valence</span></div></div>
+    <div class="info" data-repere="Encadré « 100 % fait maison »"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><div><b>100 % fait maison</b><span>Chaque gâteau est unique et personnalisé</span></div></div>
+    <div class="info" data-repere="Encadré « Commandez à l&#x27;avance »"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>Commandez à l'avance</b><span>Acompte 5 j avant (layer cakes), 2 j (bento)</span></div></div>
   </div></div></section>
 
   <!-- AVIS -->
-  <section class="avis"><div class="wrap">
+  <section class="avis" data-repere="Avis clientes"><div class="wrap">
     <div style="text-align:center"><span class="eyebrow">Avis clientes</span><h2 class="h-sec">Elles ont adoré</h2></div>
     <div class="avis__grid">
-      <div class="acard reveal"><div class="acard__stars" aria-label="5 sur 5"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><blockquote>Super bon, le gâteau était vraiment délicieux ! Je recommanderai pour ma baby shower.</blockquote><cite>Une cliente</cite></div>
-      <div class="acard reveal"><div class="acard__stars" aria-label="5 sur 5"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><blockquote>Je n'ai eu que de bons retours, il était vraiment très réussi. Je n'hésiterai pas pour d'autres occasions.</blockquote><cite>Une cliente</cite></div>
-      <div class="acard reveal"><div class="acard__stars" aria-label="5 sur 5"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><blockquote>Merci, il était trop trop bon ! Je recommande sans hésiter.</blockquote><cite>Une cliente</cite></div>
+      <div class="acard reveal" data-repere="Avis n°1"><div class="acard__stars" aria-label="5 sur 5"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><blockquote>Super bon, le gâteau était vraiment délicieux ! Je recommanderai pour ma baby shower.</blockquote><cite>Une cliente</cite></div>
+      <div class="acard reveal" data-repere="Avis n°2"><div class="acard__stars" aria-label="5 sur 5"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><blockquote>Je n'ai eu que de bons retours, il était vraiment très réussi. Je n'hésiterai pas pour d'autres occasions.</blockquote><cite>Une cliente</cite></div>
+      <div class="acard reveal" data-repere="Avis n°3"><div class="acard__stars" aria-label="5 sur 5"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><blockquote>Merci, il était trop trop bon ! Je recommande sans hésiter.</blockquote><cite>Une cliente</cite></div>
     </div>
   </div></section>
 
   <!-- CTA -->
-  <section class="cta"><div class="wrap"><div class="cta__box">
+  <section class="cta" data-repere="Encadré « Un gâteau en tête ? »"><div class="wrap"><div class="cta__box">
     <h2>Un gâteau en tête ?</h2>
     <p>Dites-moi votre occasion, vos envies et le nombre de parts — je vous prépare une création unique, rien que pour vous.</p>
     <a class="btn btn--clair" href="commander.html">Commander mon gâteau</a>
   </div></div></section>
 </main>
 
-<footer><div class="wrap">
+<footer data-repere="Pied de page"><div class="wrap">
   <div class="foot">
     <div><div class="marque" style="font-family:var(--font-script)">Cake Délice</div><p style="margin:12px 0 0;max-width:280px">Pâtisserie artisanale à Valence. Layer cakes, bento cakes et gâteaux sur-mesure faits main.</p></div>
     <div><h4>Navigation</h4><a href="creations.html">Nos créations</a><a href="histoire.html">Notre histoire</a><a href="commander.html">Commander</a><a href="contact.html">Contact</a></div>
