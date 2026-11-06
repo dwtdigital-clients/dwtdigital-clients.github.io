@@ -101,6 +101,23 @@ button{font-family:var(--body);cursor:pointer}
 .btn-sec{display:inline-flex;align-items:center;justify-content:center;padding:12px 20px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--ink);font-weight:600;font-size:.9rem;cursor:pointer;text-decoration:none;font-family:inherit}
 .btn-sec:hover{background:rgba(255,255,255,.06)}
 .btn-sm{padding:8px 16px;font-size:.82rem;margin-top:12px}
+.pt-barre{margin:4px 0 10px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(123,31,162,.32),rgba(123,31,162,.12));border:1px solid rgba(212,155,255,.45)}
+.pt-txt{margin:0 0 10px;font-size:.9rem;line-height:1.45;color:var(--ink);overflow-wrap:anywhere}
+.pt-txt b{font-weight:600}
+.pt-aide{display:block;color:var(--mut);font-size:.8rem;margin-top:3px}
+.pt-ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pt-ctrl .btn-sm{margin-top:0}
+.pt-page-l{display:inline-flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;color:var(--mut)}
+.pt-page-l select{padding:7px 10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--ink);font-family:inherit;font-size:.85rem}
+.pt-page-l select option{background:#1a0b22;color:var(--ink)}
+.btn-primary.pt-ecrire{width:auto;margin-top:0;padding:8px 16px;font-size:.82rem}
+.site-frame.pt-on{outline:2px solid var(--acc);outline-offset:2px}
+.pt-choix{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:10px 12px;border-radius:12px;border:1px dashed var(--border);font-size:.85rem;margin-bottom:8px}
+.pt-lieu{color:var(--ink);font-weight:500;overflow-wrap:anywhere}
+.pt-vide{color:var(--mut)}
+.pt-x{border:0;background:transparent;color:var(--acc);font:inherit;font-size:.8rem;font-weight:600;cursor:pointer;padding:2px 4px;text-decoration:underline}
+#pt-field .btn-sm{margin-top:0}
+#pt-panel{margin-bottom:18px}
 .iv-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 .iv-banner{display:flex;align-items:center;gap:9px;background:rgba(99,175,33,.12);border:1px solid rgba(99,175,33,.32);border-radius:13px;padding:11px 14px;margin-bottom:16px;font-size:.85rem;color:var(--gl)}
 .iv-colors{display:flex;flex-direction:column;gap:11px;margin-bottom:18px}
@@ -151,7 +168,7 @@ button{font-family:var(--body);cursor:pointer}
 .modif-item{padding:12px 14px;border-radius:13px;border:1px solid var(--border);background:rgba(255,255,255,.04)}
 .modif-item .mh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px}
 .modif-item .ms{font-weight:600;font-size:.88rem}
-.modif-item .mt{color:var(--mut);font-size:.85rem;margin:0;overflow-wrap:break-word}
+.modif-item .mt{color:var(--mut);font-size:.85rem;margin:0;overflow-wrap:break-word;white-space:pre-line}
 .mstatut{font-size:.68rem;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
 .mstatut.en_attente{background:rgba(232,163,61,.18);color:#e8a33d;border:1px solid rgba(232,163,61,.35)}
 .mstatut.en_cours{background:rgba(63,169,255,.16);color:#3fa9ff;border:1px solid rgba(63,169,255,.32)}
@@ -261,6 +278,10 @@ button{font-family:var(--body);cursor:pointer}
         <div class="card">
           <h3>Demander une modification</h3>
           <p class="card-sub">Décrivez ce que vous voulez changer — DWT s'en occupe.</p>
+          <div class="field" id="pt-field" style="display:none"><label>Où sur votre site ?</label>
+            <div class="pt-choix" id="pt-choix"><span class="pt-vide">Aucun endroit choisi : montrez-le sur votre site, ou décrivez-le dans votre message.</span></div>
+            <button type="button" class="btn-sec btn-sm" id="pt-ouvrir" onclick="ptOuvrir()">Montrer l'endroit sur mon site</button>
+          </div>
           <div class="field"><label for="modif-sujet">Type de modification</label>
             <select id="modif-sujet">
               <option>Textes</option>
@@ -569,13 +590,15 @@ button{font-family:var(--body);cursor:pointer}
   }
   function renderSite(){
     var box=g("site-etat"); if(!box) return;
+    if(PT.actif && PT.frame && box.contains(PT.frame)) ptFermer();
+    ptMajBouton();
     var s=CLIENT.site;
     if(!s){ box.style.display="none"; return; }
     var ap=siteUrlSure(s.apercu), url=siteUrlSure(s.url), h="";
     if(s.etape==="apercu" && ap){
       h='<span class="etape">Aperçu à valider</span><h3>Votre nouveau site est prêt à être découvert</h3>'+
         '<p class="card-sub">Parcourez-le ci-dessous. S\'il vous plaît, validez-le ; sinon, dites-nous simplement ce que vous souhaitez changer.</p>'+
-        '<iframe class="site-frame" src="'+esc(ap)+'" title="Aperçu de votre site" loading="lazy"></iframe>'+
+        '<iframe class="site-frame" src="'+esc(siteMemeOrigine(ap))+'" title="Aperçu de votre site"></iframe>'+
         '<div class="site-actions"><button type="button" class="btn-primary" id="site-valider" onclick="siteValider()">Je valide mon site</button>'+
         '<button type="button" class="btn-sec" onclick="siteDemanderModif()">Je demande une modification</button>'+
         '<a class="btn-sec" href="'+esc(ap)+'" target="_blank" rel="noopener">Ouvrir en grand</a></div>'+
@@ -616,10 +639,228 @@ button{font-family:var(--body);cursor:pointer}
     renderSite();
     try{ loadNotifs(); }catch(e){}
   };
-  window.siteDemanderModif = function(){
-    var s=g("modif-sujet"), m=g("modif-msg");
-    if(s) s.value="Autre";
-    if(m){ if(!m.value) m.value="Sur l'aperçu de mon site, j'aimerais modifier : "; m.focus(); try{ m.scrollIntoView({ behavior:"smooth", block:"center" }); }catch(e){} }
+  window.siteDemanderModif = function(){ ptOuvrir(); };
+
+  // ===== MODE « POINTER » : le client touche sur son site l'endroit à modifier =====
+  // Le site est affiché dans un cadre (même adresse dwtdigital.fr) : on lit les repères
+  // invisibles (data-repere) des blocs pour nommer l'endroit choisi. Rien n'est stocké en plus.
+  var PT={ frame:null, actif:false, choix:null, survol:null, sel:null };
+  function siteMemeOrigine(u){
+    try{
+      var x=new URL(u, location.href), h=function(s){ return s.replace(/^www\./,""); };
+      if(h(x.hostname)===h(location.hostname) && x.protocol===location.protocol) return location.origin+x.pathname+x.search;
+      return x.href;
+    }catch(e){ return u; }
+  }
+  function ptUrlSite(){
+    var s=CLIENT.site; if(!s) return "";
+    if(s.etape==="en_ligne") return siteUrlSure(s.url) || siteUrlSure(s.apercu);
+    if(s.etape==="apercu" || s.etape==="valide" || s.etape==="a_publier") return siteUrlSure(s.apercu);
+    return "";
+  }
+  function ptMajBouton(){ var f=g("pt-field"); if(f) f.style.display = ptUrlSite() ? "" : "none"; }
+  function ptExtrait(t){ t=String(t||"").replace(/\s+/g," ").trim(); return t.length>48 ? t.slice(0,46).trim()+"…" : t; }
+  function ptDoc(){
+    try{
+      var w=PT.frame && PT.frame.contentWindow; if(!w) return null;
+      var href=w.location.href; // provoque une erreur si le site est sur une autre adresse
+      var d=PT.frame.contentDocument;
+      if(d && d.body && href!=="about:blank") return d;
+      return null;
+    }catch(e){ return false; }
+  }
+  function ptCible(d, el){
+    if(el && el.nodeType!==1) el=el.parentElement;
+    if(!el || el===d.body || el===d.documentElement || el.id==="dwt-pt-etiq") return null;
+    var svg=el.closest("svg"); if(svg) return svg;
+    if(el.tagName==="IMG") return el;
+    var c=el.closest("h1,h2,h3,h4,h5,h6,p,li,blockquote,button,label,legend,tr,input,select,textarea,cite,figcaption");
+    if(!c) c=el.closest("a,span,b,strong,em,small");
+    if(!c) c=el.closest("[data-repere]");
+    if(!c || c===d.body || c.tagName==="MAIN") return null;
+    return c;
+  }
+  function ptDecrire(c){
+    var t=c.tagName;
+    if(t==="IMG") return "Photo";
+    if(t.toLowerCase()==="svg") return "Icône";
+    if(/^H[1-6]$/.test(t)) return "Titre « "+ptExtrait(c.textContent)+" »";
+    if(t==="TR") return "Ligne « "+ptExtrait(Array.prototype.map.call(c.cells,function(x){ return x.textContent.trim(); }).join(" : "))+" »";
+    if(t==="INPUT" || t==="SELECT" || t==="TEXTAREA"){
+      var f=c.closest(".field,label"), l=f ? (f.tagName==="LABEL" ? f : f.querySelector("label")) : null;
+      return "Champ « "+ptExtrait(l ? l.textContent : (c.name||""))+" »";
+    }
+    if(t==="BUTTON" || (t==="A" && /btn|cmd|cta/i.test(c.className))) return "Bouton « "+ptExtrait(c.textContent)+" »";
+    if(t==="A") return "Lien « "+ptExtrait(c.textContent)+" »";
+    if(c.hasAttribute("data-repere")) return "";
+    var x=ptExtrait(c.textContent); return x ? "Texte « "+x+" »" : "";
+  }
+  function ptChemin(d, c){
+    var parts=[], n=c;
+    while(n && n!==d.documentElement){ if(n.getAttribute && n.getAttribute("data-repere")) parts.unshift(n.getAttribute("data-repere")); n=n.parentElement; }
+    var page=(d.body.getAttribute("data-page")||"").trim();
+    if(!page) page=(d.title||"").split(/\s[—–|-]\s/)[0].trim();
+    var leaf=ptDecrire(c), all=[page].concat(parts);
+    // Texte identique au nom du bloc (ex. le nom d'une carte) : on évite la répétition
+    var m=parts.length ? /«\s(.+)\s»$/.exec(parts[parts.length-1]) : null;
+    var plein=String(c.textContent||"").replace(/\s+/g," ").trim().toLowerCase();
+    if(m && leaf && plein && m[1].toLowerCase()===plein) leaf = /^H[1-6]$/.test(c.tagName) ? "Titre" : "Intitulé";
+    if(leaf) all.push(leaf);
+    return all.filter(Boolean).join(" › ");
+  }
+  function ptTexte(){
+    var t=g("pt-txt"), b=g("pt-ecrire"); if(!t) return;
+    if(PT.choix){
+      t.innerHTML='Endroit choisi : <b>'+esc(PT.choix.lieu)+'</b><span class="pt-aide">Touchez un autre endroit pour changer, puis écrivez votre demande.</span>';
+      if(b) b.style.display="";
+    } else {
+      t.innerHTML='<b>Touchez sur votre site l\'endroit à modifier</b><span class="pt-aide">Un texte, une photo, un bouton… Pour une autre page, choisissez-la dans la liste.</span>';
+      if(b) b.style.display="none";
+    }
+  }
+  function ptMajChoix(){
+    var box=g("pt-choix");
+    if(box){
+      box.innerHTML = PT.choix
+        ? '<span class="pt-lieu">'+esc(PT.choix.lieu)+'</span><button type="button" class="pt-x" onclick="ptRetirer()">Retirer</button>'
+        : '<span class="pt-vide">Aucun endroit choisi : montrez-le sur votre site, ou décrivez-le dans votre message.</span>';
+    }
+    ptTexte();
+  }
+  function ptPages(d){
+    var sel=g("pt-page"), lab=g("pt-page-l"); if(!sel) return;
+    var vu={}, opts=[];
+    Array.prototype.forEach.call(d.querySelectorAll("header a[href], nav a[href]"), function(a){
+      var href=a.getAttribute("href")||"";
+      if(!/^[\w\-\/.]*\.html$/.test(href)) return;
+      var u; try{ u=new URL(href, d.location.href); }catch(e){ return; }
+      if(u.origin!==d.location.origin || vu[u.pathname]) return;
+      vu[u.pathname]=1;
+      var nom=(a.classList.contains("marque") || /(^|\/)index\.html$/.test(u.pathname)) ? "Accueil" : (a.textContent||"").replace(/\s+/g," ").trim();
+      if(nom) opts.push({ v:u.href, l:nom, k:u.pathname });
+    });
+    var cur=d.location.pathname; if(/\/$/.test(cur)) cur+="index.html";
+    sel.innerHTML=opts.map(function(o){ return '<option value="'+esc(o.v)+'"'+(o.k===cur?' selected':'')+'>'+esc(o.l)+'</option>'; }).join("");
+    if(lab) lab.style.display = opts.length>1 ? "" : "none";
+  }
+  function ptActiver(){
+    var d=ptDoc();
+    if(d===false){
+      var t=g("pt-txt"); if(t) t.textContent="Le pointage n'est pas disponible pour ce site : décrivez simplement l'endroit dans votre message.";
+      var l=g("pt-page-l"); if(l) l.style.display="none";
+      return;
+    }
+    if(!d) return; // pas encore chargé : on recommence au chargement du cadre
+    ptPages(d);
+    if(d.__dwtPt) return;
+    var st=d.createElement("style"); st.id="dwt-pt-style";
+    st.textContent='html.dwt-pt,html.dwt-pt *{cursor:crosshair!important}'+
+      '.dwt-pt-survol{outline:2px dashed #9b4dff!important;outline-offset:2px!important}'+
+      '.dwt-pt-choix{outline:3px solid #7B1FA2!important;outline-offset:2px!important}'+
+      'img.dwt-pt-survol,img.dwt-pt-choix{outline-offset:-4px!important}'+
+      '#dwt-pt-etiq{position:absolute;z-index:2147483647;max-width:260px;background:#7B1FA2;color:#fff;font:600 12px/1.35 system-ui,-apple-system,sans-serif;padding:6px 10px;border-radius:9px;box-shadow:0 6px 18px rgba(0,0,0,.25);pointer-events:none}';
+    d.head.appendChild(st);
+    d.documentElement.classList.add("dwt-pt");
+    var h={
+      click:function(e){ e.preventDefault(); e.stopPropagation(); if(e.stopImmediatePropagation) e.stopImmediatePropagation(); ptChoisir(d, e.target); },
+      down:function(e){ var t=e.target; if(t && t.closest && t.closest("input,select,textarea,label")) e.preventDefault(); },
+      focus:function(e){ var t=e.target; if(t && t.blur && /^(INPUT|SELECT|TEXTAREA)$/.test(t.tagName)) t.blur(); },
+      over:function(e){
+        var c=ptCible(d, e.target);
+        if(PT.survol && PT.survol!==c) PT.survol.classList.remove("dwt-pt-survol");
+        if(c && c!==PT.sel) c.classList.add("dwt-pt-survol");
+        PT.survol=c;
+      },
+      out:function(e){ if(!e.relatedTarget && PT.survol){ PT.survol.classList.remove("dwt-pt-survol"); PT.survol=null; } },
+      stop:function(e){ e.preventDefault(); e.stopPropagation(); }
+    };
+    d.addEventListener("click", h.click, true);
+    d.addEventListener("mousedown", h.down, true);
+    d.addEventListener("focusin", h.focus, true);
+    d.addEventListener("mouseover", h.over, true);
+    d.addEventListener("mouseout", h.out, true);
+    d.addEventListener("submit", h.stop, true);
+    d.__dwtPt=h;
+  }
+  function ptDesactiver(){
+    var d=null; try{ d=PT.frame && PT.frame.contentDocument; }catch(e){ d=null; }
+    if(d && d.__dwtPt){
+      var h=d.__dwtPt;
+      d.removeEventListener("click", h.click, true);
+      d.removeEventListener("mousedown", h.down, true);
+      d.removeEventListener("focusin", h.focus, true);
+      d.removeEventListener("mouseover", h.over, true);
+      d.removeEventListener("mouseout", h.out, true);
+      d.removeEventListener("submit", h.stop, true);
+      ["dwt-pt-style","dwt-pt-etiq"].forEach(function(id){ var x=d.getElementById(id); if(x) x.parentNode.removeChild(x); });
+      d.documentElement.classList.remove("dwt-pt");
+      Array.prototype.forEach.call(d.querySelectorAll(".dwt-pt-survol,.dwt-pt-choix"), function(x){ x.classList.remove("dwt-pt-survol","dwt-pt-choix"); });
+      d.__dwtPt=null;
+    }
+    PT.survol=null; PT.sel=null;
+  }
+  function ptChoisir(d, el){
+    var c=ptCible(d, el); if(!c) return;
+    if(PT.sel) PT.sel.classList.remove("dwt-pt-choix");
+    c.classList.remove("dwt-pt-survol"); c.classList.add("dwt-pt-choix"); PT.sel=c;
+    var page=""; try{ page=d.location.pathname.replace(/^\//,""); }catch(e){}
+    PT.choix={ lieu:ptChemin(d, c), page:page };
+    if(c.tagName==="IMG"){ var s=g("modif-sujet"); if(s) s.value="Photos & visuels"; }
+    var et=d.getElementById("dwt-pt-etiq");
+    if(!et){ et=d.createElement("div"); et.id="dwt-pt-etiq"; d.body.appendChild(et); }
+    et.textContent=PT.choix.lieu.split(" › ").slice(-2).join(" › ");
+    var r=c.getBoundingClientRect(), w=d.defaultView, sx=w.pageXOffset||0, sy=w.pageYOffset||0;
+    var top=r.top+sy-et.offsetHeight-8; if(top<sy+4) top=r.bottom+sy+8;
+    var left=Math.max(sx+6, Math.min(r.left+sx, sx+w.innerWidth-et.offsetWidth-6));
+    et.style.top=top+"px"; et.style.left=left+"px";
+    ptMajChoix();
+  }
+  window.ptOuvrir = function(){
+    var url=ptUrlSite(); if(!url) return;
+    var fr=document.querySelector("#site-etat iframe.site-frame");
+    if(!fr || fr.offsetParent===null){
+      var p=g("pt-panel");
+      if(!p){
+        p=document.createElement("div"); p.className="card"; p.id="pt-panel";
+        p.innerHTML='<h3>Montrez l\'endroit à modifier</h3><iframe class="site-frame" title="Votre site" src="'+esc(siteMemeOrigine(url))+'"></iframe>';
+        var grid=document.querySelector('[data-panel="site"] .site-grid'); grid.parentNode.insertBefore(p, grid);
+      }
+      fr=p.querySelector("iframe");
+    }
+    if(PT.frame && PT.frame!==fr) ptDesactiver();
+    PT.frame=fr;
+    if(!fr.__ptLoad){ fr.__ptLoad=true; fr.addEventListener("load", function(){ if(PT.actif && PT.frame===fr){ PT.sel=null; PT.survol=null; ptActiver(); } }); }
+    var bar=g("pt-barre");
+    if(!bar){
+      bar=document.createElement("div"); bar.className="pt-barre"; bar.id="pt-barre";
+      bar.innerHTML='<p class="pt-txt" id="pt-txt"></p><div class="pt-ctrl">'+
+        '<label class="pt-page-l" id="pt-page-l">Page <select id="pt-page" onchange="ptChangerPage(this.value)"></select></label>'+
+        '<button type="button" class="btn-primary pt-ecrire" id="pt-ecrire" style="display:none" onclick="ptEcrire()">Écrire ma demande</button>'+
+        '<button type="button" class="btn-sec btn-sm" onclick="ptFermer()">Terminé</button></div>';
+    }
+    fr.parentNode.insertBefore(bar, fr);
+    PT.actif=true; fr.classList.add("pt-on");
+    ptTexte(); ptActiver();
+    try{ bar.scrollIntoView({ behavior:"smooth", block:"start" }); }catch(e){}
+  };
+  window.ptChangerPage = function(v){ if(PT.frame && v){ PT.sel=null; PT.frame.src=v; } };
+  window.ptEcrire = function(){
+    var m=g("modif-msg"); if(!m) return;
+    try{ m.scrollIntoView({ behavior:"smooth", block:"center" }); }catch(e){}
+    setTimeout(function(){ try{ m.focus(); }catch(e){} }, 350);
+  };
+  window.ptRetirer = function(){
+    var d=ptDoc();
+    if(d){ var et=d.getElementById("dwt-pt-etiq"); if(et) et.parentNode.removeChild(et); }
+    if(PT.sel) PT.sel.classList.remove("dwt-pt-choix");
+    PT.sel=null; PT.choix=null; ptMajChoix();
+  };
+  window.ptFermer = function(){
+    ptDesactiver(); PT.actif=false;
+    if(PT.frame) PT.frame.classList.remove("pt-on");
+    var bar=g("pt-barre"); if(bar) bar.parentNode.removeChild(bar);
+    var p=g("pt-panel"); if(p) p.parentNode.removeChild(p);
+    PT.frame=null; ptMajChoix();
   };
 
   // ===== ONGLET MON SITE (demandes de modification) =====
@@ -649,13 +890,15 @@ button{font-family:var(--body);cursor:pointer}
     var sujet=g('modif-sujet').value;
     var msg=g('modif-msg').value.trim();
     if(!msg){ fb.style.color='#ff8b8b'; fb.textContent='Décrivez votre demande.'; return; }
-    var cible = CLIENT.slug ? (CLIENT.slug+'/index.html') : 'index.html';
+    var lieu = PT.choix ? PT.choix.lieu : '';
+    var cible = (PT.choix && PT.choix.page) ? PT.choix.page : (CLIENT.slug ? (CLIENT.slug+'/index.html') : 'index.html');
+    var complet = (lieu ? 'Endroit : '+lieu+'\n\n' : '') + msg;
     var btn=g('modif-btn'); btn.disabled=true;
     try{
-      var ins=await sb.from('modifications').insert({ client_id:CLIENT.id, sujet:sujet, message_client:msg, statut:'en_attente', fichier_cible:cible });
+      var ins=await sb.from('modifications').insert({ client_id:CLIENT.id, sujet:sujet, message_client:complet.slice(0,4000), statut:'en_attente', fichier_cible:cible });
       if(ins.error) throw ins.error;
-      try{ await sb.from('notifications').insert({ client_id:CLIENT.id, type:'modification', titre:'Demande de modification', contenu:(CLIENT.commerce||'Le client')+' — '+sujet+' : '+msg.slice(0,140), direction:'client_to_ceo' }); }catch(e){}
-      g('modif-msg').value=''; fb.style.color='var(--gl)'; fb.textContent='Demande envoyée ✓';
+      try{ await sb.from('notifications').insert({ client_id:CLIENT.id, type:'modification', titre:'Demande de modification', contenu:(CLIENT.commerce||'Le client')+' — '+sujet+(lieu?' — Endroit : '+lieu:'')+' : '+msg.slice(0,1500), direction:'client_to_ceo' }); }catch(e){}
+      g('modif-msg').value=''; ptRetirer(); fb.style.color='var(--gl)'; fb.textContent='Demande envoyée ✓';
       loadModifs();
     }catch(e){ fb.style.color='#ff8b8b'; fb.textContent='Erreur : '+(e&&e.message?e.message:e); }
     btn.disabled=false;
