@@ -241,11 +241,40 @@ button{font-family:var(--body);cursor:pointer}
 .dstatut.accepte{background:rgba(99,175,33,.16);color:var(--gl);border:1px solid rgba(99,175,33,.3)}
 .dstatut.refuse{background:rgba(255,139,139,.14);color:#ff8b8b;border:1px solid rgba(255,139,139,.32)}
 @media(max-width:880px){.dv-grid{grid-template-columns:1fr}.dv-line{grid-template-columns:1fr 80px 46px 74px 30px}}
+.dv-seg{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.dv-seg label{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;border:1px solid var(--border);font-size:.82rem;font-weight:600;color:var(--mut);cursor:pointer}
+.dv-seg input{accent-color:var(--g)}
+.dv-seg label:has(input:checked){color:var(--ink);border-color:rgba(212,155,255,.55);background:rgba(123,31,162,.18)}
+.dv-cat{width:100%;padding:11px 13px;border-radius:12px;border:1px dashed rgba(212,155,255,.5);background:rgba(123,31,162,.12);color:var(--ink);font-family:inherit;font-size:.86rem;font-weight:600;margin-bottom:12px}
+.dv-cat option,.dv-cat optgroup{background:#1a0b22;color:var(--ink)}
+.dv-lw{margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06)}
+.dv-lw .dv-line{margin-bottom:6px}
+.dv-l-desc{width:100%;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--mut);font-family:inherit;font-size:.78rem}
+.dv-l-desc:focus{outline:none;border-color:var(--acc);color:var(--ink)}
+.dv-empty{font-size:.8rem;color:var(--mut);margin:0 0 12px}
+.dv-rem{padding:12px 14px;border-radius:13px;border:1px solid var(--border);background:rgba(255,255,255,.03);margin-bottom:14px}
+.dv-rem-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px;font-size:.82rem;color:var(--mut)}
+.dv-rem-row>span:first-child{min-width:150px;font-weight:600;color:var(--ink)}
+.dv-rem-row input,.dv-rem-row select{width:84px;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font-family:inherit;font-size:.85rem}
+.dv-rem-row select{width:62px}
+.dv-rem-row select option{background:#1a0b22;color:var(--ink)}
+.dv-rem .field{margin-bottom:0}
+.dv-totals .tt b{font-family:var(--body);font-weight:700;font-variant-numeric:tabular-nums}
+.dv-grid .field textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--ink);font-family:inherit;font-size:.9rem;line-height:1.5;resize:vertical}
+.dv-grid .field textarea:focus{outline:none;border-color:var(--acc);background:rgba(255,255,255,.08)}
+.dv-totals .tt small{display:block;font-size:.72rem;color:var(--mut);font-weight:500;margin-top:1px}
+.dv-totals .tt .pm{font-size:.7rem;font-weight:500;color:var(--mut)}
+.dv-send{font-size:.74rem;font-weight:600;padding:6px 13px;border-radius:999px;border:1px solid rgba(63,169,255,.45);background:rgba(63,169,255,.12);color:#8fcbff;cursor:pointer;font-family:inherit}
+.dv-send:hover{background:rgba(63,169,255,.22)}
+.dv-send[data-arme="1"]{background:rgba(63,169,255,.32);color:#fff}
+.dv-send:disabled{opacity:.6;cursor:default}
+.di-actions{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
 
 /* ===== MOBILE ===== */
 @media(max-width:880px){
   #dwt-app.on{grid-template-columns:1fr}
-  .snav{position:fixed;top:0;left:0;right:0;height:auto;flex-direction:row;align-items:center;gap:4px;overflow-x:auto;padding:12px;border-right:none;border-bottom:1px solid var(--border);z-index:50}
+  .snav{position:fixed;top:0;left:0;right:0;height:auto;flex-direction:row;align-items:center;gap:4px;overflow-x:auto;padding:12px 48px 12px 12px;border-right:none;border-bottom:1px solid var(--border);z-index:50;
+    -webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 52px),rgba(0,0,0,.15) 100%);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 52px),rgba(0,0,0,.15) 100%)} /* bord droit estompé : on voit qu'il y a d'autres onglets */
   .snav-brand{padding:0 8px 0 4px;flex-shrink:0}
   .snav-brand b,.snav-brand .role{display:none}
   .snav-sep{display:none}
@@ -390,6 +419,10 @@ button{font-family:var(--body);cursor:pointer}
         <div class="card">
           <h3>Nouveau devis</h3>
           <p class="card-sub">Pour un prospect au téléphone — pas besoin de compte client.</p>
+          <div class="dv-seg" role="radiogroup" aria-label="Type de client">
+            <label><input type="radio" name="dv-ctype" value="pro" checked onchange="dvClientType()"> Client professionnel</label>
+            <label><input type="radio" name="dv-ctype" value="particulier" onchange="dvClientType()"> Particulier</label>
+          </div>
           <div class="nc-row">
             <div class="field"><label for="dv-nom">Nom</label><input id="dv-nom" placeholder="Julie Martin"></div>
             <div class="field"><label for="dv-commerce">Commerce</label><input id="dv-commerce" placeholder="Fleurs &amp; Co"></div>
@@ -398,21 +431,28 @@ button{font-family:var(--body);cursor:pointer}
             <div class="field"><label for="dv-email">Email</label><input id="dv-email" type="email" autocomplete="off" placeholder="prospect@email.fr"></div>
             <div class="field"><label for="dv-tel">Téléphone</label><input id="dv-tel" placeholder="06 12 34 56 78"></div>
           </div>
-          <div class="field"><label for="dv-pack">Pack (pré-remplit une ligne)</label>
-            <select id="dv-pack" onchange="dvPack()">
-              <option value="">— aucun / sur mesure —</option>
-              <option>Social Only</option>
-              <option>Social Pro</option>
-              <option>Essential</option>
-              <option>Premium</option>
-              <option>Sur Mesure</option>
-            </select>
+          <div class="nc-row">
+            <div class="field"><label for="dv-adresse">Adresse</label><input id="dv-adresse" placeholder="12 rue des Lilas, 75011 Paris"></div>
+            <div class="field" id="dv-siret-f"><label for="dv-siret">SIRET</label><input id="dv-siret" inputmode="numeric" placeholder="123 456 789 00012"></div>
           </div>
           <span class="dv-lines-label">Lignes du devis</span>
+          <select class="dv-cat" id="dv-cat" onchange="dvAjouter(this)" aria-label="Ajouter une prestation du catalogue"></select>
           <div id="dv-lines"></div>
-          <button type="button" class="dv-addline" onclick="dvAddLine()">+ Ajouter une ligne</button>
+          <button type="button" class="dv-addline" onclick="dvAddLine()">+ Ajouter une ligne vide</button>
+          <span class="dv-lines-label">Remise (optionnel)</span>
+          <div class="dv-rem">
+            <div class="dv-rem-row"><span>Sur « À payer une fois »</span><input id="dv-r1-v" type="number" min="0" step="any" placeholder="0" oninput="dvTotals()" aria-label="Remise sur ce qui se paie une fois"><select id="dv-r1-t" onchange="dvTotals()" aria-label="Unité"><option value="%">%</option><option value="€">€</option></select></div>
+            <div class="dv-rem-row"><span>Sur l'abonnement mensuel</span><input id="dv-r2-v" type="number" min="0" step="any" placeholder="0" oninput="dvTotals()" aria-label="Remise sur l'abonnement"><select id="dv-r2-t" onchange="dvTotals()" aria-label="Unité"><option value="%">%</option><option value="€">€</option></select><span>pendant</span><input id="dv-r2-m" type="number" min="0" step="1" placeholder="toujours" oninput="dvTotals()" aria-label="Nombre de mois"><span>mois</span></div>
+            <div class="field"><label for="dv-rtxt">Texte de la remise (affiché sur le devis)</label><textarea id="dv-rtxt" rows="3" placeholder="Remise client fondateur : -100 %…"></textarea></div>
+          </div>
+          <div class="nc-row">
+            <div class="field"><label for="dv-eng">Engagement (abonnement)</label>
+              <select id="dv-eng"><option value="sans">Sans engagement</option><option value="3mois">3 mois minimum</option></select></div>
+            <div class="field"><label for="dv-start">Démarrage de l'abonnement</label><input id="dv-start" placeholder="Ex. : 1er décembre 2026"></div>
+          </div>
+          <div class="field"><label for="dv-delai">Délai de réalisation (site)</label><input id="dv-delai" placeholder="Ex. : 3 semaines après réception des contenus"></div>
           <div class="dv-totals" id="dv-totals"></div>
-          <div class="field"><label for="dv-notes">Notes (optionnel)</label><textarea id="dv-notes" rows="2" placeholder="Engagement 3 mois, sans frais cachés…"></textarea></div>
+          <div class="field"><label for="dv-notes">Notes (optionnel)</label><textarea id="dv-notes" rows="3" placeholder="Ce qui est compris, ce qui ne l'est pas…"></textarea></div>
           <button class="btn-primary" type="button" id="dv-btn" onclick="createDevis()">Enregistrer le devis</button>
           <div class="nc-msg" id="dv-msg" aria-live="polite"></div>
         </div>
@@ -420,6 +460,7 @@ button{font-family:var(--body);cursor:pointer}
           <h3>Devis récents</h3>
           <p class="card-sub">Suivi de vos propositions commerciales.</p>
           <div class="dv-list" id="dv-list"><p class="empty">Chargement…</p></div>
+          <div class="nc-msg" id="dv-list-msg" aria-live="polite"></div>
         </div>
       </div>
     </section>
@@ -650,6 +691,7 @@ button{font-family:var(--body);cursor:pointer}
         return { ok:true, data:{ id:did, numero:dnum } };
       }
       if (path === '/admin/update-devis') return { ok:true, data:{ updated:true } };
+      if (path === '/admin/send-devis') return { ok:true, data:{ sent:true } };
       if (path === '/publish-site') return { ok:true, data:{ published:true, path:(body.slug||'')+'/index.html', updated:false, url:'https://dwtdigital.fr/'+(body.slug||'')+'/', demo:true } };
       return { ok:true, data: null };
     }
@@ -1319,8 +1361,62 @@ button{font-family:var(--body);cursor:pointer}
   };
 
   // ===== ONGLET DEVIS =====
-  var PACK_PRIX = { 'Social Only':300, 'Social Pro':497, 'Essential':650, 'Premium':950, 'Sur Mesure':0 };
+  // Catalogue des devis (grille validée avec Claude Chat, nov. 2026). Prix HT, DWT en franchise de TVA.
+  var DV_CATALOGUE = [
+    { g:'Packs (par mois, sans engagement)', items:[
+      { label:'Pack Social Only', type:'mensuel', pu:300, pack:'Social Only', desc:"Gestion d'1 réseau social au choix (Instagram ou Facebook) · 8 publications/mois avec visuels premium · calendrier éditorial mensuel · réponses aux commentaires et messages (léger) · rapport mensuel simple" },
+      { label:'Pack Social Pro', type:'mensuel', pu:497, pack:'Social Pro', desc:"Tout Social Only + 2e réseau · 12 publications/mois + stories · fiche Google Business optimisée + publications Google · gestion des avis clients (demande d'avis + réponses) · référencement local de base" },
+      { label:'Pack Essential', type:'mensuel', pu:650, pack:'Essential', desc:'Tout Social Pro + 1 newsletter email/mois · Radar Tendances locales (veille hebdomadaire) · audit de visibilité trimestriel + rapport de performance détaillé' },
+      { label:'Pack Premium', type:'mensuel', pu:950, pack:'Premium', desc:'Tout Essential + site vitrine (création + hébergement + maintenance) · gestion des campagnes Google Ads et Meta Ads (budget publicitaire en plus, payé par le client) · Sosie de Marque IA · blog SEO · accompagnement prioritaire' }
+    ]},
+    { g:'Site et prestations (une fois)', items:[
+      { label:'Site vitrine sur mesure 4 pages', type:'one-shot', pu:690, desc:"Accueil, créations/offres, histoire, contact · à l'identité du client · adapté mobile · référencement de base · mise en ligne" },
+      { label:'Page supplémentaire', type:'one-shot', pu:90, desc:'1 page de contenu en plus des 4 de base' },
+      { label:'Module de commande en ligne', type:'one-shot', pu:290, desc:'Page « Commander » : formulaire en 3 étapes, estimation automatique du prix, délais minimum contrôlés, anti-spam, accord RGPD, commande reçue par email et archivée' },
+      { label:'Espace client DWT', type:'one-shot', pu:0, desc:'Inclus' },
+      { label:'Audit de visibilité', type:'one-shot', pu:90, desc:'Rapport PDF de visibilité locale (Google, réseaux, avis) · offert si souscription d\'un pack' },
+      { label:'Hébergement + petites mises à jour (hors pack)', type:'mensuel', pu:29, desc:'Pour garder son site sans prendre de pack' }
+    ]},
+    { g:'À la carte (par mois, 3 mois minimum)', carte:true, items:[
+      { label:"Gestion d'1 réseau social", type:'mensuel', pu:200, desc:'8 publications/mois, visuels standard, réponses commentaires/messages (léger)' },
+      { label:'Réseau social supplémentaire', type:'mensuel', pu:90, desc:"En plus de la gestion d'1 réseau social" },
+      { label:'Visuels premium', type:'mensuel', pu:140, desc:'8 visuels/stories de qualité supérieure' },
+      { label:'Fiche Google Business', type:'mensuel', pu:90, desc:'Optimisation + 4 publications Google/mois' },
+      { label:'Gestion des avis', type:'mensuel', pu:70, desc:"Demande d'avis + réponses" },
+      { label:'Référencement local (SEO local)', type:'mensuel', pu:150, desc:'' },
+      { label:'Email marketing', type:'mensuel', pu:90, desc:'1 newsletter/mois' },
+      { label:'Blog SEO', type:'mensuel', pu:160, desc:'2 articles/mois' },
+      { label:'Gestion Google Ads', type:'mensuel', pu:150, desc:'Hors budget publicitaire' },
+      { label:'Gestion Meta Ads (Facebook/Instagram)', type:'mensuel', pu:150, desc:'Hors budget publicitaire' },
+      { label:'Radar Tendances locales', type:'mensuel', pu:60, desc:'Veille hebdomadaire' },
+      { label:'Sosie de Marque IA', type:'mensuel', pu:80, desc:'Textes écrits avec la voix du commerçant' }
+    ]}
+  ];
   var DV_LINES = [];
+  // Calcul d'un devis — IDENTIQUE dans dashboard.html et devis.html (ne modifier qu'à deux endroits à la fois)
+  function dvR2(x){ return Math.round((Number(x)||0)*100)/100; }
+  function dvCalc(lignes, det){
+    det=det||{}; var once=0, mens=0;
+    (lignes||[]).forEach(function(l){
+      var pu=(l.prix_unitaire!=null)?l.prix_unitaire:l.pu;
+      var t=(Number(l.qty)||0)*(Number(pu)||0);
+      if(l.type==='one-shot') once+=t; else mens+=t;
+    });
+    function rem(base, r){
+      if(!r) return 0; var v=Number(r.valeur)||0; if(v<=0 || base<=0) return 0;
+      return dvR2(Math.min(base, r.type==='€' ? v : base*Math.min(v,100)/100));
+    }
+    var rOnce=rem(once, det.remise_once), rMens=rem(mens, det.remise_mensuel);
+    var mois=(det.remise_mensuel && Number(det.remise_mensuel.mois)>0) ? Math.round(Number(det.remise_mensuel.mois)) : 0;
+    if(!rMens) mois=0;
+    var netOnce=dvR2(once-rOnce), acompte=netOnce>300, sign=acompte ? dvR2(netOnce*0.4) : netOnce;
+    return { once:dvR2(once), rOnce:rOnce, netOnce:netOnce, acompte:acompte, signature:sign, solde:dvR2(netOnce-sign),
+      mens:dvR2(mens), rMens:rMens, mois:mois,
+      mensPendant: mois ? dvR2(mens-rMens) : null,
+      mensApres: mois ? dvR2(mens) : dvR2(mens-rMens),
+      offert: dvR2(rOnce + (mois ? rMens*mois : 0)) };
+  }
+
   function eur(n){ var v=Number(n)||0; return v.toLocaleString('fr-FR',{ minimumFractionDigits:0, maximumFractionDigits:2 })+' €'; }
   function dStatutLabel(s){ return s==='envoye'?'Envoyé':(s==='accepte'?'Accepté':(s==='refuse'?'Refusé':'Brouillon')); }
   function dStatutClass(s){ return (s==='envoye'||s==='accepte'||s==='refuse')?s:'brouillon'; }
@@ -1410,16 +1506,36 @@ button{font-family:var(--body);cursor:pointer}
     else { if(btn){ btn.disabled=false; btn.textContent='↻ Réessayer'; } alert('Échec de la relance : ' + (r.error || '')); }
   };
 
-  function dvTotalsCompute(){
-    var m=0, o=0;
-    DV_LINES.forEach(function(l){ var t=(Number(l.qty)||0)*(Number(l.pu)||0); if(l.type==='one-shot') o+=t; else m+=t; });
-    return { m:m, o:o };
+  function dvNum(id){ var e=g(id); var v=e?parseFloat(String(e.value).replace(',','.')):NaN; return isNaN(v)?0:v; }
+  function dvVal(id){ var e=g(id); return e ? String(e.value||'').trim() : ''; }
+  function dvDetails(){
+    var ct=document.querySelector('input[name="dv-ctype"]:checked'), pro=!ct || ct.value!=='particulier';
+    return {
+      client_type: pro?'pro':'particulier',
+      client_adresse: dvVal('dv-adresse'),
+      client_siret: pro ? dvVal('dv-siret') : '',
+      remise_once: { type:(g('dv-r1-t')||{}).value||'%', valeur:dvNum('dv-r1-v') },
+      remise_mensuel: { type:(g('dv-r2-t')||{}).value||'%', valeur:dvNum('dv-r2-v'), mois:Math.max(0,Math.round(dvNum('dv-r2-m'))) },
+      remise_texte: dvVal('dv-rtxt'),
+      engagement: (g('dv-eng')||{}).value||'sans',
+      demarrage: dvVal('dv-start'),
+      delai: dvVal('dv-delai')
+    };
   }
   function dvTotals(){
-    var t=dvTotalsCompute(), el=g('dv-totals'); if(!el) return;
-    el.innerHTML='<div class="tt"><span>Mensuel</span><b>'+eur(t.m)+(t.m?'<span style="font-size:.7rem;font-weight:500;color:var(--mut)"> /mois</span>':'')+'</b></div>'+
-      '<div class="tt"><span>Une seule fois</span><b>'+eur(t.o)+'</b></div>';
+    var el=g('dv-totals'); if(!el) return;
+    var c=dvCalc(DV_LINES, dvDetails()), h='';
+    if(c.once){
+      h+='<div class="tt"><span>À payer une fois</span><b>'+eur(c.netOnce)+'</b>'+(c.rOnce?'<small>au lieu de '+eur(c.once)+'</small>':'')+'</div>';
+      h+='<div class="tt"><span>À la signature</span><b>'+eur(c.signature)+'</b>'+(c.acompte?'<small>acompte de 40 %</small>':'')+'</div>';
+    }
+    if(c.mens){
+      h+='<div class="tt"><span>Abonnement</span><b>'+(c.mois ? eur(c.mensPendant)+'<span class="pm"> /mois</span></b><small>pendant '+c.mois+' mois, puis '+eur(c.mensApres)+' /mois</small>' : eur(c.mensApres)+'<span class="pm"> /mois</span></b>')+'</div>';
+    }
+    if(c.offert) h+='<div class="tt"><span>Valeur offerte</span><b>'+eur(c.offert)+'</b></div>';
+    el.innerHTML = h || '<div class="tt"><span>Total</span><b>'+eur(0)+'</b></div>';
   }
+  window.dvTotals = dvTotals; // appelé par les champs de remise du formulaire
   // ===== PUBLICATIONS (posts à faire valider par le client) =====
   var PUBS = [];
   var PUB_POLL = null;
@@ -1537,31 +1653,51 @@ button{font-family:var(--body);cursor:pointer}
 
   function dvRenderLines(){
     var box=g('dv-lines'); if(!box) return;
+    if(!DV_LINES.length){ box.innerHTML='<p class="dv-empty">Aucune ligne : choisissez une prestation dans la liste ci-dessus, ou ajoutez une ligne vide.</p>'; return; }
     box.innerHTML=DV_LINES.map(function(l,i){
-      return '<div class="dv-line">'+
-        '<input class="dv-l-f" data-i="'+i+'" data-k="label" value="'+esc(l.label||'')+'" placeholder="Prestation" oninput="dvEdit(this)">'+
-        '<select class="dv-l-f" data-i="'+i+'" data-k="type" onchange="dvEdit(this)"><option value="mensuel"'+(l.type!=='one-shot'?' selected':'')+'>/ mois</option><option value="one-shot"'+(l.type==='one-shot'?' selected':'')+'>une fois</option></select>'+
-        '<input class="dv-l-f" data-i="'+i+'" data-k="qty" type="number" min="1" value="'+esc(l.qty||1)+'" oninput="dvEdit(this)">'+
-        '<input class="dv-l-f" data-i="'+i+'" data-k="pu" type="number" min="0" step="any" value="'+esc(l.pu||0)+'" oninput="dvEdit(this)">'+
-        '<button type="button" class="dv-l-del" onclick="dvDelLine('+i+')" title="Retirer">×</button>'+
-      '</div>';
+      return '<div class="dv-lw"><div class="dv-line">'+
+        '<input class="dv-l-f" data-i="'+i+'" data-k="label" value="'+esc(l.label||'')+'" placeholder="Prestation" aria-label="Prestation" oninput="dvEdit(this)">'+
+        '<select class="dv-l-f" data-i="'+i+'" data-k="type" aria-label="Type" onchange="dvEdit(this)"><option value="mensuel"'+(l.type!=='one-shot'?' selected':'')+'>/ mois</option><option value="one-shot"'+(l.type==='one-shot'?' selected':'')+'>une fois</option></select>'+
+        '<input class="dv-l-f" data-i="'+i+'" data-k="qty" type="number" min="1" value="'+esc(l.qty||1)+'" aria-label="Quantité" oninput="dvEdit(this)">'+
+        '<input class="dv-l-f" data-i="'+i+'" data-k="pu" type="number" min="0" step="any" value="'+esc(l.pu||0)+'" aria-label="Prix unitaire HT" oninput="dvEdit(this)">'+
+        '<button type="button" class="dv-l-del" onclick="dvDelLine('+i+')" title="Retirer" aria-label="Retirer la ligne">×</button>'+
+      '</div><input class="dv-l-desc" data-i="'+i+'" data-k="desc" value="'+esc(l.desc||'')+'" placeholder="Détail (optionnel) : ce qui est inclus" aria-label="Détail de la prestation" oninput="dvEdit(this)"></div>';
     }).join('');
   }
   window.dvEdit=function(elm){
     var i=+elm.getAttribute('data-i'), k=elm.getAttribute('data-k'); if(!DV_LINES[i]) return;
     DV_LINES[i][k] = (k==='qty'||k==='pu') ? Number(elm.value) : elm.value;
-    if(k!=='label') DV_LINES[i].pack=false; // édité à la main -> n'est plus la ligne pack auto
     dvTotals();
   };
-  window.dvAddLine=function(){ DV_LINES.push({ label:'', type:'mensuel', qty:1, pu:0 }); dvRenderLines(); dvTotals(); };
+  window.dvAddLine=function(){ DV_LINES.push({ label:'', desc:'', type:'one-shot', qty:1, pu:0 }); dvRenderLines(); dvTotals(); };
   window.dvDelLine=function(i){ DV_LINES.splice(i,1); dvRenderLines(); dvTotals(); };
-  window.dvPack=function(){
-    var pk=g('dv-pack').value;
-    DV_LINES=DV_LINES.filter(function(l){ return !l.pack; });
-    if(pk){ DV_LINES.unshift({ label:'Pack '+pk, type:'mensuel', qty:1, pu:(PACK_PRIX[pk]||0), pack:true }); }
+  function dvCatalogueOptions(){
+    var sel=g('dv-cat'); if(!sel) return;
+    sel.innerHTML='<option value="">+ Ajouter une prestation du catalogue…</option>'+DV_CATALOGUE.map(function(grp,gi){
+      return '<optgroup label="'+esc(grp.g)+'">'+grp.items.map(function(it,ii){
+        return '<option value="'+gi+':'+ii+'">'+esc(it.label)+' — '+(it.pu?eur(it.pu):'inclus')+(it.type==='mensuel'?' /mois':'')+'</option>';
+      }).join('')+'</optgroup>';
+    }).join('');
+  }
+  window.dvAjouter=function(sel){
+    var v=sel.value; sel.value=''; if(!v) return;
+    var p=v.split(':'), grp=DV_CATALOGUE[+p[0]], it=grp && grp.items[+p[1]]; if(!it) return;
+    DV_LINES.push({ label:it.label, desc:it.desc||'', type:it.type, qty:1, pu:it.pu, pack:it.pack||'' });
+    if(grp.carte){ var e=g('dv-eng'); if(e) e.value='3mois'; }
     dvRenderLines(); dvTotals();
   };
-  function dvInitForm(){ DV_LINES=[]; dvRenderLines(); dvTotals(); }
+  window.dvClientType=function(){
+    var ct=document.querySelector('input[name="dv-ctype"]:checked'), f=g('dv-siret-f');
+    if(f) f.style.display=(ct && ct.value==='particulier')?'none':'';
+  };
+  function dvInitForm(){
+    DV_LINES=[]; dvCatalogueOptions();
+    ['dv-adresse','dv-siret','dv-r1-v','dv-r2-v','dv-r2-m','dv-rtxt','dv-start','dv-delai'].forEach(function(id){ var e=g(id); if(e) e.value=''; });
+    ['dv-r1-t','dv-r2-t'].forEach(function(id){ var e=g(id); if(e) e.value='%'; });
+    var eg=g('dv-eng'); if(eg) eg.value='sans';
+    var pro=document.querySelector('input[name="dv-ctype"][value="pro"]'); if(pro) pro.checked=true;
+    dvClientType(); dvRenderLines(); dvTotals();
+  }
 
   function renderDevis(){
     var list=g('dv-list'); if(!list) return;
@@ -1570,7 +1706,13 @@ button{font-family:var(--body);cursor:pointer}
     list.innerHTML=rows.map(function(d){
       var who=d.prospect_commerce||d.prospect_nom||'Prospect';
       var sub=(d.prospect_commerce&&d.prospect_nom?d.prospect_nom:'')+(d.prospect_tel?(d.prospect_commerce&&d.prospect_nom?' · ':'')+d.prospect_tel:'');
-      var tot=(d.total_mensuel?eur(d.total_mensuel)+' /mois':'')+((d.total_mensuel&&d.total_oneshot)?' + ':'')+(d.total_oneshot?eur(d.total_oneshot):'');
+      var c=dvCalc(d.lignes||[], d.details||{}), tp=[];
+      if(c.once) tp.push(eur(c.netOnce)+(c.rOnce?' (remisé)':''));
+      if(c.mens) tp.push(c.mois ? (eur(c.mensPendant)+' /mois × '+c.mois+', puis '+eur(c.mensApres)+' /mois') : (eur(c.mensApres)+' /mois'));
+      var tot=tp.join(' + ');
+      if(d.envoye_le) sub=(sub?sub+' · ':'')+'Envoyé le '+fmtJour(d.envoye_le)+(d.relance_le?', relancé le '+fmtJour(d.relance_le):'');
+      var signe=!!(d.signature_data || d.statut==='accepte'), peutEnvoyer=!signe && d.statut!=='refuse' && !!d.prospect_email;
+      var sendBtn = peutEnvoyer ? '<button type="button" class="dv-send" data-id="'+esc(d.id)+'" data-relance="'+(d.envoye_le?'1':'0')+'" onclick="dvSend(this)">'+(d.envoye_le?'Relancer':'Envoyer')+'</button>' : '';
       var st=dStatutClass(d.statut);
       var rightAction = d.client_id
         ? '<span class="dv-converted">✓ Client créé</span>'
@@ -1578,10 +1720,35 @@ button{font-family:var(--body);cursor:pointer}
       return '<div class="dv-item"><div class="di-top"><span class="di-num">'+esc(d.numero||'')+'</span><span class="dstatut '+st+'">'+dStatutLabel(d.statut)+'</span></div>'+
         '<div class="di-name">'+esc(who)+'</div>'+
         '<p class="di-sub">'+esc(sub)+'</p>'+
-        '<div class="di-foot"><span class="di-tot">'+(tot||'—')+'</span><div class="di-actions"><button type="button" class="dv-open" onclick="dvOpen(\''+esc(d.id)+'\')">Voir</button>'+rightAction+'</div></div></div>';
+        '<div class="di-foot"><span class="di-tot">'+(tot||'—')+'</span><div class="di-actions"><button type="button" class="dv-open" onclick="dvOpen(\''+esc(d.id)+'\')">Voir</button>'+sendBtn+rightAction+'</div></div></div>';
     }).join('');
   }
 
+  function fmtJour(iso){ try{ return new Date(iso).toLocaleDateString('fr-FR',{ day:'numeric', month:'short' }); }catch(e){ return ''; } }
+  window.dvSend = async function(btn){
+    var id=btn.getAttribute('data-id'), rel=btn.getAttribute('data-relance')==='1', msg=g('dv-list-msg');
+    var d=null; for(var i=0;i<DATA.devis.length;i++){ if(DATA.devis[i].id===id){ d=DATA.devis[i]; break; } }
+    if(!d) return;
+    if(btn.getAttribute('data-arme')!=='1'){
+      btn.setAttribute('data-arme','1'); btn.textContent=rel?'Confirmer la relance':'Confirmer l\'envoi';
+      if(msg){ msg.style.color='var(--mut)'; msg.textContent=(rel?'Relance':'Envoi')+' du devis '+(d.numero||'')+' à '+(d.prospect_email||'')+' : cliquez à nouveau pour confirmer.'; }
+      setTimeout(function(){ if(btn.getAttribute('data-arme')==='1' && !btn.disabled){ btn.removeAttribute('data-arme'); btn.textContent=rel?'Relancer':'Envoyer'; } }, 6000);
+      return;
+    }
+    btn.disabled=true; btn.textContent='Envoi…';
+    var r=await api('/admin/send-devis', { id:id, relance:rel });
+    if(r.ok){
+      var now=new Date().toISOString();
+      if(rel) d.relance_le=now; else d.envoye_le=d.envoye_le||now;
+      if(!d.statut || d.statut==='brouillon') d.statut='envoye';
+      renderDevis();
+      if(msg){ msg.style.color='var(--gl)'; msg.textContent='Devis '+(d.numero||'')+(rel?' relancé':' envoyé')+' à '+(d.prospect_email||'')+(MODE==='demo'?' (démo)':'')+'.'; }
+    } else {
+      btn.disabled=false; btn.removeAttribute('data-arme'); btn.textContent=rel?'Relancer':'Envoyer';
+      var e=String(r.error||'');
+      if(msg){ msg.style.color='#ff8b8b'; msg.textContent = /route inconnue/.test(e) ? 'L\'envoi par email n\'est pas encore activé : il manque le bloc à coller dans Cloudflare.' : ('Envoi impossible : '+e); }
+    }
+  };
   var CONVERT_DEVIS = null;
   window.dvConvert = function(id){
     var d=null; for(var i=0;i<DATA.devis.length;i++){ if(DATA.devis[i].id===id){ d=DATA.devis[i]; break; } }
@@ -1619,14 +1786,16 @@ button{font-family:var(--body);cursor:pointer}
     var msg=g('dv-msg'); msg.style.color='#ff8b8b';
     var nom=g('dv-nom').value.trim(), com=g('dv-commerce').value.trim();
     if(!nom && !com){ msg.textContent='Indiquez au moins le nom ou le commerce du prospect.'; return; }
-    if(!DV_LINES.length){ msg.textContent='Ajoutez au moins une ligne (ou choisissez un pack).'; return; }
-    var t=dvTotalsCompute();
+    if(!DV_LINES.length){ msg.textContent='Ajoutez au moins une ligne (prestation du catalogue ou ligne vide).'; return; }
+    if(DV_LINES.some(function(l){ return !String(l.label||'').trim(); })){ msg.textContent='Chaque ligne doit avoir un nom de prestation.'; return; }
+    var det=dvDetails(), t=dvCalc(DV_LINES, det);
+    var packLine=DV_LINES.filter(function(l){ return l.pack; })[0];
     var now=''; try{ now=new Date().toISOString(); }catch(e){}
     var payload={
       prospect_nom:nom, prospect_commerce:com, prospect_email:g('dv-email').value.trim(), prospect_tel:g('dv-tel').value.trim(),
-      pack:g('dv-pack').value,
-      lignes:DV_LINES.map(function(l){ return { label:l.label, type:l.type, qty:Number(l.qty)||0, prix_unitaire:Number(l.pu)||0 }; }),
-      total_mensuel:t.m, total_oneshot:t.o, notes:g('dv-notes').value.trim(), created_at:now
+      pack:packLine?packLine.pack:'',
+      lignes:DV_LINES.map(function(l){ return { label:String(l.label||'').trim(), description:String(l.desc||'').trim(), type:l.type, qty:Number(l.qty)||0, prix_unitaire:Number(l.pu)||0 }; }),
+      total_mensuel:t.mensApres, total_oneshot:t.netOnce, notes:g('dv-notes').value.trim(), details:det, created_at:now
     };
     var btn=g('dv-btn'); btn.disabled=true; var old=btn.textContent; btn.textContent='Enregistrement…';
     var res=await api('/create-devis', payload);
@@ -1636,7 +1805,6 @@ button{font-family:var(--body);cursor:pointer}
     renderDevis();
     msg.style.color='var(--gl)'; msg.textContent='Devis '+res.data.numero+' enregistré'+(MODE==='demo'?' (démo)':'')+'. Ouvre-le via « Voir » → page partageable / PDF.';
     ['dv-nom','dv-commerce','dv-email','dv-tel','dv-notes'].forEach(function(id){ var e=g(id); if(e) e.value=''; });
-    var pk=g('dv-pack'); if(pk) pk.value='';
     dvInitForm();
   };
 
