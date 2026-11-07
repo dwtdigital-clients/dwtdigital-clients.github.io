@@ -292,12 +292,14 @@ table.lines td.r{white-space:nowrap;font-variant-numeric:tabular-nums}
 
   function showError(m){ g('dv-loading').style.display='none'; var e=g('dv-error'); e.style.display='block'; e.textContent=m; }
 
+  function fmtTel(t){ var d=String(t||'').replace(/[^\d]/g,''); return /^0\d{9}$/.test(d) ? d.replace(/(\d{2})(?=\d)/g,'$1 ') : String(t||'').trim(); }
+  function fmtAdr(a){ return String(a||'').replace(/(\d{5}),\s*/g,'$1 ').replace(/\s+,/g,',').replace(/\s{2,}/g,' ').trim(); }
   function renderEmetteur(){
     var e=EMETTEUR, l=[];
-    l.push(e.adresse ? e.adresse : e.ville);
+    l.push(e.adresse ? fmtAdr(e.adresse) : e.ville);
     l.push('SIRET : '+e.siret+(e.rcs?' · '+e.rcs:''));
     l.push(e.tva);
-    l.push(e.email+(e.tel?' · '+e.tel:''));
+    l.push(e.email+(e.tel?' · '+fmtTel(e.tel):''));
     g('em-nom').textContent=e.nom+' — '+e.commercial;
     g('em-sub').textContent=l.join('\n');
   }
