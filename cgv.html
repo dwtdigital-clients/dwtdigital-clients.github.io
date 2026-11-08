@@ -1,0 +1,294 @@
+<!doctype html><html lang="fr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Conditions générales de vente — DWT Digital</title>
+<meta name="description" content="Conditions générales de vente de DWT Digital : devis, prix, paiement, engagement, création de site, propriété et données personnelles.">
+<meta name="robots" content="all">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --v:#7B1FA2; --vd:#4F0F5C; --vdd:#2D0636;
+  --g:#63AF21; --gl:#7BC93A;
+  --ink:#F6F1FA; --mut:rgba(246,241,250,.66);
+  --border:rgba(255,255,255,.15);
+  --disp:'Syne',sans-serif; --body:'Poppins',sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:clip;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@supports not (overflow-x:clip){html,body{overflow-x:hidden}}
+body{margin:0;background:#0a0014;color:var(--ink);font-family:var(--body);line-height:1.62;overflow-x:clip;-webkit-font-smoothing:antialiased}
+.pagebg{position:fixed;inset:0;z-index:-1;background-image:radial-gradient(1200px 800px at 80% -10%,rgba(123,31,162,.40),transparent 60%),radial-gradient(900px 700px at -10% 110%,rgba(99,175,33,.12),transparent 55%)}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+.wrap{max-width:860px;margin:0 auto;padding:0 22px}
+
+/* NAV */
+.nav{position:fixed;top:14px;left:0;right:0;z-index:60;display:flex;justify-content:center;padding:0 16px}
+/* scrim : masque le contenu qui defile derriere/au-dessus du pill */
+.nav::before{content:"";position:fixed;top:0;left:0;right:0;height:98px;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,#07000d 0%,rgba(7,0,13,.88) 42%,rgba(7,0,13,0) 100%);transition:background .45s;}
+.nav:has(.nav-pill.on-light)::before{background:linear-gradient(180deg,#FBF9FE 0%,rgba(251,249,254,.86) 42%,rgba(251,249,254,0) 100%);}
+.nav-pill{display:flex;align-items:center;gap:18px;width:100%;max-width:1180px;padding:12px 16px;border-radius:999px;background:rgba(20,4,32,.55);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);border:1px solid var(--border);box-shadow:0 18px 44px -22px rgba(0,0,0,.7)}
+.nav-logo{display:flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:800;font-size:.95rem;margin-right:8px}
+.nav-logo img{height:27px;width:auto;}
+.nav-logo span{background:linear-gradient(120deg,#d49bff,var(--gl));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-tabs{display:flex;gap:20px;align-items:center}
+.nav-tabs a{font-size:.92rem;color:var(--mut);transition:color .2s}
+.nav-tabs a:hover,.nav-tabs a.cur{color:var(--ink)}
+.nav-cta{margin-left:auto;padding:10px 18px;border-radius:999px;font-size:.86rem;font-weight:600;background:linear-gradient(120deg,var(--v),var(--g));color:#fff;white-space:nowrap}
+
+/* CONTENU */
+main{padding-top:140px;padding-bottom:30px}
+.kicker{font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#d49bff;margin-bottom:10px}
+h1.page-title{font-family:var(--disp);font-weight:800;font-size:clamp(2rem,6vw,3.1rem);line-height:1.05;margin:0 0 12px}
+.lead{color:var(--mut);font-size:1.02rem;margin:0 0 34px;max-width:60ch}
+.legal-card{position:relative;padding:34px 30px;border-radius:24px;background:rgba(20,4,32,.5);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);border:1px solid var(--border);overflow:hidden}
+.legal-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(140deg,rgba(255,255,255,.14),transparent 40%,rgba(123,31,162,.10));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px;opacity:.7}
+.legal-card h2{font-family:var(--disp);font-weight:700;font-size:1.22rem;margin:30px 0 10px;color:var(--ink)}
+.legal-card h2:first-of-type{margin-top:0}
+.legal-card p,.legal-card li{color:var(--mut);font-size:.96rem;line-height:1.72}
+.legal-card ul{margin:6px 0 10px;padding-left:20px}
+.legal-card li{margin:4px 0}
+.legal-card strong{color:var(--ink);font-weight:600}
+.legal-card a.inline{color:#d49bff;text-decoration:underline;text-underline-offset:2px}
+.upd{margin-top:26px;font-size:.84rem;color:rgba(246,241,250,.5)}
+
+/* FOOTER */
+footer{border-top:1px solid rgba(255,255,255,.08);padding:40px 0 60px;margin-top:46px}
+.foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+.foot-row>span{color:var(--mut);font-size:.9rem}
+.foot-links{display:flex;gap:18px;flex-wrap:wrap}.foot-links a{white-space:nowrap;color:var(--mut);font-size:.9rem;transition:color .2s}
+.foot-links a:hover{color:#d49bff}
+.foot-nap{display:flex;flex-direction:column;gap:4px;margin-top:18px;font-style:normal;color:var(--mut);font-size:.88rem}
+.foot-nap a:hover{color:#d49bff}
+@media(max-width:680px){main{padding-top:108px}.legal-card{padding:26px 20px}}
+.sommaire{margin:0 0 30px;padding:18px 22px;border-radius:18px;border:1px solid var(--border);background:rgba(255,255,255,.03)}
+.sommaire b{display:block;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:#d49bff;margin-bottom:8px}
+.sommaire ol{margin:0;padding-left:0;list-style:none;columns:2;column-gap:28px}
+.sommaire li{margin:3px 0;break-inside:avoid}
+.sommaire a{color:var(--mut);font-size:.9rem}
+.sommaire a:hover{color:var(--ink)}
+.legal-card h2{scroll-margin-top:110px}
+.legal-card ol{margin:6px 0 10px;padding-left:22px}
+mark.todo{background:#ffe27a;color:#2b2100;border-radius:4px;padding:0 4px}
+@media(max-width:680px){.sommaire ol{columns:1}}
+</style></head>
+<body>
+<div class="pagebg" aria-hidden="true"></div>
+
+<nav class="nav"><div class="nav-pill">
+  <a class="nav-logo" href="index.html"><img src="assets/logo-cutout.png" alt="DWT" width="137" height="135" onerror="this.style.display='none'"><span>DWT</span></a>
+  <div class="nav-tabs">
+    <a href="index.html">Accueil</a>
+    <a href="offres.html">Offres</a>
+    <a href="methode.html">Méthode</a>
+    <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <a href="contact.html" class="nav-cta">Audit de visibilité offert</a>
+</div></nav>
+
+<main id="contenu" tabindex="-1"><div class="wrap">
+  <div class="kicker">Conditions générales de vente</div>
+  <h1 class="page-title">Conditions générales de vente</h1>
+  <p class="lead">Les règles qui s'appliquent à toutes les prestations de DWT Digital pour les clients professionnels. Signer un devis vaut acceptation de ces conditions.</p>
+  <nav class="sommaire" aria-label="Sommaire"><b>Sommaire</b><ol>
+    <li><a href="#article-1">Article 1 — Qui sommes-nous</a></li>
+    <li><a href="#article-2">Article 2 — À quoi servent ces conditions</a></li>
+    <li><a href="#article-3">Article 3 — Devis et commande</a></li>
+    <li><a href="#article-4">Article 4 — Prix</a></li>
+    <li><a href="#article-5">Article 5 — Paiement</a></li>
+    <li><a href="#article-6">Article 6 — Retard de paiement</a></li>
+    <li><a href="#article-7">Article 7 — Durée, engagement et résiliation</a></li>
+    <li><a href="#article-8">Article 8 — Déroulement d&#x27;une création de site</a></li>
+    <li><a href="#article-9">Article 9 — Modifications et maintenance</a></li>
+    <li><a href="#article-10">Article 10 — Ce que le client s&#x27;engage à faire</a></li>
+    <li><a href="#article-11">Article 11 — Obligation de moyens</a></li>
+    <li><a href="#article-12">Article 12 — Propriété</a></li>
+    <li><a href="#article-13">Article 13 — Référence commerciale</a></li>
+    <li><a href="#article-14">Article 14 — Données personnelles</a></li>
+    <li><a href="#article-15">Article 15 — Force majeure</a></li>
+    <li><a href="#article-16">Article 16 — Litiges</a></li>
+  </ol></nav>
+  <div class="legal-card">
+    <h2 id="article-1">Article 1 — Qui sommes-nous</h2>
+    <p>DWT Digital est le nom commercial de Darell-William TIRERA, entrepreneur individuel (EI).</p>
+    <p>Adresse : 18 rue Anatole France, 92370 Chaville.</p>
+    <p>SIRET : 106 795 826 00010 (immatriculée au Registre national des entreprises).</p>
+    <p>TVA non applicable, art. 293 B du CGI.</p>
+    <p>Contact : <a class="inline" href="mailto:contact@dwtdigital.fr">contact@dwtdigital.fr</a> · 07 51 58 63 89.</p>
+
+    <h2 id="article-2">Article 2 — À quoi servent ces conditions</h2>
+    <p>Ces conditions s'appliquent à toutes les prestations vendues par DWT Digital à des <strong>clients professionnels</strong> (entreprises, commerçants, artisans, indépendants) : création de sites, gestion des réseaux sociaux, visibilité Google, publicité en ligne et services associés.</p>
+    <p>Signer un devis vaut acceptation de ces conditions. En cas de différence entre un devis signé et ces conditions, <strong>le devis l'emporte</strong>.</p>
+
+    <h2 id="article-3">Article 3 — Devis et commande</h2>
+    <ul><li>Chaque prestation fait l'objet d'un devis gratuit, valable <strong>30 jours</strong>.</li><li>La commande est ferme à la signature du devis (signature électronique acceptée) et, pour une prestation à payer une fois, au paiement de l'acompte.</li><li>Toute demande en dehors du devis fait l'objet d'un nouveau devis.</li></ul>
+
+    <h2 id="article-4">Article 4 — Prix</h2>
+    <ul><li>Les prix sont ceux du devis, en euros hors taxes. DWT Digital n'applique pas la TVA (art. 293 B du CGI) : le prix HT est le prix à payer.</li><li>Le budget publicitaire (Google Ads, Meta Ads), le nom de domaine et les services de tiers ne sont pas compris, sauf mention contraire du devis.</li><li>DWT Digital peut modifier ses tarifs. Pour les abonnements en cours, tout changement est annoncé par email <strong>au moins 1 mois avant</strong>. Le client peut alors résilier sans frais.</li></ul>
+
+    <h2 id="article-5">Article 5 — Paiement</h2>
+    <ul><li><strong>Prestations à payer une fois</strong> (site, options, audit) : acompte de <strong>40 %</strong> à la signature, solde de <strong>60 %</strong> à la mise en ligne ou à la livraison.</li><li><strong>Abonnements mensuels</strong> (packs, prestations à la carte) : facturés au début de chaque mois, payables <strong>à réception</strong>, au plus tard sous 15 jours.</li><li>Paiement par virement bancaire. Pas d'escompte pour paiement anticipé.</li></ul>
+
+    <h2 id="article-6">Article 6 — Retard de paiement</h2>
+    <p>En cas de retard, des pénalités égales à <strong>trois fois le taux d'intérêt légal</strong> sont dues sans rappel, ainsi qu'une <strong>indemnité forfaitaire de 40 €</strong> pour frais de recouvrement (art. L441-10 et D441-5 du Code de commerce).</p>
+    <p>Après une relance restée sans réponse pendant 15 jours, DWT Digital peut suspendre ses prestations jusqu'au paiement, après en avoir prévenu le client par email.</p>
+
+    <h2 id="article-7">Article 7 — Durée, engagement et résiliation</h2>
+    <ul><li><strong>Packs :</strong> sans engagement. Résiliables à tout moment par email, avec un <strong>préavis d'1 mois</strong>. Le mois commencé est dû.</li><li><strong>Prestations à la carte :</strong> engagement de <strong>3 mois minimum</strong>, puis résiliables avec un préavis d'1 mois.</li><li><strong>Offres gratuites ou remisées</strong> (ex. mois offerts) : la durée de gratuité est indiquée sur le devis. À la fin, l'abonnement continue au tarif normal, sauf résiliation par le client. DWT Digital prévient le client <strong>15 jours avant</strong> la fin de la gratuité.</li></ul>
+
+    <h2 id="article-8">Article 8 — Déroulement d&#x27;une création de site</h2>
+    <ol><li>Validation de l'identité visuelle et de la structure des pages.</li><li>Création, puis <strong>aperçu privé</strong> envoyé au client.</li><li>Le client fait ses retours ; <strong>1 série de retours</strong> est incluse avant la mise en ligne.</li><li>Mise en ligne après validation du client (bouton « Je valide mon site » dans l'espace client, ou email).</li></ol>
+    <p>Sans réponse du client <strong>30 jours</strong> après l'envoi de l'aperçu, le site est considéré comme validé et le solde devient dû.</p>
+    <p>Les délais annoncés dépendent de la réception des contenus (textes, photos, logo) fournis par le client.</p>
+
+    <h2 id="article-9">Article 9 — Modifications et maintenance</h2>
+    <ul><li>Avec un pack, <strong>2 demandes de petites modifications par mois</strong> sont incluses (texte, photo, prix, horaires), via l'espace client. Les demandes non utilisées ne sont pas reportées.</li><li>Une refonte, une nouvelle page ou une nouvelle fonctionnalité fait l'objet d'un devis.</li><li>L'hébergement est inclus tant que le client a un pack. Sans pack, il peut être maintenu au tarif indiqué sur la grille en vigueur, ou les fichiers du site sont remis au client.</li></ul>
+
+    <h2 id="article-10">Article 10 — Ce que le client s&#x27;engage à faire</h2>
+    <ul><li>Fournir à temps les contenus et accès nécessaires (photos, textes, accès aux réseaux sociaux et à la fiche Google).</li><li>Garantir qu'il a le droit d'utiliser les contenus qu'il fournit (photos, logos, textes, avis clients).</li><li>Vérifier et valider les contenus avant publication (prix, horaires, allergènes, informations légales de son activité).</li></ul>
+
+    <h2 id="article-11">Article 11 — Obligation de moyens</h2>
+    <p>DWT Digital met tout en œuvre pour réussir ses prestations, mais <strong>ne garantit pas de résultat chiffré</strong> (nombre d'abonnés, de visites, de clients, de ventes ou position sur Google), qui dépend aussi de facteurs extérieurs (plateformes, concurrence, marché).</p>
+    <p>La responsabilité de DWT Digital est limitée au montant payé par le client au titre des <strong>3 derniers mois</strong> de la prestation en cause. DWT Digital n'est pas responsable des interruptions ou changements de règles des plateformes tierces (Meta, Google, hébergeurs).</p>
+
+    <h2 id="article-12">Article 12 — Propriété</h2>
+    <ul><li>Le <strong>site</strong> et ses contenus créés pour le client deviennent sa propriété <strong>une fois la prestation entièrement payée</strong> (pour un site offert : dès la mise en ligne).</li><li>Les outils de DWT Digital (espace client, tableau de bord, automatisations, modèles) restent la propriété de DWT Digital ; le client en a l'usage pendant la durée de son abonnement.</li><li>Le <strong>nom de domaine</strong> est acheté au nom du client, qui en reste propriétaire.</li></ul>
+
+    <h2 id="article-13">Article 13 — Référence commerciale</h2>
+    <p>Sauf refus écrit du client, DWT Digital peut citer son nom et montrer les réalisations publiques (site, publications) comme référence, sur son site, ses réseaux et ses documents commerciaux.</p>
+
+    <h2 id="article-14">Article 14 — Données personnelles</h2>
+    <ul><li>Pour les besoins des prestations (formulaires de commande, messages, emails), DWT Digital traite des données personnelles <strong>pour le compte du client</strong>, uniquement selon ses instructions, en tant que <strong>sous-traitant</strong> au sens du RGPD.</li><li>Les données sont confiées à des prestataires techniques reconnus (base de données, envoi d'emails, hébergement du site, messagerie). Certains sont situés hors de l'Union européenne, notamment aux États-Unis : ces transferts sont alors encadrés par les garanties prévues par le RGPD (clauses contractuelles types de la Commission européenne ou Data Privacy Framework). Les données sont protégées, et supprimées ou rendues au client à la fin du contrat.</li><li>Les données du client lui-même sont utilisées uniquement pour gérer la relation commerciale. Contact : <a class="inline" href="mailto:contact@dwtdigital.fr">contact@dwtdigital.fr</a>.</li></ul>
+
+    <h2 id="article-15">Article 15 — Force majeure</h2>
+    <p>Aucune partie n'est responsable d'un retard causé par un événement imprévisible et hors de son contrôle (panne générale d'une plateforme, catastrophe, etc.).</p>
+
+    <h2 id="article-16">Article 16 — Litiges</h2>
+    <p>Ces conditions sont soumises au droit français. En cas de désaccord, les parties cherchent d'abord une solution amiable. À défaut, le litige est porté devant les tribunaux compétents du ressort de Nanterre.</p>
+    <p class="upd">Version du 8 novembre 2026.</p>
+  </div>
+</div></main>
+
+<footer><div class="wrap">
+  <div class="foot-row">
+    <span>© 2026 DWT Digital — Marketing IA · Île-de-France</span>
+    <div class="foot-links">
+      <a href="index.html">Accueil</a>
+      <a href="offres.html">Offres</a>
+      <a href="methode.html">Méthode</a>
+      <a href="qui-sommes-nous.html">Qui sommes-nous</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <address class="foot-nap">
+    <span>DWT Digital · Chaville (92370), Île-de-France</span>
+    <a href="tel:+33751586389">07&nbsp;51&nbsp;58&nbsp;63&nbsp;89</a>
+    <a href="mailto:contact@dwtdigital.fr">contact@dwtdigital.fr</a>
+  </address>
+</div></footer>
+
+<!-- ════ MENU BURGER MOBILE (auto-construit, uniforme sur les 5 pages) ════ -->
+<style>
+.nav-burger{display:none;flex-direction:column;gap:5px;width:44px;height:44px;align-items:center;justify-content:center;border:none;background:rgba(255,255,255,.08);border-radius:12px;cursor:pointer;flex-shrink:0;margin-left:auto;padding:0}
+.nav-burger span{display:block;width:20px;height:2px;background:#fff;border-radius:2px;transition:transform .25s,opacity .2s}
+.nav-burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.nav-burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.dwt-mmenu{position:fixed;top:82px;left:18px;right:18px;z-index:59;display:flex;flex-direction:column;gap:4px;padding:14px;border-radius:20px;background:rgba(20,4,32,.95);backdrop-filter:blur(24px) saturate(1.6);-webkit-backdrop-filter:blur(24px) saturate(1.6);border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 60px -20px rgba(0,0,0,.75);opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .25s,transform .25s}
+.dwt-mmenu.open{opacity:1;transform:none;pointer-events:auto}
+.dwt-mmenu a{padding:14px 16px;border-radius:12px;color:#fff;font-weight:500;font-size:1.02rem;text-decoration:none}
+.dwt-mmenu a:hover,.dwt-mmenu a.cur{background:rgba(255,255,255,.09)}
+.dwt-mmenu .cta{margin-top:6px;text-align:center;background:linear-gradient(120deg,#7B1FA2,#63AF21);font-weight:600}
+@media(max-width:980px){.nav-tabs{display:none!important}.nav-cta{display:none!important}.nav-burger{display:flex}}
+@media(min-width:981px){.dwt-mmenu{display:none}}
+</style>
+<script>
+(function(){
+  "use strict";
+  var pill=document.querySelector('.nav-pill'); if(!pill) return;
+  var here=(location.pathname.split('/').pop()||'index.html'); if(here==='') here='index.html';
+  var links=[['index.html','Accueil'],['offres.html','Offres'],['methode.html','Méthode'],['qui-sommes-nous.html','Qui sommes-nous'],['contact.html','Contact'],['espace.html','Espace client']];
+  (function(){var t=pill.querySelector('.nav-tabs');if(t){var a=document.createElement('a');a.href='espace.html';a.textContent='Espace client';if(here==='espace.html'){a.className='cur';a.setAttribute('aria-current','page');}t.appendChild(a);}})();
+  var btn=document.createElement('button');
+  btn.className='nav-burger'; btn.type='button';
+  btn.setAttribute('aria-label','Ouvrir le menu'); btn.setAttribute('aria-expanded','false'); btn.setAttribute('aria-controls','dwtMobileMenu');
+  btn.innerHTML='<span></span><span></span><span></span>';
+  pill.appendChild(btn);
+  var menu=document.createElement('nav');
+  menu.className='dwt-mmenu'; menu.id='dwtMobileMenu'; menu.setAttribute('aria-label','Menu mobile');
+  var html='';
+  links.forEach(function(l){var cur=(l[0]===here)?' class="cur" aria-current="page"':'';html+='<a href="'+l[0]+'"'+cur+'>'+l[1]+'</a>';});
+  html+='<a href="contact.html" class="cta">Audit de visibilité offert</a>';
+  menu.innerHTML=html;
+  document.body.appendChild(menu);
+  function close(){btn.setAttribute('aria-expanded','false');menu.classList.remove('open');}
+  btn.addEventListener('click',function(e){e.stopPropagation();var o=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',String(!o));menu.classList.toggle('open',!o);});
+  menu.querySelectorAll('a').forEach(function(a){a.addEventListener('click',close);});
+  document.addEventListener('click',function(e){if(menu.classList.contains('open')&&!menu.contains(e.target)&&!btn.contains(e.target))close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+  window.addEventListener('resize',function(){if(window.innerWidth>980)close();});
+})();
+</script>
+
+<!-- ════ BANNIÈRE COOKIES + CONSENTEMENT (CNIL, uniforme sur les 5 pages) ════ -->
+<style>
+.ck-banner{position:fixed;left:16px;right:16px;bottom:16px;z-index:9000;display:flex;align-items:center;gap:20px;max-width:980px;margin:0 auto;padding:18px 20px;border-radius:22px;background:rgba(20,4,32,.82);-webkit-backdrop-filter:blur(26px) saturate(1.7);backdrop-filter:blur(26px) saturate(1.7);border:1px solid var(--border,rgba(255,255,255,.15));box-shadow:0 30px 70px -22px rgba(0,0,0,.8);overflow:hidden;transform:translateY(160%);transition:transform .5s cubic-bezier(.22,1,.36,1)}
+.ck-banner.ck-show{transform:translateY(0)}
+.ck-banner::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(140deg,rgba(255,255,255,.18),transparent 38%,rgba(123,31,162,.12));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px;opacity:.8}
+.ck-head{display:flex;gap:13px;align-items:flex-start;flex:1;min-width:0}
+.ck-ico{flex-shrink:0;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(123,31,162,.55),rgba(99,175,33,.30));font-size:1.25rem}
+.ck-txt{flex:1;min-width:0}
+.ck-txt h3{margin:0 0 3px;font-family:var(--disp,'Syne',sans-serif);font-weight:800;font-size:1rem;color:var(--ink,#F6F1FA)}
+.ck-txt p{margin:0;font-size:.86rem;color:var(--mut,rgba(246,241,250,.66));line-height:1.55;overflow-wrap:break-word}
+.ck-txt a{color:#d49bff;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
+.ck-acts{flex-shrink:0;display:flex;gap:10px}
+.ck-btn{font-family:var(--body,'Poppins',sans-serif);font-weight:600;font-size:.9rem;padding:12px 22px;border-radius:999px;cursor:pointer;white-space:nowrap;background:rgba(255,255,255,.08);color:var(--ink,#F6F1FA);border:1px solid var(--border,rgba(255,255,255,.15));transition:transform .18s,background .18s,border-color .18s}
+.ck-btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.28)}
+.foot-cookies{cursor:pointer}
+@media(max-width:760px){.ck-banner{flex-direction:column;align-items:flex-start;gap:14px;padding:18px;left:12px;right:12px;bottom:12px;border-radius:20px}.ck-acts{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}.ck-btn{padding:13px 14px;width:100%}}
+</style>
+<script>
+(function(){
+  "use strict";
+  var KEY="dwt-consent";
+  window.dwtConsent=localStorage.getItem(KEY)||null;
+  var fl=document.querySelector(".foot-links");
+  if(fl){
+    [["confidentialite.html","Confidentialité"],["mentions-legales.html","Mentions légales"]].forEach(function(p){
+      if(!fl.querySelector('a[href="'+p[0]+'"]')){var a=document.createElement("a");a.href=p[0];a.textContent=p[1];fl.appendChild(a);}
+    });
+    if(!fl.querySelector(".foot-cookies")){
+      var c=document.createElement("a");c.href="#";c.className="foot-cookies";c.textContent="Cookies";
+      c.addEventListener("click",function(e){e.preventDefault();openBanner();});
+      fl.appendChild(c);
+    }
+  }
+  var banner=null;
+  function setConsent(v){localStorage.setItem(KEY,v);window.dwtConsent=v;hide();}
+  function build(){
+    banner=document.createElement("div");
+    banner.className="ck-banner";
+    banner.setAttribute("role","dialog");
+    banner.setAttribute("aria-label","Préférences cookies");
+    banner.innerHTML='<div class="ck-head"><div class="ck-ico" aria-hidden="true">🍪</div><div class="ck-txt"><h3>Cookies &amp; confidentialité</h3><p>Ce site ne dépose aucun cookie publicitaire ni traceur. Avec votre accord, nous activerons une mesure d\'audience anonyme pour l\'améliorer. <a href="confidentialite.html">Politique de confidentialité</a></p></div></div><div class="ck-acts"><button class="ck-btn" type="button" data-v="essential">Refuser</button><button class="ck-btn" type="button" data-v="all">Tout accepter</button></div>';
+    document.body.appendChild(banner);
+    var btns=banner.querySelectorAll(".ck-btn");
+    for(var i=0;i<btns.length;i++){
+      (function(b){b.addEventListener("click",function(){setConsent(b.getAttribute("data-v"));});})(btns[i]);
+    }
+  }
+  function show(){if(!banner)build();void banner.offsetWidth;banner.classList.add("ck-show");}
+  function hide(){if(banner)banner.classList.remove("ck-show");}
+  function openBanner(){show();}
+  window.dwtOpenCookies=openBanner;
+  if(!window.dwtConsent){
+    if(document.readyState!=="loading")show();
+    else document.addEventListener("DOMContentLoaded",show);
+  }
+})();
+</script>
+  <script src="/tracker.js" defer></script>
+</body></html>

@@ -262,9 +262,9 @@ table.lines td.r{white-space:nowrap;font-variant-numeric:tabular-nums}
 
   // Émetteur affiché sur les devis. Adresse, téléphone et RCS sont lus dans Cloudflare (route /emetteur),
   // pour ne pas écrire l'adresse personnelle de Darell dans ce code public.
-  var EMETTEUR = { nom:'Darell William TIRERA EI', commercial:'DWT Digital', ville:'92370 Chaville', siret:'106 795 826 00010',
+  var EMETTEUR = { nom:'Darell-William TIRERA EI', commercial:'DWT Digital', ville:'92370 Chaville', siret:'106 795 826 00010',
     tva:'TVA non applicable, art. 293 B du CGI', email:'contact@dwtdigital.fr', web:'dwtdigital.fr', adresse:'', tel:'', rcs:'' };
-  var CGV_EN_LIGNE = false; // passer à true une fois la page dwtdigital.fr/cgv.html publiée
+  var CGV_EN_LIGNE = true; // page dwtdigital.fr/cgv.html publiée le 8 novembre 2026
   // Calcul d'un devis — IDENTIQUE dans dashboard.html et devis.html (ne modifier qu'à deux endroits à la fois)
   function dvR2(x){ return Math.round((Number(x)||0)*100)/100; }
   function dvCalc(lignes, det){
