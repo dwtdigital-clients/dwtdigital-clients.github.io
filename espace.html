@@ -535,7 +535,7 @@ button{font-family:var(--body);cursor:pointer}
       if(sel.error) throw sel.error;
       if(sel.data && sel.data[0]){ var up=await sb.from('identite_visuelle').update(payload).eq('id',sel.data[0].id); if(up.error) throw up.error; }
       else { payload.client_id=CLIENT.id; var ins=await sb.from('identite_visuelle').insert(payload); if(ins.error) throw ins.error; }
-      try{ await sb.from('notifications').insert({ client_id:CLIENT.id, type:'identite', titre:'Palette validée', contenu:(CLIENT.commerce||'Le client')+' a validé sa palette de marque.', direction:'client_to_ceo' }); }catch(e){}
+      try{ await sb.from('notifications').insert({ client_id:CLIENT.id, type:'identite', titre:'Palette validée', contenu:(CLIENT.commerce||'Le client')+' a validé sa palette de marque.', direction:'client_to_ceo' }); notifierDWT(); }catch(e){}
       setValidated(true); msg.style.color='var(--gl)'; msg.textContent='Palette enregistrée ✓';
     }catch(e){ msg.style.color='#ff8b8b'; msg.textContent='Erreur : '+(e&&e.message?e.message:e); }
   };
@@ -580,6 +580,21 @@ button{font-family:var(--body);cursor:pointer}
     }
     btn.disabled=false; btn.textContent=old;
   };
+
+  // ===== EMAIL À DWT : prévient Darell qu'une demande ou un message vient d'arriver =====
+  // Le serveur vérifie que la notification appartient bien à ce client avant d'envoyer l'email.
+  var DWT_WORKER='https://dwt-admin.darellwilliampro1.workers.dev';
+  async function notifierDWT(){
+    try{
+      if(!CLIENT || !CLIENT.id) return;
+      var s=await sb.auth.getSession(), tok=(s && s.data && s.data.session) ? s.data.session.access_token : null;
+      if(!tok) return;
+      var r=await sb.from('notifications').select('id').eq('client_id', CLIENT.id).eq('direction','client_to_ceo').order('created_at',{ ascending:false }).limit(1);
+      var id=(r && r.data && r.data[0]) ? r.data[0].id : null;
+      if(!id) return;
+      fetch(DWT_WORKER+'/notify-ceo',{ method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+tok }, body:JSON.stringify({ id:id }), keepalive:true }).catch(function(){});
+    }catch(e){}
+  }
 
   // ===== ÉTAPE DU SITE (aperçu → validation → mise en ligne) =====
   function siteUrlSure(u){ try{ var x=new URL(u, location.href); return (x.protocol==="https:"||x.protocol==="http:") ? x.href : ""; }catch(e){ return ""; } }
@@ -636,6 +651,7 @@ button{font-family:var(--body);cursor:pointer}
       return;
     }
     CLIENT.site.etape="valide"; CLIENT.site.valide=new Date().toISOString();
+    notifierDWT();
     renderSite();
     try{ loadNotifs(); }catch(e){}
   };
@@ -897,7 +913,7 @@ button{font-family:var(--body);cursor:pointer}
     try{
       var ins=await sb.from('modifications').insert({ client_id:CLIENT.id, sujet:sujet, message_client:complet.slice(0,4000), statut:'en_attente', fichier_cible:cible });
       if(ins.error) throw ins.error;
-      try{ await sb.from('notifications').insert({ client_id:CLIENT.id, type:'modification', titre:'Demande de modification', contenu:(CLIENT.commerce||'Le client')+' — '+sujet+(lieu?' — Endroit : '+lieu:'')+' : '+msg.slice(0,1500), direction:'client_to_ceo' }); }catch(e){}
+      try{ await sb.from('notifications').insert({ client_id:CLIENT.id, type:'modification', titre:'Demande de modification', contenu:(CLIENT.commerce||'Le client')+' — '+sujet+(lieu?' — Endroit : '+lieu:'')+' : '+msg.slice(0,1500), direction:'client_to_ceo' }); notifierDWT(); }catch(e){}
       g('modif-msg').value=''; ptRetirer(); fb.style.color='var(--gl)'; fb.textContent='Demande envoyée ✓';
       loadModifs();
     }catch(e){ fb.style.color='#ff8b8b'; fb.textContent='Erreur : '+(e&&e.message?e.message:e); }
@@ -984,7 +1000,7 @@ button{font-family:var(--body);cursor:pointer}
       if(up.error) throw up.error;
       var titre=reponse==='valide'?'Publication validée':'Modification demandée';
       var contenu=(CLIENT.commerce||'Le client')+' — '+(reponse==='valide'?'a validé un post.':('demande une modif : '+comm.slice(0,140)));
-      try{ await sb.from('notifications').insert({ client_id:CLIENT.id, type:'publication', titre:titre, contenu:contenu, direction:'client_to_ceo' }); }catch(e){}
+      try{ await sb.from('notifications').insert({ client_id:CLIENT.id, type:'publication', titre:titre, contenu:contenu, direction:'client_to_ceo' }); notifierDWT(); }catch(e){}
       loadPubsClient();
     }catch(e){ if(fb){ fb.style.color='#ff8b8b'; fb.textContent='Erreur : '+(e&&e.message?e.message:e); } }
   };
@@ -1055,6 +1071,7 @@ button{font-family:var(--body);cursor:pointer}
     try{
       var ins=await sb.from('notifications').insert({ client_id:CLIENT.id, type:'message', titre:'Message client', contenu:txt, direction:'client_to_ceo' });
       if(ins.error) throw ins.error;
+      notifierDWT();
       inp.value=''; fb.style.color='var(--gl)'; fb.textContent='Message envoyé ✓';
       loadNotifs();
     }catch(e){ fb.style.color='#ff8b8b'; fb.textContent='Erreur : '+(e&&e.message?e.message:e); }
