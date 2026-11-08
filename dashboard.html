@@ -149,6 +149,27 @@ button{font-family:var(--body);cursor:pointer}
 .seg button.on.en_attente{background:rgba(232,163,61,.22);color:#e8a33d}
 .seg button.on.en_cours{background:rgba(63,169,255,.2);color:#3fa9ff}
 .seg button.on.termine{background:rgba(99,175,33,.2);color:var(--gl)}
+.seg button:disabled{cursor:default;opacity:.55}
+.seg button.wait{opacity:1;color:var(--ink);background:rgba(255,255,255,.1)}
+.dem-err{margin:10px 0 0;font-size:.8rem;color:#ff8b8b}
+.dem-lieu{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px;padding:11px 13px;border-radius:12px;border:1px solid rgba(232,163,61,.4);background:rgba(232,163,61,.08)}
+.dem-lieu .t{font-size:.84rem;color:var(--ink);min-width:0;overflow-wrap:anywhere}
+.dem-lieu .t b{display:block;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#e8a33d;margin-bottom:2px}
+.dem-voir{flex-shrink:0;font-size:.78rem;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid rgba(232,163,61,.55);background:rgba(232,163,61,.18);color:#ffcf86;cursor:pointer;font-family:inherit}
+.dem-voir:hover{background:rgba(232,163,61,.3)}
+.lv{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(6,3,12,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.lv.on{display:flex}
+.lv-box{width:min(1100px,100%);height:min(92vh,900px);display:flex;flex-direction:column;border-radius:18px;overflow:hidden;background:#140420;border:1px solid var(--border);box-shadow:0 40px 90px -30px rgba(0,0,0,.8)}
+.lv-head{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)}
+.lv-txt{min-width:0}
+.lv-txt b{display:block;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#e8a33d;margin-bottom:3px}
+.lv-lieu{font-weight:600;font-size:.9rem;overflow-wrap:anywhere}
+.lv-msg{margin:6px 0 0;font-size:.84rem;color:var(--mut);white-space:pre-line;max-height:5.6em;overflow:auto}
+.lv-x{flex-shrink:0;width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--ink);font-size:1.3rem;line-height:1;cursor:pointer}
+.lv-etat{font-size:.78rem;color:var(--mut);padding:7px 16px;border-bottom:1px solid var(--border)}
+.lv-etat.ok{color:#ffcf86}
+.lv-frame{flex:1;width:100%;border:0;background:#fff}
+@media(max-width:640px){.lv{padding:0}.lv-box{height:100%;border-radius:0}}
 
 /* ===== ONGLET MESSAGERIE ===== */
 .msgwrap{display:grid;grid-template-columns:308px 1fr;gap:18px;align-items:start}
@@ -1155,17 +1176,103 @@ button{font-family:var(--body);cursor:pointer}
     var ava = c ? initials(c) : '?';
     var prenom = c ? (c.prenom || '') : '';
     var seg = ['en_attente','en_cours','termine'].map(function(s){
-      return '<button type="button" class="'+s+(statutClass(m.statut)===s?' on':'')+'" onclick="setStatut(\''+esc(m.id)+'\',\''+s+'\')">'+statutLabel(s)+'</button>';
+      return '<button type="button" class="'+s+(statutClass(m.statut)===s?' on':'')+'" onclick="setStatut(\''+esc(m.id)+'\',\''+s+'\',this)">'+statutLabel(s)+'</button>';
     }).join('');
     return '<div class="dem-item">'+
       '<div class="dem-head"><div class="dem-ava">'+esc(ava)+'</div>'+
       '<div class="dem-who"><b>'+esc(commerce)+'</b><span>'+esc(prenom)+'</span></div>'+
       '<span class="dem-date">'+esc(fmtDate(m.created_at))+'</span></div>'+
       '<div class="dem-sujet">'+esc(m.sujet||'Demande')+'</div>'+
-      '<p class="dem-msg">'+esc(m.message_client||'')+'</p>'+
+      demCorps(m)+
       '<div class="dem-foot"><span class="lbl">Statut :</span><div class="seg">'+seg+'</div></div>'+
     '</div>';
   }
+
+  // Une demande faite avec le mode « Pointer » commence par « Endroit : … » ; on l'affiche à part avec « Voir l'endroit »
+  function demLieu(m){
+    var txt=String(m.message_client||''), mm=/^Endroit : (.+)\n+([\s\S]*)$/.exec(txt);
+    var page=String(m.fichier_cible||'');
+    if(!mm) return null;
+    return { lieu:mm[1].trim(), reste:mm[2], page: /^[\w\-\/]+\.html$/.test(page) && page.indexOf('..')<0 ? page : '' };
+  }
+  function demCorps(m){
+    var L=demLieu(m);
+    if(!L) return '<p class="dem-msg">'+esc(m.message_client||'')+'</p>';
+    return '<div class="dem-lieu"><div class="t"><b>Endroit</b>'+esc(L.lieu)+'</div>'+
+      (L.page?'<button type="button" class="dem-voir" onclick="lieuVoir(\''+esc(m.id)+'\')">Voir l\'endroit</button>':'')+'</div>'+
+      '<p class="dem-msg">'+esc(L.reste)+'</p>';
+  }
+  // Retrouve sur la page l'élément décrit par « Page › Bloc › … › Texte « … » » (repères data-repere posés sur le site)
+  function lieuTrouver(doc, lieu){
+    var parts=String(lieu).split(' › '); if(parts.length<2) return null;
+    var scope=doc.body, i=1;
+    for(; i<parts.length; i++){
+      var found=null, cands=scope.querySelectorAll('[data-repere]');
+      for(var k=0;k<cands.length;k++){ if(cands[k].getAttribute('data-repere')===parts[i]){ found=cands[k]; break; } }
+      if(!found) break;
+      scope=found;
+    }
+    var proche = scope===doc.body ? null : scope;
+    if(i>=parts.length) return { el:proche, exact:!!proche };
+    var m=/^(Photo|Icône|Titre|Texte|Bouton|Lien|Ligne|Champ|Intitulé)(?: « (.*) »)?$/.exec(parts[i]);
+    if(!m || i<parts.length-1) return { el:proche, exact:false };
+    var type=m[1], txt=String(m[2]||'').replace(/…$/,'').replace(/\s+/g,' ').trim().toLowerCase();
+    function norm(e){ return String(e.textContent||'').replace(/\s+/g,' ').trim().toLowerCase(); }
+    function pick(sel, test){ var els=scope.querySelectorAll(sel); for(var k=0;k<els.length;k++){ if(!test || test(els[k])) return els[k]; } return null; }
+    var r=null;
+    if(type==='Photo') r=pick('img');
+    else if(type==='Icône') r=pick('svg');
+    else if(type==='Titre') r=pick('h1,h2,h3,h4,h5,h6', function(e){ return !txt || norm(e).indexOf(txt)===0; });
+    else if(type==='Intitulé'){ var q=/«\s(.+)\s»$/.exec(parts[i-1]||''), t2=q?q[1].toLowerCase():''; r=pick('*', function(e){ return !e.children.length && norm(e)===t2; }); }
+    else if(type==='Ligne') r=pick('tr', function(e){ return Array.prototype.map.call(e.cells,function(c){ return c.textContent.trim(); }).join(' : ').toLowerCase().indexOf(txt)===0; });
+    else if(type==='Champ') r=pick('input,select,textarea', function(e){ var f=e.closest('.field,label'), l=f?(f.tagName==='LABEL'?f:f.querySelector('label')):null; return !!l && norm(l).indexOf(txt)===0; });
+    else if(type==='Bouton'||type==='Lien') r=pick('a,button', function(e){ return norm(e).indexOf(txt)===0; });
+    else { var els=scope.querySelectorAll('*'); for(var k=0;k<els.length;k++){ if(txt && norm(els[k]).indexOf(txt)===0 && (!r || r.contains(els[k]))) r=els[k]; } }
+    return r ? { el:r, exact:true } : { el:proche, exact:false };
+  }
+  function lieuMarquer(d, el){
+    var st=d.createElement('style');
+    st.textContent='[class*="reveal"]{opacity:1!important;transform:none!important}'+
+      '.dwt-lv{outline:4px solid #e8a33d!important;outline-offset:3px!important;border-radius:6px}img.dwt-lv{outline-offset:-5px!important}'+
+      '#dwt-lv-etiq{position:absolute;z-index:2147483647;background:#e8a33d;color:#1a0b22;font:700 12px/1.3 system-ui,-apple-system,sans-serif;padding:6px 10px;border-radius:9px;box-shadow:0 6px 18px rgba(0,0,0,.3);pointer-events:none}';
+    d.head.appendChild(st);
+    el.classList.add('dwt-lv');
+    try{ el.scrollIntoView({ block:'center' }); }catch(e){ el.scrollIntoView(); }
+    var et=d.createElement('div'); et.id='dwt-lv-etiq'; et.textContent='À modifier ici'; d.body.appendChild(et);
+    var r=el.getBoundingClientRect(), w=d.defaultView, sx=w.pageXOffset||0, sy=w.pageYOffset||0;
+    var top=r.top+sy-et.offsetHeight-10; if(top<sy+4) top=r.bottom+sy+10;
+    et.style.top=top+'px'; et.style.left=Math.max(sx+6, Math.min(r.left+sx, sx+w.innerWidth-et.offsetWidth-6))+'px';
+  }
+  window.lieuVoir=function(id){
+    var m=null; for(var i=0;i<DATA.modifications.length;i++){ if(DATA.modifications[i].id===id){ m=DATA.modifications[i]; break; } }
+    var L=m && demLieu(m); if(!L || !L.page) return;
+    var box=g('lv');
+    if(!box){
+      box=document.createElement('div'); box.className='lv'; box.id='lv'; box.setAttribute('role','dialog'); box.setAttribute('aria-modal','true'); box.setAttribute('aria-label','Endroit à modifier');
+      box.innerHTML='<div class="lv-box"><div class="lv-head"><div class="lv-txt"><b>Endroit à modifier</b><div class="lv-lieu" id="lv-lieu"></div><p class="lv-msg" id="lv-msg"></p></div>'+
+        '<button type="button" class="lv-x" onclick="lieuFermer()" aria-label="Fermer">×</button></div>'+
+        '<div class="lv-etat" id="lv-etat"></div><iframe class="lv-frame" id="lv-frame" title="Page du site"></iframe></div>';
+      box.addEventListener('click', function(e){ if(e.target===box) lieuFermer(); });
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape' && g('lv') && g('lv').classList.contains('on')) lieuFermer(); });
+      document.body.appendChild(box);
+    }
+    g('lv-lieu').textContent=L.lieu; g('lv-msg').textContent=L.reste;
+    var etat=g('lv-etat'); etat.className='lv-etat'; etat.textContent='Chargement de la page…';
+    var fr=g('lv-frame');
+    fr.onload=function(){
+      var d=null; try{ d=fr.contentDocument; }catch(e){ d=null; }
+      if(!d || !d.body){ etat.textContent='Impossible d\'afficher l\'endroit sur cette page.'; return; }
+      var res=lieuTrouver(d, L.lieu);
+      if(res && res.el){
+        lieuMarquer(d, res.el); etat.className='lv-etat ok';
+        etat.textContent = res.exact ? 'L\'endroit est entouré en orange sur la page ci-dessous.' : 'L\'endroit exact a changé depuis la demande : la zone la plus proche est entourée en orange.';
+      }
+      else { etat.textContent='Endroit introuvable sur la page (elle a peut-être changé depuis la demande) : voici la page concernée.'; }
+    };
+    fr.src='/'+L.page;
+    box.classList.add('on');
+  };
+  window.lieuFermer=function(){ var b=g('lv'); if(b){ b.classList.remove('on'); var fr=g('lv-frame'); if(fr){ fr.onload=null; fr.src='about:blank'; } } };
 
   function renderDemandes(){
     var mods = DATA.modifications.slice();
@@ -1183,9 +1290,20 @@ button{font-family:var(--body);cursor:pointer}
     list.innerHTML = shown.map(demItem).join('');
   }
 
-  window.setStatut = async function(id, statut){
+  window.setStatut = async function(id, statut, btn){
+    var seg = btn ? btn.parentNode : null, item = btn ? btn.closest('.dem-item') : null;
+    var btns = seg ? seg.querySelectorAll('button') : [];
+    var old = item ? item.querySelector('.dem-err') : null; if(old) old.parentNode.removeChild(old);
+    Array.prototype.forEach.call(btns, function(b){ b.disabled=true; });
+    var label = btn ? btn.textContent : '';
+    if(btn){ btn.classList.add('wait'); btn.textContent='Enregistrement…'; }
     var res = await api('/admin/update-modification', { id:id, statut:statut });
-    if(!res.ok) return;
+    if(!res.ok){
+      Array.prototype.forEach.call(btns, function(b){ b.disabled=false; });
+      if(btn){ btn.classList.remove('wait'); btn.textContent=label; }
+      if(item){ var p=document.createElement('p'); p.className='dem-err'; p.textContent='Le statut n\'a pas pu être enregistré : '+(res.error||'erreur inconnue'); item.appendChild(p); }
+      return;
+    }
     for(var i=0;i<DATA.modifications.length;i++){ if(DATA.modifications[i].id===id){ DATA.modifications[i].statut=statut; break; } }
     recomputeCounts();
     renderDemandes();
