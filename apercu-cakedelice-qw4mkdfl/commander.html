@@ -54,6 +54,15 @@
 .ajout{display:inline-flex;align-items:center;gap:8px;border:1.5px dashed var(--accent);color:var(--accent);background:transparent;border-radius:var(--r-btn);padding:11px 18px;font-family:var(--font);font-weight:600;font-size:14.5px;cursor:pointer;transition:background .2s;}
 .ajout:hover{background:var(--rose-soft);}
 .ajout[hidden]{display:none;}
+.field[hidden]{display:none;}
+/* Cookies (flyer de Lise) */
+.groupe{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:4px 0 8px;font-size:13.5px;font-weight:600;}
+.groupe span{color:var(--accent);font-weight:700;}
+.saveurs + .groupe{margin-top:14px;}
+.saveurs.deux{grid-template-columns:repeat(2,minmax(0,1fr));}
+.tarifs h3 .opt{font-weight:400;font-size:13px;color:var(--text-muted);}
+.tarifs td small{display:block;font-size:12px;color:var(--text-muted);margin-top:2px;line-height:1.35;}
+.tarifs td:last-child{white-space:nowrap;padding-left:12px;vertical-align:top;}
 .ajout-box .aide{display:block;margin-top:6px;font-size:12.5px;color:var(--text-muted);}
 .consent{display:flex;gap:12px;align-items:flex-start;font-size:13.5px;color:var(--text-muted);margin:6px 0 20px;}
 .consent input{accent-color:var(--accent);width:20px;height:20px;flex-shrink:0;margin-top:1px;}
@@ -158,7 +167,7 @@
                 </select>
               </div>
             </div>
-            <div class="field" data-repere="Saveurs">
+            <div class="field" id="champ-saveurs" data-repere="Saveurs">
               <span class="lbl" id="lbl-saveur">Saveur <span class="req">*</span></span>
               <div class="saveurs" role="radiogroup" aria-labelledby="lbl-saveur">
                 <label><input type="radio" name="saveur" value="Framboise"><span>Framboise</span></label>
@@ -170,6 +179,30 @@
                 <label class="autre"><input type="radio" name="saveur" value="autre"><span>Autre, précisez</span></label>
               </div>
             </div>
+            <div class="field" id="champ-cookies" data-repere="Saveurs des cookies" hidden>
+              <span class="lbl" id="lbl-cookie">Saveur du cookie <span class="req">*</span></span>
+              <div role="radiogroup" aria-labelledby="lbl-cookie">
+                <p class="groupe">Les classiques <span>3 € pièce</span></p>
+                <div class="saveurs">
+                  <label><input type="radio" name="cookie" value="Chocolat blanc"><span>Chocolat blanc</span></label>
+                  <label><input type="radio" name="cookie" value="Trois chocolat"><span>Trois chocolat</span></label>
+                  <label><input type="radio" name="cookie" value="Framboise-chocolat blanc"><span>Framboise-chocolat blanc</span></label>
+                </div>
+                <p class="groupe">Les gourmands fourrés <span>4 € pièce</span></p>
+                <div class="saveurs">
+                  <label><input type="radio" name="cookie" value="Nutella"><span>Nutella</span></label>
+                  <label><input type="radio" name="cookie" value="Spéculoos"><span>Spéculoos</span></label>
+                  <label><input type="radio" name="cookie" value="Pistache"><span>Pistache</span></label>
+                </div>
+              </div>
+            </div>
+            <div class="field" id="champ-base" data-repere="Base du cookie fourré" hidden>
+              <span class="lbl" id="lbl-base">Base du cookie fourré <span class="req">*</span></span>
+              <div class="saveurs deux" role="radiogroup" aria-labelledby="lbl-base">
+                <label><input type="radio" name="base" value="Chocolat noir"><span>Chocolat noir</span></label>
+                <label><input type="radio" name="base" value="Chocolat blanc"><span>Chocolat blanc</span></label>
+              </div>
+            </div>
             <div class="field">
               <label for="saveur-autre" id="lbl-saveur-autre">Une autre saveur ou une précision ? <span class="opt">(facultatif)</span></label>
               <input type="text" id="saveur-autre" name="saveur_autre" maxlength="120" placeholder="Écrivez-nous la saveur que vous voulez">
@@ -177,7 +210,7 @@
             <div id="autres-gateaux"></div>
             <div class="ajout-box" data-repere="Ajouter un autre gâteau">
               <button type="button" class="ajout" id="ajout-gateau"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Ajouter un autre gâteau</button>
-              <span class="aide" id="ajout-aide">Pour commander un deuxième gâteau, identique ou différent.</span>
+              <span class="aide" id="ajout-aide">Pour un deuxième gâteau ou une autre saveur de cookies.</span>
             </div>
             <div class="field">
               <label for="date">Date souhaitée <span class="req">*</span></label>
@@ -266,6 +299,14 @@
           </table>
           <p class="note">Tarifs de base sans devis : le prix peut varier selon le modèle, les saveurs et la décoration.</p>
         </div>
+        <div class="card tarifs" data-repere="Tarifs cookies">
+          <h3>Nos cookies <span class="opt">100 g pièce</span></h3>
+          <table>
+            <tr><td>Les classiques<small>Chocolat blanc, trois chocolat, framboise-chocolat blanc</small></td><td>3 €</td></tr>
+            <tr><td>Les gourmands fourrés<small>Nutella, spéculoos, pistache — base chocolat noir ou blanc</small></td><td>4 €</td></tr>
+          </table>
+          <p class="note">Prix à la pièce.</p>
+        </div>
         <div class="card cond" data-repere="Bon à savoir">
           <h3>Bon à savoir</h3>
           <ul>
@@ -324,7 +365,23 @@
     }
     if (selType.value === "bento") selParts.value = "bento";
   }
-  var MSG_COOKIES = "Cookies à l'unité (100 g pièce) : Lise vous confirme le prix.";
+  var PRIX_COOKIE = { "Chocolat blanc": 3, "Trois chocolat": 3, "Framboise-chocolat blanc": 3, "Nutella": 4, "Spéculoos": 4, "Pistache": 4 };
+  var GOURMANDS = { "Nutella": true, "Spéculoos": true, "Pistache": true };
+  var MSG_COOKIES = "Cookies de 100 g : 3 € pièce (classiques) ou 4 € pièce (gourmands fourrés). Choisissez la saveur et le nombre.";
+  function nbCookies(v) { var n = parseInt(String(v || "").slice(1), 10); return isNaN(n) ? 0 : n; }
+  function prixLigne(g) {
+    if (g.type === "cookies") { var n = nbCookies(g.parts), pu = PRIX_COOKIE[g.saveur]; return n && pu ? n * pu : 0; }
+    return PRIX[g.parts] || 0;
+  }
+  function detLigne(g) { return g.type === "cookies" ? nbCookies(g.parts) + " × " + PRIX_COOKIE[g.saveur] + " €" : PRIX[g.parts] + " €"; }
+  function optionsCookies() {
+    var h = '<option value="">Choisir…</option><optgroup label="Les classiques (3 € pièce)">';
+    Object.keys(PRIX_COOKIE).forEach(function (k, i) {
+      if (i === 3) h += '</optgroup><optgroup label="Les gourmands fourrés (4 € pièce)">';
+      h += '<option value="' + k + '">' + k + "</option>";
+    });
+    return h + "</optgroup>";
+  }
 
   function isoDans(jours) {
     var d = new Date(); d.setDate(d.getDate() + jours);
@@ -347,39 +404,53 @@
   function majMode() { var l = mode() === "livraison"; adresseBox.style.display = l ? "" : "none"; adresse.required = l; majEstim(); }
   var FIN_ESTIM = ". Le prix final dépend du modèle, des saveurs et de la décoration.";
   function majEstim() {
-    var gs = gateaux(), total = 0, det = [], sansTaille = 0, cookies = 0;
-    gs.forEach(function (g) { var pg = PRIX[g.parts]; if (pg) { total += pg; det.push(pg + " €"); } else if (g.type === "cookies") { cookies++; } else { sansTaille++; } });
+    var gs = gateaux(), total = 0, det = [], sansTaille = 0, cookiesIncomplets = 0, avecGateau = false;
+    gs.forEach(function (g) {
+      var pl = prixLigne(g);
+      if (g.type && g.type !== "cookies") avecGateau = true;
+      if (pl) { total += pl; det.push(detLigne(g)); }
+      else if (g.type === "cookies") cookiesIncomplets++;
+      else sansTaille++;
+    });
     var horsTotal = [];
-    if (cookies) horsTotal.push("les cookies (prix confirmé par Lise)");
+    if (cookiesIncomplets) horsTotal.push("les cookies dont la saveur ou le nombre reste à choisir");
     if (sansTaille) horsTotal.push((sansTaille > 1 ? sansTaille + " gâteaux" : "1 gâteau") + " dont la taille reste à choisir");
+    var fin = avecGateau ? FIN_ESTIM : ".";
     $("estim-prix").textContent = total ? total + " €" : "—";
     if (gs.length > 1) {
-      $("estim-sub").textContent = total ? (horsTotal.length ? "Total de base : " + det.join(" + ") + " (sans compter " + horsTotal.join(" ni ") + ")" : "Total de base pour " + gs.length + " gâteaux : " + det.join(" + ")) + FIN_ESTIM : (cookies ? MSG_COOKIES : "Choisissez le nombre de parts pour voir le tarif de base.");
+      $("estim-sub").textContent = total ? "Total de base : " + det.join(" + ") + (horsTotal.length ? " (sans compter " + horsTotal.join(" ni ") + ")" : "") + fin : (cookiesIncomplets && !sansTaille ? MSG_COOKIES : "Choisissez le nombre de parts pour voir le tarif de base.");
+    } else if (type.value === "cookies") {
+      var g1 = gs[0], n1 = nbCookies(g1.parts), pu1 = PRIX_COOKIE[g1.saveur];
+      $("estim-sub").textContent = total ? n1 + (n1 > 1 ? " cookies " : " cookie ") + g1.saveur + " × " + pu1 + " € (100 g pièce)." : (g1.parts === "c-plus" && pu1 ? "Plus de 30 cookies à " + pu1 + " € pièce : précisez le nombre dans le message." : MSG_COOKIES);
     } else {
       var p = PRIX[parts.value];
-      $("estim-sub").textContent = type.value === "cookies" ? MSG_COOKIES : p ? "Tarif de base pour " + LIB_PARTS[parts.value] + FIN_ESTIM : (parts.value === "nsp" ? "Lise vous conseillera la bonne taille selon le nombre d'invités." : "Choisissez le nombre de parts pour voir le tarif de base.");
+      $("estim-sub").textContent = p ? "Tarif de base pour " + LIB_PARTS[parts.value] + FIN_ESTIM : (parts.value === "nsp" ? "Lise vous conseillera la bonne taille selon le nombre d'invités." : "Choisissez le nombre de parts pour voir le tarif de base.");
     }
     $("estim-livr").classList.toggle("on", total >= 30 && mode() === "livraison");
   }
 
   /* Tous les gâteaux de la commande : le gâteau 1 (champs du haut) + les gâteaux ajoutés */
-  var autres = $("autres-gateaux"), ajout = $("ajout-gateau"), MAX_GATEAUX = 5, compteurG = 1;
+  var autres = $("autres-gateaux"), ajout = $("ajout-gateau"), MAX_GATEAUX = 6, compteurG = 1;
   function gateaux() {
-    var r = form.querySelector("input[name=saveur]:checked");
-    var liste = [{ num: 1, type: type.value, parts: parts.value, saveur: r ? r.value : "", prec: $("saveur-autre").value.trim() }];
+    var ck1 = type.value === "cookies";
+    var r = form.querySelector(ck1 ? "input[name=cookie]:checked" : "input[name=saveur]:checked"), rb = form.querySelector("input[name=base]:checked");
+    var liste = [{ num: 1, type: type.value, parts: parts.value, saveur: r ? r.value : "", base: ck1 && rb ? rb.value : "", prec: $("saveur-autre").value.trim() }];
     autres.querySelectorAll(".gateau").forEach(function (b, i) {
-      liste.push({ num: i + 2, bloc: b, type: b.querySelector(".g-type").value, parts: b.querySelector(".g-parts").value, saveur: b.querySelector(".g-saveur").value, prec: b.querySelector(".g-prec").value.trim() });
+      liste.push({ num: i + 2, bloc: b, type: b.querySelector(".g-type").value, parts: b.querySelector(".g-parts").value, saveur: b.querySelector(".g-saveur").value, base: b.querySelector(".g-base").value, prec: b.querySelector(".g-prec").value.trim() });
     });
     return liste;
   }
-  function libSaveur(g) { return g.saveur === "autre" ? "Autre — " + g.prec : g.saveur + (g.prec ? " (précision : " + g.prec + ")" : ""); }
+  function libSaveur(g) {
+    if (g.type === "cookies") return g.saveur + (GOURMANDS[g.saveur] ? " (fourré), base " + g.base.toLowerCase() : "") + (g.prec ? " (précision : " + g.prec + ")" : "");
+    return g.saveur === "autre" ? "Autre — " + g.prec : g.saveur + (g.prec ? " (précision : " + g.prec + ")" : "");
+  }
   function renumeroter() {
     var blocs = autres.querySelectorAll(".gateau");
     blocs.forEach(function (b, i) { b.querySelector(".g-titre").textContent = "Gâteau " + (i + 2); b.setAttribute("data-repere", "Gâteau " + (i + 2)); });
     $("g1-titre").hidden = blocs.length === 0;
     var plein = blocs.length + 1 >= MAX_GATEAUX;
     ajout.hidden = plein;
-    $("ajout-aide").textContent = plein ? "5 gâteaux au maximum par commande : pour plus, précisez-le dans le message." : "Pour commander un deuxième gâteau, identique ou différent.";
+    $("ajout-aide").textContent = plein ? "6 au maximum par commande : pour plus, précisez-le dans le message." : "Pour un deuxième gâteau ou une autre saveur de cookies.";
     majDate(); majEstim();
   }
   function optionsSaveurs() {
@@ -400,18 +471,31 @@
         '<div class="field"><label for="' + id + '-parts" class="g-parts-lbl">Nombre de parts <span class="req">*</span></label><select id="' + id + '-parts" class="g-parts" data-mode="gateau">' + OPT_GATEAU + "</select></div>" +
       "</div>" +
       '<div class="row2">' +
-        '<div class="field"><label for="' + id + '-saveur">Saveur <span class="req">*</span></label><select id="' + id + '-saveur" class="g-saveur">' + optionsSaveurs() + "</select></div>" +
+        '<div class="field"><label for="' + id + '-saveur" class="g-saveur-lbl">Saveur <span class="req">*</span></label><select id="' + id + '-saveur" class="g-saveur" data-mode="gateau">' + optionsSaveurs() + "</select></div>" +
         '<div class="field"><label for="' + id + '-prec" class="g-prec-lbl">Précision <span class="opt">(facultatif)</span></label><input type="text" id="' + id + '-prec" class="g-prec" maxlength="120" placeholder="Ex. éclats de noisette"></div>' +
-      "</div>";
+      "</div>" +
+      '<div class="field g-base-box" hidden><label for="' + id + '-base">Base du cookie fourré <span class="req">*</span></label><select id="' + id + '-base" class="g-base"><option value="">Choisir…</option><option value="Chocolat noir">Chocolat noir</option><option value="Chocolat blanc">Chocolat blanc</option></select></div>';
     autres.appendChild(b);
     var gT = b.querySelector(".g-type"), gP = b.querySelector(".g-parts"), gS = b.querySelector(".g-saveur");
     gT.value = ""; gP.value = "";
-    gT.addEventListener("change", function () { majParts(gT, gP, b.querySelector(".g-parts-lbl")); majDate(); majEstim(); });
+    function majBase() { b.querySelector(".g-base-box").hidden = !(gT.value === "cookies" && GOURMANDS[gS.value]); }
+    gT.addEventListener("change", function () {
+      majParts(gT, gP, b.querySelector(".g-parts-lbl"));
+      var ck = gT.value === "cookies";
+      if (ck !== (gS.getAttribute("data-mode") === "cookies")) {
+        gS.innerHTML = ck ? optionsCookies() : optionsSaveurs();
+        gS.value = ""; gS.setAttribute("data-mode", ck ? "cookies" : "gateau");
+        b.querySelector(".g-saveur-lbl").innerHTML = (ck ? "Saveur du cookie" : "Saveur") + ' <span class="req">*</span>';
+        b.querySelector(".g-prec-lbl").innerHTML = 'Précision <span class="opt">(facultatif)</span>';
+      }
+      majBase(); majDate(); majEstim();
+    });
     gP.addEventListener("change", majEstim);
     gS.addEventListener("change", function () {
       var a = gS.value === "autre";
       b.querySelector(".g-prec-lbl").innerHTML = a ? 'Précisez la saveur <span class="req">*</span>' : 'Précision <span class="opt">(facultatif)</span>';
       if (a) b.querySelector(".g-prec").focus();
+      majBase(); majEstim();
     });
     b.querySelector(".gateau__suppr").addEventListener("click", function () { b.remove(); renumeroter(); ajout.focus(); });
     renumeroter(); gT.focus();
@@ -426,7 +510,7 @@
     if (q.get("produit")) $("message").value = "Création qui m'inspire : " + q.get("produit") + "\n";
   } catch (e) {}
 
-  type.addEventListener("change", function () { majParts(type, parts, $("lbl-parts")); majDate(); majEstim(); });
+  type.addEventListener("change", function () { majParts(type, parts, $("lbl-parts")); majCookies1(); majDate(); majEstim(); });
   parts.addEventListener("change", majEstim);
   date.addEventListener("change", majDate);
   form.querySelectorAll("input[name=mode]").forEach(function (r) { r.addEventListener("change", majMode); });
@@ -434,14 +518,24 @@
 
   /* Saveurs : « Autre, précisez » rend la précision obligatoire */
   var savAutre = $("saveur-autre"), savLbl = $("lbl-saveur-autre");
-  function saveur() { var r = form.querySelector("input[name=saveur]:checked"); return r ? r.value : ""; }
-  function majSaveur() {
+  function saveur() { var r = form.querySelector(type.value === "cookies" ? "input[name=cookie]:checked" : "input[name=saveur]:checked"); return r ? r.value : ""; }
+  function base1() { var r = form.querySelector("input[name=base]:checked"); return r ? r.value : ""; }
+  function majCookies1() {
+    var ck = type.value === "cookies";
+    $("champ-saveurs").hidden = ck; $("champ-cookies").hidden = !ck;
+    $("champ-base").hidden = !(ck && GOURMANDS[saveur()]);
+    if (ck) { savLbl.innerHTML = 'Une précision ? <span class="opt">(facultatif)</span>'; savAutre.required = false; savAutre.placeholder = "Ex. emballage cadeau, mot à ajouter"; }
+    else { savAutre.placeholder = "Écrivez-nous la saveur que vous voulez"; majSaveur(true); }
+  }
+  function majSaveur(sansFocus) {
     var a = saveur() === "autre";
     savLbl.innerHTML = a ? 'Précisez la saveur souhaitée <span class="req">*</span>' : 'Une autre saveur ou une précision ? <span class="opt">(facultatif)</span>';
     savAutre.required = a;
-    if (a) savAutre.focus();
+    if (a && sansFocus !== true) savAutre.focus();
   }
   form.querySelectorAll("input[name=saveur]").forEach(function (r) { r.addEventListener("change", majSaveur); });
+  form.querySelectorAll("input[name=cookie]").forEach(function (r) { r.addEventListener("change", function () { majCookies1(); majEstim(); }); });
+  majCookies1();
 
   function erreur(msg) { var s = $("statut"); s.className = "statut err"; s.innerHTML = msg; }
 
@@ -452,7 +546,8 @@
     if (!type.value || !parts.value || !date.value || !nom || !tel || (mode() === "livraison" && !adresse.value.trim())) {
       erreur("Merci de remplir les champs marqués d'une étoile (*)."); return;
     }
-    if (!saveur()) { erreur("Merci de choisir une saveur (ou « Autre, précisez »)."); return; }
+    if (!saveur()) { erreur(type.value === "cookies" ? "Merci de choisir la saveur du cookie." : "Merci de choisir une saveur (ou « Autre, précisez »)."); return; }
+    if (type.value === "cookies" && GOURMANDS[saveur()] && !base1()) { erreur("Merci de choisir la base du cookie fourré (chocolat noir ou blanc)."); return; }
     if (saveur() === "autre" && !savAutre.value.trim()) { erreur("Merci de préciser la saveur souhaitée."); savAutre.focus(); return; }
     var gs = gateaux();
     for (var i = 1; i < gs.length; i++) {
@@ -460,6 +555,7 @@
       if (!g.type || !g.parts) { erreur("Gâteau " + g.num + " : merci de choisir le type et le nombre de parts."); g.bloc.querySelector(g.type ? ".g-parts" : ".g-type").focus(); return; }
       if (!g.saveur) { erreur("Gâteau " + g.num + " : merci de choisir une saveur."); g.bloc.querySelector(".g-saveur").focus(); return; }
       if (g.saveur === "autre" && !g.prec) { erreur("Gâteau " + g.num + " : merci de préciser la saveur souhaitée."); g.bloc.querySelector(".g-prec").focus(); return; }
+      if (g.type === "cookies" && GOURMANDS[g.saveur] && !g.base) { erreur("Gâteau " + g.num + " : merci de choisir la base du cookie fourré (chocolat noir ou blanc)."); g.bloc.querySelector(".g-base").focus(); return; }
     }
     if (date.value < date.min) { erreur("La date choisie est trop proche : " + aide.textContent); return; }
     if (!$("consent").checked) { erreur("Merci de cocher la case d'accord pour que Lise puisse vous recontacter."); return; }
@@ -467,21 +563,24 @@
     var p = PRIX[parts.value];
     var lignes = ["COMMANDE CAKE DÉLICE"];
     if (gs.length === 1) {
-      lignes.push(
-        "Type : " + LIB_TYPE[type.value],
-        (type.value === "cookies" ? "Nombre : " + LIB_PARTS[parts.value] : "Parts : " + LIB_PARTS[parts.value] + (p ? " (prix de base " + p + " €)" : "")),
-        "Saveur : " + libSaveur(gs[0])
-      );
+      if (type.value === "cookies") {
+        var pu = PRIX_COOKIE[gs[0].saveur], nc = nbCookies(parts.value);
+        lignes.push("Type : Cookies", "Nombre : " + LIB_PARTS[parts.value], "Saveur : " + libSaveur(gs[0]), "Prix : " + pu + " € pièce" + (nc ? ", soit " + (nc * pu) + " €" : " (nombre à préciser)"));
+      } else {
+        lignes.push("Type : " + LIB_TYPE[type.value], "Parts : " + LIB_PARTS[parts.value] + (p ? " (prix de base " + p + " €)" : ""), "Saveur : " + libSaveur(gs[0]));
+      }
     } else {
       var tot = 0, sansT = false, avecCookies = false;
       lignes.push(gs.length + " gâteaux :");
       gs.forEach(function (g) {
-        var pg = PRIX[g.parts];
-        if (pg) tot += pg; else if (g.type === "cookies") avecCookies = true; else sansT = true;
-        lignes.push("Gâteau " + g.num + " : " + LIB_TYPE[g.type] + ", " + LIB_PARTS[g.parts] + " — Saveur : " + libSaveur(g) + (pg ? " — prix de base " + pg + " €" : ""));
+        var pl = prixLigne(g), suite;
+        if (pl) tot += pl; else if (g.type === "cookies") avecCookies = true; else sansT = true;
+        if (g.type === "cookies") suite = " — " + PRIX_COOKIE[g.saveur] + " € pièce" + (pl ? ", soit " + pl + " €" : "");
+        else suite = pl ? " — prix de base " + pl + " €" : "";
+        lignes.push("Gâteau " + g.num + " : " + LIB_TYPE[g.type] + ", " + LIB_PARTS[g.parts] + " — Saveur : " + libSaveur(g) + suite);
       });
       var hors = [];
-      if (avecCookies) hors.push("cookies");
+      if (avecCookies) hors.push("cookies dont le nombre est à préciser");
       if (sansT) hors.push("gâteau dont la taille reste à choisir");
       lignes.push("Total de base : " + (tot ? tot + " €" : "—") + (hors.length ? " (hors " + hors.join(" et ") + ")" : ""));
     }
