@@ -139,13 +139,14 @@
                 </select>
               </div>
               <div class="field">
-                <label for="parts">Nombre de parts <span class="req">*</span></label>
+                <label for="parts" id="lbl-parts">Nombre de parts <span class="req">*</span></label>
                 <select id="parts" name="parts" required>
                   <option value="">Choisir…</option>
                   <option value="bento">1 à 2 parts (bento)</option>
                   <option value="2-4">2 à 4 parts</option>
                   <option value="4-6">4 à 6 parts</option>
                   <option value="6-8">6 à 8 parts</option>
+                  <option value="8-10">8 à 10 parts</option>
                   <option value="10-12">10 à 12 parts</option>
                   <option value="14-16">14 à 16 parts</option>
                   <option value="16-18">16 à 18 parts</option>
@@ -253,6 +254,7 @@
             <tr><td>2 à 4 parts</td><td>20 €</td></tr>
             <tr><td>4 à 6 parts</td><td>30 €</td></tr>
             <tr><td>6 à 8 parts</td><td>40 €</td></tr>
+            <tr><td>8 à 10 parts</td><td>50 €</td></tr>
             <tr><td>10 à 12 parts</td><td>60 €</td></tr>
             <tr><td>14 à 16 parts</td><td>70 €</td></tr>
             <tr><td>16 à 18 parts</td><td>80 €</td></tr>
@@ -292,14 +294,36 @@
   "use strict";
   /* Envoi vers le Worker DWT : la commande est enregistrée dans Supabase (table contacts) + email de notification. */
   var WORKER = "https://dwt-admin.darellwilliampro1.workers.dev";
-  var PRIX = { "bento": 15, "2-4": 20, "4-6": 30, "6-8": 40, "10-12": 60, "14-16": 70, "16-18": 80, "18-20": 90, "30": 120, "40": 150 };
+  var PRIX = { "bento": 15, "2-4": 20, "4-6": 30, "6-8": 40, "8-10": 50, "10-12": 60, "14-16": 70, "16-18": 80, "18-20": 90, "30": 120, "40": 150 };
   var LIB_TYPE = { layer: "Layer cake", bento: "Bento cake", surmesure: "Gâteau sur-mesure", cookies: "Cookies", autre: "Autre pâtisserie" };
-  var LIB_PARTS = { "bento": "1 à 2 parts (bento)", "2-4": "2 à 4 parts", "4-6": "4 à 6 parts", "6-8": "6 à 8 parts", "10-12": "10 à 12 parts", "14-16": "14 à 16 parts", "16-18": "16 à 18 parts", "18-20": "18 à 20 parts", "30": "30 parts", "40": "40 parts", "nsp": "Je ne sais pas encore" };
+  var LIB_PARTS = { "bento": "1 à 2 parts (bento)", "2-4": "2 à 4 parts", "4-6": "4 à 6 parts", "6-8": "6 à 8 parts", "8-10": "8 à 10 parts", "10-12": "10 à 12 parts", "14-16": "14 à 16 parts", "16-18": "16 à 18 parts", "18-20": "18 à 20 parts", "30": "30 parts", "40": "40 parts", "nsp": "Je ne sais pas encore" };
 
   var form = document.getElementById("form");
   var $ = function (id) { return document.getElementById(id); };
   var type = $("type"), parts = $("parts"), date = $("date"), aide = $("aide-date");
   var adresseBox = $("champ-adresse"), adresse = $("adresse");
+
+  /* Cookies : vendus à l'unité (100 g pièce) => « Nombre de cookies » au lieu de « Nombre de parts » */
+  var OPT_GATEAU = parts.innerHTML, NB_COOKIES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 20, 25, 30];
+  var OPT_COOKIES = '<option value="">Choisir…</option>';
+  NB_COOKIES.forEach(function (n) {
+    OPT_COOKIES += '<option value="c' + n + '">' + n + (n > 1 ? " cookies" : " cookie") + "</option>";
+    LIB_PARTS["c" + n] = n + (n > 1 ? " cookies" : " cookie") + " (100 g pièce)";
+  });
+  OPT_COOKIES += '<option value="c-plus">Plus de 30 (précisez dans le message)</option>';
+  LIB_PARTS["c-plus"] = "plus de 30 cookies (100 g pièce, nombre précisé dans le message)";
+  var LBL_PARTS = 'Nombre de parts <span class="req">*</span>', LBL_COOKIES = 'Nombre de cookies <span class="opt">(100 g pièce)</span> <span class="req">*</span>';
+  function majParts(selType, selParts, lbl) {
+    var ck = selType.value === "cookies";
+    if (ck !== (selParts.getAttribute("data-mode") === "cookies")) {
+      selParts.innerHTML = ck ? OPT_COOKIES : OPT_GATEAU;
+      selParts.value = "";
+      selParts.setAttribute("data-mode", ck ? "cookies" : "gateau");
+      lbl.innerHTML = ck ? LBL_COOKIES : LBL_PARTS;
+    }
+    if (selType.value === "bento") selParts.value = "bento";
+  }
+  var MSG_COOKIES = "Cookies à l'unité (100 g pièce) : Lise vous confirme le prix.";
 
   function isoDans(jours) {
     var d = new Date(); d.setDate(d.getDate() + jours);
@@ -322,14 +346,17 @@
   function majMode() { var l = mode() === "livraison"; adresseBox.style.display = l ? "" : "none"; adresse.required = l; majEstim(); }
   var FIN_ESTIM = ". Le prix final dépend du modèle, des saveurs et de la décoration.";
   function majEstim() {
-    var gs = gateaux(), total = 0, det = [], sansTaille = 0;
-    gs.forEach(function (g) { var pg = PRIX[g.parts]; if (pg) { total += pg; det.push(pg + " €"); } else { sansTaille++; } });
+    var gs = gateaux(), total = 0, det = [], sansTaille = 0, cookies = 0;
+    gs.forEach(function (g) { var pg = PRIX[g.parts]; if (pg) { total += pg; det.push(pg + " €"); } else if (g.type === "cookies") { cookies++; } else { sansTaille++; } });
+    var horsTotal = [];
+    if (cookies) horsTotal.push("les cookies (prix confirmé par Lise)");
+    if (sansTaille) horsTotal.push((sansTaille > 1 ? sansTaille + " gâteaux" : "1 gâteau") + " dont la taille reste à choisir");
     $("estim-prix").textContent = total ? total + " €" : "—";
     if (gs.length > 1) {
-      $("estim-sub").textContent = total ? "Total de base pour " + gs.length + " gâteaux : " + det.join(" + ") + (sansTaille ? " (sans compter " + (sansTaille > 1 ? sansTaille + " gâteaux" : "1 gâteau") + " dont la taille reste à choisir)" : "") + FIN_ESTIM : "Choisissez le nombre de parts pour voir le tarif de base.";
+      $("estim-sub").textContent = total ? (horsTotal.length ? "Total de base : " + det.join(" + ") + " (sans compter " + horsTotal.join(" ni ") + ")" : "Total de base pour " + gs.length + " gâteaux : " + det.join(" + ")) + FIN_ESTIM : (cookies ? MSG_COOKIES : "Choisissez le nombre de parts pour voir le tarif de base.");
     } else {
       var p = PRIX[parts.value];
-      $("estim-sub").textContent = p ? "Tarif de base pour " + LIB_PARTS[parts.value] + FIN_ESTIM : (parts.value === "nsp" ? "Lise vous conseillera la bonne taille selon le nombre d'invités." : "Choisissez le nombre de parts pour voir le tarif de base.");
+      $("estim-sub").textContent = type.value === "cookies" ? MSG_COOKIES : p ? "Tarif de base pour " + LIB_PARTS[parts.value] + FIN_ESTIM : (parts.value === "nsp" ? "Lise vous conseillera la bonne taille selon le nombre d'invités." : "Choisissez le nombre de parts pour voir le tarif de base.");
     }
     $("estim-livr").classList.toggle("on", total >= 30 && mode() === "livraison");
   }
@@ -369,7 +396,7 @@
       '<div class="gateau__tete"><p class="g-titre">Gâteau</p><button type="button" class="gateau__suppr">' + SVG_X + "Retirer</button></div>" +
       '<div class="row2">' +
         '<div class="field"><label for="' + id + '-type">Type de gâteau <span class="req">*</span></label><select id="' + id + '-type" class="g-type">' + type.innerHTML + "</select></div>" +
-        '<div class="field"><label for="' + id + '-parts">Nombre de parts <span class="req">*</span></label><select id="' + id + '-parts" class="g-parts">' + parts.innerHTML + "</select></div>" +
+        '<div class="field"><label for="' + id + '-parts" class="g-parts-lbl">Nombre de parts <span class="req">*</span></label><select id="' + id + '-parts" class="g-parts" data-mode="gateau">' + OPT_GATEAU + "</select></div>" +
       "</div>" +
       '<div class="row2">' +
         '<div class="field"><label for="' + id + '-saveur">Saveur <span class="req">*</span></label><select id="' + id + '-saveur" class="g-saveur">' + optionsSaveurs() + "</select></div>" +
@@ -378,7 +405,7 @@
     autres.appendChild(b);
     var gT = b.querySelector(".g-type"), gP = b.querySelector(".g-parts"), gS = b.querySelector(".g-saveur");
     gT.value = ""; gP.value = "";
-    gT.addEventListener("change", function () { if (gT.value === "bento") gP.value = "bento"; majDate(); majEstim(); });
+    gT.addEventListener("change", function () { majParts(gT, gP, b.querySelector(".g-parts-lbl")); majDate(); majEstim(); });
     gP.addEventListener("change", majEstim);
     gS.addEventListener("change", function () {
       var a = gS.value === "autre";
@@ -394,11 +421,11 @@
   try {
     var q = new URLSearchParams(location.search);
     if (q.get("type") && LIB_TYPE[q.get("type")]) type.value = q.get("type");
-    if (q.get("type") === "bento") parts.value = "bento";
+    majParts(type, parts, $("lbl-parts"));
     if (q.get("produit")) $("message").value = "Création qui m'inspire : " + q.get("produit") + "\n";
   } catch (e) {}
 
-  type.addEventListener("change", function () { if (type.value === "bento") parts.value = "bento"; majDate(); majEstim(); });
+  type.addEventListener("change", function () { majParts(type, parts, $("lbl-parts")); majDate(); majEstim(); });
   parts.addEventListener("change", majEstim);
   date.addEventListener("change", majDate);
   form.querySelectorAll("input[name=mode]").forEach(function (r) { r.addEventListener("change", majMode); });
@@ -441,18 +468,21 @@
     if (gs.length === 1) {
       lignes.push(
         "Type : " + LIB_TYPE[type.value],
-        "Parts : " + LIB_PARTS[parts.value] + (p ? " (prix de base " + p + " €)" : ""),
+        (type.value === "cookies" ? "Nombre : " + LIB_PARTS[parts.value] : "Parts : " + LIB_PARTS[parts.value] + (p ? " (prix de base " + p + " €)" : "")),
         "Saveur : " + libSaveur(gs[0])
       );
     } else {
-      var tot = 0, sansT = false;
+      var tot = 0, sansT = false, avecCookies = false;
       lignes.push(gs.length + " gâteaux :");
       gs.forEach(function (g) {
         var pg = PRIX[g.parts];
-        if (pg) tot += pg; else sansT = true;
+        if (pg) tot += pg; else if (g.type === "cookies") avecCookies = true; else sansT = true;
         lignes.push("Gâteau " + g.num + " : " + LIB_TYPE[g.type] + ", " + LIB_PARTS[g.parts] + " — Saveur : " + libSaveur(g) + (pg ? " — prix de base " + pg + " €" : ""));
       });
-      lignes.push("Total de base : " + (tot ? tot + " €" : "—") + (sansT ? " (hors gâteau dont la taille reste à choisir)" : ""));
+      var hors = [];
+      if (avecCookies) hors.push("cookies");
+      if (sansT) hors.push("gâteau dont la taille reste à choisir");
+      lignes.push("Total de base : " + (tot ? tot + " €" : "—") + (hors.length ? " (hors " + hors.join(" et ") + ")" : ""));
     }
     lignes.push(
       "Date souhaitée : " + date.value.split("-").reverse().join("/"),
