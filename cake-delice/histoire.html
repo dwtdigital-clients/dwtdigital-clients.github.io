@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notre histoire — Cake Délice, Valence</title>
+<meta name="description" content="L'histoire de Lise, jeune maman de 24 ans passée de la restauration à la pâtisserie. Des gâteaux faits main avec passion, à Valence.">
+<link rel="canonical" href="https://dwtdigital.fr/cake-delice/histoire.html">
+<meta name="theme-color" content="#FBF6EF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=Jost:wght@400;500;600;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/cake.css">
+<style>
+.story{padding:clamp(40px,6vw,80px) 0;}
+.story__grid{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(28px,5vw,64px);align-items:center;}
+.story__photo{position:relative;}
+.story__photo img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:220px 220px var(--r) var(--r);box-shadow:0 40px 60px -40px rgba(142,44,72,.55);}
+.story__sig{position:absolute;left:-10px;bottom:24px;background:#fff;border-radius:16px;padding:12px 18px;box-shadow:0 20px 40px -24px rgba(43,30,31,.5);font-family:var(--font-script);font-size:30px;color:var(--accent);line-height:1;}
+.story__txt p{color:var(--text-muted);font-size:17px;line-height:1.75;margin:0 0 18px;}
+.story__txt p:first-of-type{color:var(--text);font-size:clamp(19px,2vw,22px);line-height:1.6;}
+.story__quote{margin:26px 0 0;padding:20px 24px;background:var(--rose-soft);border-radius:var(--r-sm);font-family:var(--font-ital);font-style:italic;font-size:22px;line-height:1.45;color:var(--accent);}
+.valeurs{padding:0 0 clamp(20px,4vw,40px);}
+.valeurs__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:24px;}
+.val{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px;}
+.val__ico{width:52px;height:52px;border-radius:16px;background:var(--rose-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.val h3{margin:0 0 6px;font-size:18px;font-weight:600;}
+.val p{margin:0;color:var(--text-muted);font-size:14.5px;}
+.mini-gal{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:40px;}
+.mini-gal img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:var(--r-sm);}
+@media(max-width:920px){.story__grid{grid-template-columns:1fr;}.story__photo{max-width:440px;margin:0 auto;}.valeurs__grid{grid-template-columns:1fr;}.mini-gal{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body data-page="Notre histoire">
+
+<header class="appbar" data-repere="En-tête (logo et menu)">
+  <div class="appbar__in">
+    <a class="marque" href="index.html">Cake Délice</a>
+    <nav class="appbar__nav" aria-label="Navigation principale">
+      <a href="creations.html">Nos créations</a>
+      <a href="histoire.html" class="actif">Notre histoire</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="appbar__right">
+      <a class="btn btn--plein" href="commander.html" style="min-height:44px;padding:0 22px;">Commander</a>
+      <button class="burger" id="burger" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu-mobile"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+<nav class="menu-mobile" id="menu-mobile" aria-label="Menu mobile" data-repere="Menu mobile">
+  <a href="creations.html">Nos créations</a>
+  <a href="histoire.html">Notre histoire</a>
+  <a href="contact.html">Contact</a>
+  <a class="cmd" href="commander.html">Commander</a>
+</nav>
+
+<main>
+  <section class="page-head" data-repere="Titre de la page">
+    <div class="wrap"><span class="eyebrow">Notre histoire</span><h1>Une passion née d'un <em>nouveau départ</em></h1></div>
+  </section>
+
+  <section class="story" data-repere="Mon histoire"><div class="wrap">
+    <div class="story__grid">
+      <div class="story__photo reveal">
+        <img src="assets/photos/couronne-doree.jpg" alt="Layer cake Couronne dorée, création de Lise">
+        <span class="story__sig">Lise</span>
+      </div>
+      <div class="story__txt reveal">
+        <p>Je suis une jeune maman de 24 ans, et j'ai toujours évolué dans le milieu de la restauration.</p>
+        <p>Mon métier en cuisine était peu compatible avec la vie de maman. J'ai donc décidé de laisser la cuisine pour me consacrer à la pâtisserie — et ce qui n'était qu'un changement de cap est très vite devenu une vraie passion.</p>
+        <p>Aujourd'hui, depuis Valence, je prépare chaque gâteau à la main, sur commande, en l'adaptant à votre occasion, à vos couleurs et à vos envies.</p>
+        <div class="story__quote" data-repere="Citation">« Chaque commande est une nouvelle occasion de créer une pièce unique, pensée pour vous. »</div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="valeurs" data-repere="Mes valeurs"><div class="wrap">
+    <div style="text-align:center"><span class="eyebrow">Ce qui compte pour moi</span><h2 class="h-sec">Fait main, fait pour vous</h2></div>
+    <div class="valeurs__grid">
+      <div class="val reveal" data-repere="Valeur « 100 % fait maison »"><div class="val__ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div><h3>100 % fait maison</h3><p>Chaque gâteau est préparé à la main, sur commande, jamais à l'avance.</p></div>
+      <div class="val reveal" data-repere="Valeur « Sur-mesure »"><div class="val__ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.9L19 9l-4.1 1.1L12 15l-1.9-4.9L6 9l4.1-1.1z"/></svg></div><h3>Sur-mesure</h3><p>Thème, couleurs, saveurs, message : votre gâteau vous ressemble.</p></div>
+      <div class="val reveal" data-repere="Valeur « À Valence »"><div class="val__ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><h3>À Valence</h3><p>Livraison sur Valence et alentours (35 km), ou retrait sur rendez-vous.</p></div>
+    </div>
+    <div class="mini-gal" data-repere="Petite galerie photos">
+      <img src="assets/photos/jardin-roses.jpg" alt="Layer cake jardin de roses" loading="lazy">
+      <img src="assets/photos/bento-cerisier.jpg" alt="Bento cake fleur de cerisier" loading="lazy">
+      <img src="assets/photos/coeur-rouge.jpg" alt="Gâteau cœur personnalisé" loading="lazy">
+      <img src="assets/photos/cookies-framboise.jpg" alt="Cookies framboise" loading="lazy">
+    </div>
+  </div></section>
+
+  <section class="cta" data-repere="Encadré « On crée le vôtre ? »"><div class="wrap"><div class="cta__box">
+    <h2>On crée le vôtre ?</h2>
+    <p>Racontez-moi votre occasion : je vous prépare un gâteau unique, fait main à Valence.</p>
+    <a class="btn btn--clair" href="commander.html">Commander mon gâteau</a>
+  </div></div></section>
+</main>
+
+<footer data-repere="Pied de page"><div class="wrap">
+  <div class="foot">
+    <div><div class="marque">Cake Délice</div><p style="margin:12px 0 0;max-width:280px">Pâtisserie artisanale à Valence. Layer cakes, bento cakes et gâteaux sur-mesure faits main.</p></div>
+    <div><h4>Navigation</h4><a href="creations.html">Nos créations</a><a href="histoire.html">Notre histoire</a><a href="commander.html">Commander</a><a href="contact.html">Contact</a></div>
+    <div><h4>Contact</h4><a href="tel:+33782929694">07 82 92 96 94</a><a href="mailto:cakedelice26000@gmail.com">cakedelice26000@gmail.com</a><a href="https://www.instagram.com/cakedelice26" target="_blank" rel="noopener">Instagram @cakedelice26</a><span style="display:block;margin-top:6px">Valence &amp; alentours (35 km)</span></div>
+  </div>
+  <div class="foot__bas"><span>© 2026 Cake Délice — Pâtisserie artisanale, Valence · <a href="cgv.html">CGV</a> · <a href="mentions-legales.html">Mentions légales</a></span><span>Site créé par <a href="https://dwtdigital.fr" target="_blank" rel="noopener">DWT Digital</a></span></div>
+</div></footer>
+
+<script src="assets/cake.js"></script>
+</body>
+</html>
