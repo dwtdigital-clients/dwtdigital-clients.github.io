@@ -1496,7 +1496,8 @@ button{font-family:var(--body);cursor:pointer}
       { label:'Module de commande en ligne', type:'one-shot', pu:290, desc:'Page « Commander » : formulaire en 3 étapes, estimation automatique du prix, délais minimum contrôlés, anti-spam, accord RGPD, commande reçue par email et archivée' },
       { label:'Espace client DWT', type:'one-shot', pu:0, desc:'Inclus' },
       { label:'Audit de visibilité', type:'one-shot', pu:90, desc:'Rapport PDF de visibilité locale (Google, réseaux, avis) · offert si souscription d\'un pack' },
-      { label:'Hébergement + petites mises à jour (hors pack)', type:'mensuel', pu:29, desc:'Pour garder son site sans prendre de pack' }
+      { label:'Hébergement + petites mises à jour (hors pack)', type:'mensuel', pu:29, desc:'Pour garder son site sans prendre de pack' },
+      { label:'Nom de domaine (achat, réglages et renouvellement)', type:'one-shot', pu:0, prixAIndiquer:true, desc:'Prix selon le nom choisi, communiqué après vérification de sa disponibilité. Renouvelé chaque année.' }
     ]},
     { g:'À la carte (par mois, 3 mois minimum)', carte:true, items:[
       { label:"Gestion d'1 réseau social", type:'mensuel', pu:200, desc:'8 publications/mois, visuels standard, réponses commentaires/messages (léger)' },
@@ -1796,14 +1797,14 @@ button{font-family:var(--body);cursor:pointer}
     var sel=g('dv-cat'); if(!sel) return;
     sel.innerHTML='<option value="">+ Ajouter une prestation du catalogue…</option>'+DV_CATALOGUE.map(function(grp,gi){
       return '<optgroup label="'+esc(grp.g)+'">'+grp.items.map(function(it,ii){
-        return '<option value="'+gi+':'+ii+'">'+esc(it.label)+' — '+(it.pu?eur(it.pu):'inclus')+(it.type==='mensuel'?' /mois':'')+'</option>';
+        return '<option value="'+gi+':'+ii+'">'+esc(it.label)+' — '+(it.prixAIndiquer?'prix à indiquer':(it.pu?eur(it.pu):'inclus'))+(it.type==='mensuel'?' /mois':'')+'</option>';
       }).join('')+'</optgroup>';
     }).join('');
   }
   window.dvAjouter=function(sel){
     var v=sel.value; sel.value=''; if(!v) return;
     var p=v.split(':'), grp=DV_CATALOGUE[+p[0]], it=grp && grp.items[+p[1]]; if(!it) return;
-    DV_LINES.push({ label:it.label, desc:it.desc||'', type:it.type, qty:1, pu:it.pu, pack:it.pack||'' });
+    DV_LINES.push({ label:it.label, desc:it.desc||'', type:it.type, qty:1, pu:it.pu, pack:it.pack||'', prixAIndiquer:!!it.prixAIndiquer });
     if(grp.carte){ var e=g('dv-eng'); if(e) e.value='3mois'; }
     dvRenderLines(); dvTotals();
   };
@@ -1909,6 +1910,7 @@ button{font-family:var(--body);cursor:pointer}
     if(!nom && !com){ msg.textContent='Indiquez au moins le nom ou le commerce du prospect.'; return; }
     if(!DV_LINES.length){ msg.textContent='Ajoutez au moins une ligne (prestation du catalogue ou ligne vide).'; return; }
     if(DV_LINES.some(function(l){ return !String(l.label||'').trim(); })){ msg.textContent='Chaque ligne doit avoir un nom de prestation.'; return; }
+    if(DV_LINES.some(function(l){ return l.prixAIndiquer && !(Number(l.pu)>0); })){ msg.textContent='Indiquez le prix du nom de domaine (après avoir vérifié sa disponibilité) : sinon le client lirait « inclus ».'; return; }
     var det=dvDetails(), t=dvCalc(DV_LINES, det);
     var packLine=DV_LINES.filter(function(l){ return l.pack; })[0];
     var now=''; try{ now=new Date().toISOString(); }catch(e){}
