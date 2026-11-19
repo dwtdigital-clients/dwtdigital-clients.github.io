@@ -170,6 +170,22 @@ button{font-family:var(--body);cursor:pointer}
 .lv-etat.ok{color:#ffcf86}
 .lv-frame{flex:1;width:100%;border:0;background:#fff}
 @media(max-width:640px){.lv{padding:0}.lv-box{height:100%;border-radius:0}}
+/* Message avec endroit (messagerie) */
+.msg-endroit{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 10px}
+.msg-endroit[hidden]{display:none}
+.msg-endroit-choix{font-size:.82rem;color:var(--ink);min-width:0;overflow-wrap:anywhere}
+.msg-endroit-choix b{font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:#e8a33d;margin-right:7px}
+.mp-x{border:0;background:transparent;color:var(--acc);font:inherit;font-size:.78rem;font-weight:600;cursor:pointer;padding:2px 4px;text-decoration:underline}
+.mb-lieu{margin:2px 0 8px;padding:8px 10px;border-radius:10px;border:1px solid rgba(232,163,61,.4);background:rgba(232,163,61,.08);font-size:.8rem;overflow-wrap:anywhere}
+.mb-lieu b{display:block;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#e8a33d;margin-bottom:2px}
+.mb-lieu .dem-voir{margin-top:7px;padding:6px 12px;font-size:.74rem}
+.mp .lv-head{flex-wrap:wrap}
+.mp-ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-left:auto}
+.mp-page{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--mut)}
+.mp-page select{padding:7px 10px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--ink);font-family:inherit;font-size:.82rem}
+.mp-page select option{color:#111}
+.mp-ok{width:auto;margin-top:0;padding:9px 16px;font-size:.82rem}
+.mp-ok:disabled{opacity:.45;cursor:not-allowed}
 
 /* ===== ONGLET MESSAGERIE ===== */
 .msgwrap{display:grid;grid-template-columns:308px 1fr;gap:18px;align-items:start}
@@ -424,6 +440,10 @@ button{font-family:var(--body);cursor:pointer}
         <div class="card thread-card">
           <div class="thread-head" id="thread-head">Sélectionnez une conversation</div>
           <div class="thread" id="thread"><p class="thread-empty">Choisissez un client à gauche pour voir le fil.</p></div>
+          <div class="msg-endroit" id="msg-endroit" hidden>
+            <button type="button" class="dem-voir" id="msg-pointer" onclick="msgPointer()">Montrer un endroit de son site</button>
+            <div class="msg-endroit-choix" id="msg-endroit-choix"></div>
+          </div>
           <div class="composer">
             <textarea id="msg-input" rows="2" placeholder="Votre réponse à ce client…" disabled></textarea>
             <button class="btn-primary" id="msg-send" type="button" onclick="sendMessage()" disabled>Envoyer</button>
@@ -998,6 +1018,7 @@ button{font-family:var(--body);cursor:pointer}
     SITES={};
     r.data.forEach(function(x){ SITES[String(x.id)]=x; });
     Object.keys(SITES).forEach(renderSiteBlock);
+    msgLieuMaj(); // messagerie : le bouton « Montrer un endroit » dépend de l'adresse du site
   }
   function siteBtn(id, etape, label, opts){
     opts=opts||{};
@@ -1230,7 +1251,7 @@ button{font-family:var(--body);cursor:pointer}
     else { var els=scope.querySelectorAll('*'); for(var k=0;k<els.length;k++){ if(txt && norm(els[k]).indexOf(txt)===0 && (!r || r.contains(els[k]))) r=els[k]; } }
     return r ? { el:r, exact:true } : { el:proche, exact:false };
   }
-  function lieuMarquer(d, el){
+  function lieuMarquer(d, el, etiq){
     var st=d.createElement('style');
     st.textContent='[class*="reveal"]{opacity:1!important;transform:none!important}'+
       '.dwt-lv{outline:4px solid #e8a33d!important;outline-offset:3px!important;border-radius:6px}img.dwt-lv{outline-offset:-5px!important}'+
@@ -1238,7 +1259,7 @@ button{font-family:var(--body);cursor:pointer}
     d.head.appendChild(st);
     el.classList.add('dwt-lv');
     try{ el.scrollIntoView({ block:'center' }); }catch(e){ el.scrollIntoView(); }
-    var et=d.createElement('div'); et.id='dwt-lv-etiq'; et.textContent='À modifier ici'; d.body.appendChild(et);
+    var et=d.createElement('div'); et.id='dwt-lv-etiq'; et.textContent=etiq||'À modifier ici'; d.body.appendChild(et);
     var r=el.getBoundingClientRect(), w=d.defaultView, sx=w.pageXOffset||0, sy=w.pageYOffset||0;
     var top=r.top+sy-et.offsetHeight-10; if(top<sy+4) top=r.bottom+sy+10;
     et.style.top=top+'px'; et.style.left=Math.max(sx+6, Math.min(r.left+sx, sx+w.innerWidth-et.offsetWidth-6))+'px';
@@ -1246,16 +1267,21 @@ button{font-family:var(--body);cursor:pointer}
   window.lieuVoir=function(id){
     var m=null; for(var i=0;i<DATA.modifications.length;i++){ if(DATA.modifications[i].id===id){ m=DATA.modifications[i]; break; } }
     var L=m && demLieu(m); if(!L || !L.page) return;
+    lieuOuvrir(L, { titre:'Endroit à modifier', etiq:'À modifier ici', quand:'la demande' });
+  };
+  // Fenêtre « Voir l'endroit » : sert aux demandes du client et aux messages envoyés avec un endroit
+  function lieuOuvrir(L, o){
     var box=g('lv');
     if(!box){
       box=document.createElement('div'); box.className='lv'; box.id='lv'; box.setAttribute('role','dialog'); box.setAttribute('aria-modal','true'); box.setAttribute('aria-label','Endroit à modifier');
-      box.innerHTML='<div class="lv-box"><div class="lv-head"><div class="lv-txt"><b>Endroit à modifier</b><div class="lv-lieu" id="lv-lieu"></div><p class="lv-msg" id="lv-msg"></p></div>'+
+      box.innerHTML='<div class="lv-box"><div class="lv-head"><div class="lv-txt"><b id="lv-titre">Endroit à modifier</b><div class="lv-lieu" id="lv-lieu"></div><p class="lv-msg" id="lv-msg"></p></div>'+
         '<button type="button" class="lv-x" onclick="lieuFermer()" aria-label="Fermer">×</button></div>'+
         '<div class="lv-etat" id="lv-etat"></div><iframe class="lv-frame" id="lv-frame" title="Page du site"></iframe></div>';
       box.addEventListener('click', function(e){ if(e.target===box) lieuFermer(); });
       document.addEventListener('keydown', function(e){ if(e.key==='Escape' && g('lv') && g('lv').classList.contains('on')) lieuFermer(); });
       document.body.appendChild(box);
     }
+    g('lv-titre').textContent=o.titre; box.setAttribute('aria-label', o.titre);
     g('lv-lieu').textContent=L.lieu; g('lv-msg').textContent=L.reste;
     var etat=g('lv-etat'); etat.className='lv-etat'; etat.textContent='Chargement de la page…';
     var fr=g('lv-frame');
@@ -1267,15 +1293,183 @@ button{font-family:var(--body);cursor:pointer}
       d.addEventListener('submit', function(e){ e.preventDefault(); e.stopPropagation(); }, true);
       var res=lieuTrouver(d, L.lieu);
       if(res && res.el){
-        lieuMarquer(d, res.el); etat.className='lv-etat ok';
-        etat.textContent = res.exact ? 'L\'endroit est entouré en orange sur la page ci-dessous.' : 'L\'endroit exact a changé depuis la demande : la zone la plus proche est entourée en orange.';
+        lieuMarquer(d, res.el, o.etiq); etat.className='lv-etat ok';
+        etat.textContent = res.exact ? 'L\'endroit est entouré en orange sur la page ci-dessous.' : 'L\'endroit exact a changé depuis '+o.quand+' : la zone la plus proche est entourée en orange.';
       }
-      else { etat.textContent='Endroit introuvable sur la page (elle a peut-être changé depuis la demande) : voici la page concernée.'; }
+      else { etat.textContent='Endroit introuvable sur la page (elle a peut-être changé depuis '+o.quand+') : voici la page concernée.'; }
     };
     fr.src='/'+L.page;
     box.classList.add('on');
-  };
+  }
   window.lieuFermer=function(){ var b=g('lv'); if(b){ b.classList.remove('on'); var fr=g('lv-frame'); if(fr){ fr.onload=null; fr.src='about:blank'; } } };
+
+  // ===== MESSAGE AVEC ENDROIT : DWT montre au client un endroit précis de son site =====
+  // Le message enregistré commence par « Endroit : … » puis « Page : … » ; l'espace client lit ces 2 lignes
+  // et affiche un bouton « Voir l'endroit ». Aucun champ en plus dans la base, rien à changer côté Worker.
+  var MSG_LIEU = null, MP = { choix:null, sel:null, survol:null };
+  function msgLieuDe(n){
+    var txt=String((n && n.contenu)||''), mm=/^Endroit : (.+)\nPage : (\S+)\n+([\s\S]*)$/.exec(txt);
+    if(!mm) return null;
+    return { lieu:mm[1].trim(), page: /^[\w\-\/]+\.html$/.test(mm[2]) && mm[2].indexOf('..')<0 ? mm[2] : '', reste:mm[3] };
+  }
+  function msgTexte(n){ var L=msgLieuDe(n); return L ? L.reste : String((n && n.contenu)||''); }
+  // Adresse du site du client sur dwtdigital.fr (même adresse que le dashboard, sinon on ne peut pas pointer)
+  function msgSiteUrl(cid){
+    var s=SITES[String(cid)]; if(!s) return '';
+    var liste = s.site_etape==='en_ligne' ? [s.site_url, s.site_apercu_url] : [s.site_apercu_url, s.site_url];
+    var h=function(x){ return String(x||'').replace(/^www\./,''); };
+    for(var i=0;i<liste.length;i++){
+      if(!liste[i]) continue;
+      try{ var x=new URL(liste[i], location.href); if(h(x.hostname)===h(location.hostname)) return location.origin+x.pathname+x.search; }catch(e){}
+    }
+    return '';
+  }
+  function msgLieuMaj(){
+    var bar=g('msg-endroit'), bt=g('msg-pointer'), ch=g('msg-endroit-choix'); if(!bar) return;
+    var url = MSG_ACTIVE ? msgSiteUrl(MSG_ACTIVE) : '';
+    bar.hidden = !url;
+    if(bt) bt.textContent = MSG_LIEU ? 'Changer l\'endroit' : 'Montrer un endroit de son site';
+    if(ch) ch.innerHTML = MSG_LIEU ? '<b>Endroit</b>'+esc(MSG_LIEU.lieu)+' <button type="button" class="mp-x" onclick="msgLieuRetirer()">Retirer</button>' : '';
+  }
+  window.msgLieuRetirer=function(){ MSG_LIEU=null; msgLieuMaj(); };
+  window.msgLieuVoir=function(id){
+    var n=null; for(var i=0;i<DATA.notifications.length;i++){ if(String(DATA.notifications[i].id)===String(id)){ n=DATA.notifications[i]; break; } }
+    var L=msgLieuDe(n); if(!L || !L.page) return;
+    lieuOuvrir(L, { titre:'Endroit montré au client', etiq:'Ici', quand:'le message' });
+  };
+
+  // Pointage — même logique et même format de chemin que l'espace client (espace.html, ptCible / ptDecrire / ptChemin) :
+  // à modifier aux deux endroits à la fois, sinon « Voir l'endroit » ne retrouve plus l'élément.
+  function mpExtrait(t){ t=String(t||'').replace(/\s+/g,' ').trim(); return t.length>48 ? t.slice(0,46).trim()+'…' : t; }
+  function mpCible(d, el){
+    if(el && el.nodeType!==1) el=el.parentElement;
+    if(!el || el===d.body || el===d.documentElement || el.id==='dwt-pt-etiq') return null;
+    var svg=el.closest('svg'); if(svg) return svg;
+    if(el.tagName==='IMG') return el;
+    var c=el.closest('h1,h2,h3,h4,h5,h6,p,li,blockquote,button,label,legend,tr,input,select,textarea,cite,figcaption');
+    if(!c) c=el.closest('a,span,b,strong,em,small');
+    if(!c) c=el.closest('[data-repere]');
+    if(!c || c===d.body || c.tagName==='MAIN') return null;
+    return c;
+  }
+  function mpDecrire(c){
+    var t=c.tagName;
+    if(t==='IMG') return 'Photo';
+    if(t.toLowerCase()==='svg') return 'Icône';
+    if(/^H[1-6]$/.test(t)) return 'Titre « '+mpExtrait(c.textContent)+' »';
+    if(t==='TR') return 'Ligne « '+mpExtrait(Array.prototype.map.call(c.cells,function(x){ return x.textContent.trim(); }).join(' : '))+' »';
+    if(t==='INPUT' || t==='SELECT' || t==='TEXTAREA'){
+      var f=c.closest('.field,label'), l=f ? (f.tagName==='LABEL' ? f : f.querySelector('label')) : null;
+      return 'Champ « '+mpExtrait(l ? l.textContent : (c.name||''))+' »';
+    }
+    if(t==='BUTTON' || (t==='A' && /btn|cmd|cta/i.test(c.className))) return 'Bouton « '+mpExtrait(c.textContent)+' »';
+    if(t==='A') return 'Lien « '+mpExtrait(c.textContent)+' »';
+    if(c.hasAttribute('data-repere')) return '';
+    var x=mpExtrait(c.textContent); return x ? 'Texte « '+x+' »' : '';
+  }
+  function mpChemin(d, c){
+    var parts=[], n=c;
+    while(n && n!==d.documentElement){ if(n.getAttribute && n.getAttribute('data-repere')) parts.unshift(n.getAttribute('data-repere')); n=n.parentElement; }
+    var page=(d.body.getAttribute('data-page')||'').trim();
+    if(!page) page=(d.title||'').split(/\s[—–|-]\s/)[0].trim();
+    var leaf=mpDecrire(c), all=[page].concat(parts);
+    var m=parts.length ? /«\s(.+)\s»$/.exec(parts[parts.length-1]) : null;
+    var plein=String(c.textContent||'').replace(/\s+/g,' ').trim().toLowerCase();
+    if(m && leaf && plein && m[1].toLowerCase()===plein) leaf = /^H[1-6]$/.test(c.tagName) ? 'Titre' : 'Intitulé';
+    if(leaf) all.push(leaf);
+    return all.filter(Boolean).join(' › ');
+  }
+  function mpDoc(){ var fr=g('mp-frame'); try{ var d=fr && fr.contentDocument; return (d && d.body && fr.contentWindow.location.href!=='about:blank') ? d : null; }catch(e){ return false; } }
+  function mpPages(d){
+    var sel=g('mp-page'), lab=g('mp-page-l'); if(!sel) return;
+    var vu={}, opts=[];
+    Array.prototype.forEach.call(d.querySelectorAll('header a[href], nav a[href]'), function(a){
+      var href=a.getAttribute('href')||'';
+      if(!/^[\w\-\/.]*\.html$/.test(href)) return;
+      var u; try{ u=new URL(href, d.location.href); }catch(e){ return; }
+      if(u.origin!==d.location.origin || vu[u.pathname]) return;
+      vu[u.pathname]=1;
+      var nom=(a.classList.contains('marque') || /(^|\/)index\.html$/.test(u.pathname)) ? 'Accueil' : (a.textContent||'').replace(/\s+/g,' ').trim();
+      if(nom) opts.push({ v:u.href, l:nom, k:u.pathname });
+    });
+    var cur=d.location.pathname; if(/\/$/.test(cur)) cur+='index.html';
+    sel.innerHTML=opts.map(function(o){ return '<option value="'+esc(o.v)+'"'+(o.k===cur?' selected':'')+'>'+esc(o.l)+'</option>'; }).join('');
+    if(lab) lab.style.display = opts.length>1 ? '' : 'none';
+  }
+  function mpMaj(){
+    var l=g('mp-lieu'), e=g('mp-etat'), ok=g('mp-ok'); if(!e) return;
+    if(l) l.textContent = MP.choix ? MP.choix.lieu : '';
+    e.className = MP.choix ? 'lv-etat ok' : 'lv-etat';
+    e.textContent = MP.choix ? 'Endroit choisi. Touchez un autre endroit pour changer, puis cliquez sur « Choisir cet endroit ».'
+      : 'Touchez sur le site le texte, la photo ou le bouton à montrer au client. Pour une autre page, choisissez-la dans la liste.';
+    if(ok) ok.disabled = !MP.choix;
+  }
+  function mpChoisir(d, el){
+    var c=mpCible(d, el); if(!c) return;
+    if(MP.sel) MP.sel.classList.remove('dwt-pt-choix');
+    c.classList.remove('dwt-pt-survol'); c.classList.add('dwt-pt-choix'); MP.sel=c;
+    var page=String(d.location.pathname||'').replace(/^\//,''); if(!page || /\/$/.test(page)) page+='index.html';
+    MP.choix={ lieu:mpChemin(d, c), page:page };
+    var et=d.getElementById('dwt-pt-etiq');
+    if(!et){ et=d.createElement('div'); et.id='dwt-pt-etiq'; d.body.appendChild(et); }
+    et.textContent=MP.choix.lieu.split(' › ').slice(-2).join(' › ');
+    var r=c.getBoundingClientRect(), w=d.defaultView, sx=w.pageXOffset||0, sy=w.pageYOffset||0;
+    var top=r.top+sy-et.offsetHeight-8; if(top<sy+4) top=r.bottom+sy+8;
+    et.style.top=top+'px'; et.style.left=Math.max(sx+6, Math.min(r.left+sx, sx+w.innerWidth-et.offsetWidth-6))+'px';
+    mpMaj();
+  }
+  function mpActiver(){
+    var d=mpDoc(), e=g('mp-etat');
+    if(d===false){ if(e) e.textContent='Impossible de pointer sur ce site (il n\'est pas sur dwtdigital.fr) : décrivez l\'endroit dans votre message.'; return; }
+    if(!d) return;
+    MP.sel=null; MP.survol=null; MP.choix=null; mpMaj();
+    mpPages(d);
+    var st=d.createElement('style');
+    st.textContent='html,html *{cursor:crosshair!important}[class*="reveal"]{opacity:1!important;transform:none!important}'+
+      '.dwt-pt-survol{outline:2px dashed #9b4dff!important;outline-offset:2px!important}'+
+      '.dwt-pt-choix{outline:3px solid #7B1FA2!important;outline-offset:2px!important}'+
+      'img.dwt-pt-survol,img.dwt-pt-choix{outline-offset:-4px!important}'+
+      '#dwt-pt-etiq{position:absolute;z-index:2147483647;max-width:260px;background:#7B1FA2;color:#fff;font:600 12px/1.35 system-ui,-apple-system,sans-serif;padding:6px 10px;border-radius:9px;box-shadow:0 6px 18px rgba(0,0,0,.25);pointer-events:none}';
+    d.head.appendChild(st);
+    d.addEventListener('click', function(ev){ ev.preventDefault(); ev.stopPropagation(); if(ev.stopImmediatePropagation) ev.stopImmediatePropagation(); mpChoisir(d, ev.target); }, true);
+    d.addEventListener('mousedown', function(ev){ var t=ev.target; if(t && t.closest && t.closest('input,select,textarea,label')) ev.preventDefault(); }, true);
+    d.addEventListener('focusin', function(ev){ var t=ev.target; if(t && t.blur && /^(INPUT|SELECT|TEXTAREA)$/.test(t.tagName)) t.blur(); }, true);
+    d.addEventListener('mouseover', function(ev){
+      var c=mpCible(d, ev.target);
+      if(MP.survol && MP.survol!==c) MP.survol.classList.remove('dwt-pt-survol');
+      if(c && c!==MP.sel) c.classList.add('dwt-pt-survol');
+      MP.survol=c;
+    }, true);
+    d.addEventListener('submit', function(ev){ ev.preventDefault(); ev.stopPropagation(); }, true);
+  }
+  window.msgPointer=function(){
+    if(!MSG_ACTIVE) return;
+    var url=msgSiteUrl(MSG_ACTIVE); if(!url) return;
+    var box=g('mp');
+    if(!box){
+      box=document.createElement('div'); box.className='lv mp'; box.id='mp'; box.setAttribute('role','dialog'); box.setAttribute('aria-modal','true'); box.setAttribute('aria-label','Montrer un endroit au client');
+      box.innerHTML='<div class="lv-box"><div class="lv-head"><div class="lv-txt"><b>Montrer un endroit au client</b><div class="lv-lieu" id="mp-lieu"></div></div>'+
+        '<div class="mp-ctrl"><label class="mp-page" id="mp-page-l">Page <select id="mp-page" onchange="mpPage(this.value)"></select></label>'+
+        '<button type="button" class="btn-primary mp-ok" id="mp-ok" onclick="mpValider()" disabled>Choisir cet endroit</button>'+
+        '<button type="button" class="lv-x" onclick="mpFermer()" aria-label="Fermer">×</button></div></div>'+
+        '<div class="lv-etat" id="mp-etat"></div><iframe class="lv-frame" id="mp-frame" title="Site du client"></iframe></div>';
+      box.addEventListener('click', function(e){ if(e.target===box) mpFermer(); });
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape' && g('mp') && g('mp').classList.contains('on')) mpFermer(); });
+      document.body.appendChild(box);
+    }
+    MP.choix=null; MP.sel=null; MP.survol=null; mpMaj();
+    var e=g('mp-etat'); if(e) e.textContent='Chargement du site…';
+    var fr=g('mp-frame'); fr.onload=mpActiver; fr.src=url;
+    box.classList.add('on');
+  };
+  window.mpPage=function(v){ var fr=g('mp-frame'); if(fr && v){ fr.src=v; } };
+  window.mpValider=function(){
+    if(!MP.choix) return;
+    MSG_LIEU={ lieu:MP.choix.lieu, page:MP.choix.page };
+    mpFermer(); msgLieuMaj();
+    var ta=g('msg-input'); if(ta){ try{ ta.focus(); }catch(e){} }
+  };
+  window.mpFermer=function(){ var b=g('mp'); if(b){ b.classList.remove('on'); var fr=g('mp-frame'); if(fr){ fr.onload=null; fr.src='about:blank'; } } MP.sel=null; MP.survol=null; };
 
   function renderDemandes(){
     var mods = DATA.modifications.slice();
@@ -1337,7 +1531,7 @@ button{font-family:var(--body);cursor:pointer}
     convs.sort(function(a,b){ var ta=a.last?String(a.last.created_at||''):''; var tb=b.last?String(b.last.created_at||''):''; return tb.localeCompare(ta); });
     if(!convs.length){ box.innerHTML='<p class="empty">Aucun client.</p>'; return; }
     box.innerHTML=convs.map(function(o){
-      var prev=o.last?(o.last.contenu||''):'Pas encore de message';
+      var prev=o.last?msgTexte(o.last):'Pas encore de message';
       var dot=o.unread?'<span class="cv-dot"></span>':'';
       return '<div class="conv'+(MSG_ACTIVE===o.c.id?' on':'')+'" onclick="selectConv(\''+esc(o.c.id)+'\')">'+
         '<div class="cv-ava">'+esc(initials(o.c))+'</div>'+
@@ -1352,6 +1546,7 @@ button{font-family:var(--body);cursor:pointer}
       if(head) head.textContent='Sélectionnez une conversation';
       if(thread) thread.innerHTML='<p class="thread-empty">Choisissez un client à gauche pour voir le fil.</p>';
       if(ta) ta.disabled=true; if(btn) btn.disabled=true;
+      msgLieuMaj();
       return;
     }
     var c=clientById(MSG_ACTIVE);
@@ -1362,11 +1557,14 @@ button{font-family:var(--body);cursor:pointer}
       else thread.innerHTML=arr.map(function(n){
         var inc=fromClient(n.direction);
         var who=inc ? (c?(c.prenom||'Client'):'Client') : 'DWT';
-        return '<div class="mb '+(inc?'mb-in':'mb-out')+'"><div class="who">'+esc(who)+'</div><p>'+esc(n.contenu||'')+'</p><span class="t">'+esc(fmtTime(n.created_at))+'</span></div>';
+        var L=msgLieuDe(n);
+        var lieu=L ? '<div class="mb-lieu"><b>Endroit</b>'+esc(L.lieu)+(L.page?'<br><button type="button" class="dem-voir" onclick="msgLieuVoir(\''+esc(n.id)+'\')">Voir l\'endroit</button>':'')+'</div>' : '';
+        return '<div class="mb '+(inc?'mb-in':'mb-out')+'"><div class="who">'+esc(who)+'</div>'+lieu+'<p>'+esc(L?L.reste:(n.contenu||''))+'</p><span class="t">'+esc(fmtTime(n.created_at))+'</span></div>';
       }).join('');
       thread.scrollTop=thread.scrollHeight;
     }
     if(ta) ta.disabled=false; if(btn) btn.disabled=false;
+    msgLieuMaj();
   }
 
   function renderMessagerie(){
@@ -1380,6 +1578,7 @@ button{font-family:var(--body);cursor:pointer}
   }
 
   window.selectConv=function(cid){
+    if(MSG_ACTIVE!==cid) MSG_LIEU=null;
     MSG_ACTIVE=cid;
     // marque les messages entrants comme lus (visuel ; persistance reelle a brancher cote Worker)
     DATA.notifications.forEach(function(n){ if(n.client_id===cid && fromClient(n.direction)) n.lu=true; });
@@ -1396,11 +1595,12 @@ button{font-family:var(--body);cursor:pointer}
     var txt=ta.value.trim();
     if(!txt){ if(fb){ fb.style.color='#ff8b8b'; fb.textContent='Écrivez un message.'; } return; }
     btn.disabled=true;
+    if(MSG_LIEU) txt='Endroit : '+MSG_LIEU.lieu+'\nPage : '+MSG_LIEU.page+'\n\n'+txt;
     var res=await api('/admin/send-message',{ client_id:MSG_ACTIVE, contenu:txt });
     if(!res.ok){ if(fb){ fb.style.color='#ff8b8b'; fb.textContent='Erreur : '+esc(res.error||''); } btn.disabled=false; return; }
     var now=''; try{ now=new Date().toISOString(); }catch(e){}
     DATA.notifications.push({ id:'tmp-'+(DATA.notifications.length+1), client_id:MSG_ACTIVE, contenu:txt, direction:'ceo_to_client', lu:true, created_at:now });
-    ta.value=''; btn.disabled=false;
+    ta.value=''; btn.disabled=false; MSG_LIEU=null;
     renderConvList();
     renderThread();
     if(fb){ fb.style.color='var(--gl)'; fb.textContent=(MODE==='demo'?'Réponse ajoutée (démo)':'Réponse envoyée ✓'); }
