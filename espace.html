@@ -194,7 +194,24 @@ button{font-family:var(--body);cursor:pointer}
 .msg-thread{display:flex;flex-direction:column;gap:9px;max-height:300px;overflow-y:auto;margin-bottom:12px;padding-right:4px}
 .msg-bubble{max-width:85%;padding:9px 13px;border-radius:14px;font-size:.85rem;line-height:1.45}
 .msg-bubble .who{font-size:.66rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.7;margin-bottom:3px}
-.msg-bubble p{margin:0;color:var(--ink);overflow-wrap:break-word}
+.msg-bubble p{margin:0;color:var(--ink);overflow-wrap:break-word;white-space:pre-line}
+.msg-lieu{margin:2px 0 8px;padding:8px 10px;border-radius:10px;border:1px solid rgba(232,163,61,.4);background:rgba(232,163,61,.08);font-size:.8rem;color:var(--ink);overflow-wrap:anywhere}
+.msg-lieu b{display:block;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:#e8a33d;margin-bottom:2px}
+.msg-voir{display:inline-block;margin-top:7px;font-size:.78rem;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid rgba(232,163,61,.55);background:rgba(232,163,61,.18);color:#ffcf86;cursor:pointer;font-family:inherit}
+.msg-voir:hover{background:rgba(232,163,61,.3)}
+.lv{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(6,3,12,.72);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.lv.on{display:flex}
+.lv-box{width:min(1100px,100%);height:min(92vh,900px);display:flex;flex-direction:column;border-radius:18px;overflow:hidden;background:#140420;border:1px solid var(--border);box-shadow:0 40px 90px -30px rgba(0,0,0,.8)}
+.lv-head{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)}
+.lv-txt{min-width:0}
+.lv-txt b{display:block;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#e8a33d;margin-bottom:3px}
+.lv-lieu{font-weight:600;font-size:.9rem;color:var(--ink);overflow-wrap:anywhere}
+.lv-msg{margin:6px 0 0;font-size:.84rem;color:var(--mut);white-space:pre-line;max-height:5.6em;overflow:auto}
+.lv-x{flex-shrink:0;width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--ink);font-size:1.3rem;line-height:1;cursor:pointer}
+.lv-etat{font-size:.78rem;color:var(--mut);padding:7px 16px;border-bottom:1px solid var(--border)}
+.lv-etat.ok{color:#ffcf86}
+.lv-frame{flex:1;width:100%;border:0;background:#fff}
+@media(max-width:640px){.lv{padding:0}.lv-box{height:100%;border-radius:0}}
 .msg-dwt{align-self:flex-start;background:linear-gradient(135deg,rgba(123,31,162,.32),rgba(99,175,33,.16));border:1px solid rgba(212,155,255,.25);border-bottom-left-radius:4px}
 .msg-client{align-self:flex-end;background:rgba(255,255,255,.07);border:1px solid var(--border);border-bottom-right-radius:4px}
 .msg-compose{display:flex;gap:9px;align-items:flex-end}
@@ -1042,6 +1059,90 @@ button{font-family:var(--body);cursor:pointer}
     msg.textContent = okAll ? 'Fichiers envoyés ✓' : 'Certains fichiers n\'ont pas pu être envoyés.';
   };
 
+  // ===== MESSAGE DE DWT AVEC UN ENDROIT =====
+  // Le dashboard écrit « Endroit : … » puis « Page : … » en tête du message : on affiche l'endroit à part,
+  // avec un bouton qui ouvre la page du site et entoure l'endroit en orange.
+  var MSGS=[];
+  function msgLieuDe(n){
+    var txt=String((n && n.contenu)||''), mm=/^Endroit : (.+)\nPage : (\S+)\n+([\s\S]*)$/.exec(txt);
+    if(!mm) return null;
+    return { lieu:mm[1].trim(), page: /^[\w\-\/]+\.html$/.test(mm[2]) && mm[2].indexOf('..')<0 ? mm[2] : '', reste:mm[3] };
+  }
+  // Retrouve et entoure l'endroit — même logique que dashboard.html (lieuTrouver / lieuMarquer) : modifier aux deux endroits.
+  function lieuTrouver(doc, lieu){
+    var parts=String(lieu).split(' › '); if(parts.length<2) return null;
+    var scope=doc.body, i=1;
+    for(; i<parts.length; i++){
+      var found=null, cands=scope.querySelectorAll('[data-repere]');
+      for(var k=0;k<cands.length;k++){ if(cands[k].getAttribute('data-repere')===parts[i]){ found=cands[k]; break; } }
+      if(!found) break;
+      scope=found;
+    }
+    var proche = scope===doc.body ? null : scope;
+    if(i>=parts.length) return { el:proche, exact:!!proche };
+    var m=/^(Photo|Icône|Titre|Texte|Bouton|Lien|Ligne|Champ|Intitulé)(?: « (.*) »)?$/.exec(parts[i]);
+    if(!m || i<parts.length-1) return { el:proche, exact:false };
+    var type=m[1], txt=String(m[2]||'').replace(/…$/,'').replace(/\s+/g,' ').trim().toLowerCase();
+    function norm(e){ return String(e.textContent||'').replace(/\s+/g,' ').trim().toLowerCase(); }
+    function pick(sel, test){ var els=scope.querySelectorAll(sel); for(var k=0;k<els.length;k++){ if(!test || test(els[k])) return els[k]; } return null; }
+    var r=null;
+    if(type==='Photo') r=pick('img');
+    else if(type==='Icône') r=pick('svg');
+    else if(type==='Titre') r=pick('h1,h2,h3,h4,h5,h6', function(e){ return !txt || norm(e).indexOf(txt)===0; });
+    else if(type==='Intitulé'){ var q=/«\s(.+)\s»$/.exec(parts[i-1]||''), t2=q?q[1].toLowerCase():''; r=pick('*', function(e){ return !e.children.length && norm(e)===t2; }); }
+    else if(type==='Ligne') r=pick('tr', function(e){ return Array.prototype.map.call(e.cells,function(c){ return c.textContent.trim(); }).join(' : ').toLowerCase().indexOf(txt)===0; });
+    else if(type==='Champ') r=pick('input,select,textarea', function(e){ var f=e.closest('.field,label'), l=f?(f.tagName==='LABEL'?f:f.querySelector('label')):null; return !!l && norm(l).indexOf(txt)===0; });
+    else if(type==='Bouton'||type==='Lien') r=pick('a,button', function(e){ return norm(e).indexOf(txt)===0; });
+    else { var els=scope.querySelectorAll('*'); for(var k=0;k<els.length;k++){ if(txt && norm(els[k]).indexOf(txt)===0 && (!r || r.contains(els[k]))) r=els[k]; } }
+    return r ? { el:r, exact:true } : { el:proche, exact:false };
+  }
+  function lieuMarquer(d, el, etiq){
+    var st=d.createElement('style');
+    st.textContent='[class*="reveal"]{opacity:1!important;transform:none!important}'+
+      '.dwt-lv{outline:4px solid #e8a33d!important;outline-offset:3px!important;border-radius:6px}img.dwt-lv{outline-offset:-5px!important}'+
+      '#dwt-lv-etiq{position:absolute;z-index:2147483647;background:#e8a33d;color:#1a0b22;font:700 12px/1.3 system-ui,-apple-system,sans-serif;padding:6px 10px;border-radius:9px;box-shadow:0 6px 18px rgba(0,0,0,.3);pointer-events:none}';
+    d.head.appendChild(st);
+    el.classList.add('dwt-lv');
+    try{ el.scrollIntoView({ block:'center' }); }catch(e){ el.scrollIntoView(); }
+    var et=d.createElement('div'); et.id='dwt-lv-etiq'; et.textContent=etiq; d.body.appendChild(et);
+    var r=el.getBoundingClientRect(), w=d.defaultView, sx=w.pageXOffset||0, sy=w.pageYOffset||0;
+    var top=r.top+sy-et.offsetHeight-10; if(top<sy+4) top=r.bottom+sy+10;
+    et.style.top=top+'px'; et.style.left=Math.max(sx+6, Math.min(r.left+sx, sx+w.innerWidth-et.offsetWidth-6))+'px';
+  }
+  window.msgVoirEndroit=function(id){
+    var n=null; for(var i=0;i<MSGS.length;i++){ if(String(MSGS[i].id)===String(id)){ n=MSGS[i]; break; } }
+    var L=msgLieuDe(n); if(!L || !L.page) return;
+    var box=g('lv');
+    if(!box){
+      box=document.createElement('div'); box.className='lv'; box.id='lv'; box.setAttribute('role','dialog'); box.setAttribute('aria-modal','true'); box.setAttribute('aria-label','L\'endroit dont parle DWT');
+      box.innerHTML='<div class="lv-box"><div class="lv-head"><div class="lv-txt"><b>L\'endroit dont parle DWT</b><div class="lv-lieu" id="lv-lieu"></div><p class="lv-msg" id="lv-msg"></p></div>'+
+        '<button type="button" class="lv-x" onclick="lieuFermer()" aria-label="Fermer">×</button></div>'+
+        '<div class="lv-etat" id="lv-etat"></div><iframe class="lv-frame" id="lv-frame" title="Page de votre site"></iframe></div>';
+      box.addEventListener('click', function(e){ if(e.target===box) lieuFermer(); });
+      document.addEventListener('keydown', function(e){ if(e.key==='Escape' && g('lv') && g('lv').classList.contains('on')) lieuFermer(); });
+      document.body.appendChild(box);
+    }
+    g('lv-lieu').textContent=L.lieu; g('lv-msg').textContent=L.reste;
+    var etat=g('lv-etat'); etat.className='lv-etat'; etat.textContent='Chargement de la page…';
+    var fr=g('lv-frame');
+    fr.onload=function(){
+      var d=null; try{ d=fr.contentDocument; }catch(e){ d=null; }
+      if(!d || !d.body){ etat.textContent='Impossible d\'afficher l\'endroit sur cette page.'; return; }
+      // Ici on regarde seulement : les clics sur liens et boutons ne changent pas de page
+      d.addEventListener('click', function(e){ var t=e.target && e.target.closest ? e.target.closest('a,button,[onclick],label,input,select,textarea') : null; if(t){ e.preventDefault(); e.stopPropagation(); } }, true);
+      d.addEventListener('submit', function(e){ e.preventDefault(); e.stopPropagation(); }, true);
+      var res=lieuTrouver(d, L.lieu);
+      if(res && res.el){
+        lieuMarquer(d, res.el, 'C\'est ici'); etat.className='lv-etat ok';
+        etat.textContent = res.exact ? 'L\'endroit est entouré en orange sur la page ci-dessous.' : 'La page a changé depuis le message : la zone la plus proche est entourée en orange.';
+      }
+      else { etat.textContent='Endroit introuvable (la page a peut-être changé depuis le message) : voici la page concernée.'; }
+    };
+    fr.src='/'+L.page;
+    box.classList.add('on');
+  };
+  window.lieuFermer=function(){ var b=g('lv'); if(b){ b.classList.remove('on'); var fr=g('lv-frame'); if(fr){ fr.onload=null; fr.src='about:blank'; } } };
+
   // ===== ONGLET SUIVI (messages avec DWT) =====
   function msgFromClient(dir){ return String(dir||'').toLowerCase().indexOf('client')===0; }
 
@@ -1054,9 +1155,11 @@ button{font-family:var(--body);cursor:pointer}
       var rows=(r.data||[]).slice();
       rows.sort(function(a,b){ return String(a.created_at||a.created||a.id||'').localeCompare(String(b.created_at||b.created||b.id||'')); });
       if(!rows.length){ thread.innerHTML='<p class="modif-empty">Aucun message pour l\'instant.</p>'; return; }
+      MSGS=rows;
       thread.innerHTML = rows.map(function(n){
-        var fromCl=msgFromClient(n.direction);
-        return '<div class="msg-bubble '+(fromCl?'msg-client':'msg-dwt')+'"><div class="who">'+(fromCl?'Vous':'DWT Digital')+'</div><p>'+esc(n.contenu||n.titre||'')+'</p></div>';
+        var fromCl=msgFromClient(n.direction), L=fromCl ? null : msgLieuDe(n);
+        var lieu=L ? '<div class="msg-lieu"><b>Endroit</b>'+esc(L.lieu)+(L.page?'<br><button type="button" class="msg-voir" onclick="msgVoirEndroit(\''+esc(String(n.id))+'\')">Voir l\'endroit</button>':'')+'</div>' : '';
+        return '<div class="msg-bubble '+(fromCl?'msg-client':'msg-dwt')+'"><div class="who">'+(fromCl?'Vous':'DWT Digital')+'</div>'+lieu+'<p>'+esc(L ? L.reste : (n.contenu||n.titre||''))+'</p></div>';
       }).join('');
       thread.scrollTop=thread.scrollHeight;
     }catch(e){ thread.innerHTML='<p class="modif-empty">Impossible de charger les messages.</p>'; }
