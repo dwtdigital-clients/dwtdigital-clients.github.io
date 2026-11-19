@@ -685,9 +685,17 @@ button{font-family:var(--body);cursor:pointer}
       return x.href;
     }catch(e){ return u; }
   }
+  function ptMemeAdresse(u){
+    try{ var x=new URL(u, location.href), h=function(t){ return t.replace(/^www\./,""); }; return h(x.hostname)===h(location.hostname) && x.protocol===location.protocol; }catch(e){ return false; }
+  }
   function ptUrlSite(){
     var s=CLIENT.site; if(!s) return "";
-    if(s.etape==="en_ligne") return siteUrlSure(s.url) || siteUrlSure(s.apercu);
+    if(s.etape==="en_ligne"){
+      // Site public sur son propre nom de domaine : on pointe sur la copie aperçu de dwtdigital.fr (identique), seule lisible ici
+      var u=siteUrlSure(s.url), a=siteUrlSure(s.apercu);
+      if(u && ptMemeAdresse(u)) return u;
+      return (a && ptMemeAdresse(a)) ? a : (u || a);
+    }
     if(s.etape==="apercu" || s.etape==="valide" || s.etape==="a_publier") return siteUrlSure(s.apercu);
     return "";
   }
