@@ -456,6 +456,15 @@ button{font-family:var(--body);cursor:pointer}
     <!-- ONGLET DEVIS -->
     <section class="tab-panel" data-panel="devis">
       <div class="sec-head"><h2>Devis</h2></div>
+      <div id="dv-prefill-lise" class="card" style="margin-bottom:18px;border:1.5px solid #7BC93A;background:linear-gradient(135deg,rgba(123,201,58,.08),rgba(123,201,58,.02))">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <div style="flex:1;min-width:200px">
+            <b style="font-size:1.05rem">Devis Lise GUILLOT-VERNET — Cake Délice</b>
+            <p style="margin:6px 0 0;font-size:.85rem;color:#9a93a5">Site 5 pages + module commande + espace client + domaine (offerts) &middot; Pack Social Pro 497 &euro;/mois (3 mois offerts) &middot; Valeur offerte : 2 476 &euro;</p>
+          </div>
+          <button class="btn-primary" type="button" onclick="dvPreFillLise()" style="white-space:nowrap">Charger dans le formulaire</button>
+        </div>
+      </div>
       <div class="dv-grid">
         <div class="card">
           <h3>Nouveau devis</h3>
@@ -2020,6 +2029,35 @@ button{font-family:var(--body);cursor:pointer}
     var pro=document.querySelector('input[name="dv-ctype"][value="pro"]'); if(pro) pro.checked=true;
     dvClientType(); dvRenderLines(); dvTotals();
   }
+
+  window.dvPreFillLise=function(){
+    g('dv-nom').value='Lise GUILLOT-VERNET';
+    g('dv-commerce').value='Cake Délice';
+    g('dv-email').value='cakedelice26000@gmail.com';
+    g('dv-tel').value='';
+    g('dv-adresse').value='Valence (26)';
+    var part=document.querySelector('input[name="dv-ctype"][value="particulier"]');
+    if(part) part.checked=true;
+    dvClientType();
+    DV_LINES=[
+      {label:'Pack Social Pro',desc:"Tout Social Only + 2e réseau · 12 publications/mois + stories · fiche Google Business optimisée + publications Google · gestion des avis clients (demande d'avis + réponses) · référencement local de base",type:'mensuel',qty:1,pu:497,pack:'Social Pro'},
+      {label:'Site vitrine sur mesure 4 pages',desc:"Accueil, Nos créations, Notre histoire, Contact · design sur mesure à l'identité de Cake Délice · adapté mobile · référencement de base · mise en ligne",type:'one-shot',qty:1,pu:690},
+      {label:'Module de commande en ligne',desc:"Page « Commander » : formulaire en 3 étapes, estimation automatique du prix selon 10 paliers tarifaires, délais minimum contrôlés, anti-spam, accord RGPD, commande reçue par email et archivée",type:'one-shot',qty:1,pu:290},
+      {label:'Espace client DWT',desc:"Suivi des commandes en temps réel (mode Pointer ~80 marqueurs), historique des modifications, messagerie intégrée",type:'one-shot',qty:1,pu:0},
+      {label:'Nom de domaine cake-delice.fr',desc:"Achat, configuration DNS et renouvellement annuel",type:'one-shot',qty:1,pu:5}
+    ];
+    dvRenderLines();
+    g('dv-r1-t').value='%'; g('dv-r1-v').value='100';
+    g('dv-r2-t').value='%'; g('dv-r2-v').value='100'; g('dv-r2-m').value='3';
+    g('dv-rtxt').value="Remise cliente fondatrice : site vitrine, module de commande et nom de domaine offerts. 3 premiers mois d'abonnement Pack Social Pro offerts.";
+    g('dv-eng').value='sans';
+    g('dv-start').value='1er décembre 2026';
+    g('dv-delai').value='Site livré et en ligne';
+    g('dv-notes').value="Comprend : site vitrine 5 pages (Accueil, Nos créations, Commander, Notre histoire, Contact), module de commande avec estimation automatique des prix, espace client avec suivi en temps réel, nom de domaine cake-delice.fr, hébergement Cloudflare, référencement de base (SEO + Search Console), CGV et mentions légales, 13 photos retouchées.\n\nLe site est déjà réalisé et en ligne sur cake-delice.fr.";
+    dvTotals();
+    var b=g('dv-prefill-lise'); if(b) b.style.display='none';
+    g('dv-nom').scrollIntoView({behavior:'smooth',block:'center'});
+  };
 
   function renderDevis(){
     var list=g('dv-list'); if(!list) return;
