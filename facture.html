@@ -1,0 +1,325 @@
+<!doctype html><html lang="fr"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Facture — DWT Digital</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --v:#7B1FA2; --vd:#4F0F5C; --vdd:#2D0636;
+  --g:#63AF21; --gl:#7BC93A;
+  --ink:#F6F1FA; --mut:rgba(246,241,250,.66); --acc:#d49bff;
+  --border:rgba(255,255,255,.15);
+  --disp:'Syne',sans-serif; --body:'Poppins',sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:clip}
+body{margin:0;background:#0a0014;color:var(--ink);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:clip;min-height:100vh}
+.pagebg{position:fixed;inset:0;z-index:-1;background-image:radial-gradient(1100px 760px at 82% -8%,rgba(123,31,162,.40),transparent 60%),radial-gradient(820px 620px at -8% 108%,rgba(99,175,33,.12),transparent 55%)}
+.wrap{max-width:800px;margin:0 auto;padding:36px 20px 70px}
+
+.doc{position:relative;border-radius:22px;overflow:hidden;padding:34px 36px;
+  background:rgba(20,4,32,.55);-webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5);
+  border:1px solid var(--border);box-shadow:0 40px 90px -30px rgba(0,0,0,.8)}
+.doc::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(140deg,rgba(255,255,255,.12),transparent 42%,rgba(123,31,162,.10));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;padding:1px;opacity:.6}
+
+.dh{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;flex-wrap:wrap;margin-bottom:26px}
+.dh-brand{display:flex;align-items:center;gap:11px}
+.dh-brand img{height:40px;width:auto}
+.dh-brand b{font-family:var(--disp);font-weight:800;font-size:1.15rem}
+.dh-brand span{display:block;font-size:.72rem;color:var(--mut);font-weight:500}
+.dh-meta{text-align:right;font-size:.84rem}
+.dh-meta .lbl{font-family:var(--disp);font-weight:800;font-size:1.5rem;letter-spacing:.04em}
+.dh-meta .num{font-family:monospace;color:var(--acc);margin-top:2px}
+.dh-meta .dt{color:var(--mut);font-size:.8rem;margin-top:5px}
+.dh-meta .ref{color:var(--mut);font-size:.76rem;margin-top:3px}
+
+.parties{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+.parties .dfor{margin-bottom:0}
+@media(max-width:620px){.parties{grid-template-columns:1fr}}
+.dfor{margin-bottom:24px;padding:15px 17px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.04)}
+.dfor .k{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:5px}
+.dfor .who{font-family:var(--disp);font-weight:700;font-size:1.05rem}
+.dfor .sub{font-size:.86rem;color:var(--mut);margin-top:2px;white-space:pre-line}
+
+.bloc{margin-bottom:20px}
+.bloc-h{font-family:var(--disp);font-weight:800;font-size:.95rem;margin:0 0 8px;letter-spacing:.02em}
+.bloc .lines-wrap{margin-bottom:8px}
+.lines-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:22px}
+table.lines{width:100%;border-collapse:collapse;font-size:.9rem}
+table.lines th{text-align:left;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);padding:0 10px 9px;border-bottom:1px solid var(--border)}
+table.lines th.r,table.lines td.r{text-align:right}
+table.lines td{padding:11px 10px;border-bottom:1px solid rgba(255,255,255,.07);vertical-align:top}
+table.lines .li-lbl{font-weight:500}
+table.lines .li-desc{display:block;font-size:.76rem;color:var(--mut);font-weight:400;margin-top:2px;line-height:1.45}
+table.lines .li-tot{font-weight:600;white-space:nowrap}
+table.lines td.r{white-space:nowrap;font-variant-numeric:tabular-nums}
+table.lines tr.rem td{color:var(--gl);font-weight:600}
+@media(max-width:560px){
+  table.lines{font-size:.84rem;min-width:0}
+  table.lines th,table.lines td{padding-left:6px;padding-right:6px}
+  table.lines th:nth-child(3),table.lines td:nth-child(3){display:none}
+  .permo{display:none}
+}
+.bloc-t{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:10px 14px;border-radius:11px;background:rgba(255,255,255,.04);border:1px solid var(--border);font-size:.88rem}
+.bloc-t b{font-family:var(--body);font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.bloc-t small{display:block;font-family:var(--body);font-weight:500;color:var(--mut);font-size:.76rem}
+
+.dsum{margin:4px 0 20px;padding:16px 18px;border-radius:14px;background:linear-gradient(120deg,rgba(123,31,162,.3),rgba(99,175,33,.16));border:1px solid rgba(212,155,255,.25)}
+.dsum-row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:5px 0}
+.dsum-row span{color:var(--mut);font-size:.86rem}
+.dsum-row b{font-family:var(--body);font-weight:700;font-size:1.02rem;text-align:right;font-variant-numeric:tabular-nums}
+.dsum-row b small{display:block;font-family:var(--body);font-weight:500;font-size:.76rem;color:var(--mut)}
+.dsum-info{font-size:.8rem;color:var(--mut);margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.12)}
+
+.dremise{margin-bottom:18px;padding:13px 16px;border-radius:13px;border:1px solid rgba(99,175,33,.35);background:rgba(99,175,33,.08);font-size:.86rem;white-space:pre-line}
+.dremise b{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gl);margin-bottom:4px}
+.dnotes{font-size:.86rem;color:var(--mut);border-top:1px solid var(--border);padding-top:16px;margin-bottom:4px;white-space:pre-line}
+.dnotes b{color:var(--ink);font-weight:600;display:block;margin-bottom:4px;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase}
+.dcond{margin-top:18px;padding-top:14px;border-top:1px solid var(--border);font-size:.74rem;line-height:1.55;color:var(--mut)}
+.dcond p{margin:0 0 5px}
+.dcond a{color:var(--acc)}
+.dfoot{margin-top:22px;padding-top:16px;border-top:1px solid var(--border);font-size:.78rem;color:var(--mut);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.dfoot a{color:var(--acc)}
+
+.actions{display:flex;gap:11px;flex-wrap:wrap;justify-content:center;margin-top:26px}
+.btn{padding:13px 22px;border-radius:999px;border:none;font-weight:600;font-size:.92rem;font-family:var(--body);cursor:pointer;transition:transform .18s,opacity .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn-dl{color:var(--ink);background:rgba(255,255,255,.07);border:1px solid var(--border)}
+
+.state{text-align:center;color:var(--mut);padding:60px 20px;font-size:.95rem}
+
+@media print{
+  @page{margin:14mm}
+  html,body{background:#fff!important;color:#15121a!important}
+  .pagebg,.actions{display:none!important}
+  .wrap{max-width:none;margin:0;padding:0}
+  .lines-wrap{overflow:visible!important}
+  .doc{box-shadow:none!important;border:none!important;border-radius:0;padding:0;background:#fff!important;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .doc::after{display:none!important}
+  .dh-brand b,.dh-meta .lbl,.dfor .who{color:#15121a!important}
+  .dh-brand span,.dh-meta .dt,.dh-meta .ref,.dfor .k,.dfor .sub,.dnotes,.dfoot,table.lines th{color:#5b5566!important}
+  .dh-meta .num{color:#7B1FA2!important}
+  .dfor{background:#f6f4f8!important;border:1px solid #e2dde8!important}
+  table.lines th{border-bottom:1px solid #cfc7d8!important}
+  table.lines td{border-bottom:1px solid #ece8f0!important;color:#15121a!important}
+  .dnotes,.dfoot{border-top:1px solid #e2dde8!important}
+  .bloc-h,.bloc-t b,.dsum-row b{color:#15121a!important}
+  .bloc-t,.dsum{background:#f6f4f8!important;border:1px solid #e2dde8!important}
+  .bloc-t small,.dsum-row span,.dsum-row b small,.dsum-info,.dcond,table.lines .li-desc{color:#5b5566!important}
+  .dremise{background:#f3f8ee!important;border:1px solid #d5e6c4!important;color:#15121a!important}
+  .dremise b,table.lines tr.rem td{color:#3d7a12!important}
+  .dnotes b{color:#15121a!important}
+  .dcond{border-top:1px solid #e2dde8!important}
+  .dcond a{color:#7B1FA2!important}
+  .dfoot a{color:#7B1FA2!important}
+  .bloc,.dsum,.dcond{break-inside:avoid}
+}
+</style></head>
+<body>
+<div class="pagebg" aria-hidden="true"></div>
+<div class="wrap">
+  <div id="fa-loading" class="state">Chargement de la facture...</div>
+  <div id="fa-error" class="state" style="display:none"></div>
+
+  <div class="doc" id="fa-doc" style="display:none">
+    <div class="dh">
+      <div class="dh-brand">
+        <img src="https://dwtdigital-clients.github.io/logo-200.png" alt="DWT Digital" onerror="this.style.display='none'">
+        <div><b>DWT Digital</b><span>Marketing IA</span></div>
+      </div>
+      <div class="dh-meta">
+        <div class="lbl">FACTURE</div>
+        <div class="num" id="fa-num">—</div>
+        <div class="dt" id="fa-date"></div>
+        <div class="ref" id="fa-ref"></div>
+      </div>
+    </div>
+
+    <div class="parties">
+      <div class="dfor">
+        <div class="k">Vendeur</div>
+        <div class="who" id="em-nom">DWT Digital</div>
+        <div class="sub" id="em-sub"></div>
+      </div>
+      <div class="dfor">
+        <div class="k">Acheteur</div>
+        <div class="who" id="fa-who">—</div>
+        <div class="sub" id="fa-whosub"></div>
+      </div>
+    </div>
+
+    <div id="fa-blocs"></div>
+    <div class="dsum" id="fa-sum"></div>
+    <div class="dremise" id="fa-remise" style="display:none"><b>Remise</b><span id="fa-remise-txt"></span></div>
+    <div class="dnotes" id="fa-notes-wrap" style="display:none"><b>Notes</b><span id="fa-notes"></span></div>
+    <div class="dcond" id="fa-cond"></div>
+
+    <div class="dfoot">
+      <span>DWT Digital — <a href="mailto:contact@dwtdigital.fr">contact@dwtdigital.fr</a> — dwtdigital.fr</span>
+      <span id="fa-footer-num"></span>
+    </div>
+  </div>
+
+  <div class="actions" id="fa-actions" style="display:none">
+    <button class="btn btn-dl" type="button" onclick="window.print()">Télécharger en PDF</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var WORKER_BASE = 'https://dwt-admin.darellwilliampro1.workers.dev';
+
+  function g(id){ return document.getElementById(id); }
+  function esc(t){ var d=document.createElement('div'); d.textContent=(t==null?'':String(t)); return d.innerHTML; }
+  function eur(n){ var v=Number(n)||0; return v.toLocaleString('fr-FR',{ minimumFractionDigits:0, maximumFractionDigits:2 })+' €'; }
+  function param(k){ try{ return new URLSearchParams(location.search).get(k); }catch(e){ return null; } }
+  function fmtDate(iso){ if(!iso) return ''; try{ return new Date(iso).toLocaleDateString('fr-FR',{ day:'numeric', month:'long', year:'numeric' }); }catch(e){ return ''; } }
+
+  var EMETTEUR = { nom:'Darell-William TIRERA EI', commercial:'DWT Digital', ville:'92370 Chaville', siret:'106 795 826 00010',
+    tva:'TVA non applicable, art. 293 B du CGI', email:'contact@dwtdigital.fr', web:'dwtdigital.fr', adresse:'', tel:'', rcs:'' };
+
+  function dvR2(x){ return Math.round((Number(x)||0)*100)/100; }
+  function dvCalc(lignes, det){
+    det=det||{}; var once=0, mens=0;
+    (lignes||[]).forEach(function(l){
+      var pu=(l.prix_unitaire!=null)?l.prix_unitaire:l.pu;
+      var t=(Number(l.qty)||0)*(Number(pu)||0);
+      if(l.type==='one-shot') once+=t; else mens+=t;
+    });
+    function rem(base, r){
+      if(!r) return 0; var v=Number(r.valeur)||0; if(v<=0 || base<=0) return 0;
+      return dvR2(Math.min(base, r.type==='€' ? v : base*Math.min(v,100)/100));
+    }
+    var rOnce=rem(once, det.remise_once), rMens=rem(mens, det.remise_mensuel);
+    var mois=(det.remise_mensuel && Number(det.remise_mensuel.mois)>0) ? Math.round(Number(det.remise_mensuel.mois)) : 0;
+    if(!rMens) mois=0;
+    var netOnce=dvR2(once-rOnce), acompte=netOnce>300, sign=acompte ? dvR2(netOnce*0.4) : netOnce;
+    return { once:dvR2(once), rOnce:rOnce, netOnce:netOnce, acompte:acompte, signature:sign, solde:dvR2(netOnce-sign),
+      mens:dvR2(mens), rMens:rMens, mois:mois,
+      mensPendant: mois ? dvR2(mens-rMens) : null,
+      mensApres: mois ? dvR2(mens) : dvR2(mens-rMens),
+      offert: dvR2(rOnce + (mois ? rMens*mois : 0)) };
+  }
+
+  function showError(m){ g('fa-loading').style.display='none'; var e=g('fa-error'); e.style.display='block'; e.textContent=m; }
+
+  function fmtTel(t){ var d=String(t||'').replace(/[^\d]/g,''); return /^0\d{9}$/.test(d) ? d.replace(/(\d{2})(?=\d)/g,'$1 ') : String(t||'').trim(); }
+  function fmtAdr(a){ return String(a||'').replace(/(\d{5}),\s*/g,'$1 ').replace(/\s+,/g,',').replace(/\s{2,}/g,' ').trim(); }
+
+  function renderEmetteur(){
+    var e=EMETTEUR, l=[];
+    l.push(e.adresse ? fmtAdr(e.adresse) : e.ville);
+    l.push('SIRET : '+e.siret+(e.rcs?' · '+e.rcs:''));
+    l.push(e.tva);
+    l.push(e.email+(e.tel?' · '+fmtTel(e.tel):''));
+    g('em-nom').textContent=e.nom+' — '+e.commercial;
+    g('em-sub').textContent=l.join('\n');
+  }
+
+  function ligneRow(l, mensuel){
+    var pu=Number(l.prix_unitaire)||0, qty=Number(l.qty)||0, pm=mensuel?'<span class="permo"> /mois</span>':'';
+    return '<tr><td class="li-lbl">'+esc(l.label||'Prestation')+(l.description?'<span class="li-desc">'+esc(l.description)+'</span>':'')+'</td>'+
+      '<td class="r">'+qty+'</td><td class="r">'+(pu?eur(pu)+pm:'inclus')+'</td><td class="r li-tot">'+(pu?eur(pu*qty)+pm:'—')+'</td></tr>';
+  }
+  function remiseRow(r, montant, mensuel, mois){
+    var lbl='Remise'+((r && r.type!=='€')?' (−'+(Number(r.valeur)||0).toLocaleString('fr-FR')+' %)':'')+(mensuel && mois?' pendant '+mois+' mois':'');
+    return '<tr class="rem"><td>'+esc(lbl)+'</td><td></td><td></td><td class="r">−'+eur(montant)+(mensuel?'<span class="permo"> /mois</span>':'')+'</td></tr>';
+  }
+  function bloc(titre, rows, totLbl, totVal){
+    return '<div class="bloc"><div class="bloc-h">'+titre+'</div><div class="lines-wrap"><table class="lines"><thead><tr><th>Prestation</th><th class="r">Qté</th><th class="r">P.U. HT</th><th class="r">Total HT</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+      '<div class="bloc-t"><span>'+totLbl+'</span><b>'+totVal+'</b></div></div>';
+  }
+
+  function factureNum(devisNum){
+    return String(devisNum||'').replace(/^DV-/,'FA-') || 'FA-0001';
+  }
+
+  function render(d){
+    var det=d.details||{}, lignes=d.lignes||[], c=dvCalc(lignes, det), pro=det.client_type!=='particulier';
+    var faNum = factureNum(d.numero);
+    var faDate = d.signed_at || d.created_at || new Date().toISOString();
+
+    g('fa-loading').style.display='none';
+    g('fa-doc').style.display='block';
+    g('fa-actions').style.display='flex';
+
+    g('fa-num').textContent=faNum;
+    g('fa-date').textContent='Date : '+fmtDate(faDate);
+    g('fa-ref').textContent='Réf. devis : '+(d.numero||'—');
+    g('fa-footer-num').textContent='Facture '+faNum;
+    renderEmetteur();
+
+    g('fa-who').textContent=d.prospect_commerce||d.prospect_nom||'Client';
+    var sub=[];
+    if(d.prospect_commerce && d.prospect_nom) sub.push(d.prospect_nom);
+    if(det.client_adresse) sub.push(det.client_adresse);
+    if(pro && det.client_siret) sub.push('SIRET : '+det.client_siret);
+    if(!pro) sub.push('Client particulier');
+    var ct=[]; if(d.prospect_email) ct.push(d.prospect_email); if(d.prospect_tel) ct.push(d.prospect_tel);
+    if(ct.length) sub.push(ct.join(' · '));
+    g('fa-whosub').textContent=sub.join('\n');
+
+    var once=lignes.filter(function(l){ return l.type==='one-shot'; }), mens=lignes.filter(function(l){ return l.type!=='one-shot'; }), h='';
+    if(once.length){
+      var r1=once.map(function(l){ return ligneRow(l,false); }).join('')+(c.rOnce?remiseRow(det.remise_once,c.rOnce,false,0):'');
+      h+=bloc('Prestations (une fois)', r1, 'Total prestations', eur(c.netOnce));
+    }
+    if(mens.length){
+      var r2=mens.map(function(l){ return ligneRow(l,true); }).join('')+(c.rMens?remiseRow(det.remise_mensuel,c.rMens,true,c.mois):'');
+      var tv = c.mois ? eur(c.mensPendant)+' /mois<small>pendant '+c.mois+' mois, puis '+eur(c.mensApres)+' /mois</small>' : eur(c.mensApres)+' /mois';
+      h+=bloc('Abonnement mensuel', r2, 'Abonnement', tv);
+    }
+    g('fa-blocs').innerHTML=h;
+
+    var sm='';
+    if(c.once){
+      sm+='<div class="dsum-row"><span>Total prestations HT</span><b>'+eur(c.netOnce)+'</b></div>';
+    }
+    if(c.mens){
+      var puis = c.mois ? eur(c.mensPendant)+' HT /mois pendant '+c.mois+' mois<small>puis '+eur(c.mensApres)+' HT /mois</small>' : eur(c.mensApres)+' HT /mois';
+      sm+='<div class="dsum-row"><span>Abonnement</span><b>'+puis+'</b></div>';
+    }
+    sm+='<div class="dsum-row"><span>TVA</span><b>Non applicable</b></div>';
+    sm+='<div class="dsum-row"><span>Net à payer</span><b>'+eur(c.netOnce)+'</b></div>';
+    if(c.offert) sm+='<div class="dsum-row"><span>Valeur offerte</span><b>'+eur(c.offert)+'</b></div>';
+    g('fa-sum').innerHTML=sm;
+
+    if(det.remise_texte){ g('fa-remise').style.display='block'; g('fa-remise-txt').textContent=det.remise_texte; }
+    if(d.notes){ g('fa-notes-wrap').style.display='block'; g('fa-notes').textContent=d.notes; }
+
+    var cond=[];
+    cond.push('Paiement par virement bancaire, à réception de la facture (au plus tard sous 30 jours).');
+    cond.push('Pas d’escompte pour paiement anticipé.');
+    if(pro) cond.push('En cas de retard de paiement, des pénalités égales à trois fois le taux d’intérêt légal seront exigibles sans rappel, ainsi qu’une indemnité forfaitaire de 40 € pour frais de recouvrement (art. L441-10 et D441-5 du Code de commerce).');
+    cond.push('Prix en euros hors taxes. '+EMETTEUR.tva+' : le prix HT est le prix à payer.');
+    var ch=cond.map(function(t){ return '<p>'+esc(t)+'</p>'; }).join('');
+    g('fa-cond').innerHTML=ch;
+  }
+
+  async function boot(){
+    var id=param('id');
+    if(!id){ showError('Facture introuvable (lien incomplet).'); return; }
+
+    try{
+      var re=await fetch(WORKER_BASE+'/emetteur');
+      if(re.ok){ var je=await re.json(); var em=je && (je.data||je); if(em){ ['adresse','tel','rcs'].forEach(function(k){ if(em[k]) EMETTEUR[k]=String(em[k]); }); } }
+    }catch(e){}
+    try{
+      var r=await fetch(WORKER_BASE+'/devis-public?id='+encodeURIComponent(id));
+      var txt=await r.text();
+      var j=txt?JSON.parse(txt):null;
+      var d=j && (j.data!==undefined?j.data:j);
+      if(!r.ok || !d){ showError('Ce devis n’est pas disponible.'); return; }
+      if(d.statut!=='accepte' && !d.signature_data){ showError('La facture ne peut être générée que pour un devis signé et accepté.'); return; }
+      render(d);
+    }catch(e){ showError('Impossible de charger les données.'); }
+  }
+
+  if(document.readyState!=='loading') boot();
+  else document.addEventListener('DOMContentLoaded', boot);
+})();
+</script>
+</body></html>

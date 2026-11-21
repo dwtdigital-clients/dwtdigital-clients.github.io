@@ -2077,10 +2077,11 @@ button{font-family:var(--body);cursor:pointer}
       var rightAction = d.client_id
         ? '<span class="dv-converted">✓ Client créé</span>'
         : '<button type="button" class="dv-conv" onclick="dvConvert(\''+esc(d.id)+'\')">Convertir</button>';
+      var factureBtn = signe ? '<button type="button" class="dv-open" onclick="dvFacture(\''+esc(d.id)+'\')" style="background:rgba(99,175,33,.15);border-color:rgba(99,175,33,.4)">Facture</button>' : '';
       return '<div class="dv-item"><div class="di-top"><span class="di-num">'+esc(d.numero||'')+'</span><span class="dstatut '+st+'">'+dStatutLabel(d.statut)+'</span></div>'+
         '<div class="di-name">'+esc(who)+'</div>'+
         '<p class="di-sub">'+esc(sub)+'</p>'+
-        '<div class="di-foot"><span class="di-tot">'+(tot||'—')+'</span><div class="di-actions"><button type="button" class="dv-open" onclick="dvOpen(\''+esc(d.id)+'\')">Voir</button>'+sendBtn+rightAction+'</div></div></div>';
+        '<div class="di-foot"><span class="di-tot">'+(tot||'—')+'</span><div class="di-actions"><button type="button" class="dv-open" onclick="dvOpen(\''+esc(d.id)+'\')">Voir</button>'+factureBtn+sendBtn+rightAction+'</div></div></div>';
     }).join('');
   }
 
@@ -2140,6 +2141,9 @@ button{font-family:var(--body);cursor:pointer}
     var d=null; for(var i=0;i<DATA.devis.length;i++){ if(DATA.devis[i].id===id){ d=DATA.devis[i]; break; } }
     if(MODE==='demo' && d){ try{ localStorage.setItem('dwt_devis_'+id, JSON.stringify(d)); }catch(e){} }
     window.open('devis.html?id='+encodeURIComponent(id)+(MODE==='demo'?'&demo=1':''), '_blank');
+  };
+  window.dvFacture=function(id){
+    window.open('facture.html?id='+encodeURIComponent(id), '_blank');
   };
 
   window.createDevis=async function(){
