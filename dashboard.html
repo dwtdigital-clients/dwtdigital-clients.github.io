@@ -306,6 +306,11 @@ button{font-family:var(--body);cursor:pointer}
 .dv-send[data-arme="1"]{background:rgba(63,169,255,.32);color:#fff}
 .dv-send:disabled{opacity:.6;cursor:default}
 .di-actions{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.dv-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.dv-filters button{padding:6px 14px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--mut);font-size:.78rem;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s}
+.dv-filters button:hover{background:rgba(255,255,255,.08);color:var(--ink)}
+.dv-filters button.active{background:rgba(123,31,162,.25);border-color:var(--acc);color:var(--ink)}
+.dv-filters .dv-fcount{font-size:.7rem;opacity:.7;margin-left:3px}
 
 /* ===== MOBILE ===== */
 @media(max-width:880px){
@@ -509,6 +514,7 @@ button{font-family:var(--body);cursor:pointer}
         <div class="card">
           <h3>Devis récents</h3>
           <p class="card-sub">Suivi de vos propositions commerciales.</p>
+          <div class="dv-filters" id="dv-filters"></div>
           <div class="dv-list" id="dv-list"><p class="empty">Chargement…</p></div>
           <div class="nc-msg" id="dv-list-msg" aria-live="polite"></div>
         </div>
@@ -2059,11 +2065,29 @@ button{font-family:var(--body);cursor:pointer}
     g('dv-nom').scrollIntoView({behavior:'smooth',block:'center'});
   };
 
+  var DV_FILTER='tous';
+  function dvFilterGroup(d){
+    var signe=!!(d.signature_data || d.statut==='accepte');
+    if(signe || d.statut==='refuse') return 'acceptes';
+    if(d.envoye_le) return 'attente';
+    return 'envoyer';
+  }
+  window.dvSetFilter=function(f){ DV_FILTER=f; renderDevis(); };
   function renderDevis(){
-    var list=g('dv-list'); if(!list) return;
+    var list=g('dv-list'), fb=g('dv-filters'); if(!list) return;
     var rows=DATA.devis.slice().sort(function(a,b){ return String(b.numero||'').localeCompare(String(a.numero||'')); });
-    if(!rows.length){ list.innerHTML='<p class="empty">Aucun devis pour l\'instant.</p>'; return; }
-    list.innerHTML=rows.map(function(d){
+    if(!rows.length){ if(fb) fb.innerHTML=''; list.innerHTML='<p class="empty">Aucun devis pour l\'instant.</p>'; return; }
+    var counts={tous:rows.length,envoyer:0,attente:0,acceptes:0};
+    rows.forEach(function(d){ var gr=dvFilterGroup(d); counts[gr]=(counts[gr]||0)+1; });
+    if(fb){
+      var filters=[['tous','Tous'],['envoyer','À envoyer'],['attente','En attente'],['acceptes','Acceptés']];
+      fb.innerHTML=filters.map(function(f){
+        return '<button type="button" class="'+(DV_FILTER===f[0]?'active':'')+'" onclick="dvSetFilter(\''+f[0]+'\')">'+f[1]+'<span class="dv-fcount">'+counts[f[0]]+'</span></button>';
+      }).join('');
+    }
+    var filtered=DV_FILTER==='tous'?rows:rows.filter(function(d){ return dvFilterGroup(d)===DV_FILTER; });
+    if(!filtered.length){ list.innerHTML='<p class="empty">Aucun devis dans cette catégorie.</p>'; return; }
+    list.innerHTML=filtered.map(function(d){
       var who=d.prospect_commerce||d.prospect_nom||'Prospect';
       var sub=(d.prospect_commerce&&d.prospect_nom?d.prospect_nom:'')+(d.prospect_tel?(d.prospect_commerce&&d.prospect_nom?' · ':'')+d.prospect_tel:'');
       var c=dvCalc(d.lignes||[], d.details||{}), tp=[];
